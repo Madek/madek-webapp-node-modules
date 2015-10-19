@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-dist",
-  "version": "1.1.527",
+  "version": "1.1.535",
   "description": "Generic build of Mozilla's PDF.js library.",
   "keywords": [
     "Mozilla",
@@ -14,14 +14,14 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mozilla/pdfjs-dist"
+    "url": "git+https://github.com/mozilla/pdfjs-dist.git"
   },
-  "_id": "pdfjs-dist@1.1.527",
+  "_id": "pdfjs-dist@1.1.535",
   "dist": {
-    "shasum": "089681fa73a27e28b8a084cf5b2a76a99d88a858",
-    "tarball": "http://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.1.527.tgz"
+    "shasum": "49780989c58ee290caf57d75e024a9b603c9845f",
+    "tarball": "http://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.1.535.tgz"
   },
-  "_from": "pdfjs-dist@1.1.527",
+  "_from": "pdfjs-dist@1.1.535",
   "_npmVersion": "1.4.3",
   "_npmUser": {
     "name": "pdfjsbot",
@@ -34,6 +34,7 @@
     }
   ],
   "directories": {},
-  "_shasum": "089681fa73a27e28b8a084cf5b2a76a99d88a858",
-  "_resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.1.527.tgz"
+  "_shasum": "49780989c58ee290caf57d75e024a9b603c9845f",
+  "_resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.1.535.tgz",
+  "readme": "ERROR: No README data found!"
 }

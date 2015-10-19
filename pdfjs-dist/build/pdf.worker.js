@@ -22,8 +22,8 @@ if (typeof PDFJS === 'undefined') {
   (typeof window !== 'undefined' ? window : this).PDFJS = {};
 }
 
-PDFJS.version = '1.1.527';
-PDFJS.build = '2096a2a';
+PDFJS.version = '1.1.535';
+PDFJS.build = 'eff28ee';
 
 (function pdfjsWrapper() {
   // Use strict in our context only - users might not want it
@@ -3258,7 +3258,8 @@ var Dict = (function DictClosure() {
     // Same as get(), but dereferences all elements if the result is an Array.
     getArray: function Dict_getArray(key1, key2, key3) {
       var value = this.get(key1, key2, key3);
-      if (!isArray(value)) {
+      var xref = this.xref;
+      if (!isArray(value) || !xref) {
         return value;
       }
       value = value.slice(); // Ensure that we don't modify the Dict data.
@@ -3266,7 +3267,7 @@ var Dict = (function DictClosure() {
         if (!isRef(value[i])) {
           continue;
         }
-        value[i] = this.xref.fetch(value[i]);
+        value[i] = xref.fetch(value[i]);
       }
       return value;
     },
@@ -9745,9 +9746,10 @@ var CipherTransformFactory = (function CipherTransformFactoryClosure() {
       if (pdfAlgorithm.checkUserPassword(password, userValidationSalt,
                                          userPassword)) {
         return pdfAlgorithm.getUserKey(password, userKeySalt, userEncryption);
-      } else if (pdfAlgorithm.checkOwnerPassword(password, ownerValidationSalt,
-                                                 uBytes,
-                                                 ownerPassword)) {
+      } else if (password.length && pdfAlgorithm.checkOwnerPassword(password,
+                                                   ownerValidationSalt,
+                                                   uBytes,
+                                                   ownerPassword)) {
         return pdfAlgorithm.getOwnerKey(password, ownerKeySalt, uBytes,
                                         ownerEncryption);
       }
