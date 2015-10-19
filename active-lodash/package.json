@@ -1,0 +1,92 @@
+{
+  "name": "active-lodash",
+  "description": "A version of lodash customized to feel more like ActiveSupport (from Rails).",
+  "main": "dist/index.js",
+  "files": [
+    "dist/",
+    "lodash.custom.js"
+  ],
+  "scripts": {
+    "dev": "npm run -s build && npm run -s test",
+    "clean": "rimraf dist lodash.custom.js",
+    "lint": "eslint src test",
+    "watch": "watch 'npm run build -s' src test",
+    "watch-dev": "watch 'npm run dev -s' src test",
+    "check": "npm run -s lint",
+    "test": "babel-node test/*.js | tee tap.log | tspec",
+    "prebuild": "npm run -s check && npm run -s clean",
+    "build": "npm run -s build-lodash && babel --optional runtime src -d dist",
+    "build-lodash": "lodash modern strict exports=node minus=template -d -o lodash.custom.js",
+    "coverage": "babel-node node_modules/.bin/istanbul cover test/*.js",
+    "coveralls": "npm run -s coverage && coveralls < coverage/lcov.info",
+    "postcoveralls": "rimraf ./coverage",
+    "ci": "npm install --ignore-scripts && npm run -s build && npm run -s test && npm run -s coverage",
+    "prepublish": "npm run -s build",
+    "deploy": "git pull --rebase origin master && git push origin master",
+    "patch": "npm version patch && npm publish",
+    "minor": "npm version minor && npm publish",
+    "major": "npm version major && npm publish",
+    "postpublish": "git push origin master --follow-tags",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eins78/active-lodash.git"
+  },
+  "keywords": [
+    "lodash",
+    "ActiveSupport",
+    "RubyOnRails"
+  ],
+  "author": {
+    "name": "Max F. Albrecht",
+    "email": "1@178.is"
+  },
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/eins78/active-lodash/issues"
+  },
+  "homepage": "https://github.com/eins78/active-lodash#readme",
+  "devDependencies": {
+    "babel": "*",
+    "babel-eslint": "*",
+    "coveralls": "*",
+    "dependency-check": "*",
+    "eslint": "*",
+    "istanbul": "*",
+    "rimraf": "*",
+    "tap-spec": "*",
+    "tape": "*",
+    "tape-catch": "*",
+    "watch": "*",
+    "semantic-release": "^4.3.5"
+  },
+  "dependencies": {
+    "babel-runtime": "*",
+    "lodash-cli": "3.x.x"
+  },
+  "version": "1.2.0",
+  "gitHead": "b406a1b360ba6cd8a94705697d95bd089f055bae",
+  "_id": "active-lodash@1.2.0",
+  "_shasum": "21b50760f78e6a4fadb62df13b90df97bd0af08d",
+  "_from": "active-lodash@1.2.0",
+  "_npmVersion": "2.14.8",
+  "_nodeVersion": "4.2.1",
+  "_npmUser": {
+    "name": "eins78",
+    "email": "1@178.is"
+  },
+  "dist": {
+    "shasum": "21b50760f78e6a4fadb62df13b90df97bd0af08d",
+    "tarball": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "eins78",
+      "email": "1@178.is"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/active-lodash/-/active-lodash-1.2.0.tgz",
+  "readme": "ERROR: No README data found!"
+}
