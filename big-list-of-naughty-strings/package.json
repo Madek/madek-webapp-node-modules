@@ -1,0 +1,43 @@
+{
+  "name": "big-list-of-naughty-strings",
+  "version": "1.0.0",
+  "description": "The Big List of Naughty Strings is a list of strings which have a high probability of causing issues when used as user-input data",
+  "author": {
+    "name": "Max Woolf",
+    "email": "max@minimaxir.com"
+  },
+  "main": "blns.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minimaxir/big-list-of-naughty-strings.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/minimaxir/big-list-of-naughty-strings/issues"
+  },
+  "homepage": "https://github.com/minimaxir/big-list-of-naughty-strings#readme",
+  "gitHead": "bcd08985e0d5eb445b434f4cf5227153ec450faa",
+  "_id": "big-list-of-naughty-strings@1.0.0",
+  "scripts": {},
+  "_shasum": "4364e58591541b18e2e8991bc034ce5e9ab18119",
+  "_from": "big-list-of-naughty-strings@1.0.0",
+  "_npmVersion": "2.14.3",
+  "_nodeVersion": "4.1.0",
+  "_npmUser": {
+    "name": "minimaxir",
+    "email": "max@minimaxir.com"
+  },
+  "dist": {
+    "shasum": "4364e58591541b18e2e8991bc034ce5e9ab18119",
+    "tarball": "http://registry.npmjs.org/big-list-of-naughty-strings/-/big-list-of-naughty-strings-1.0.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "minimaxir",
+      "email": "max@minimaxir.com"
+    }
+  ],
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/big-list-of-naughty-strings/-/big-list-of-naughty-strings-1.0.0.tgz",
+  "readme": "ERROR: No README data found!"
+}

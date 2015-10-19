@@ -1,0 +1,104 @@
+{
+  "name": "ampersand-model",
+  "description": "An extension to ampersand-state that adds methods and properties for working with a RESTful API.",
+  "version": "5.0.3",
+  "author": {
+    "name": "Henrik Joreteg",
+    "email": "henrik@andyet.net"
+  },
+  "files": [
+    "ampersand-model.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/ampersandjs/ampersand-model/issues"
+  },
+  "dependencies": {
+    "ampersand-state": "^4.5.2",
+    "ampersand-sync": "^3.0.5",
+    "ampersand-version": "^1.0.2",
+    "lodash.assign": "^3.0.0",
+    "lodash.clone": "^3.0.1",
+    "lodash.isobject": "^3.0.1",
+    "lodash.result": "^3.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^8.1.0",
+    "lodash": "^3.6.0",
+    "phantomjs": "^1.9.13",
+    "precommit-hook": "*",
+    "run-browser": "^2.0.1",
+    "tap-spec": "^2.1.2",
+    "tape": "^3.0.3",
+    "tape-run": "^0.3.0"
+  },
+  "homepage": "https://github.com/ampersandjs/ampersand-model",
+  "keywords": [
+    "model, ampersand, state"
+  ],
+  "license": "MIT",
+  "main": "./ampersand-model.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ampersandjs/ampersand-model.git"
+  },
+  "scripts": {
+    "start": "run-browser test/*.js",
+    "test": "browserify test/*.js | tape-run | tap-spec"
+  },
+  "testling": {
+    "files": "test/index.js",
+    "browsers": [
+      "ie/8..latest",
+      "firefox/17..latest",
+      "firefox/nightly",
+      "chrome/22..latest",
+      "chrome/canary",
+      "opera/12..latest",
+      "opera/next",
+      "safari/5.1..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest",
+      "android-browser/4.2..latest"
+    ]
+  },
+  "browserify": {
+    "transform": [
+      "ampersand-version"
+    ]
+  },
+  "gitHead": "e87a37eda452910eb9e1bc1ef1e6268fa3169e88",
+  "_id": "ampersand-model@5.0.3",
+  "_shasum": "d9f8be72e376f9f377b98adc28ec4fcd47e46b5f",
+  "_from": "ampersand-model@5.0.3",
+  "_npmVersion": "2.7.5",
+  "_nodeVersion": "0.10.35",
+  "_npmUser": {
+    "name": "lukekarrys",
+    "email": "luke@lukekarrys.com"
+  },
+  "maintainers": [
+    {
+      "name": "henrikjoreteg",
+      "email": "henrik@andyet.net"
+    },
+    {
+      "name": "latentflip",
+      "email": "phil@latentflip.com"
+    },
+    {
+      "name": "gar",
+      "email": "gar@comrade.us"
+    },
+    {
+      "name": "lukekarrys",
+      "email": "luke@lukekarrys.com"
+    }
+  ],
+  "dist": {
+    "shasum": "d9f8be72e376f9f377b98adc28ec4fcd47e46b5f",
+    "tarball": "http://registry.npmjs.org/ampersand-model/-/ampersand-model-5.0.3.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/ampersand-model/-/ampersand-model-5.0.3.tgz",
+  "readme": "ERROR: No README data found!"
+}

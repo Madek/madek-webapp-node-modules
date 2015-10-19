@@ -1,0 +1,46 @@
+{
+  "name": "hashblot",
+  "version": "0.4.5",
+  "description": "Functions for hash visualization.",
+  "main": "hashblot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stuartpb/hashblot.git"
+  },
+  "keywords": [
+    "hash",
+    "visualization"
+  ],
+  "author": {
+    "name": "Stuart P. Bentley"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stuartpb/hashblot/issues"
+  },
+  "homepage": "https://github.com/stuartpb/hashblot",
+  "_id": "hashblot@0.4.5",
+  "_shasum": "3b0702a1a31df7798ed50dbb0a3fa818c65047a0",
+  "_from": "hashblot@0.4.5",
+  "_npmVersion": "1.4.9",
+  "_npmUser": {
+    "name": "stuartpb",
+    "email": "stuart@testtrack4.com"
+  },
+  "maintainers": [
+    {
+      "name": "stuartpb",
+      "email": "stuart@testtrack4.com"
+    }
+  ],
+  "dist": {
+    "shasum": "3b0702a1a31df7798ed50dbb0a3fa818c65047a0",
+    "tarball": "http://registry.npmjs.org/hashblot/-/hashblot-0.4.5.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/hashblot/-/hashblot-0.4.5.tgz",
+  "readme": "ERROR: No README data found!"
+}
