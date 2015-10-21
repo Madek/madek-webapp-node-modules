@@ -1,20 +1,47 @@
 {
-  "name": "lodash.foreach",
-  "version": "3.0.3",
-  "description": "The modern build of lodash’s `_.forEach` as a module.",
-  "homepage": "https://lodash.com/",
-  "icon": "https://lodash.com/icon.svg",
-  "license": "MIT",
-  "keywords": [
-    "lodash",
-    "lodash-modularized",
-    "stdlib",
-    "util"
+  "_args": [
+    [
+      "lodash.foreach@^3.0.2",
+      "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-state"
+    ]
   ],
-  "author": {
-    "name": "John-David Dalton",
+  "_from": "lodash.foreach@>=3.0.2 <4.0.0",
+  "_id": "lodash.foreach@3.0.3",
+  "_inCache": true,
+  "_location": "/lodash.foreach",
+  "_nodeVersion": "0.12.2",
+  "_npmUser": {
     "email": "john.david.dalton@gmail.com",
+    "name": "jdalton"
+  },
+  "_npmVersion": "2.7.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "lodash.foreach",
+    "raw": "lodash.foreach@^3.0.2",
+    "rawSpec": "^3.0.2",
+    "scope": null,
+    "spec": ">=3.0.2 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/ampersand-collection-lodash-mixin",
+    "/ampersand-events",
+    "/ampersand-react-mixin",
+    "/ampersand-state"
+  ],
+  "_resolved": "https://registry.npmjs.org/lodash.foreach/-/lodash.foreach-3.0.3.tgz",
+  "_shasum": "6fd7efb79691aecd67fdeac2761c98e701d6c39a",
+  "_shrinkwrap": null,
+  "_spec": "lodash.foreach@^3.0.2",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-state",
+  "author": {
+    "email": "john.david.dalton@gmail.com",
+    "name": "John-David Dalton",
     "url": "http://allyoucanleet.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/lodash/lodash/issues"
   },
   "contributors": [
     {
@@ -43,31 +70,29 @@
       "url": "https://mathiasbynens.be/"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lodash/lodash.git"
-  },
-  "scripts": {
-    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
-  },
   "dependencies": {
     "lodash._arrayeach": "^3.0.0",
     "lodash._baseeach": "^3.0.0",
     "lodash._bindcallback": "^3.0.0",
     "lodash.isarray": "^3.0.0"
   },
-  "bugs": {
-    "url": "https://github.com/lodash/lodash/issues"
+  "description": "The modern build of lodash’s `_.forEach` as a module.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "6fd7efb79691aecd67fdeac2761c98e701d6c39a",
+    "tarball": "http://registry.npmjs.org/lodash.foreach/-/lodash.foreach-3.0.3.tgz"
   },
-  "_id": "lodash.foreach@3.0.3",
-  "_shasum": "6fd7efb79691aecd67fdeac2761c98e701d6c39a",
-  "_from": "lodash.foreach@3.0.3",
-  "_npmVersion": "2.7.6",
-  "_nodeVersion": "0.12.2",
-  "_npmUser": {
-    "name": "jdalton",
-    "email": "john.david.dalton@gmail.com"
-  },
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "installable": true,
+  "keywords": [
+    "lodash",
+    "lodash-modularized",
+    "stdlib",
+    "util"
+  ],
+  "license": "MIT",
   "maintainers": [
     {
       "name": "jdalton",
@@ -90,11 +115,14 @@
       "email": "demoneaux@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "6fd7efb79691aecd67fdeac2761c98e701d6c39a",
-    "tarball": "http://registry.npmjs.org/lodash.foreach/-/lodash.foreach-3.0.3.tgz"
+  "name": "lodash.foreach",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lodash/lodash"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/lodash.foreach/-/lodash.foreach-3.0.3.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  },
+  "version": "3.0.3"
 }

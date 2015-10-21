@@ -1,52 +1,44 @@
 {
-  "name": "active-lodash",
-  "description": "A version of lodash customized to feel more like ActiveSupport (from Rails).",
-  "main": "dist/index.js",
-  "files": [
-    "dist/",
-    "lodash.custom.js"
+  "_args": [
+    [
+      "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+      "/Users/mfa/CODE/Madek/webapp"
+    ]
   ],
-  "scripts": {
-    "dev": "npm run -s build && npm run -s test",
-    "clean": "rimraf dist lodash.custom.js",
-    "lint": "eslint src test",
-    "watch": "watch 'npm run build -s' src test",
-    "watch-dev": "watch 'npm run dev -s' src test",
-    "check": "npm run -s lint",
-    "test": "babel-node test/*.js | tee tap.log | tspec",
-    "prebuild": "npm run -s check && npm run -s clean",
-    "build": "npm run -s build-lodash && babel --optional runtime src -d dist",
-    "build-lodash": "lodash modern strict exports=node minus=template -d -o lodash.custom.js",
-    "coverage": "babel-node node_modules/.bin/istanbul cover test/*.js",
-    "coveralls": "npm run -s coverage && coveralls < coverage/lcov.info",
-    "postcoveralls": "rimraf ./coverage",
-    "ci": "npm install --ignore-scripts && npm run -s build && npm run -s test && npm run -s coverage",
-    "prepublish": "npm run -s build",
-    "deploy": "git pull --rebase origin master && git push origin master",
-    "patch": "npm version patch && npm publish",
-    "minor": "npm version minor && npm publish",
-    "major": "npm version major && npm publish",
-    "postpublish": "git push origin master --follow-tags",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  "_from": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+  "_id": "active-lodash@1.2.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/active-lodash",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": null,
+    "raw": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+    "rawSpec": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+    "scope": null,
+    "spec": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+    "type": "remote"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eins78/active-lodash.git"
-  },
-  "keywords": [
-    "lodash",
-    "ActiveSupport",
-    "RubyOnRails"
+  "_requiredBy": [
+    "/"
   ],
+  "_resolved": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+  "_shasum": "f071ece58d2f5d9c9e24458042f966ff4b3d3851",
+  "_shrinkwrap": null,
+  "_spec": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+  "_where": "/Users/mfa/CODE/Madek/webapp",
   "author": {
-    "name": "Max F. Albrecht",
-    "email": "1@178.is"
+    "email": "1@178.is",
+    "name": "Max F. Albrecht"
   },
-  "license": "CC0-1.0",
   "bugs": {
     "url": "https://github.com/eins78/active-lodash/issues"
   },
-  "homepage": "https://github.com/eins78/active-lodash#readme",
+  "dependencies": {
+    "babel-runtime": "*",
+    "lodash-cli": "3.x.x"
+  },
+  "description": "A version of lodash customized to feel more like ActiveSupport (from Rails).",
   "devDependencies": {
     "babel": "*",
     "babel-eslint": "*",
@@ -55,38 +47,53 @@
     "eslint": "*",
     "istanbul": "*",
     "rimraf": "*",
+    "semantic-release": "^4.3.5",
     "tap-spec": "*",
     "tape": "*",
     "tape-catch": "*",
-    "watch": "*",
-    "semantic-release": "^4.3.5"
+    "watch": "*"
   },
-  "dependencies": {
-    "babel-runtime": "*",
-    "lodash-cli": "3.x.x"
-  },
-  "version": "1.2.0",
-  "gitHead": "b406a1b360ba6cd8a94705697d95bd089f055bae",
-  "_id": "active-lodash@1.2.0",
-  "_shasum": "21b50760f78e6a4fadb62df13b90df97bd0af08d",
-  "_from": "active-lodash@1.2.0",
-  "_npmVersion": "2.14.8",
-  "_nodeVersion": "4.2.1",
-  "_npmUser": {
-    "name": "eins78",
-    "email": "1@178.is"
-  },
-  "dist": {
-    "shasum": "21b50760f78e6a4fadb62df13b90df97bd0af08d",
-    "tarball": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.0.tgz"
-  },
-  "maintainers": [
-    {
-      "name": "eins78",
-      "email": "1@178.is"
-    }
+  "files": [
+    "dist/",
+    "lodash.custom.js"
   ],
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/active-lodash/-/active-lodash-1.2.0.tgz",
-  "readme": "ERROR: No README data found!"
+  "homepage": "https://github.com/eins78/active-lodash#readme",
+  "keywords": [
+    "ActiveSupport",
+    "RubyOnRails",
+    "lodash"
+  ],
+  "license": "CC0-1.0",
+  "main": "dist/index.js",
+  "name": "active-lodash",
+  "optionalDependencies": {},
+  "readme": "# active-lodash\n\n[![NPM version][npm-image]][npm-url]\n[![Travis Build Status][travis-image]][travis-url]\n[![Coveralls Status][coveralls-image]][coveralls-url]\n[![Dependency Status][depstat-image]][depstat-url]\n<!-- [![Downloads][download-badge]][npm-url] -->\n[![CI Status][cider-image]][cider-url]\n\n> A version of lodash customized to feel more like Ruby/Rails/ActiveSupport.\n\n## Features\n\n-   custom, reduced, modern build of `lodash`\n\n-   **non-destructive `merge`**, `assign`, `extend`,\n    `defaults` and `defaultsDeep`.  \n(They are always returning a new object)\n\n-   **`present()`** and **`presence()`**\n\n-   Does not extend prototypes.  \n(If you want that, have a look at [rodash][] or [activesupport][])\n\n-   [**`<your idea here>`**](https://github.com/eins78/active-lodash/issues)\n\n## Install\n\n```sh\nnpm i -SE active-lodash\n```\n\n## Usage\n\n```js\nimport f from 'active-lodash'\n```\n\nor\n\n```js\nvar f = require('active-lodash')\n\n```\n\nthen\n\n```js\nassert.equal((f(23).presence() || 42), 23)\nassert.equal((f(null).presence() || 42), 42)\n\nassert.equal(f.present({a: 1}), true)\nassert.equal(f.present([1]), true)\nassert.equal(f.present(true), true)\nassert.equal(f.present(false), true)\nassert.equal(f.present(function () {}), true)\n\nassert.equal(f.present({}), false)\nassert.equal(f.present([]), false)\nassert.equal(f.present(undefined), false)\nassert.equal(f.present(null), false)\n```\n\n(See [tests][] for more Examples.)\n\n## License\n\nCC-0 © [Max F. Albrecht](http://github.com/eins78)\n\n[tests]: https://github.com/eins78/active-lodash/blob/master/test/tests.js\n[lodash-inflection]: https://www.npmjs.com/package/lodash-inflection\n[rodash]: https://github.com/obie/rodash\n[activesupport]: https://www.npmjs.com/package/activesupport\n\n[npm-url]: https://npmjs.org/package/active-lodash\n[npm-image]: https://img.shields.io/npm/v/active-lodash.svg?style=flat-square\n\n[cider-url]: http://ci.zhdk.ch/cider-ci/ui/public/active-lodash/cider-ci/Test/summary.html\n[cider-image]: http://ci.zhdk.ch/cider-ci/ui/public/active-lodash/master/Test/summary.svg?respond_width_200&orientation=horizontal\n[travis-url]: https://travis-ci.org/eins78/active-lodash\n[travis-image]: https://img.shields.io/travis/eins78/active-lodash.svg?style=flat-square\n\n[coveralls-url]: https://coveralls.io/r/eins78/active-lodash\n[coveralls-image]: https://img.shields.io/coveralls/eins78/active-lodash.svg?style=flat-square\n\n[depstat-url]: https://david-dm.org/eins78/active-lodash\n[depstat-image]: https://david-dm.org/eins78/active-lodash.svg?style=flat-square\n\n[download-badge]: http://img.shields.io/npm/dm/active-lodash.svg?style=flat-square\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eins78/active-lodash.git"
+  },
+  "scripts": {
+    "build": "npm run -s build-lodash && babel --optional runtime src -d dist",
+    "build-lodash": "lodash modern strict exports=node minus=template -d -o lodash.custom.js",
+    "check": "npm run -s lint",
+    "ci": "npm install --ignore-scripts && npm run -s build && npm run -s test && npm run -s coverage",
+    "clean": "rimraf dist lodash.custom.js",
+    "coverage": "babel-node node_modules/.bin/istanbul cover test/*.js",
+    "coveralls": "npm run -s coverage && coveralls < coverage/lcov.info",
+    "deploy": "git pull --rebase origin master && git push origin master",
+    "dev": "npm run -s build && npm run -s test",
+    "lint": "eslint src test",
+    "major": "npm version major && npm publish",
+    "minor": "npm version minor && npm publish",
+    "patch": "npm version patch && npm publish",
+    "postcoveralls": "rimraf ./coverage",
+    "prebuild": "npm run -s check && npm run -s clean",
+    "prepublish": "npm run -s build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "test": "babel-node test/*.js | tee tap.log | tspec",
+    "watch": "watch 'npm run build -s' src test",
+    "watch-dev": "watch 'npm run dev -s' src test"
+  },
+  "version": "1.2.1"
 }

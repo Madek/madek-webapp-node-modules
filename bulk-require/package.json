@@ -1,0 +1,58 @@
+{
+  "name": "bulk-require",
+  "version": "0.2.1",
+  "description": "require a whole directory of trees in bulk",
+  "main": "index.js",
+  "dependencies": {
+    "glob": "~3.2.7"
+  },
+  "devDependencies": {
+    "tape": "^2.13.2"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/bulk-require.git"
+  },
+  "homepage": "https://github.com/substack/bulk-require",
+  "keywords": [
+    "require",
+    "bulk",
+    "directory",
+    "glob",
+    "load",
+    "include"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/substack/bulk-require/issues"
+  },
+  "_id": "bulk-require@0.2.1",
+  "dist": {
+    "shasum": "f118d7833118b0a1a20b465b136d9db513479d25",
+    "tarball": "http://registry.npmjs.org/bulk-require/-/bulk-require-0.2.1.tgz"
+  },
+  "_from": "bulk-require@0.2.1",
+  "_npmVersion": "1.4.3",
+  "_npmUser": {
+    "name": "substack",
+    "email": "mail@substack.net"
+  },
+  "maintainers": [
+    {
+      "name": "substack",
+      "email": "mail@substack.net"
+    }
+  ],
+  "directories": {},
+  "_shasum": "f118d7833118b0a1a20b465b136d9db513479d25",
+  "_resolved": "https://registry.npmjs.org/bulk-require/-/bulk-require-0.2.1.tgz",
+  "readme": "ERROR: No README data found!"
+}

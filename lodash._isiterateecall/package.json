@@ -1,14 +1,56 @@
 {
-  "name": "lodash._isiterateecall",
-  "version": "3.0.9",
-  "description": "The modern build of lodash’s internal `isIterateeCall` as a module.",
-  "homepage": "https://lodash.com/",
-  "icon": "https://lodash.com/icon.svg",
-  "license": "MIT",
-  "author": {
-    "name": "John-David Dalton",
+  "_args": [
+    [
+      "lodash._isiterateecall@^3.0.0",
+      "/Users/ma/CODE/Madek/webapp/node_modules/lodash._createassigner"
+    ]
+  ],
+  "_from": "lodash._isiterateecall@>=3.0.0 <4.0.0",
+  "_id": "lodash._isiterateecall@3.0.9",
+  "_inCache": true,
+  "_location": "/lodash._isiterateecall",
+  "_nodeVersion": "2.0.2",
+  "_npmUser": {
     "email": "john.david.dalton@gmail.com",
+    "name": "jdalton"
+  },
+  "_npmVersion": "2.10.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "lodash._isiterateecall",
+    "raw": "lodash._isiterateecall@^3.0.0",
+    "rawSpec": "^3.0.0",
+    "scope": null,
+    "spec": ">=3.0.0 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/lodash._createassigner",
+    "/lodash.clone",
+    "/lodash.drop",
+    "/lodash.every",
+    "/lodash.includes",
+    "/lodash.initial",
+    "/lodash.max",
+    "/lodash.min",
+    "/lodash.rest",
+    "/lodash.sample",
+    "/lodash.some",
+    "/lodash.sortby",
+    "/lodash.take"
+  ],
+  "_resolved": "https://registry.npmjs.org/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz",
+  "_shasum": "5203ad7ba425fae842460e696db9cf3e6aac057c",
+  "_shrinkwrap": null,
+  "_spec": "lodash._isiterateecall@^3.0.0",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/lodash._createassigner",
+  "author": {
+    "email": "john.david.dalton@gmail.com",
+    "name": "John-David Dalton",
     "url": "http://allyoucanleet.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/lodash/lodash/issues"
   },
   "contributors": [
     {
@@ -37,25 +79,18 @@
       "url": "https://mathiasbynens.be/"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lodash/lodash.git"
+  "dependencies": {},
+  "description": "The modern build of lodash’s internal `isIterateeCall` as a module.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "5203ad7ba425fae842460e696db9cf3e6aac057c",
+    "tarball": "http://registry.npmjs.org/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz"
   },
-  "scripts": {
-    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
-  },
-  "bugs": {
-    "url": "https://github.com/lodash/lodash/issues"
-  },
-  "_id": "lodash._isiterateecall@3.0.9",
-  "_shasum": "5203ad7ba425fae842460e696db9cf3e6aac057c",
-  "_from": "lodash._isiterateecall@3.0.9",
-  "_npmVersion": "2.10.1",
-  "_nodeVersion": "2.0.2",
-  "_npmUser": {
-    "name": "jdalton",
-    "email": "john.david.dalton@gmail.com"
-  },
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "installable": true,
+  "license": "MIT",
   "maintainers": [
     {
       "name": "jdalton",
@@ -78,11 +113,14 @@
       "email": "blaine@iceddev.com"
     }
   ],
-  "dist": {
-    "shasum": "5203ad7ba425fae842460e696db9cf3e6aac057c",
-    "tarball": "http://registry.npmjs.org/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz"
+  "name": "lodash._isiterateecall",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lodash/lodash.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  },
+  "version": "3.0.9"
 }

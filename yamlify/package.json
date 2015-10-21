@@ -1,50 +1,74 @@
 {
-  "name": "yamlify",
-  "description": "YAML for browserify and node.js; YAML includes",
-  "version": "0.1.2",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/dmapper/yamlify.git"
+  "_args": [
+    [
+      "yamlify@0.1.2",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "yamlify@0.1.2",
+  "_id": "yamlify@0.1.2",
+  "_inCache": true,
+  "_location": "/yamlify",
+  "_npmUser": {
+    "email": "cray0000@gmail.com",
+    "name": "cray0000"
   },
-  "main": "index.js",
-  "engines": {
-    "node": "0.10.x"
+  "_npmVersion": "1.4.14",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "yamlify",
+    "raw": "yamlify@0.1.2",
+    "rawSpec": "0.1.2",
+    "scope": null,
+    "spec": "0.1.2",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/yamlify/-/yamlify-0.1.2.tgz",
+  "_shasum": "11ad68babf6edd0069feb60c4147067477c4a507",
+  "_shrinkwrap": null,
+  "_spec": "yamlify@0.1.2",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "bugs": {
+    "url": "https://github.com/dmapper/yamlify/issues"
   },
   "dependencies": {
     "js-yaml": "~3.0.2",
     "through": "~2.3.4"
   },
+  "description": "YAML for browserify and node.js; YAML includes",
   "devDependencies": {},
-  "keywords": [
-    "yaml",
-    "browserify",
-    "browserify-transform"
-  ],
+  "directories": {},
+  "dist": {
+    "shasum": "11ad68babf6edd0069feb60c4147067477c4a507",
+    "tarball": "http://registry.npmjs.org/yamlify/-/yamlify-0.1.2.tgz"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
   "gitHead": "d62fd87c9123acd62b68324444ba3aae85680743",
-  "bugs": {
-    "url": "https://github.com/dmapper/yamlify/issues"
-  },
   "homepage": "https://github.com/dmapper/yamlify",
-  "_id": "yamlify@0.1.2",
-  "scripts": {},
-  "_shasum": "11ad68babf6edd0069feb60c4147067477c4a507",
-  "_from": "yamlify@0.1.2",
-  "_npmVersion": "1.4.14",
-  "_npmUser": {
-    "name": "cray0000",
-    "email": "cray0000@gmail.com"
-  },
+  "installable": true,
+  "keywords": [
+    "browserify",
+    "browserify-transform",
+    "yaml"
+  ],
+  "main": "index.js",
   "maintainers": [
     {
       "name": "cray0000",
       "email": "cray0000@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "11ad68babf6edd0069feb60c4147067477c4a507",
-    "tarball": "http://registry.npmjs.org/yamlify/-/yamlify-0.1.2.tgz"
+  "name": "yamlify",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dmapper/yamlify.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/yamlify/-/yamlify-0.1.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {},
+  "version": "0.1.2"
 }

@@ -1,23 +1,45 @@
 {
-  "name": "rusha",
-  "version": "0.8.3",
-  "description": "A high-performance pure-javascript SHA1 implementation suitable for large binary data.",
-  "main": "rusha.js",
-  "keywords": [
-    "sha1",
-    "binary",
-    "crypto",
-    "hash"
+  "_args": [
+    [
+      "rusha@0.8.3",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
   ],
-  "scripts": {
-    "test": "grunt test",
-    "test-saucelabs": "grunt test-saucelabs",
-    "build": "grunt build"
+  "_from": "rusha@0.8.3",
+  "_id": "rusha@0.8.3",
+  "_inCache": true,
+  "_location": "/rusha",
+  "_nodeVersion": "0.10.33",
+  "_npmUser": {
+    "email": "recv@awesam.de",
+    "name": "srijs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/srijs/rusha.git"
+  "_npmVersion": "2.1.12",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "rusha",
+    "raw": "rusha@0.8.3",
+    "rawSpec": "0.8.3",
+    "scope": null,
+    "spec": "0.8.3",
+    "type": "version"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/rusha/-/rusha-0.8.3.tgz",
+  "_shasum": "63cafec9e626ae09565ab0c4ab2cbc1f2f69b71f",
+  "_shrinkwrap": null,
+  "_spec": "rusha@0.8.3",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Sam Rijs"
+  },
+  "bugs": {
+    "url": "https://github.com/srijs/rusha/issues"
+  },
+  "dependencies": {},
+  "description": "A high-performance pure-javascript SHA1 implementation suitable for large binary data.",
   "devDependencies": {
     "asm.js": "0.0.2",
     "benchmark": "^1.0.0",
@@ -33,46 +55,49 @@
     "microtime": "^1.0.1",
     "sweet.js": "~0.7.1"
   },
-  "testling": {
-    "files": "test/test.js",
-    "harness": "mocha-tdd",
-    "browsers": [
-      "ie/6..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest"
-    ]
+  "directories": {},
+  "dist": {
+    "shasum": "63cafec9e626ae09565ab0c4ab2cbc1f2f69b71f",
+    "tarball": "http://registry.npmjs.org/rusha/-/rusha-0.8.3.tgz"
   },
-  "author": {
-    "name": "Sam Rijs"
-  },
-  "license": "MIT",
   "gitHead": "59c4f65bf6682b6c2fd2b002d33f4fc057a8f98c",
-  "bugs": {
-    "url": "https://github.com/srijs/rusha/issues"
-  },
   "homepage": "https://github.com/srijs/rusha",
-  "_id": "rusha@0.8.3",
-  "_shasum": "63cafec9e626ae09565ab0c4ab2cbc1f2f69b71f",
-  "_from": "rusha@0.8.3",
-  "_npmVersion": "2.1.12",
-  "_nodeVersion": "0.10.33",
-  "_npmUser": {
-    "name": "srijs",
-    "email": "recv@awesam.de"
-  },
+  "installable": true,
+  "keywords": [
+    "binary",
+    "crypto",
+    "hash",
+    "sha1"
+  ],
+  "license": "MIT",
+  "main": "rusha.js",
   "maintainers": [
     {
       "name": "srijs",
       "email": "recv@awesam.de"
     }
   ],
-  "dist": {
-    "shasum": "63cafec9e626ae09565ab0c4ab2cbc1f2f69b71f",
-    "tarball": "http://registry.npmjs.org/rusha/-/rusha-0.8.3.tgz"
+  "name": "rusha",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srijs/rusha"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/rusha/-/rusha-0.8.3.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "build": "grunt build",
+    "test": "grunt test",
+    "test-saucelabs": "grunt test-saucelabs"
+  },
+  "testling": {
+    "browsers": [
+      "chrome/22..latest",
+      "firefox/16..latest",
+      "ie/6..latest",
+      "opera/11.0..latest",
+      "safari/latest"
+    ],
+    "files": "test/test.js",
+    "harness": "mocha-tdd"
+  },
+  "version": "0.8.3"
 }

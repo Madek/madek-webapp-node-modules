@@ -1,0 +1,91 @@
+{
+  "_args": [
+    [
+      "react-file-drop@0.1.6",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "react-file-drop@0.1.6",
+  "_id": "react-file-drop@0.1.6",
+  "_inCache": true,
+  "_location": "/react-file-drop",
+  "_nodeVersion": "0.12.2",
+  "_npmUser": {
+    "email": "sarink87@gmail.com",
+    "name": "sarink"
+  },
+  "_npmVersion": "2.10.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "react-file-drop",
+    "raw": "react-file-drop@0.1.6",
+    "rawSpec": "0.1.6",
+    "scope": null,
+    "spec": "0.1.6",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.6.tgz",
+  "_shasum": "1287ba7acfb17073787b052c7f6f07ce6a76de5f",
+  "_shrinkwrap": null,
+  "_spec": "react-file-drop@0.1.6",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Kabir Sarin"
+  },
+  "bugs": {
+    "url": "https://github.com/sarink/react-file-drop/issues"
+  },
+  "dependencies": {},
+  "description": "React component for Gmail or Facbook -like drag and drop file uploader. Drag files anywhere onto the window (or user defined \"frame\" prop)! Very extensible, provides many hooks so you can use it to develop any custom behavior that you desire.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "1287ba7acfb17073787b052c7f6f07ce6a76de5f",
+    "tarball": "http://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.6.tgz"
+  },
+  "gitHead": "8bb01b737aa9353fd1c36f3a4c45d9670c905a8f",
+  "homepage": "https://github.com/sarink/react-file-drop#readme",
+  "installable": true,
+  "keywords": [
+    "document",
+    "drag",
+    "drag and drop",
+    "drag n drop",
+    "drop",
+    "dropzone",
+    "facebook",
+    "file",
+    "gmail",
+    "react",
+    "react dropzone",
+    "react file drag drop",
+    "react file facebook",
+    "react file gmail",
+    "react file upload",
+    "react-file-drop",
+    "upload",
+    "window"
+  ],
+  "license": "MIT",
+  "main": "./FileDrop",
+  "maintainers": [
+    {
+      "name": "sarink",
+      "email": "sarink87@gmail.com"
+    }
+  ],
+  "name": "react-file-drop",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "react": "^0.13 || 0.14.0-beta1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarink/react-file-drop.git"
+  },
+  "scripts": {},
+  "version": "0.1.6"
+}

@@ -1,52 +1,75 @@
 {
-  "name": "hogan.js",
+  "_args": [
+    [
+      "hogan.js@3.0.2",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "hogan.js@3.0.2",
+  "_id": "hogan.js@3.0.2",
+  "_inCache": true,
+  "_location": "/hogan.js",
+  "_npmUser": {
+    "email": "sayrer@gmail.com",
+    "name": "sayrer"
+  },
+  "_npmVersion": "1.4.15",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "hogan.js",
+    "raw": "hogan.js@3.0.2",
+    "rawSpec": "3.0.2",
+    "scope": null,
+    "spec": "3.0.2",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz",
+  "_shasum": "4cd9e1abd4294146e7679e41d7898732b02c7bfd",
+  "_shrinkwrap": null,
+  "_spec": "hogan.js@3.0.2",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Twitter Inc."
+  },
+  "bin": {
+    "hulk": "./bin/hulk"
+  },
+  "bugs": {
+    "url": "https://github.com/twitter/hogan.js/issues"
+  },
+  "dependencies": {
+    "mkdirp": "0.3.0",
+    "nopt": "1.0.10"
+  },
   "description": "A mustache compiler.",
-  "version": "3.0.2",
+  "devDependencies": {
+    "jsdom": "0.3.4",
+    "rimraf": "2.0.1",
+    "step": "0.0.5",
+    "uglify-js": "2.x"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "4cd9e1abd4294146e7679e41d7898732b02c7bfd",
+    "tarball": "http://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz"
+  },
+  "gitHead": "c52d142643e764e3f82e8ad3f2d44a46b82d1640",
+  "homepage": "http://twitter.github.com/hogan.js/",
+  "installable": true,
   "keywords": [
     "mustache",
     "template"
   ],
-  "main": "./lib/hogan.js",
-  "homepage": "http://twitter.github.com/hogan.js/",
-  "author": {
-    "name": "Twitter Inc."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/twitter/hogan.js.git"
-  },
   "licenses": [
     {
       "type": "Apache-2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   ],
-  "dependencies": {
-    "nopt": "1.0.10",
-    "mkdirp": "0.3.0"
-  },
-  "devDependencies": {
-    "uglify-js": "2.x",
-    "jsdom": "0.3.4",
-    "step": "0.0.5",
-    "rimraf": "2.0.1"
-  },
-  "bin": {
-    "hulk": "./bin/hulk"
-  },
-  "gitHead": "c52d142643e764e3f82e8ad3f2d44a46b82d1640",
-  "bugs": {
-    "url": "https://github.com/twitter/hogan.js/issues"
-  },
-  "_id": "hogan.js@3.0.2",
-  "scripts": {},
-  "_shasum": "4cd9e1abd4294146e7679e41d7898732b02c7bfd",
-  "_from": "hogan.js@3.0.2",
-  "_npmVersion": "1.4.15",
-  "_npmUser": {
-    "name": "sayrer",
-    "email": "sayrer@gmail.com"
-  },
+  "main": "./lib/hogan.js",
   "maintainers": [
     {
       "name": "fat",
@@ -57,11 +80,12 @@
       "email": "sayrer@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "4cd9e1abd4294146e7679e41d7898732b02c7bfd",
-    "tarball": "http://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz"
+  "name": "hogan.js",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twitter/hogan.js.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {},
+  "version": "3.0.2"
 }

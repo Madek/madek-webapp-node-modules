@@ -1,8 +1,40 @@
 {
-  "name": "underscore.string",
-  "version": "3.2.2",
-  "description": "String manipulation extensions for Underscore.js javascript library.",
-  "homepage": "http://epeli.github.com/underscore.string/",
+  "_args": [
+    [
+      "underscore.string@3.2.2",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "underscore.string@3.2.2",
+  "_id": "underscore.string@3.2.2",
+  "_inCache": true,
+  "_location": "/underscore.string",
+  "_nodeVersion": "0.10.33",
+  "_npmUser": {
+    "email": "esa-matti@suuronen.org",
+    "name": "epeli"
+  },
+  "_npmVersion": "2.14.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "underscore.string",
+    "raw": "underscore.string@3.2.2",
+    "rawSpec": "3.2.2",
+    "scope": null,
+    "spec": "3.2.2",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-3.2.2.tgz",
+  "_shasum": "4ed47e9eafa575a28bd1f7bc6a5bb1d9302bb11b",
+  "_shrinkwrap": null,
+  "_spec": "underscore.string@3.2.2",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "bugs": {
+    "url": "https://github.com/epeli/underscore.string/issues"
+  },
   "contributors": [
     {
       "name": "Esa-Matti Suuronen",
@@ -43,28 +75,8 @@
       "url": "<http://funkatron.com>"
     }
   ],
-  "keywords": [
-    "underscore",
-    "string"
-  ],
-  "main": "./index.js",
-  "directories": {
-    "lib": "./"
-  },
-  "engines": {
-    "node": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/epeli/underscore.string.git"
-  },
-  "bugs": {
-    "url": "https://github.com/epeli/underscore.string/issues"
-  },
-  "license": "MIT",
-  "scripts": {
-    "test": "gulp test"
-  },
+  "dependencies": {},
+  "description": "String manipulation extensions for Underscore.js javascript library.",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-bench": "^1.1.0",
@@ -81,25 +93,33 @@
     "mocha": "^2.1.0",
     "underscore": "^1.7.0"
   },
+  "directories": {
+    "lib": "./"
+  },
+  "dist": {
+    "shasum": "4ed47e9eafa575a28bd1f7bc6a5bb1d9302bb11b",
+    "tarball": "http://registry.npmjs.org/underscore.string/-/underscore.string-3.2.2.tgz"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "gitHead": "522c5254a09b04d250db44c91f4a7f3a18e6c1fb",
+  "homepage": "http://epeli.github.com/underscore.string/",
+  "installable": true,
   "jshintConfig": {
-    "node": true,
     "browser": true,
-    "qunit": true,
     "globals": {
       "s": true
-    }
+    },
+    "node": true,
+    "qunit": true
   },
-  "dependencies": {},
-  "gitHead": "522c5254a09b04d250db44c91f4a7f3a18e6c1fb",
-  "_id": "underscore.string@3.2.2",
-  "_shasum": "4ed47e9eafa575a28bd1f7bc6a5bb1d9302bb11b",
-  "_from": "underscore.string@3.2.2",
-  "_npmVersion": "2.14.2",
-  "_nodeVersion": "0.10.33",
-  "_npmUser": {
-    "name": "epeli",
-    "email": "esa-matti@suuronen.org"
-  },
+  "keywords": [
+    "string",
+    "underscore"
+  ],
+  "license": "MIT",
+  "main": "./index.js",
   "maintainers": [
     {
       "name": "edtsech",
@@ -118,10 +138,14 @@
       "email": "schtoeffel@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "4ed47e9eafa575a28bd1f7bc6a5bb1d9302bb11b",
-    "tarball": "http://registry.npmjs.org/underscore.string/-/underscore.string-3.2.2.tgz"
+  "name": "underscore.string",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epeli/underscore.string.git"
   },
-  "_resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-3.2.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "gulp test"
+  },
+  "version": "3.2.2"
 }

@@ -1,14 +1,46 @@
 {
-  "name": "lodash._baseget",
-  "version": "3.7.2",
-  "description": "The modern build of lodash’s internal `baseGet` as a module.",
-  "homepage": "https://lodash.com/",
-  "icon": "https://lodash.com/icon.svg",
-  "license": "MIT",
-  "author": {
-    "name": "John-David Dalton",
+  "_args": [
+    [
+      "lodash._baseget@^3.0.0",
+      "/Users/ma/CODE/Madek/webapp/node_modules/lodash.has"
+    ]
+  ],
+  "_from": "lodash._baseget@>=3.0.0 <4.0.0",
+  "_id": "lodash._baseget@3.7.2",
+  "_inCache": true,
+  "_location": "/lodash._baseget",
+  "_nodeVersion": "0.12.3",
+  "_npmUser": {
     "email": "john.david.dalton@gmail.com",
+    "name": "jdalton"
+  },
+  "_npmVersion": "2.10.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "lodash._baseget",
+    "raw": "lodash._baseget@^3.0.0",
+    "rawSpec": "^3.0.0",
+    "scope": null,
+    "spec": ">=3.0.0 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/lodash._invokepath",
+    "/lodash.has",
+    "/lodash.result"
+  ],
+  "_resolved": "https://registry.npmjs.org/lodash._baseget/-/lodash._baseget-3.7.2.tgz",
+  "_shasum": "1b6ae1d5facf3c25532350a13c1197cb8bb674f4",
+  "_shrinkwrap": null,
+  "_spec": "lodash._baseget@^3.0.0",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/lodash.has",
+  "author": {
+    "email": "john.david.dalton@gmail.com",
+    "name": "John-David Dalton",
     "url": "http://allyoucanleet.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/lodash/lodash/issues"
   },
   "contributors": [
     {
@@ -37,25 +69,18 @@
       "url": "https://mathiasbynens.be/"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lodash/lodash.git"
+  "dependencies": {},
+  "description": "The modern build of lodash’s internal `baseGet` as a module.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "1b6ae1d5facf3c25532350a13c1197cb8bb674f4",
+    "tarball": "http://registry.npmjs.org/lodash._baseget/-/lodash._baseget-3.7.2.tgz"
   },
-  "scripts": {
-    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
-  },
-  "bugs": {
-    "url": "https://github.com/lodash/lodash/issues"
-  },
-  "_id": "lodash._baseget@3.7.2",
-  "_shasum": "1b6ae1d5facf3c25532350a13c1197cb8bb674f4",
-  "_from": "lodash._baseget@3.7.2",
-  "_npmVersion": "2.10.0",
-  "_nodeVersion": "0.12.3",
-  "_npmUser": {
-    "name": "jdalton",
-    "email": "john.david.dalton@gmail.com"
-  },
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "installable": true,
+  "license": "MIT",
   "maintainers": [
     {
       "name": "jdalton",
@@ -74,11 +99,14 @@
       "email": "blaine@iceddev.com"
     }
   ],
-  "dist": {
-    "shasum": "1b6ae1d5facf3c25532350a13c1197cb8bb674f4",
-    "tarball": "http://registry.npmjs.org/lodash._baseget/-/lodash._baseget-3.7.2.tgz"
+  "name": "lodash._baseget",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lodash/lodash.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/lodash._baseget/-/lodash._baseget-3.7.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  },
+  "version": "3.7.2"
 }

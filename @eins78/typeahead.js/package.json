@@ -1,21 +1,43 @@
 {
-  "name": "@eins78/typeahead.js",
-  "description": "fast and fully-featured autocomplete library",
-  "keywords": [
-    "typeahead",
-    "autocomplete"
+  "_args": [
+    [
+      "@eins78/typeahead.js@0.11.2-pre.1",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
   ],
-  "homepage": "http://twitter.github.com/typeahead.js",
-  "bugs": {
-    "url": "https://github.com/twitter/typeahead.js/issues"
+  "_from": "@eins78/typeahead.js@0.11.2-pre.1",
+  "_id": "@eins78/typeahead.js@0.11.2-pre.1",
+  "_inCache": true,
+  "_location": "/@eins78/typeahead.js",
+  "_nodeVersion": "0.10.33",
+  "_npmUser": {
+    "email": "1@178.is",
+    "name": "eins78"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/twitter/typeahead.js.git"
+  "_npmVersion": "2.11.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "@eins78/typeahead.js",
+    "raw": "@eins78/typeahead.js@0.11.2-pre.1",
+    "rawSpec": "0.11.2-pre.1",
+    "scope": "@eins78",
+    "spec": "0.11.2-pre.1",
+    "type": "version"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@eins78/typeahead.js/-/typeahead.js-0.11.2-pre.1.tgz",
+  "_shasum": "60b9c174ce030fd38ffa075798822103eb79a57d",
+  "_shrinkwrap": null,
+  "_spec": "@eins78/typeahead.js@0.11.2-pre.1",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Twitter, Inc.",
     "url": "https://twitter.com/twitteross"
+  },
+  "bugs": {
+    "url": "https://github.com/twitter/typeahead.js/issues"
   },
   "contributors": [
     {
@@ -34,6 +56,7 @@
   "dependencies": {
     "jquery": ">=1.7"
   },
+  "description": "fast and fully-featured autocomplete library",
   "devDependencies": {
     "chai": "^1.9.1",
     "colors": "^0.6.2",
@@ -62,33 +85,34 @@
     "underscore": "^1.6.0",
     "yiewd": "^0.5.0"
   },
-  "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
-    "grunt": "grunt"
-  },
-  "version": "0.11.2-pre.1",
-  "main": "dist/typeahead.bundle.js",
-  "gitHead": "ea9671fdee8ca1e4925dd2aef4f3157d440dbbb5",
-  "_id": "@eins78/typeahead.js@0.11.2-pre.1",
-  "_shasum": "60b9c174ce030fd38ffa075798822103eb79a57d",
-  "_from": "@eins78/typeahead.js@0.11.2-pre.1",
-  "_npmVersion": "2.11.3",
-  "_nodeVersion": "0.10.33",
-  "_npmUser": {
-    "name": "eins78",
-    "email": "1@178.is"
-  },
+  "directories": {},
   "dist": {
     "shasum": "60b9c174ce030fd38ffa075798822103eb79a57d",
     "tarball": "http://registry.npmjs.org/@eins78/typeahead.js/-/typeahead.js-0.11.2-pre.1.tgz"
   },
+  "gitHead": "ea9671fdee8ca1e4925dd2aef4f3157d440dbbb5",
+  "homepage": "http://twitter.github.com/typeahead.js",
+  "installable": true,
+  "keywords": [
+    "autocomplete",
+    "typeahead"
+  ],
+  "main": "dist/typeahead.bundle.js",
   "maintainers": [
     {
       "name": "eins78",
       "email": "1@178.is"
     }
   ],
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/@eins78/typeahead.js/-/typeahead.js-0.11.2-pre.1.tgz",
-  "readme": "ERROR: No README data found!"
+  "name": "@eins78/typeahead.js",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twitter/typeahead.js.git"
+  },
+  "scripts": {
+    "grunt": "grunt",
+    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS"
+  },
+  "version": "0.11.2-pre.1"
 }

@@ -1,27 +1,49 @@
 {
-  "name": "browserify-incremental",
-  "version": "3.0.1",
-  "description": "Fast incremental rebuilds for browserify",
-  "main": "index.js",
+  "_args": [
+    [
+      "browserify-incremental@3.0.1",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "browserify-incremental@3.0.1",
+  "_id": "browserify-incremental@3.0.1",
+  "_inCache": true,
+  "_location": "/browserify-incremental",
+  "_nodeVersion": "0.10.26",
+  "_npmUser": {
+    "email": "james@jsdf.co",
+    "name": "jsdf"
+  },
+  "_npmVersion": "2.4.1",
+  "_phantomChildren": {
+    "through": "2.3.8"
+  },
+  "_requested": {
+    "name": "browserify-incremental",
+    "raw": "browserify-incremental@3.0.1",
+    "rawSpec": "3.0.1",
+    "scope": null,
+    "spec": "3.0.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/browserify-incremental/-/browserify-incremental-3.0.1.tgz",
+  "_shasum": "a2a65cf8e1278e3e4753da2a430e26162b373f41",
+  "_shrinkwrap": null,
+  "_spec": "browserify-incremental@3.0.1",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "email": "james@jsdf.co",
+    "name": "James Friend",
+    "url": "http://jsdf.co/"
+  },
   "bin": {
     "browserifyinc": "./bin/cmd.js"
   },
-  "scripts": {
-    "test": "tap test"
-  },
-  "author": {
-    "name": "James Friend",
-    "email": "james@jsdf.co",
-    "url": "http://jsdf.co/"
-  },
-  "license": "MIT",
-  "homepage": "https://github.com/jsdf/browserify-incremental",
   "bugs": {
     "url": "https://github.com/jsdf/browserify-incremental/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jsdf/browserify-incremental.git"
   },
   "dependencies": {
     "JSONStream": "^0.10.0",
@@ -29,33 +51,37 @@
     "through2": "^0.6.2",
     "xtend": "^4.0.0"
   },
-  "peerDependencies": {
-    "browserify": "*"
-  },
+  "description": "Fast incremental rebuilds for browserify",
   "devDependencies": {
     "tap": "^0.4.12"
   },
-  "gitHead": "fd7facb0270538f2629b7c75c9bd27108b33d383",
-  "_id": "browserify-incremental@3.0.1",
-  "_shasum": "a2a65cf8e1278e3e4753da2a430e26162b373f41",
-  "_from": "browserify-incremental@3.0.1",
-  "_npmVersion": "2.4.1",
-  "_nodeVersion": "0.10.26",
-  "_npmUser": {
-    "name": "jsdf",
-    "email": "james@jsdf.co"
+  "directories": {},
+  "dist": {
+    "shasum": "a2a65cf8e1278e3e4753da2a430e26162b373f41",
+    "tarball": "http://registry.npmjs.org/browserify-incremental/-/browserify-incremental-3.0.1.tgz"
   },
+  "gitHead": "fd7facb0270538f2629b7c75c9bd27108b33d383",
+  "homepage": "https://github.com/jsdf/browserify-incremental",
+  "installable": true,
+  "license": "MIT",
+  "main": "index.js",
   "maintainers": [
     {
       "name": "jsdf",
       "email": "james@jsdf.co"
     }
   ],
-  "dist": {
-    "shasum": "a2a65cf8e1278e3e4753da2a430e26162b373f41",
-    "tarball": "http://registry.npmjs.org/browserify-incremental/-/browserify-incremental-3.0.1.tgz"
+  "name": "browserify-incremental",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "browserify": "*"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/browserify-incremental/-/browserify-incremental-3.0.1.tgz",
-  "readme": "ERROR: No README data found!"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jsdf/browserify-incremental.git"
+  },
+  "scripts": {
+    "test": "tap test"
+  },
+  "version": "3.0.1"
 }

@@ -1,0 +1,62 @@
+{
+  "name": "bulkify",
+  "version": "1.1.1",
+  "description": "transform inline bulk-require calls into statically resolvable require maps",
+  "main": "index.js",
+  "dependencies": {
+    "bulk-require": "~0.2.0",
+    "static-module": "^1.1.2",
+    "through2": "~0.4.1"
+  },
+  "devDependencies": {
+    "concat-stream": "^1.4.5",
+    "tape": "^2.12.1"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/bulkify.git"
+  },
+  "homepage": "https://github.com/substack/bulkify",
+  "keywords": [
+    "browserify-transform",
+    "bulk-require",
+    "directory",
+    "nested",
+    "require"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT",
+  "gitHead": "799f4420c1aa9173ed395a2425f7974077e06333",
+  "bugs": {
+    "url": "https://github.com/substack/bulkify/issues"
+  },
+  "_id": "bulkify@1.1.1",
+  "_shasum": "23001106678bf268c35694204e5237170f26186c",
+  "_from": "bulkify@1.1.1",
+  "_npmVersion": "2.3.0",
+  "_nodeVersion": "0.12.0",
+  "_npmUser": {
+    "name": "substack",
+    "email": "mail@substack.net"
+  },
+  "maintainers": [
+    {
+      "name": "substack",
+      "email": "mail@substack.net"
+    }
+  ],
+  "dist": {
+    "shasum": "23001106678bf268c35694204e5237170f26186c",
+    "tarball": "http://registry.npmjs.org/bulkify/-/bulkify-1.1.1.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/bulkify/-/bulkify-1.1.1.tgz",
+  "readme": "ERROR: No README data found!"
+}

@@ -1,20 +1,47 @@
 {
-  "name": "lodash.bind",
-  "version": "3.1.0",
-  "description": "The modern build of lodash’s `_.bind` as a module.",
-  "homepage": "https://lodash.com/",
-  "icon": "https://lodash.com/icon.svg",
-  "license": "MIT",
-  "keywords": [
-    "lodash",
-    "lodash-modularized",
-    "stdlib",
-    "util"
+  "_args": [
+    [
+      "lodash.bind@^3.1.0",
+      "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-state"
+    ]
   ],
-  "author": {
-    "name": "John-David Dalton",
+  "_from": "lodash.bind@>=3.1.0 <4.0.0",
+  "_id": "lodash.bind@3.1.0",
+  "_inCache": true,
+  "_location": "/lodash.bind",
+  "_nodeVersion": "0.12.0",
+  "_npmUser": {
     "email": "john.david.dalton@gmail.com",
+    "name": "jdalton"
+  },
+  "_npmVersion": "2.7.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "lodash.bind",
+    "raw": "lodash.bind@^3.1.0",
+    "rawSpec": "^3.1.0",
+    "scope": null,
+    "spec": ">=3.1.0 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/ampersand-collection",
+    "/ampersand-events",
+    "/ampersand-react-mixin",
+    "/ampersand-state"
+  ],
+  "_resolved": "https://registry.npmjs.org/lodash.bind/-/lodash.bind-3.1.0.tgz",
+  "_shasum": "f95f48638d7d8bbb5854f908266527999fbfa4bb",
+  "_shrinkwrap": null,
+  "_spec": "lodash.bind@^3.1.0",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-state",
+  "author": {
+    "email": "john.david.dalton@gmail.com",
+    "name": "John-David Dalton",
     "url": "http://allyoucanleet.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/lodash/lodash/issues"
   },
   "contributors": [
     {
@@ -43,30 +70,28 @@
       "url": "https://mathiasbynens.be/"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lodash/lodash.git"
-  },
-  "scripts": {
-    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
-  },
   "dependencies": {
     "lodash._createwrapper": "^3.0.0",
     "lodash._replaceholders": "^3.0.0",
     "lodash.restparam": "^3.0.0"
   },
-  "bugs": {
-    "url": "https://github.com/lodash/lodash/issues"
+  "description": "The modern build of lodash’s `_.bind` as a module.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "f95f48638d7d8bbb5854f908266527999fbfa4bb",
+    "tarball": "http://registry.npmjs.org/lodash.bind/-/lodash.bind-3.1.0.tgz"
   },
-  "_id": "lodash.bind@3.1.0",
-  "_shasum": "f95f48638d7d8bbb5854f908266527999fbfa4bb",
-  "_from": "lodash.bind@3.1.0",
-  "_npmVersion": "2.7.3",
-  "_nodeVersion": "0.12.0",
-  "_npmUser": {
-    "name": "jdalton",
-    "email": "john.david.dalton@gmail.com"
-  },
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "installable": true,
+  "keywords": [
+    "lodash",
+    "lodash-modularized",
+    "stdlib",
+    "util"
+  ],
+  "license": "MIT",
   "maintainers": [
     {
       "name": "jdalton",
@@ -89,11 +114,14 @@
       "email": "demoneaux@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "f95f48638d7d8bbb5854f908266527999fbfa4bb",
-    "tarball": "http://registry.npmjs.org/lodash.bind/-/lodash.bind-3.1.0.tgz"
+  "name": "lodash.bind",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lodash/lodash"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/lodash.bind/-/lodash.bind-3.1.0.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  },
+  "version": "3.1.0"
 }

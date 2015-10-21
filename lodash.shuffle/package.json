@@ -1,0 +1,122 @@
+{
+  "_args": [
+    [
+      "lodash.shuffle@^3.0.0",
+      "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-collection-lodash-mixin"
+    ]
+  ],
+  "_from": "lodash.shuffle@>=3.0.0 <4.0.0",
+  "_id": "lodash.shuffle@3.1.0",
+  "_inCache": true,
+  "_location": "/lodash.shuffle",
+  "_nodeVersion": "2.0.2",
+  "_npmUser": {
+    "email": "john.david.dalton@gmail.com",
+    "name": "jdalton"
+  },
+  "_npmVersion": "2.10.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "lodash.shuffle",
+    "raw": "lodash.shuffle@^3.0.0",
+    "rawSpec": "^3.0.0",
+    "scope": null,
+    "spec": ">=3.0.0 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/ampersand-collection-lodash-mixin"
+  ],
+  "_resolved": "https://registry.npmjs.org/lodash.shuffle/-/lodash.shuffle-3.1.0.tgz",
+  "_shasum": "518546d6a51d63511e5128741f2943267f4cc479",
+  "_shrinkwrap": null,
+  "_spec": "lodash.shuffle@^3.0.0",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-collection-lodash-mixin",
+  "author": {
+    "email": "john.david.dalton@gmail.com",
+    "name": "John-David Dalton",
+    "url": "http://allyoucanleet.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/lodash/lodash/issues"
+  },
+  "contributors": [
+    {
+      "name": "John-David Dalton",
+      "email": "john.david.dalton@gmail.com",
+      "url": "http://allyoucanleet.com/"
+    },
+    {
+      "name": "Benjamin Tan",
+      "email": "demoneaux@gmail.com",
+      "url": "https://d10.github.io/"
+    },
+    {
+      "name": "Blaine Bublitz",
+      "email": "blaine@iceddev.com",
+      "url": "http://www.iceddev.com/"
+    },
+    {
+      "name": "Kit Cambridge",
+      "email": "github@kitcambridge.be",
+      "url": "http://kitcambridge.be/"
+    },
+    {
+      "name": "Mathias Bynens",
+      "email": "mathias@qiwi.be",
+      "url": "https://mathiasbynens.be/"
+    }
+  ],
+  "dependencies": {
+    "lodash.sample": "^3.0.0"
+  },
+  "description": "The modern build of lodash’s `_.shuffle` as a module.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "518546d6a51d63511e5128741f2943267f4cc479",
+    "tarball": "http://registry.npmjs.org/lodash.shuffle/-/lodash.shuffle-3.1.0.tgz"
+  },
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "installable": true,
+  "keywords": [
+    "lodash",
+    "lodash-modularized",
+    "stdlib",
+    "util"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "jdalton",
+      "email": "john.david.dalton@gmail.com"
+    },
+    {
+      "name": "kitcambridge",
+      "email": "github@kitcambridge.be"
+    },
+    {
+      "name": "mathias",
+      "email": "mathias@qiwi.be"
+    },
+    {
+      "name": "phated",
+      "email": "blaine@iceddev.com"
+    },
+    {
+      "name": "d10",
+      "email": "demoneaux@gmail.com"
+    }
+  ],
+  "name": "lodash.shuffle",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lodash/lodash.git"
+  },
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+  },
+  "version": "3.1.0"
+}

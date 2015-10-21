@@ -1,47 +1,73 @@
 {
-  "name": "any_sha1",
-  "version": "0.1.1",
-  "description": "JavaScript functions for abstracting SHA1 implementations",
-  "main": "any_sha1.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stuartpb/any_sha1.git"
-  },
-  "keywords": [
-    "sha1"
+  "_args": [
+    [
+      "any_sha1@0.1.1",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
   ],
-  "author": {
-    "name": "Stuart P. Bentley",
-    "email": "stuart@testtrack4.com"
+  "_from": "any_sha1@0.1.1",
+  "_id": "any_sha1@0.1.1",
+  "_inCache": true,
+  "_location": "/any_sha1",
+  "_npmUser": {
+    "email": "stuart@testtrack4.com",
+    "name": "stuartpb"
   },
-  "license": "MIT",
+  "_npmVersion": "1.4.21",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "any_sha1",
+    "raw": "any_sha1@0.1.1",
+    "rawSpec": "0.1.1",
+    "scope": null,
+    "spec": "0.1.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/any_sha1/-/any_sha1-0.1.1.tgz",
+  "_shasum": "9e5b859b5beabd3e9d0f3adfb9da3263492b7e3d",
+  "_shrinkwrap": null,
+  "_spec": "any_sha1@0.1.1",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "email": "stuart@testtrack4.com",
+    "name": "Stuart P. Bentley"
+  },
   "bugs": {
     "url": "https://github.com/stuartpb/any_sha1/issues"
   },
-  "homepage": "https://github.com/stuartpb/any_sha1",
-  "gitHead": "e4d160ebecec17f0939e8ac44e59c53639a71880",
-  "_id": "any_sha1@0.1.1",
-  "_shasum": "9e5b859b5beabd3e9d0f3adfb9da3263492b7e3d",
-  "_from": "any_sha1@0.1.1",
-  "_npmVersion": "1.4.21",
-  "_npmUser": {
-    "name": "stuartpb",
-    "email": "stuart@testtrack4.com"
+  "dependencies": {},
+  "description": "JavaScript functions for abstracting SHA1 implementations",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "9e5b859b5beabd3e9d0f3adfb9da3263492b7e3d",
+    "tarball": "http://registry.npmjs.org/any_sha1/-/any_sha1-0.1.1.tgz"
   },
+  "gitHead": "e4d160ebecec17f0939e8ac44e59c53639a71880",
+  "homepage": "https://github.com/stuartpb/any_sha1",
+  "installable": true,
+  "keywords": [
+    "sha1"
+  ],
+  "license": "MIT",
+  "main": "any_sha1.js",
   "maintainers": [
     {
       "name": "stuartpb",
       "email": "stuart@testtrack4.com"
     }
   ],
-  "dist": {
-    "shasum": "9e5b859b5beabd3e9d0f3adfb9da3263492b7e3d",
-    "tarball": "http://registry.npmjs.org/any_sha1/-/any_sha1-0.1.1.tgz"
+  "name": "any_sha1",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stuartpb/any_sha1.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/any_sha1/-/any_sha1-0.1.1.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.1"
 }

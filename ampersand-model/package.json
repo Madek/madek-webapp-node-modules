@@ -1,14 +1,46 @@
 {
-  "name": "ampersand-model",
-  "description": "An extension to ampersand-state that adds methods and properties for working with a RESTful API.",
-  "version": "6.0.2",
-  "author": {
-    "name": "Henrik Joreteg",
-    "email": "henrik@andyet.net"
-  },
-  "files": [
-    "ampersand-model.js"
+  "_args": [
+    [
+      "ampersand-model@6.0.2",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
   ],
+  "_from": "ampersand-model@6.0.2",
+  "_id": "ampersand-model@6.0.2",
+  "_inCache": true,
+  "_location": "/ampersand-model",
+  "_nodeVersion": "2.5.0",
+  "_npmUser": {
+    "email": "cdaringe@gmail.com",
+    "name": "cdaringe"
+  },
+  "_npmVersion": "2.13.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "ampersand-model",
+    "raw": "ampersand-model@6.0.2",
+    "rawSpec": "6.0.2",
+    "scope": null,
+    "spec": "6.0.2",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ampersand-model/-/ampersand-model-6.0.2.tgz",
+  "_shasum": "8a6957aff74b291f60369c6d338d1d38d2b94029",
+  "_shrinkwrap": null,
+  "_spec": "ampersand-model@6.0.2",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "email": "henrik@andyet.net",
+    "name": "Henrik Joreteg"
+  },
+  "browserify": {
+    "transform": [
+      "ampersand-version"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/ampersandjs/ampersand-model/issues"
   },
@@ -21,6 +53,7 @@
     "lodash.isobject": "^3.0.2",
     "lodash.result": "^3.1.2"
   },
+  "description": "An extension to ampersand-state that adds methods and properties for working with a RESTful API.",
   "devDependencies": {
     "browserify": "^8.1.0",
     "lodash": "^3.6.0",
@@ -31,62 +64,22 @@
     "tape": "^3.0.3",
     "tape-run": "^0.3.0"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "8a6957aff74b291f60369c6d338d1d38d2b94029",
+    "tarball": "http://registry.npmjs.org/ampersand-model/-/ampersand-model-6.0.2.tgz"
+  },
+  "files": [
+    "ampersand-model.js"
+  ],
+  "gitHead": "42a6aaa366777ddf8073fb447967b8fe7a4bc535",
   "homepage": "https://github.com/ampersandjs/ampersand-model",
+  "installable": true,
   "keywords": [
     "model, ampersand, state"
   ],
   "license": "MIT",
   "main": "./ampersand-model.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ampersandjs/ampersand-model.git"
-  },
-  "scripts": {
-    "start": "run-browser test/*.js",
-    "test": "browserify test/*.js | tape-run | tap-spec",
-    "lint": "jshint .",
-    "validate": "npm ls",
-    "preversion": "git checkout master && git pull && npm ls",
-    "publish-patch": "npm run preversion && npm version patch && git push origin master --tags && npm publish",
-    "publish-minor": "npm run preversion && npm version minor && git push origin master --tags && npm publish",
-    "publish-major": "npm run preversion && npm version major && git push origin master --tags && npm publish"
-  },
-  "testling": {
-    "files": "test/index.js",
-    "browsers": [
-      "ie/8..latest",
-      "firefox/17..latest",
-      "firefox/nightly",
-      "chrome/22..latest",
-      "chrome/canary",
-      "opera/12..latest",
-      "opera/next",
-      "safari/5.1..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "android-browser/4.2..latest"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "ampersand-version"
-    ]
-  },
-  "pre-commit": [
-    "lint",
-    "validate",
-    "test"
-  ],
-  "gitHead": "42a6aaa366777ddf8073fb447967b8fe7a4bc535",
-  "_id": "ampersand-model@6.0.2",
-  "_shasum": "8a6957aff74b291f60369c6d338d1d38d2b94029",
-  "_from": "ampersand-model@6.0.2",
-  "_npmVersion": "2.13.2",
-  "_nodeVersion": "2.5.0",
-  "_npmUser": {
-    "name": "cdaringe",
-    "email": "cdaringe@gmail.com"
-  },
   "maintainers": [
     {
       "name": "cdaringe",
@@ -113,11 +106,42 @@
       "email": "giladp007@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "8a6957aff74b291f60369c6d338d1d38d2b94029",
-    "tarball": "http://registry.npmjs.org/ampersand-model/-/ampersand-model-6.0.2.tgz"
+  "name": "ampersand-model",
+  "optionalDependencies": {},
+  "pre-commit": [
+    "lint",
+    "test",
+    "validate"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ampersandjs/ampersand-model.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/ampersand-model/-/ampersand-model-6.0.2.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "lint": "jshint .",
+    "preversion": "git checkout master && git pull && npm ls",
+    "publish-major": "npm run preversion && npm version major && git push origin master --tags && npm publish",
+    "publish-minor": "npm run preversion && npm version minor && git push origin master --tags && npm publish",
+    "publish-patch": "npm run preversion && npm version patch && git push origin master --tags && npm publish",
+    "start": "run-browser test/*.js",
+    "test": "browserify test/*.js | tape-run | tap-spec",
+    "validate": "npm ls"
+  },
+  "testling": {
+    "browsers": [
+      "android-browser/4.2..latest",
+      "chrome/22..latest",
+      "chrome/canary",
+      "firefox/17..latest",
+      "firefox/nightly",
+      "ie/8..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest",
+      "opera/12..latest",
+      "opera/next",
+      "safari/5.1..latest"
+    ],
+    "files": "test/index.js"
+  },
+  "version": "6.0.2"
 }
