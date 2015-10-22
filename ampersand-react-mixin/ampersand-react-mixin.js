@@ -1,6 +1,5 @@
 var events = require('ampersand-events');
 var bind = require('lodash.bind');
-var result = require('lodash.result');
 var forEach = require('lodash.foreach');
 
 var deferbounce = function (fn) {
@@ -14,6 +13,12 @@ var deferbounce = function (fn) {
                 triggered = false;
             }, 0)
         }
+    }
+};
+
+var safeForceUpdate = function () {
+    if (this.isMounted()) {
+        this.forceUpdate();
     }
 };
 
@@ -34,9 +39,9 @@ module.exports = events.createEmitter({
           return;
         }
 
-        this.listenTo(modelOrCollection, events, deferbounce(bind(this.forceUpdate, this)));
+        this.listenTo(modelOrCollection, events, deferbounce(bind(safeForceUpdate, this)));
 
-        if (opts.reRender) this.forceUpdate();
+        if (opts.reRender) safeForceUpdate.call(this);
     },
 
     componentDidMount: function () {

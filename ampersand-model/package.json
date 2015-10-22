@@ -1,7 +1,7 @@
 {
   "name": "ampersand-model",
   "description": "An extension to ampersand-state that adds methods and properties for working with a RESTful API.",
-  "version": "5.0.3",
+  "version": "6.0.2",
   "author": {
     "name": "Henrik Joreteg",
     "email": "henrik@andyet.net"
@@ -13,13 +13,13 @@
     "url": "https://github.com/ampersandjs/ampersand-model/issues"
   },
   "dependencies": {
-    "ampersand-state": "^4.5.2",
-    "ampersand-sync": "^3.0.5",
+    "ampersand-state": "^4.6.0",
+    "ampersand-sync": "^4.0.2",
     "ampersand-version": "^1.0.2",
-    "lodash.assign": "^3.0.0",
-    "lodash.clone": "^3.0.1",
-    "lodash.isobject": "^3.0.1",
-    "lodash.result": "^3.0.0"
+    "lodash.assign": "^3.2.0",
+    "lodash.clone": "^3.0.3",
+    "lodash.isobject": "^3.0.2",
+    "lodash.result": "^3.1.2"
   },
   "devDependencies": {
     "browserify": "^8.1.0",
@@ -43,7 +43,13 @@
   },
   "scripts": {
     "start": "run-browser test/*.js",
-    "test": "browserify test/*.js | tape-run | tap-spec"
+    "test": "browserify test/*.js | tape-run | tap-spec",
+    "lint": "jshint .",
+    "validate": "npm ls",
+    "preversion": "git checkout master && git pull && npm ls",
+    "publish-patch": "npm run preversion && npm version patch && git push origin master --tags && npm publish",
+    "publish-minor": "npm run preversion && npm version minor && git push origin master --tags && npm publish",
+    "publish-major": "npm run preversion && npm version major && git push origin master --tags && npm publish"
   },
   "testling": {
     "files": "test/index.js",
@@ -66,39 +72,52 @@
       "ampersand-version"
     ]
   },
-  "gitHead": "e87a37eda452910eb9e1bc1ef1e6268fa3169e88",
-  "_id": "ampersand-model@5.0.3",
-  "_shasum": "d9f8be72e376f9f377b98adc28ec4fcd47e46b5f",
-  "_from": "ampersand-model@5.0.3",
-  "_npmVersion": "2.7.5",
-  "_nodeVersion": "0.10.35",
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ],
+  "gitHead": "42a6aaa366777ddf8073fb447967b8fe7a4bc535",
+  "_id": "ampersand-model@6.0.2",
+  "_shasum": "8a6957aff74b291f60369c6d338d1d38d2b94029",
+  "_from": "ampersand-model@6.0.2",
+  "_npmVersion": "2.13.2",
+  "_nodeVersion": "2.5.0",
   "_npmUser": {
-    "name": "lukekarrys",
-    "email": "luke@lukekarrys.com"
+    "name": "cdaringe",
+    "email": "cdaringe@gmail.com"
   },
   "maintainers": [
     {
+      "name": "cdaringe",
+      "email": "cdaringe@gmail.com"
+    },
+    {
+      "name": "gar",
+      "email": "gar+npm@danger.computer"
+    },
+    {
       "name": "henrikjoreteg",
-      "email": "henrik@andyet.net"
+      "email": "henrik@joreteg.com"
     },
     {
       "name": "latentflip",
       "email": "phil@latentflip.com"
     },
     {
-      "name": "gar",
-      "email": "gar@comrade.us"
-    },
-    {
       "name": "lukekarrys",
       "email": "luke@lukekarrys.com"
+    },
+    {
+      "name": "pgilad",
+      "email": "giladp007@gmail.com"
     }
   ],
   "dist": {
-    "shasum": "d9f8be72e376f9f377b98adc28ec4fcd47e46b5f",
-    "tarball": "http://registry.npmjs.org/ampersand-model/-/ampersand-model-5.0.3.tgz"
+    "shasum": "8a6957aff74b291f60369c6d338d1d38d2b94029",
+    "tarball": "http://registry.npmjs.org/ampersand-model/-/ampersand-model-6.0.2.tgz"
   },
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/ampersand-model/-/ampersand-model-5.0.3.tgz",
+  "_resolved": "https://registry.npmjs.org/ampersand-model/-/ampersand-model-6.0.2.tgz",
   "readme": "ERROR: No README data found!"
 }

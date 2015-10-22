@@ -1,14 +1,14 @@
 {
   "name": "jquery-ujs",
-  "version": "1.0.4",
-  "description": "Ruby on Rails unobtrusive scripting adapter for jQuery",
+  "version": "1.1.0-1",
+  "description": "Ruby on Rails unobtrusive scripting adapter for jQuery, for npm",
   "main": "src/rails.js",
   "scripts": {
     "test": "echo \"See the wiki: https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rails/jquery-ujs.git"
+    "url": "git+https://github.com/shakacode/jquery-ujs.git"
   },
   "author": {
     "name": "Stephen St. Martin"
@@ -19,37 +19,44 @@
     },
     {
       "name": "Steve Schwartz"
+    },
+    {
+      "name": "Justin Gordon"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rails/jquery-ujs/issues"
+    "url": "https://github.com/shakacode/jquery-ujs/issues"
   },
-  "homepage": "https://github.com/rails/jquery-ujs",
+  "homepage": "https://github.com/shakacode/jquery-ujs",
   "dependencies": {
     "jquery": ">=1.8.0"
   },
-  "gitHead": "81ea69a1c473aeaf4252ccbaf5050fc62bb2d763",
-  "_id": "jquery-ujs@1.0.4",
-  "_shasum": "b285f94b4de6c3fb14b0dbf6bead0982dc85a1e0",
-  "_from": "jquery-ujs@1.0.4",
-  "_npmVersion": "2.5.1",
-  "_nodeVersion": "0.12.0",
+  "gitHead": "1f5cee5986f863450acba7c0a0bcf872d100cf88",
+  "_id": "jquery-ujs@1.1.0-1",
+  "_shasum": "0eba3c9b42e8ef4ed33a8501d8db2253a60bb02e",
+  "_from": "jquery-ujs@1.1.0-1",
+  "_npmVersion": "2.13.4",
+  "_nodeVersion": "0.12.7",
   "_npmUser": {
-    "name": "callumacrae",
-    "email": "callum@macr.ae"
+    "name": "shakacode",
+    "email": "justin@shakacode.com"
   },
   "dist": {
-    "shasum": "b285f94b4de6c3fb14b0dbf6bead0982dc85a1e0",
-    "tarball": "http://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.0.4.tgz"
+    "shasum": "0eba3c9b42e8ef4ed33a8501d8db2253a60bb02e",
+    "tarball": "http://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.1.0-1.tgz"
   },
   "maintainers": [
     {
       "name": "callumacrae",
       "email": "callum@macr.ae"
+    },
+    {
+      "name": "shakacode",
+      "email": "justin@shakacode.com"
     }
   ],
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.0.4.tgz",
+  "_resolved": "https://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.1.0-1.tgz",
   "readme": "ERROR: No README data found!"
 }

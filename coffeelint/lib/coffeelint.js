@@ -429,7 +429,7 @@ coffeelint.setCache = function(obj) {
 module.exports={
   "name": "coffeelint",
   "description": "Lint your CoffeeScript",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "homepage": "http://www.coffeelint.org",
   "keywords": [
     "lint",
@@ -468,6 +468,7 @@ module.exports={
     "testrule": "npm run compile && ./vowsrunner.js --spec",
     "posttest": "npm run lint",
     "prepublish": "cake prepublish",
+    "postpublish": "cake postpublish",
     "publish": "cake publish",
     "lint": "cake compile && ./bin/coffeelint .",
     "lint-csv": "cake compile && ./bin/coffeelint --csv .",
@@ -1653,7 +1654,7 @@ module.exports = Indentation = (function() {
   }
 
   Indentation.prototype.lintToken = function(token, tokenApi) {
-    var currentLine, expected, ignoreIndent, isArrayIndent, isInterpIndent, isMultiline, lineNumber, lines, numIndents, previous, previousSymbol, ref, ref1, ref2, type;
+    var currentLine, expected, ignoreIndent, isArrayIndent, isMultiline, lineNumber, lines, numIndents, previous, previousSymbol, ref, ref1, ref2, type;
     type = token[0], numIndents = token[1], (ref = token[2], lineNumber = ref.first_line);
     lines = tokenApi.lines, lineNumber = tokenApi.lineNumber;
     expected = tokenApi.config[this.rule.name].value;
@@ -1668,16 +1669,14 @@ module.exports = Indentation = (function() {
       this.lintArray(token);
       return void 0;
     }
-    if (token.generated != null) {
+    if ((token.generated != null) || (token.explicit != null)) {
       return null;
     }
-    previous = tokenApi.peek(-2);
-    isInterpIndent = previous && previous[0] === '+';
     previous = tokenApi.peek(-1);
     isArrayIndent = this.inArray() && (previous != null ? previous.newLine : void 0);
     previousSymbol = (ref2 = tokenApi.peek(-1)) != null ? ref2[0] : void 0;
     isMultiline = previousSymbol === '=' || previousSymbol === ',';
-    ignoreIndent = isInterpIndent || isArrayIndent || isMultiline;
+    ignoreIndent = isArrayIndent || isMultiline;
     numIndents = this.getCorrectIndent(tokenApi);
     if (!ignoreIndent && !(indexOf.call(numIndents, expected) >= 0)) {
       return {
@@ -1707,7 +1706,7 @@ module.exports = Indentation = (function() {
     lineNumber = tokenApi.lineNumber, lines = tokenApi.lines;
     currentLine = lines[lineNumber];
     findCallStart = tokenApi.peek(-callStart);
-    while (findCallStart && (findCallStart[0] !== 'TERMINATOR' || (findCallStart.newLine == null))) {
+    while (findCallStart && findCallStart[0] !== 'TERMINATOR') {
       lastCheck = findCallStart[2].first_line;
       callStart += 1;
       findCallStart = tokenApi.peek(-callStart);
@@ -1940,7 +1939,6 @@ module.exports = MissingFatArrows = (function() {
   function MissingFatArrows() {
     this.isFatArrowCode = bind(this.isFatArrowCode, this);
     this.isThis = bind(this.isThis, this);
-    this.isPrototype = bind(this.isPrototype, this);
     this.isObject = bind(this.isObject, this);
     this.isValue = bind(this.isValue, this);
     this.isClass = bind(this.isClass, this);
@@ -2084,9 +2082,9 @@ module.exports = NewlinesAfterClasses = (function() {
   NewlinesAfterClasses.prototype.classCount = 0;
 
   NewlinesAfterClasses.prototype.lintToken = function(token, tokenApi) {
-    var afters, befores, comment, ending, got, lineNumber, lines, numIndents, ref, ref1, ref2, trueLine, type;
+    var afters, befores, comment, ending, got, lineNumber, lines, numIndents, outdent, ref, ref1, ref2, start, trueLine, type;
     type = token[0], numIndents = token[1], (ref = token[2], lineNumber = ref.first_line);
-    lines = tokenApi.lines, lineNumber = tokenApi.lineNumber;
+    lines = tokenApi.lines;
     ending = tokenApi.config[this.rule.name].value;
     if (type === 'CLASS') {
       this.classCount++;
@@ -2102,17 +2100,26 @@ module.exports = NewlinesAfterClasses = (function() {
           befores = 1;
           afters = 1;
           comment = 0;
-          while (/^\s*(#|$)/.test(lines[lineNumber + afters])) {
-            if (/^\s*#/.test(lines[lineNumber + afters])) {
+          outdent = token.origin[2].first_line;
+          start = Math.min(lineNumber, outdent);
+          trueLine = Infinity;
+          while (/^\s*(#|$)/.test(lines[start + afters])) {
+            if (/^\s*#/.test(lines[start + afters])) {
               comment += 1;
+            } else {
+              trueLine = Math.min(trueLine, start + afters);
             }
             afters += 1;
           }
-          while (/^\s*(#|$)/.test(lines[lineNumber - befores])) {
+          while (/^\s*(#|$)/.test(lines[start - befores])) {
+            if (/^\s*#/.test(lines[start - befores])) {
+              comment += 1;
+            } else {
+              trueLine = Math.min(trueLine, start - befores);
+            }
             befores += 1;
           }
           got = afters + befores - comment - 2;
-          trueLine = lineNumber + afters - befores - comment;
           if (got !== ending && trueLine + ending <= lines.length) {
             return {
               context: "Expected " + ending + " got " + got,

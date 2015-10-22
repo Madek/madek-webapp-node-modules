@@ -1,7 +1,7 @@
 {
   "name": "coffeelint",
   "description": "Lint your CoffeeScript",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "homepage": "http://www.coffeelint.org",
   "keywords": [
     "lint",
@@ -25,7 +25,9 @@
     "coffeelint": "./bin/coffeelint"
   },
   "dependencies": {
+    "browserify": "~8.1.0",
     "coffee-script": "^1.9.1",
+    "coffeeify": "~1.0.0",
     "glob": "^4.0.0",
     "ignore": "^2.2.15",
     "optimist": "^0.6.1",
@@ -43,28 +45,30 @@
     "testrule": "npm run compile && ./vowsrunner.js --spec",
     "posttest": "npm run lint",
     "prepublish": "cake prepublish",
+    "postpublish": "cake postpublish",
     "publish": "cake publish",
+    "install": "cake install",
     "lint": "cake compile && ./bin/coffeelint .",
     "lint-csv": "cake compile && ./bin/coffeelint --csv .",
     "lint-jslint": "cake compile && ./bin/coffeelint --jslint .",
     "compile": "cake compile"
   },
-  "gitHead": "de31256b12eeedce7d525541a52ed02bc1b6af79",
+  "gitHead": "6d6b9f471f257337539db2f4757627870d31a471",
   "bugs": {
     "url": "https://github.com/clutchski/coffeelint/issues"
   },
-  "_id": "coffeelint@1.12.1",
-  "_shasum": "8173b13e45dc1b69809017fa50171eeb75766fe3",
-  "_from": "coffeelint@1.12.1",
-  "_npmVersion": "2.7.3",
-  "_nodeVersion": "0.10.32",
+  "_id": "coffeelint@1.13.0",
+  "_shasum": "d6784b84b5b5370d2700d0fbb652494db6ede295",
+  "_from": "coffeelint@1.13.0",
+  "_npmVersion": "2.14.2",
+  "_nodeVersion": "4.0.0",
   "_npmUser": {
     "name": "swang",
     "email": "shuanwang@gmail.com"
   },
   "dist": {
-    "shasum": "8173b13e45dc1b69809017fa50171eeb75766fe3",
-    "tarball": "http://registry.npmjs.org/coffeelint/-/coffeelint-1.12.1.tgz"
+    "shasum": "d6784b84b5b5370d2700d0fbb652494db6ede295",
+    "tarball": "http://registry.npmjs.org/coffeelint/-/coffeelint-1.13.0.tgz"
   },
   "maintainers": [
     {
@@ -85,6 +89,6 @@
     }
   ],
   "directories": {},
-  "_resolved": "https://registry.npmjs.org/coffeelint/-/coffeelint-1.12.1.tgz",
+  "_resolved": "https://registry.npmjs.org/coffeelint/-/coffeelint-1.13.0.tgz",
   "readme": "ERROR: No README data found!"
 }

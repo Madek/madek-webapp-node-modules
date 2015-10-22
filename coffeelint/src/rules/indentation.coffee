@@ -48,7 +48,6 @@ module.exports = class Indentation
             # the linting pass if the '.' token is not at the beginning of
             # the line
             currentLine = lines[lineNumber]
-
             if currentLine.match(/\S/)?[0] is '.'
                 return @handleChain(tokenApi, expected)
             return undefined
@@ -57,14 +56,7 @@ module.exports = class Indentation
             @lintArray(token)
             return undefined
 
-        return null if token.generated?
-
-        # HACK: CoffeeScript's lexer insert indentation in string
-        # interpolations that start with spaces e.g. "#{ 123 }"
-        # so ignore such cases. Are there other times an indentation
-        # could possibly follow a '+'?
-        previous = tokenApi.peek(-2)
-        isInterpIndent = previous and previous[0] is '+'
+        return null if token.generated? or token.explicit?
 
         # Ignore the indentation inside of an array, so that
         # we can allow things like:
@@ -81,7 +73,7 @@ module.exports = class Indentation
         isMultiline = previousSymbol in ['=', ',']
 
         # Summarize the indentation conditions we'd like to ignore
-        ignoreIndent = isInterpIndent or isArrayIndent or isMultiline
+        ignoreIndent = isArrayIndent or isMultiline
 
         # Correct CoffeeScript's incorrect INDENT token value when functions
         # get chained. See https://github.com/jashkenas/coffeescript/issues/3137
@@ -118,8 +110,7 @@ module.exports = class Indentation
         # Traverse up the token list until we see a CALL_START token.
         # Don't scan above this line
         findCallStart = tokenApi.peek(-callStart)
-        while (findCallStart and (findCallStart[0] isnt 'TERMINATOR' or
-                not findCallStart.newLine?))
+        while (findCallStart and findCallStart[0] isnt 'TERMINATOR')
             { first_line: lastCheck } = findCallStart[2]
 
             callStart += 1
