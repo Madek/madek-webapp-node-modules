@@ -1,31 +1,37 @@
 {
   "_args": [
     [
-      "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+      "active-lodash@1.2.2",
       "/Users/mfa/CODE/Madek/webapp"
     ]
   ],
-  "_from": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
-  "_id": "active-lodash@1.2.1",
+  "_from": "active-lodash@1.2.2",
+  "_id": "active-lodash@1.2.2",
   "_inCache": true,
   "_installable": true,
   "_location": "/active-lodash",
+  "_nodeVersion": "4.2.1",
+  "_npmUser": {
+    "email": "1@178.is",
+    "name": "eins78"
+  },
+  "_npmVersion": "2.14.8",
   "_phantomChildren": {},
   "_requested": {
-    "name": null,
-    "raw": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
-    "rawSpec": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+    "name": "active-lodash",
+    "raw": "active-lodash@1.2.2",
+    "rawSpec": "1.2.2",
     "scope": null,
-    "spec": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
-    "type": "remote"
+    "spec": "1.2.2",
+    "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
-  "_shasum": "f071ece58d2f5d9c9e24458042f966ff4b3d3851",
+  "_resolved": "https://registry.npmjs.org/active-lodash/-/active-lodash-1.2.2.tgz",
+  "_shasum": "d32ff779c9447e233ef9b8958dbe0ea024213ed3",
   "_shrinkwrap": null,
-  "_spec": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.1.tgz",
+  "_spec": "active-lodash@1.2.2",
   "_where": "/Users/mfa/CODE/Madek/webapp",
   "author": {
     "email": "1@178.is",
@@ -53,10 +59,16 @@
     "tape-catch": "*",
     "watch": "*"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "d32ff779c9447e233ef9b8958dbe0ea024213ed3",
+    "tarball": "http://registry.npmjs.org/active-lodash/-/active-lodash-1.2.2.tgz"
+  },
   "files": [
     "dist/",
     "lodash.custom.js"
   ],
+  "gitHead": "1f11e47b82b56f14c20f60f8d388f2d09b8de6c2",
   "homepage": "https://github.com/eins78/active-lodash#readme",
   "keywords": [
     "ActiveSupport",
@@ -65,10 +77,14 @@
   ],
   "license": "CC0-1.0",
   "main": "dist/index.js",
+  "maintainers": [
+    {
+      "name": "eins78",
+      "email": "1@178.is"
+    }
+  ],
   "name": "active-lodash",
   "optionalDependencies": {},
-  "readme": "# active-lodash\n\n[![NPM version][npm-image]][npm-url]\n[![Travis Build Status][travis-image]][travis-url]\n[![Coveralls Status][coveralls-image]][coveralls-url]\n[![Dependency Status][depstat-image]][depstat-url]\n<!-- [![Downloads][download-badge]][npm-url] -->\n[![CI Status][cider-image]][cider-url]\n\n> A version of lodash customized to feel more like Ruby/Rails/ActiveSupport.\n\n## Features\n\n-   custom, reduced, modern build of `lodash`\n\n-   **non-destructive `merge`**, `assign`, `extend`,\n    `defaults` and `defaultsDeep`.  \n(They are always returning a new object)\n\n-   **`present()`** and **`presence()`**\n\n-   Does not extend prototypes.  \n(If you want that, have a look at [rodash][] or [activesupport][])\n\n-   [**`<your idea here>`**](https://github.com/eins78/active-lodash/issues)\n\n## Install\n\n```sh\nnpm i -SE active-lodash\n```\n\n## Usage\n\n```js\nimport f from 'active-lodash'\n```\n\nor\n\n```js\nvar f = require('active-lodash')\n\n```\n\nthen\n\n```js\nassert.equal((f(23).presence() || 42), 23)\nassert.equal((f(null).presence() || 42), 42)\n\nassert.equal(f.present({a: 1}), true)\nassert.equal(f.present([1]), true)\nassert.equal(f.present(true), true)\nassert.equal(f.present(false), true)\nassert.equal(f.present(function () {}), true)\n\nassert.equal(f.present({}), false)\nassert.equal(f.present([]), false)\nassert.equal(f.present(undefined), false)\nassert.equal(f.present(null), false)\n```\n\n(See [tests][] for more Examples.)\n\n## License\n\nCC-0 © [Max F. Albrecht](http://github.com/eins78)\n\n[tests]: https://github.com/eins78/active-lodash/blob/master/test/tests.js\n[lodash-inflection]: https://www.npmjs.com/package/lodash-inflection\n[rodash]: https://github.com/obie/rodash\n[activesupport]: https://www.npmjs.com/package/activesupport\n\n[npm-url]: https://npmjs.org/package/active-lodash\n[npm-image]: https://img.shields.io/npm/v/active-lodash.svg?style=flat-square\n\n[cider-url]: http://ci.zhdk.ch/cider-ci/ui/public/active-lodash/cider-ci/Test/summary.html\n[cider-image]: http://ci.zhdk.ch/cider-ci/ui/public/active-lodash/master/Test/summary.svg?respond_width_200&orientation=horizontal\n[travis-url]: https://travis-ci.org/eins78/active-lodash\n[travis-image]: https://img.shields.io/travis/eins78/active-lodash.svg?style=flat-square\n\n[coveralls-url]: https://coveralls.io/r/eins78/active-lodash\n[coveralls-image]: https://img.shields.io/coveralls/eins78/active-lodash.svg?style=flat-square\n\n[depstat-url]: https://david-dm.org/eins78/active-lodash\n[depstat-image]: https://david-dm.org/eins78/active-lodash.svg?style=flat-square\n\n[download-badge]: http://img.shields.io/npm/dm/active-lodash.svg?style=flat-square\n",
-  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eins78/active-lodash.git"
@@ -95,5 +111,5 @@
     "watch": "watch 'npm run build -s' src test",
     "watch-dev": "watch 'npm run dev -s' src test"
   },
-  "version": "1.2.1"
+  "version": "1.2.2"
 }

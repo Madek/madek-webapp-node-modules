@@ -65,7 +65,7 @@ assert.equal(f.present(null), false)
 
 ## License
 
-CC-0 © [Max F. Albrecht](http://github.com/eins78)
+[CC-0](https://github.com/eins78/active-lodash/blob/master/LICENSE.md) © [Max F. Albrecht](http://github.com/eins78)
 
 [tests]: https://github.com/eins78/active-lodash/blob/master/test/tests.js
 [lodash-inflection]: https://www.npmjs.com/package/lodash-inflection
