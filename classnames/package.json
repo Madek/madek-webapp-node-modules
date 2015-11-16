@@ -1,0 +1,84 @@
+{
+  "_args": [
+    [
+      "classnames",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "classnames@*",
+  "_id": "classnames@2.2.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/classnames",
+  "_nodeVersion": "4.1.0",
+  "_npmUser": {
+    "email": "jed.watson@me.com",
+    "name": "jedwatson"
+  },
+  "_npmVersion": "2.14.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "classnames",
+    "raw": "classnames",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "*",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.0.tgz",
+  "_shasum": "8f61df81f356c45d18a31d83fde4dfb194ea8722",
+  "_shrinkwrap": null,
+  "_spec": "classnames",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Jed Watson"
+  },
+  "bugs": {
+    "url": "https://github.com/JedWatson/classnames/issues"
+  },
+  "dependencies": {},
+  "description": "A simple utility for conditionally joining classNames together",
+  "devDependencies": {
+    "benchmark": "^1.0.0",
+    "mocha": "^2.1.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "8f61df81f356c45d18a31d83fde4dfb194ea8722",
+    "tarball": "http://registry.npmjs.org/classnames/-/classnames-2.2.0.tgz"
+  },
+  "gitHead": "34226abe201badf881eac7de52d0562f82b0e13b",
+  "homepage": "https://github.com/JedWatson/classnames#readme",
+  "keywords": [
+    "classes",
+    "classname",
+    "classnames",
+    "css",
+    "react",
+    "util",
+    "utility"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "jedwatson",
+      "email": "jed.watson@me.com"
+    }
+  ],
+  "name": "classnames",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JedWatson/classnames.git"
+  },
+  "scripts": {
+    "benchmarks": "node ./benchmarks/run",
+    "test": "npm run unit",
+    "unit": "mocha tests/*.js"
+  },
+  "version": "2.2.0"
+}
