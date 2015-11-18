@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "0.10"
+before_install:
+  - "export DISPLAY=:99.0"
+  - sh -e /etc/init.d/xvfb start
+script: npm run test-travis
+env:
+  global:
+    - secure: Un33iUemAw5wmLHIzGCnnhMKIh0Q9XhTaiPI4ATjBVMSeDFkqe9rgtMYNiuK0hfbGX/sXS8Uj2EquprKScJAAK0eYa88AZlmg6QBOWP/xgwKa2yssndXDaaotj3Fz8OIi6BVGJO3ncaBbTJ1jaWvd9xAt2797uHqIrIN9LMtc3k=
+    - secure: obyvEZIlPTGQ83NnDZQTCCnRi3eyyFUSjEnsg2U2sG7z7iJ4aaG8mii8O55ITGsip/kT7fTK9pZwaa04LhUWV/brphLiEpij1Vnc/M2N09R+5wIpefvDAD0acDqBTPXgCzXliQNnk+RH3LxOY1eAxcbI1EAaqBmJchkF3ntMWBk=
