@@ -4,10 +4,9 @@ module.exports = class NoStandAloneAt
         name: 'no_stand_alone_at'
         level: 'ignore'
         message: '@ must not be used stand alone'
-        description:
-            '''
+        description: '''
             This rule checks that no stand alone @ are in use, they are
-            discouraged. Further information in CoffeScript issue <a
+            discouraged. Further information in CoffeeScript issue <a
             href="https://github.com/jashkenas/coffee-script/issues/1601">
             #1601</a>
             '''

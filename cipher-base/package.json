@@ -6,15 +6,16 @@
     ]
   ],
   "_from": "cipher-base@>=1.0.0 <2.0.0",
-  "_id": "cipher-base@1.0.1",
+  "_id": "cipher-base@1.0.2",
   "_inCache": true,
+  "_installable": true,
   "_location": "/cipher-base",
-  "_nodeVersion": "4.1.1",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
     "email": "calvin.metcalf@gmail.com",
     "name": "cwmma"
   },
-  "_npmVersion": "2.14.4",
+  "_npmVersion": "2.9.0",
   "_phantomChildren": {},
   "_requested": {
     "name": "cipher-base",
@@ -29,8 +30,8 @@
     "/browserify-des",
     "/create-hash"
   ],
-  "_resolved": "https://registry.npmjs.org/cipher-base/-/cipher-base-1.0.1.tgz",
-  "_shasum": "b714888e810519106b3b039948e4fc9e2718c563",
+  "_resolved": "https://registry.npmjs.org/cipher-base/-/cipher-base-1.0.2.tgz",
+  "_shasum": "54ac1d1ebdf6a1bcd3559e6f369d72697f2cab8f",
   "_shrinkwrap": null,
   "_spec": "cipher-base@^1.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/browserify-aes",
@@ -51,12 +52,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "b714888e810519106b3b039948e4fc9e2718c563",
-    "tarball": "http://registry.npmjs.org/cipher-base/-/cipher-base-1.0.1.tgz"
+    "shasum": "54ac1d1ebdf6a1bcd3559e6f369d72697f2cab8f",
+    "tarball": "http://registry.npmjs.org/cipher-base/-/cipher-base-1.0.2.tgz"
   },
-  "gitHead": "5f5eb4a23599806ef5f92aa25930ac0beeb35bd1",
+  "gitHead": "c295535e1eef90a587dba110c8799bfd68f75161",
   "homepage": "https://github.com/crypto-browserify/cipher-base#readme",
-  "installable": true,
   "keywords": [
     "cipher",
     "stream"
@@ -78,5 +78,5 @@
   "scripts": {
     "test": "node test.js | tspec"
   },
-  "version": "1.0.1"
+  "version": "1.0.2"
 }

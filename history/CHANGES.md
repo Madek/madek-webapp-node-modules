@@ -1,9 +1,42 @@
 ## HEAD
 
+- Fail gracefully when Safari security settings prevent access to window.sessionStorage
+- Pushing the currently active path will result in a replace to not create additional browser history entries (see [#43])
+- Strip the protocol and domain from `<base href>` (see [#139])
+
+[#43]: https://github.com/rackt/history/pull/43
+[#139]: https://github.com/rackt/history/pull/139 
+
+## [v1.13.0]
+> Oct 28, 2015
+
+- `useBasename` transparently handles trailing slashes (see [#108])
+- `useBasename` automatically uses the value of `<base href>` when no
+  `basename` option is provided (see [#94])
+
+[v1.13.0]: https://github.com/rackt/history/compare/v1.12.6...v1.13.0
+[#108]: https://github.com/rackt/history/pull/108
+[#94]: https://github.com/rackt/history/issues/94
+
+## [v1.12.6]
+> Oct 25, 2015
+
+- Add `forceRefresh` option to `createBrowserHistory` that forces
+  full page refreshes even when the browser supports pushState (see [#95])
+
+[v1.12.6]: https://github.com/rackt/history/compare/v1.12.5...v1.12.6
+[#95]: https://github.com/rackt/history/issues/95
+
+## [v1.12.5]
+> Oct 11, 2015
+
 - Un-deprecate top-level createLocation method
 - Add ability to use `{ pathname, search, hash }` object anywhere
   a path can be used
-- Fix `useQueries` handling of hashes
+- Fix `useQueries` handling of hashes (see [#93])
+
+[v1.12.5]: https://github.com/rackt/history/compare/v1.12.4...v1.12.5
+[#93]: https://github.com/rackt/history/issues/93
 
 ## [v1.12.4]
 > Oct 9, 2015

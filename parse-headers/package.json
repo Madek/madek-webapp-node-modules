@@ -6,14 +6,16 @@
     ]
   ],
   "_from": "parse-headers@>=2.0.0 <3.0.0",
-  "_id": "parse-headers@2.0.0",
+  "_id": "parse-headers@2.0.1",
   "_inCache": true,
+  "_installable": true,
   "_location": "/parse-headers",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
     "email": "david.bjorklund@gmail.com",
     "name": "kesla"
   },
-  "_npmVersion": "1.4.21",
+  "_npmVersion": "3.3.9",
   "_phantomChildren": {},
   "_requested": {
     "name": "parse-headers",
@@ -26,8 +28,8 @@
   "_requiredBy": [
     "/xhr"
   ],
-  "_resolved": "https://registry.npmjs.org/parse-headers/-/parse-headers-2.0.0.tgz",
-  "_shasum": "3d3bd273f4405c0cff15da0f31aec98a6acb87f9",
+  "_resolved": "https://registry.npmjs.org/parse-headers/-/parse-headers-2.0.1.tgz",
+  "_shasum": "6ae83a7aa25a9d9b700acc28698cd1f1ed7e9536",
   "_shrinkwrap": null,
   "_spec": "parse-headers@^2.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/xhr",
@@ -45,17 +47,16 @@
   },
   "description": "Parse http headers, works with browserify/xhr",
   "devDependencies": {
-    "tape": "^2.14.0",
-    "zuul": "^1.10.1"
+    "tape": "^4.2.2",
+    "zuul": "^3.7.2"
   },
   "directories": {},
   "dist": {
-    "shasum": "3d3bd273f4405c0cff15da0f31aec98a6acb87f9",
-    "tarball": "http://registry.npmjs.org/parse-headers/-/parse-headers-2.0.0.tgz"
+    "shasum": "6ae83a7aa25a9d9b700acc28698cd1f1ed7e9536",
+    "tarball": "http://registry.npmjs.org/parse-headers/-/parse-headers-2.0.1.tgz"
   },
-  "gitHead": "44ad6032314b4dcd5c041a20372abcce709bd549",
+  "gitHead": "c16ae5bebe94d377e081a37eee2bbf3d8e7869a8",
   "homepage": "https://github.com/kesla/parse-headers",
-  "installable": true,
   "keywords": [
     "browserify",
     "headers",
@@ -73,10 +74,10 @@
   "optionalDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/kesla/parse-headers.git"
+    "url": "git+https://github.com/kesla/parse-headers.git"
   },
   "scripts": {
     "test": "zuul test.js"
   },
-  "version": "2.0.0"
+  "version": "2.0.1"
 }

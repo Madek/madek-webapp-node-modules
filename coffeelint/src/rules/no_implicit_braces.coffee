@@ -1,4 +1,3 @@
-
 module.exports = class NoImplicitBraces
 
     rule:
@@ -22,7 +21,7 @@ module.exports = class NoImplicitBraces
             </pre>
             Implicit braces are permitted by default, since their use is
             idiomatic CoffeeScript.
-        '''
+            '''
 
     tokens: ['{', 'OUTDENT', 'CLASS', 'IDENTIFIER']
 
@@ -43,7 +42,7 @@ module.exports = class NoImplicitBraces
                 (not @className? or tokenApi.peek(-1)[0] is 'EXTENDS')
             @className = val
 
-        if token.generated and type is "{"
+        if token.generated and type is '{'
             # If strict mode is turned off it allows implicit braces when the
             # object is declared over multiple lines.
             unless tokenApi.config[@rule.name].strict

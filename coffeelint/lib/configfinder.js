@@ -24,7 +24,7 @@ JSHint does.
     if (findFileResults[filename]) {
       return findFileResults[filename];
     }
-    parent = path.resolve(dir, "../");
+    parent = path.resolve(dir, '../');
     if (fs.existsSync(filename)) {
       return findFileResults[filename] = filename;
     } else if (dir === parent) {
@@ -36,7 +36,7 @@ JSHint does.
 
   loadNpmConfig = function(dir) {
     var fp, ref;
-    fp = findFile("package.json", dir);
+    fp = findFile('package.json', dir);
     if (fp) {
       return (ref = loadJSON(fp)) != null ? ref.coffeelintConfig : void 0;
     }
@@ -55,16 +55,19 @@ JSHint does.
 
   getConfig = function(dir) {
     var envs, home, npmConfig, projConfig;
+    if (process.env.COFFEELINT_CONFIG && fs.existsSync(process.env.COFFEELINT_CONFIG)) {
+      return loadJSON(process.env.COFFEELINT_CONFIG);
+    }
     npmConfig = loadNpmConfig(dir);
     if (npmConfig) {
       return npmConfig;
     }
-    projConfig = findFile("coffeelint.json", dir);
+    projConfig = findFile('coffeelint.json', dir);
     if (projConfig) {
       return loadJSON(projConfig);
     }
     envs = process.env.USERPROFILE || process.env.HOME || process.env.HOMEPATH;
-    home = path.normalize(path.join(envs, "coffeelint.json"));
+    home = path.normalize(path.join(envs, 'coffeelint.json'));
     if (fs.existsSync(home)) {
       return loadJSON(home);
     }

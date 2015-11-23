@@ -1,13 +1,14 @@
 {
   "_args": [
     [
-      "global@~4.3.0",
-      "/Users/ma/CODE/Madek/webapp/node_modules/xhr"
+      "global@4.3.0",
+      "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "global@>=4.3.0 <4.4.0",
+  "_from": "global@4.3.0",
   "_id": "global@4.3.0",
   "_inCache": true,
+  "_installable": true,
   "_location": "/global",
   "_npmUser": {
     "email": "raynos2@gmail.com",
@@ -17,20 +18,20 @@
   "_phantomChildren": {},
   "_requested": {
     "name": "global",
-    "raw": "global@~4.3.0",
-    "rawSpec": "~4.3.0",
+    "raw": "global@4.3.0",
+    "rawSpec": "4.3.0",
     "scope": null,
-    "spec": ">=4.3.0 <4.4.0",
-    "type": "range"
+    "spec": "4.3.0",
+    "type": "version"
   },
   "_requiredBy": [
-    "/xhr"
+    "/"
   ],
   "_resolved": "https://registry.npmjs.org/global/-/global-4.3.0.tgz",
   "_shasum": "ef7ec4beead579b454f5ebd5e7f303db54f42a2b",
   "_shrinkwrap": null,
-  "_spec": "global@~4.3.0",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/xhr",
+  "_spec": "global@4.3.0",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "email": "raynos2@gmail.com",
     "name": "Raynos"
@@ -63,7 +64,6 @@
   },
   "gitHead": "b089724e7378fee6a7efda13f858577f34633ca8",
   "homepage": "https://github.com/Raynos/global",
-  "installable": true,
   "keywords": [],
   "licenses": [
     {

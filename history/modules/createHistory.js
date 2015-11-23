@@ -114,8 +114,18 @@ function createHistory(options={}) {
         return // Transition was interrupted.
 
       if (ok) {
-        finishTransition(nextLocation)
-        updateLocation(nextLocation)
+        // treat PUSH to current path like REPLACE to be consistent with browsers
+        if (nextLocation.action === PUSH) {
+          let { pathname, search } = getCurrentLocation()
+          let currentPath = pathname + search
+          let path = nextLocation.pathname + nextLocation.search
+
+          if (currentPath === path)
+            nextLocation.action = REPLACE
+        }
+
+        if (finishTransition(nextLocation) !== false)
+          updateLocation(nextLocation)
       } else if (location && nextLocation.action === POP) {
         let prevIndex = allKeys.indexOf(location.key)
         let nextIndex = allKeys.indexOf(nextLocation.key)
@@ -132,10 +142,18 @@ function createHistory(options={}) {
     )
   }
 
+  function push(path) {
+    pushState(null, path)
+  }
+
   function replaceState(state, path) {
     transitionTo(
       createLocation(path, state, REPLACE, createKey())
     )
+  }
+
+  function replace(path) {
+    replaceState(null, path)
   }
 
   function goBack() {
@@ -207,6 +225,8 @@ function createHistory(options={}) {
     transitionTo,
     pushState,
     replaceState,
+    push,
+    replace,
     go,
     goBack,
     goForward,

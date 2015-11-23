@@ -140,8 +140,20 @@ function createHistory() {
       if (pendingLocation !== nextLocation) return; // Transition was interrupted.
 
       if (ok) {
-        finishTransition(nextLocation);
-        updateLocation(nextLocation);
+        // treat PUSH to current path like REPLACE to be consistent with browsers
+        if (nextLocation.action === _Actions.PUSH) {
+          var _getCurrentLocation = getCurrentLocation();
+
+          var pathname = _getCurrentLocation.pathname;
+          var search = _getCurrentLocation.search;
+
+          var currentPath = pathname + search;
+          var path = nextLocation.pathname + nextLocation.search;
+
+          if (currentPath === path) nextLocation.action = _Actions.REPLACE;
+        }
+
+        if (finishTransition(nextLocation) !== false) updateLocation(nextLocation);
       } else if (location && nextLocation.action === _Actions.POP) {
         var prevIndex = allKeys.indexOf(location.key);
         var nextIndex = allKeys.indexOf(nextLocation.key);
@@ -155,8 +167,16 @@ function createHistory() {
     transitionTo(createLocation(path, state, _Actions.PUSH, createKey()));
   }
 
+  function push(path) {
+    pushState(null, path);
+  }
+
   function replaceState(state, path) {
     transitionTo(createLocation(path, state, _Actions.REPLACE, createKey()));
+  }
+
+  function replace(path) {
+    replaceState(null, path);
   }
 
   function goBack() {
@@ -230,6 +250,8 @@ function createHistory() {
     transitionTo: transitionTo,
     pushState: pushState,
     replaceState: replaceState,
+    push: push,
+    replace: replace,
     go: go,
     goBack: goBack,
     goForward: goForward,

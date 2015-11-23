@@ -1,11 +1,10 @@
-
 module.exports = class ArrowSpacing
 
     rule:
         name: 'arrow_spacing'
-        level : 'ignore'
-        message : 'Function arrows (-> and =>) must be spaced properly'
-        description: """
+        level: 'ignore'
+        message: 'Function arrows (-> and =>) must be spaced properly'
+        description: '''
             <p>This rule checks to see that there is spacing before and after
             the arrow operator that declares a function. This rule is disabled
             by default.</p> <p>Note that if arrow_spacing is enabled, and you
@@ -21,11 +20,11 @@ module.exports = class ArrowSpacing
             x((a,b)-> 3)
             </code>
             </pre>
-             """
+             '''
 
-    tokens: [ '->', '=>' ]
+    tokens: ['->', '=>']
 
-    lintToken : (token, tokenApi) ->
+    lintToken: (token, tokenApi) ->
         # Throw error unless the following happens.
         #
         # We will take a look at the previous token to see
@@ -56,8 +55,8 @@ module.exports = class ArrowSpacing
                # Throw error unless the previous token...
                ((pp.spaced? or pp[0] is 'TERMINATOR') or #1
                 pp.generated? or #2
-                pp[0] is "INDENT" or #3
-                (pp[1] is "(" and not pp.generated?)) #4
+                pp[0] is 'INDENT' or #3
+                (pp[1] is '(' and not pp.generated?)) #4
             true
         else
             null

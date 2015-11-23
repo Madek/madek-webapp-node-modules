@@ -1,16 +1,15 @@
-
 class TokenApi
+
     constructor: (CoffeeScript, source, @config, @tokensByLine) ->
         @tokens = CoffeeScript.tokens(source)
         @lines = source.split('\n')
         @tokensByLine = {}  # A map of tokens by line.
 
-    i: 0              # The index of the current token we're linting.
+    i: 0 # The index of the current token we're linting.
 
     # Return the token n places away from the current token.
-    peek : (n = 1) ->
+    peek: (n = 1) ->
         @tokens[@i + n] || null
-
 
 BaseLinter = require './base_linter.coffee'
 
@@ -42,13 +41,8 @@ module.exports = class LexicalLinter extends BaseLinter
 
     # Return an error if the given token fails a lint check, false otherwise.
     lintToken: (token) ->
-        [type, value, lineNumber] = token
+        [type, value, { first_line: lineNumber }] = token
 
-        if typeof lineNumber is "object"
-            if type is 'OUTDENT' or type is 'INDENT'
-                lineNumber = lineNumber.last_line
-            else
-                lineNumber = lineNumber.first_line
         @tokensByLine[lineNumber] ?= []
         @tokensByLine[lineNumber].push(token)
         # CoffeeScript loses line numbers of interpolations and multi-line

@@ -19,8 +19,8 @@
 
     CheckstyleReporter.prototype.publish = function() {
       var context, e, errors, i, len, level, path, ref, ref1;
-      this.print("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-      this.print("<checkstyle version=\"4.3\">");
+      this.print('<?xml version="1.0" encoding="utf-8"?>');
+      this.print('<checkstyle version="4.3">');
       ref = this.errorReport.paths;
       for (path in ref) {
         errors = ref[path];
@@ -32,13 +32,13 @@
             if (level === 'warn') {
               level = 'warning';
             }
-            context = (ref1 = e.context) != null ? ref1 : "";
-            this.print("<error line=\"" + e.lineNumber + "\"\n    severity=\"" + (this.escape(level)) + "\"\n    message=\"" + (this.escape(e.message + '; context: ' + context)) + "\"\n    source=\"coffeelint\"/>");
+            context = (ref1 = e.context) != null ? ref1 : '';
+            this.print('<error line="#{e.lineNumber}"\n    severity="#{@escape(level)}"\n    message="#{@escape(e.message+\'; context: \'+context)}"\n    source="coffeelint"/>');
           }
-          this.print("</file>");
+          this.print('</file>');
         }
       }
-      return this.print("</checkstyle>");
+      return this.print('</checkstyle>');
     };
 
     return CheckstyleReporter;

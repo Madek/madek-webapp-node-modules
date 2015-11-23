@@ -1,4 +1,3 @@
-
 module.exports = class DuplicateKey
 
     rule:
@@ -9,24 +8,25 @@ module.exports = class DuplicateKey
         name: 'duplicate_key'
         level: 'error'
         message: 'Duplicate key defined in object or class'
-        description:
-            "Prevents defining duplicate keys in object literals and classes"
+        description: '''
+            Prevents defining duplicate keys in object literals and classes
+            '''
 
-    tokens: [ 'IDENTIFIER', '{', '}' ]
+    tokens: ['IDENTIFIER', '{', '}']
 
     constructor: ->
         @braceScopes = []   # A stack tracking keys defined in nexted scopes.
 
-    lintToken : ([type], tokenApi) ->
+    lintToken: ([type], tokenApi) ->
 
-        if type in [ '{', '}' ]
+        if type in ['{', '}']
             @lintBrace arguments...
             return undefined
 
         if type is 'IDENTIFIER'
             @lintIdentifier arguments...
 
-    lintIdentifier : (token, tokenApi) ->
+    lintIdentifier: (token, tokenApi) ->
         key = token[1]
 
         # Class names might not be in a scope
@@ -50,7 +50,7 @@ module.exports = class DuplicateKey
             @currentScope[key] = token
             null
 
-    lintBrace : (token) ->
+    lintBrace: (token) ->
         if token[0] is '{'
             @braceScopes.push @currentScope if @currentScope?
             @currentScope = {}

@@ -1,10 +1,11 @@
-
 module.exports = class SpacingAfterComma
     rule:
         name: 'spacing_after_comma'
-        description: 'This rule requires a space after commas.'
         level: 'ignore'
-        message: 'Spaces are required after commas'
+        message: 'a space is required after commas'
+        description: '''
+            This rule checks to make sure you have a space after commas.
+            '''
 
     tokens: [',', 'REGEX_START', 'REGEX_END']
 
@@ -12,7 +13,7 @@ module.exports = class SpacingAfterComma
         @inRegex = false
 
     lintToken: (token, tokenApi) ->
-        [ type ] = token
+        [type] = token
 
         if type is 'REGEX_START'
             @inRegex = true
@@ -23,7 +24,7 @@ module.exports = class SpacingAfterComma
 
         unless token.spaced or token.newLine or token.generated or
                 @isRegexFlag(token, tokenApi)
-            {context : token[1]}
+            return true
 
     # When generating a regex (///${whatever}///i) CoffeeScript generates tokens
     # for RegEx(whatever, "i") but doesn't bother to mark that comma as

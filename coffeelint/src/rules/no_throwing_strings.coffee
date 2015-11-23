@@ -1,11 +1,10 @@
-
 module.exports = class NoThrowingStrings
 
     rule:
         name: 'no_throwing_strings'
-        level : 'error'
-        message : 'Throwing strings is forbidden'
-        description: """
+        level: 'error'
+        message: 'Throwing strings is forbidden'
+        description: '''
             This rule forbids throwing string literals or interpolations. While
             JavaScript (and CoffeeScript by extension) allow any expression to
             be thrown, it is best to only throw <a
@@ -24,11 +23,11 @@ module.exports = class NoThrowingStrings
             </code>
             </pre>
             This rule is enabled by default.
-            """
+            '''
 
-    tokens: [ 'THROW' ]
+    tokens: ['THROW']
 
-    lintToken : (token, tokenApi) ->
+    lintToken: (token, tokenApi) ->
         [n1, ...] = tokenApi.peek()
         # Catch literals and string interpolations, which are wrapped in parens.
 

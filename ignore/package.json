@@ -6,15 +6,16 @@
     ]
   ],
   "_from": "ignore@>=2.2.15 <3.0.0",
-  "_id": "ignore@2.2.18",
+  "_id": "ignore@2.2.19",
   "_inCache": true,
+  "_installable": true,
   "_location": "/ignore",
   "_nodeVersion": "0.12.1",
   "_npmUser": {
     "email": "i@kael.me",
     "name": "kael"
   },
-  "_npmVersion": "3.3.3",
+  "_npmVersion": "3.3.9",
   "_phantomChildren": {},
   "_requested": {
     "name": "ignore",
@@ -27,8 +28,8 @@
   "_requiredBy": [
     "/coffeelint"
   ],
-  "_resolved": "https://registry.npmjs.org/ignore/-/ignore-2.2.18.tgz",
-  "_shasum": "fb1d11a785613a05cfdc56c670dde24fb569ea2f",
+  "_resolved": "https://registry.npmjs.org/ignore/-/ignore-2.2.19.tgz",
+  "_shasum": "4c845a61f7e50b4a410f6156aaa38b6ad95e0c8f",
   "_shrinkwrap": null,
   "_spec": "ignore@^2.2.15",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/coffeelint",
@@ -46,16 +47,15 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "fb1d11a785613a05cfdc56c670dde24fb569ea2f",
-    "tarball": "http://registry.npmjs.org/ignore/-/ignore-2.2.18.tgz"
+    "shasum": "4c845a61f7e50b4a410f6156aaa38b6ad95e0c8f",
+    "tarball": "http://registry.npmjs.org/ignore/-/ignore-2.2.19.tgz"
   },
   "files": [
     "LICENSE-MIT",
     "index.js"
   ],
-  "gitHead": "e891f01b6fa909a11c57cb6d7f72696c07c875f9",
+  "gitHead": "97df28de4e8401e08c620986156924c1c0f3f37e",
   "homepage": "https://github.com/kaelzhang/node-ignore#readme",
-  "installable": true,
   "keywords": [
     ".gitignore",
     "filter",
@@ -85,5 +85,5 @@
   "scripts": {
     "test": "mocha --reporter spec ./test/ignore.js"
   },
-  "version": "2.2.18"
+  "version": "2.2.19"
 }

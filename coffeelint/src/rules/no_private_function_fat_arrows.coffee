@@ -1,15 +1,14 @@
-
 module.exports = class NoPrivateFunctionFatArrows
 
     rule:
         name: 'no_private_function_fat_arrows'
         level: 'warn'
         message: 'Used the fat arrow for a private function'
-        description: """
+        description: '''
             Warns when you use the fat arrow for a private function
             inside a class definition scope. It is not necessary and
             it does not do anything.
-            """
+            '''
 
     lintAST: (node, @astApi) ->
         @lintNode node

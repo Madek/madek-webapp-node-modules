@@ -1,6 +1,6 @@
 ## Basename Support
 
-Support for running an app under a "base" URL is provided by the `useBasename` [enhancer](Terms.md#createhistoryenhancer) function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have the correct `location.pathname` inside `listen` and `listenBefore` hooks.
+Support for running an app under a "base" URL is provided by the `useBasename` [enhancer](Glossary.md#createhistoryenhancer) function. Simply use a wrapped version of your `createHistory` function to create your `history` object and you'll have the correct `location.pathname` inside `listen` and `listenBefore` hooks.
 
 ```js
 import { createHistory, useBasename } from 'history'
@@ -17,9 +17,14 @@ history.listen(function (location) {
 })
 ```
 
-Basename-enhanced histories also automatically prepend the basename to paths used in `pushState`, `replaceState`, `createPath`, and `createHref`.
+Basename-enhanced histories also automatically prepend the basename to paths used in `pushState`, `push`, `replaceState`, `replace`, `createPath`, and `createHref`.
 
 ```js
 history.createPath('/the/path') // /base/the/path
 history.pushState(null, '/the/path') // push /base/the/path
+history.push('/the/path') // push /base/the/path
 ```
+
+### Using `<base href>`
+
+In HTML documents, you can use the [`<base>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)'s `href` attribute to specify a `basename` for the page. This way, you don't have to manually pass the `basename` property to your `createHistory` function.

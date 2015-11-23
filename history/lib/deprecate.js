@@ -10,7 +10,7 @@ var _warning2 = _interopRequireDefault(_warning);
 
 function deprecate(fn, message) {
   return function () {
-    _warning2['default'](false, '[history] ' + message);
+    process.env.NODE_ENV !== 'production' ? _warning2['default'](false, '[history] ' + message) : undefined;
     return fn.apply(this, arguments);
   };
 }

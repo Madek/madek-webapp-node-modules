@@ -5,7 +5,6 @@ Copyright (c) 2011 Matthew Perpick.
 CoffeeLint is freely distributable under the MIT license.
 ###
 
-
 # Coffeelint's namespace.
 # Browserify wrapps this file in a UMD that will set window.coffeelint to
 # exports
@@ -35,7 +34,6 @@ packageJSON = require('./../package.json')
 
 # The current version of Coffeelint.
 coffeelint.VERSION = packageJSON.version
-
 
 # CoffeeLint error levels.
 ERROR   = 'error'
@@ -70,7 +68,6 @@ ASTLinter = require './ast_linter.coffee'
 # Cache instance, disabled by default
 cache = null
 
-
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->
     # When run from the browser it may not be able to find the ruleLoader.
@@ -91,7 +88,6 @@ sameJSON = (a, b) ->
 coffeelint.trimConfig = (userConfig) ->
     newConfig = {}
     userConfig = mergeDefaultConfig(userConfig)
-
     for rule, config of userConfig
         dConfig = RULES[rule]
 
@@ -114,7 +110,6 @@ coffeelint.trimConfig = (userConfig) ->
         else
             config.module = config._module
             delete config._module
-
             for key, value of config
                 continue if key in ['message', 'description', 'name']
 
@@ -128,8 +123,8 @@ coffeelint.invertLiterate = (source) ->
     source = CoffeeScript.helpers.invertLiterate source
     # Strip the first 4 spaces from every line. After this the markdown is
     # commented and all of the other code should be at their natural location.
-    newSource = ""
-    for line in source.split "\n"
+    newSource = ''
+    for line in source.split '\n'
         if line.match(/^#/)
             # strip trailing space
             line = line.replace /\s*$/, ''
@@ -145,26 +140,26 @@ _rules = {}
 coffeelint.registerRule = (RuleConstructor, ruleName = undefined) ->
     p = new RuleConstructor
 
-    name = p?.rule?.name or "(unknown)"
+    name = p?.rule?.name or '(unknown)'
     e = (msg) -> throw new Error "Invalid rule: #{name} #{msg}"
     unless p.rule?
-        e "Rules must provide rule attribute with a default configuration."
+        e 'Rules must provide rule attribute with a default configuration.'
 
-    e "Rule defaults require a name" unless p.rule.name?
+    e 'Rule defaults require a name' unless p.rule.name?
 
     if ruleName? and ruleName isnt p.rule.name
         e "Mismatched rule name: #{ruleName}"
 
-    e "Rule defaults require a message" unless p.rule.message?
-    e "Rule defaults require a description" unless p.rule.description?
-    unless p.rule.level in [ 'ignore', 'warn', 'error' ]
+    e 'Rule defaults require a message' unless p.rule.message?
+    e 'Rule defaults require a description' unless p.rule.description?
+    unless p.rule.level in ['ignore', 'warn', 'error']
         e "Default level must be 'ignore', 'warn', or 'error'"
 
     if typeof p.lintToken is 'function'
         e "'tokens' is required for 'lintToken'" unless p.tokens
     else if typeof p.lintLine isnt 'function' and
             typeof p.lintAST isnt 'function'
-        e "Rules must implement lintToken, lintLine, or lintAST"
+        e 'Rules must implement lintToken, lintLine, or lintAST'
 
     # Capture the default options for the new rule.
     RULES[p.rule.name] = p.rule
@@ -254,7 +249,7 @@ coffeelint.lint = (source, userConfig = {}, literate = false) ->
 
     source = @invertLiterate source if literate
     if userConfig?.coffeelint?.transforms?
-        sourceLength = source.split("\n").length
+        sourceLength = source.split('\n').length
         for m in userConfig?.coffeelint?.transforms
             try
                 ruleLoader = nodeRequire './ruleLoader'
@@ -265,7 +260,7 @@ coffeelint.lint = (source, userConfig = {}, literate = false) ->
         # changes one line into two early in the file and later condenses two
         # into one you'll end up with the same length and not get the warning
         # even though everything in between will be off by one.
-        if sourceLength isnt source.split("\n").length and
+        if sourceLength isnt source.split('\n').length and
                 config.transform_messes_up_line_numbers.level isnt 'ignore'
 
             errors.push(extend(
@@ -285,7 +280,7 @@ coffeelint.lint = (source, userConfig = {}, literate = false) ->
     # indicates a syntax error and would not work well as a stand alone rule.
     #
     # Why can't JSON just support comments?
-    for name of userConfig when name not in [ 'coffeescript_error', '_comment' ]
+    for name of userConfig when name not in ['coffeescript_error', '_comment']
         unless _rules[name]?
             # TODO: Figure out a good way to notify the user that they have
             # configured a rule that doesn't exist. throwing an Error was
@@ -293,17 +288,15 @@ coffeelint.lint = (source, userConfig = {}, literate = false) ->
             # warnings for configuration.
             undefined
 
-
+    # disabledInitially is to prevent the rule from becoming active before
+    # the actual inlined comment appears
+    disabledInitially = []
     # Check ahead for inline enabled rules
-    disabled_initially = []
     for l in source.split('\n')
-        s = LineLinter.configStatement.exec(l)
-        if s?.length > 2 and 'enable' in s
-            for r in s[1..]
-                unless r in ['enable','disable']
-                    unless r of config and config[r].level in ['warn','error']
-                        disabled_initially.push r
-                        config[r] = { level: 'error' }
+        [ regex, set, rule ] = LineLinter.configStatement.exec(l) or []
+        if set is 'enable' and config[rule]?.level is 'ignore'
+            disabledInitially.push rule
+            config[rule].level = 'error'
 
     # Do AST linting first so all compile errors are caught.
     astErrors = new ASTLinter(source, config, _rules, CoffeeScript).lint()
@@ -323,37 +316,37 @@ coffeelint.lint = (source, userConfig = {}, literate = false) ->
             literate)
         lineErrors = lineLinter.lint()
         errors = errors.concat(lineErrors)
-        block_config = lineLinter.block_config
+        inlineConfig = lineLinter.inlineConfig
     else
         # default this so it knows what to do
-        block_config =
-            enable : {}
-            disable : {}
+        inlineConfig =
+            enable: {}
+            disable: {}
 
     # Sort by line number and return.
     errors.sort((a, b) -> a.lineNumber - b.lineNumber)
 
     # Disable/enable rules for inline blocks
-    all_errors = errors
+    allErrors = errors
     errors = []
-    disabled = disabled_initially
-    next_line = 0
+    disabled = disabledInitially
+    nextLine = 0
     for i in [0...source.split('\n').length]
-        for cmd of block_config
-            rules = block_config[cmd][i]
+        for cmd of inlineConfig
+            rules = inlineConfig[cmd][i]
             {
                 'disable': ->
                     disabled = disabled.concat(rules)
                 'enable': ->
                     difference(disabled, rules)
-                    disabled = disabled_initially if rules.length is 0
+                    disabled = disabledInitially if rules.length is 0
             }[cmd]() if rules?
         # advance line and append relevant messages
-        while next_line is i and all_errors.length > 0
-            next_line = all_errors[0].lineNumber - 1
-            e = all_errors[0]
+        while nextLine is i and allErrors.length > 0
+            nextLine = allErrors[0].lineNumber - 1
+            e = allErrors[0]
             if e.lineNumber is i + 1 or not e.lineNumber?
-                e = all_errors.shift()
+                e = allErrors.shift()
                 errors.push e unless e.rule in disabled
 
     cache?.set source, errors

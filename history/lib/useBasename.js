@@ -8,9 +8,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
+var _ExecutionEnvironment = require('./ExecutionEnvironment');
+
 var _runTransitionHook = require('./runTransitionHook');
 
 var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
+
+var _extractPath = require('./extractPath');
+
+var _extractPath2 = _interopRequireDefault(_extractPath);
 
 var _parsePath = require('./parsePath');
 
@@ -24,6 +30,14 @@ function useBasename(createHistory) {
     var historyOptions = _objectWithoutProperties(options, ['basename']);
 
     var history = createHistory(historyOptions);
+
+    // Automatically use the value of <base href> in HTML
+    // documents as basename if it's not explicitly given.
+    if (basename == null && _ExecutionEnvironment.canUseDOM) {
+      var base = document.getElementsByTagName('base')[0];
+
+      if (base) basename = _extractPath2['default'](base.href);
+    }
 
     function addBasename(location) {
       if (basename && location.basename == null) {
@@ -45,7 +59,10 @@ function useBasename(createHistory) {
 
       if (typeof path === 'string') path = _parsePath2['default'](path);
 
-      var pathname = basename + path.pathname;
+      var pname = path.pathname;
+      var normalizedBasename = basename.slice(-1) === '/' ? basename : basename + '/';
+      var normalizedPathname = pname.charAt(0) === '/' ? pname.slice(1) : pname;
+      var pathname = normalizedBasename + normalizedPathname;
 
       return _extends({}, path, {
         pathname: pathname
@@ -70,8 +87,16 @@ function useBasename(createHistory) {
       history.pushState(state, prependBasename(path));
     }
 
+    function push(path) {
+      pushState(null, path);
+    }
+
     function replaceState(state, path) {
       history.replaceState(state, prependBasename(path));
+    }
+
+    function replace(path) {
+      replaceState(null, path);
     }
 
     function createPath(path) {
@@ -90,7 +115,9 @@ function useBasename(createHistory) {
       listenBefore: listenBefore,
       listen: listen,
       pushState: pushState,
+      push: push,
       replaceState: replaceState,
+      replace: replace,
       createPath: createPath,
       createHref: createHref,
       createLocation: createLocation

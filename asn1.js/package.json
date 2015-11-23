@@ -1,36 +1,37 @@
 {
   "_args": [
     [
-      "asn1.js@^2.0.0",
+      "asn1.js@^4.0.0",
       "/Users/ma/CODE/Madek/webapp/node_modules/parse-asn1"
     ]
   ],
-  "_from": "asn1.js@>=2.0.0 <3.0.0",
-  "_id": "asn1.js@2.2.1",
+  "_from": "asn1.js@>=4.0.0 <5.0.0",
+  "_id": "asn1.js@4.0.0",
   "_inCache": true,
+  "_installable": true,
   "_location": "/asn1.js",
-  "_nodeVersion": "4.0.0",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
     "email": "fedor@indutny.com",
     "name": "indutny"
   },
-  "_npmVersion": "2.14.2",
+  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
     "name": "asn1.js",
-    "raw": "asn1.js@^2.0.0",
-    "rawSpec": "^2.0.0",
+    "raw": "asn1.js@^4.0.0",
+    "rawSpec": "^4.0.0",
     "scope": null,
-    "spec": ">=2.0.0 <3.0.0",
+    "spec": ">=4.0.0 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/parse-asn1"
   ],
-  "_resolved": "https://registry.npmjs.org/asn1.js/-/asn1.js-2.2.1.tgz",
-  "_shasum": "c8ba4dd68e84431288126230cb2045bdfa9fbfe1",
+  "_resolved": "https://registry.npmjs.org/asn1.js/-/asn1.js-4.0.0.tgz",
+  "_shasum": "4fe967ace3ca32d88822c277ddbfa190c06b4a27",
   "_shrinkwrap": null,
-  "_spec": "asn1.js@^2.0.0",
+  "_spec": "asn1.js@^4.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/parse-asn1",
   "author": {
     "name": "Fedor Indutny"
@@ -39,7 +40,7 @@
     "url": "https://github.com/indutny/asn1.js/issues"
   },
   "dependencies": {
-    "bn.js": "^2.0.0",
+    "bn.js": "^4.0.0",
     "inherits": "^2.0.1",
     "minimalistic-assert": "^1.0.0"
   },
@@ -49,12 +50,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "c8ba4dd68e84431288126230cb2045bdfa9fbfe1",
-    "tarball": "http://registry.npmjs.org/asn1.js/-/asn1.js-2.2.1.tgz"
+    "shasum": "4fe967ace3ca32d88822c277ddbfa190c06b4a27",
+    "tarball": "http://registry.npmjs.org/asn1.js/-/asn1.js-4.0.0.tgz"
   },
-  "gitHead": "93ca61d053fd2da6d32419c200d7347368167533",
+  "gitHead": "75383bad77c869bde876db6a799badfcee9b2a1f",
   "homepage": "https://github.com/indutny/asn1.js",
-  "installable": true,
   "keywords": [
     "asn.1",
     "der"
@@ -80,5 +80,5 @@
   "scripts": {
     "test": "mocha --reporter spec test/*-test.js rfc/2560/test/*-test.js rfc/3280/test/*-test.js"
   },
-  "version": "2.2.1"
+  "version": "4.0.0"
 }

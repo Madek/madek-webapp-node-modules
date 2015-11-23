@@ -21,11 +21,11 @@ var _parsePath = require('./parsePath');
 var _parsePath2 = _interopRequireDefault(_parsePath);
 
 function defaultStringifyQuery(query) {
-  return _qs2['default'].stringify(query, { arrayFormat: 'brackets' });
+  return _qs2['default'].stringify(query, { arrayFormat: 'brackets' }).replace(/%20/g, '+');
 }
 
 function defaultParseQueryString(queryString) {
-  return _qs2['default'].parse(queryString);
+  return _qs2['default'].parse(queryString.replace(/\+/g, '%20'));
 }
 
 /**

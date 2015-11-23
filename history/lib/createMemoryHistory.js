@@ -58,13 +58,13 @@ function createMemoryHistory() {
 
     if (typeof entry === 'object' && entry) return _extends({}, entry, { key: key });
 
-    _invariant2['default'](false, 'Unable to create history entry from %s', entry);
+    !false ? process.env.NODE_ENV !== 'production' ? _invariant2['default'](false, 'Unable to create history entry from %s', entry) : _invariant2['default'](false) : undefined;
   });
 
   if (current == null) {
     current = entries.length - 1;
   } else {
-    _invariant2['default'](current >= 0 && current < entries.length, 'Current index must be >= 0 and < %s, was %s', entries.length, current);
+    !(current >= 0 && current < entries.length) ? process.env.NODE_ENV !== 'production' ? _invariant2['default'](false, 'Current index must be >= 0 and < %s, was %s', entries.length, current) : _invariant2['default'](false) : undefined;
   }
 
   var storage = createStateStorage(entries);
@@ -105,7 +105,7 @@ function createMemoryHistory() {
 
   function go(n) {
     if (n) {
-      _invariant2['default'](canGo(n), 'Cannot go(%s) there is not enough history', n);
+      !canGo(n) ? process.env.NODE_ENV !== 'production' ? _invariant2['default'](false, 'Cannot go(%s) there is not enough history', n) : _invariant2['default'](false) : undefined;
 
       current += n;
 

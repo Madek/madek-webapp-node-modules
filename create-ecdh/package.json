@@ -1,36 +1,37 @@
 {
   "_args": [
     [
-      "create-ecdh@^2.0.0",
+      "create-ecdh@^4.0.0",
       "/Users/ma/CODE/Madek/webapp/node_modules/crypto-browserify"
     ]
   ],
-  "_from": "create-ecdh@>=2.0.0 <3.0.0",
-  "_id": "create-ecdh@2.0.2",
+  "_from": "create-ecdh@>=4.0.0 <5.0.0",
+  "_id": "create-ecdh@4.0.0",
   "_inCache": true,
+  "_installable": true,
   "_location": "/create-ecdh",
-  "_nodeVersion": "4.1.1",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
-    "email": "email@dcousens.com",
-    "name": "dcousens"
+    "email": "calvin.metcalf@gmail.com",
+    "name": "cwmma"
   },
-  "_npmVersion": "3.3.4",
+  "_npmVersion": "2.9.0",
   "_phantomChildren": {},
   "_requested": {
     "name": "create-ecdh",
-    "raw": "create-ecdh@^2.0.0",
-    "rawSpec": "^2.0.0",
+    "raw": "create-ecdh@^4.0.0",
+    "rawSpec": "^4.0.0",
     "scope": null,
-    "spec": ">=2.0.0 <3.0.0",
+    "spec": ">=4.0.0 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/crypto-browserify"
   ],
-  "_resolved": "https://registry.npmjs.org/create-ecdh/-/create-ecdh-2.0.2.tgz",
-  "_shasum": "5b0dc9e1241944a29973f8cd2ecf1ba0cadb6255",
+  "_resolved": "https://registry.npmjs.org/create-ecdh/-/create-ecdh-4.0.0.tgz",
+  "_shasum": "888c723596cdf7612f6498233eebd7a35301737d",
   "_shrinkwrap": null,
-  "_spec": "create-ecdh@^2.0.0",
+  "_spec": "create-ecdh@^4.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/crypto-browserify",
   "author": {
     "name": "Calvin Metcalf"
@@ -40,8 +41,8 @@
     "url": "https://github.com/crypto-browserify/createECDH/issues"
   },
   "dependencies": {
-    "bn.js": "^2.0.0",
-    "elliptic": "^3.0.0"
+    "bn.js": "^4.1.0",
+    "elliptic": "^6.0.0"
   },
   "description": "createECDH but browserifiable",
   "devDependencies": {
@@ -50,12 +51,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "5b0dc9e1241944a29973f8cd2ecf1ba0cadb6255",
-    "tarball": "http://registry.npmjs.org/create-ecdh/-/create-ecdh-2.0.2.tgz"
+    "shasum": "888c723596cdf7612f6498233eebd7a35301737d",
+    "tarball": "http://registry.npmjs.org/create-ecdh/-/create-ecdh-4.0.0.tgz"
   },
-  "gitHead": "a0dc2b85e0868e85e3c7d284c4ed75a2077fe7d7",
+  "gitHead": "115f7b6bad56934285b9015575e1b43f23148a8a",
   "homepage": "https://github.com/crypto-browserify/createECDH",
-  "installable": true,
   "keywords": [
     "ECDH",
     "diffie",
@@ -95,5 +95,5 @@
   "scripts": {
     "test": "node test.js | tspec"
   },
-  "version": "2.0.2"
+  "version": "4.0.0"
 }

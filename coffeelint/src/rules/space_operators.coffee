@@ -1,11 +1,12 @@
-
 module.exports = class SpaceOperators
 
     rule:
         name: 'space_operators'
-        level : 'ignore'
-        message : 'Operators must be spaced properly'
-        description: "This rule enforces that operators have space around them."
+        level: 'ignore'
+        message: 'Operators must be spaced properly'
+        description: '''
+            This rule enforces that operators have spaces around them.
+            '''
 
     tokens: ['+', '-', '=', '**', 'MATH', 'COMPARE', 'LOGIC', 'COMPOUND_ASSIGN',
         'STRING_START', 'STRING_END', 'CALL_START', 'CALL_END']
@@ -18,15 +19,15 @@ module.exports = class SpaceOperators
     lintToken: ([type], tokenApi) ->
 
         # These just keep track of state
-        if type in [ 'CALL_START', 'CALL_END' ]
+        if type in ['CALL_START', 'CALL_END']
             @trackCall arguments...
             return
 
-        if type in [ 'STRING_START', 'STRING_END' ]
+        if type in ['STRING_START', 'STRING_END']
             return @trackParens arguments...
 
         # These may return errors
-        if type in [ '+', '-' ]
+        if type in ['+', '-']
             @lintPlus arguments...
         else
             @lintMath arguments...
@@ -46,14 +47,14 @@ module.exports = class SpaceOperators
         if (isUnary and token.spaced?) or
                 (not isUnary and not token.newLine and
                 (not token.spaced or (p and not p.spaced)))
-            return {context: token[1]}
+            return { context: token[1] }
         else
             null
 
     lintMath: (token, tokenApi) ->
         p = tokenApi.peek(-1)
         if not token.newLine and (not token.spaced or (p and not p.spaced))
-            return {context: token[1]}
+            return { context: token[1] }
         else
             null
 

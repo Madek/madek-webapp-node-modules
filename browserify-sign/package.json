@@ -1,36 +1,37 @@
 {
   "_args": [
     [
-      "browserify-sign@^3.0.1",
+      "browserify-sign@^4.0.0",
       "/Users/ma/CODE/Madek/webapp/node_modules/crypto-browserify"
     ]
   ],
-  "_from": "browserify-sign@>=3.0.1 <4.0.0",
-  "_id": "browserify-sign@3.0.8",
+  "_from": "browserify-sign@>=4.0.0 <5.0.0",
+  "_id": "browserify-sign@4.0.0",
   "_inCache": true,
+  "_installable": true,
   "_location": "/browserify-sign",
-  "_nodeVersion": "3.2.0",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
     "email": "calvin.metcalf@gmail.com",
     "name": "cwmma"
   },
-  "_npmVersion": "2.13.3",
+  "_npmVersion": "2.9.0",
   "_phantomChildren": {},
   "_requested": {
     "name": "browserify-sign",
-    "raw": "browserify-sign@^3.0.1",
-    "rawSpec": "^3.0.1",
+    "raw": "browserify-sign@^4.0.0",
+    "rawSpec": "^4.0.0",
     "scope": null,
-    "spec": ">=3.0.1 <4.0.0",
+    "spec": ">=4.0.0 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/crypto-browserify"
   ],
-  "_resolved": "https://registry.npmjs.org/browserify-sign/-/browserify-sign-3.0.8.tgz",
-  "_shasum": "a5cc9a2f84005ddc37775b7c56bdabd987e69025",
+  "_resolved": "https://registry.npmjs.org/browserify-sign/-/browserify-sign-4.0.0.tgz",
+  "_shasum": "10773910c3c206d5420a46aad8694f820b85968f",
   "_shrinkwrap": null,
-  "_spec": "browserify-sign@^3.0.1",
+  "_spec": "browserify-sign@^4.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/crypto-browserify",
   "author": "",
   "browser": "browser.js",
@@ -38,15 +39,15 @@
     "url": "https://github.com/crypto-browserify/browserify-sign/issues"
   },
   "dependencies": {
-    "bn.js": "^2.0.0",
-    "browserify-rsa": "^2.0.0",
+    "bn.js": "^4.1.1",
+    "browserify-rsa": "^4.0.0",
     "create-hash": "^1.1.0",
     "create-hmac": "^1.1.2",
-    "elliptic": "^3.0.0",
+    "elliptic": "^6.0.0",
     "inherits": "^2.0.1",
-    "parse-asn1": "^3.0.0"
+    "parse-asn1": "^5.0.0"
   },
-  "description": "browserify-sign [![Build Status](https://travis-ci.org/crypto-browserify/browserify-sign.svg)](https://travis-ci.org/crypto-browserify/browserify-sign) ===",
+  "description": "adds node crypto signing for browsers",
   "devDependencies": {
     "standard": "^5.0.0",
     "tap-spec": "^1.0.1",
@@ -54,12 +55,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "a5cc9a2f84005ddc37775b7c56bdabd987e69025",
-    "tarball": "http://registry.npmjs.org/browserify-sign/-/browserify-sign-3.0.8.tgz"
+    "shasum": "10773910c3c206d5420a46aad8694f820b85968f",
+    "tarball": "http://registry.npmjs.org/browserify-sign/-/browserify-sign-4.0.0.tgz"
   },
-  "gitHead": "243fac9e1ba49440a0a9edfd912a2bfea324149a",
+  "gitHead": "7e4d3cf65624fbf58c027835a5e2c70de19cd640",
   "homepage": "https://github.com/crypto-browserify/browserify-sign#readme",
-  "installable": true,
   "license": "ISC",
   "main": "index.js",
   "maintainers": [
@@ -95,5 +95,5 @@
     "test": "npm run standard && npm run unit",
     "unit": "node test/index.js | tspec"
   },
-  "version": "3.0.8"
+  "version": "4.0.0"
 }

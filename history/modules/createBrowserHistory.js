@@ -14,13 +14,15 @@ import createDOMHistory from './createDOMHistory'
  * Note: In browsers that do not support the HTML5 history API full
  * page reloads will be used to preserve URLs.
  */
-function createBrowserHistory(options) {
+function createBrowserHistory(options={}) {
   invariant(
     canUseDOM,
     'Browser history needs a DOM'
   )
 
+  let { forceRefresh } = options
   let isSupported = supportsHistory()
+  let useRefresh = !isSupported || forceRefresh
 
   function getCurrentLocation(historyState) {
     historyState = historyState || window.history.state || {}
@@ -73,18 +75,18 @@ function createBrowserHistory(options) {
     }
 
     if (action === PUSH) {
-      if (isSupported) {
-        window.history.pushState(historyState, null, path)
-      } else {
-        // Use a full-page reload to preserve the URL.
+      if (useRefresh) {
         window.location.href = path
+        return false // Prevent location update.
+      } else {
+        window.history.pushState(historyState, null, path)
       }
     } else { // REPLACE
-      if (isSupported) {
-        window.history.replaceState(historyState, null, path)
-      } else {
-        // Use a full-page reload to preserve the URL.
+      if (useRefresh) {
         window.location.replace(path)
+        return false // Prevent location update.
+      } else {
+        window.history.replaceState(historyState, null, path)
       }
     }
   }

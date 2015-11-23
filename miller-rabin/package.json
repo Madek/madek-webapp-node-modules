@@ -1,36 +1,37 @@
 {
   "_args": [
     [
-      "miller-rabin@^2.0.0",
+      "miller-rabin@^4.0.0",
       "/Users/ma/CODE/Madek/webapp/node_modules/diffie-hellman"
     ]
   ],
-  "_from": "miller-rabin@>=2.0.0 <3.0.0",
-  "_id": "miller-rabin@2.0.1",
+  "_from": "miller-rabin@>=4.0.0 <5.0.0",
+  "_id": "miller-rabin@4.0.0",
   "_inCache": true,
+  "_installable": true,
   "_location": "/miller-rabin",
-  "_nodeVersion": "1.8.2",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
     "email": "fedor@indutny.com",
     "name": "indutny"
   },
-  "_npmVersion": "2.8.3",
+  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
     "name": "miller-rabin",
-    "raw": "miller-rabin@^2.0.0",
-    "rawSpec": "^2.0.0",
+    "raw": "miller-rabin@^4.0.0",
+    "rawSpec": "^4.0.0",
     "scope": null,
-    "spec": ">=2.0.0 <3.0.0",
+    "spec": ">=4.0.0 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/diffie-hellman"
   ],
-  "_resolved": "https://registry.npmjs.org/miller-rabin/-/miller-rabin-2.0.1.tgz",
-  "_shasum": "8c0e07fef1bc24900a78895434d39ce4024d4648",
+  "_resolved": "https://registry.npmjs.org/miller-rabin/-/miller-rabin-4.0.0.tgz",
+  "_shasum": "4a62fb1d42933c05583982f4c716f6fb9e6c6d3d",
   "_shrinkwrap": null,
-  "_spec": "miller-rabin@^2.0.0",
+  "_spec": "miller-rabin@^4.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/diffie-hellman",
   "author": {
     "email": "fedor@indutny.com",
@@ -43,7 +44,7 @@
     "url": "https://github.com/indutny/miller-rabin/issues"
   },
   "dependencies": {
-    "bn.js": "^2.0.0",
+    "bn.js": "^4.0.0",
     "brorand": "^1.0.1"
   },
   "description": "Miller Rabin algorithm for primality test",
@@ -52,12 +53,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "8c0e07fef1bc24900a78895434d39ce4024d4648",
-    "tarball": "http://registry.npmjs.org/miller-rabin/-/miller-rabin-2.0.1.tgz"
+    "shasum": "4a62fb1d42933c05583982f4c716f6fb9e6c6d3d",
+    "tarball": "http://registry.npmjs.org/miller-rabin/-/miller-rabin-4.0.0.tgz"
   },
-  "gitHead": "ec5836de2a565211217d0531639d70cb4bca6ec3",
+  "gitHead": "94b56df9948a1ae592b331afc9559115f3f98fb2",
   "homepage": "https://github.com/indutny/miller-rabin",
-  "installable": true,
   "keywords": [
     "bignumber",
     "miller-rabin",
@@ -69,6 +69,10 @@
     {
       "name": "indutny",
       "email": "fedor@indutny.com"
+    },
+    {
+      "name": "cwmma",
+      "email": "calvin.metcalf@gmail.com"
     }
   ],
   "name": "miller-rabin",
@@ -80,5 +84,5 @@
   "scripts": {
     "test": "mocha --reporter=spec test/**/*-test.js"
   },
-  "version": "2.0.1"
+  "version": "4.0.0"
 }

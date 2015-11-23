@@ -1,10 +1,9 @@
-
 module.exports = class NoNestedStringInterpolation
 
     rule:
         name: 'no_nested_string_interpolation'
-        level : 'warn'
-        message : 'Nested string interpolation is forbidden'
+        level: 'warn'
+        message: 'Nested string interpolation is forbidden'
         description: '''
             This rule warns about nested string interpolation,
             as it tends to make code harder to read and understand.
@@ -18,7 +17,7 @@ module.exports = class NoNestedStringInterpolation
             </pre>
             '''
 
-    tokens: [ 'STRING_START', 'STRING_END' ]
+    tokens: ['STRING_START', 'STRING_END']
 
     constructor: ->
         @startedStrings = 0

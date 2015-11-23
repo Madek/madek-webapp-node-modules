@@ -1,16 +1,14 @@
-
-
 module.exports = class LineEndings
 
     rule:
         name: 'line_endings'
-        level : 'ignore'
-        value : 'unix' # or 'windows'
-        message : 'Line contains incorrect line endings'
-        description: """
+        level: 'ignore'
+        value: 'unix' # or 'windows'
+        message: 'Line contains incorrect line endings'
+        description: '''
             This rule ensures your project uses only <tt>windows</tt> or
             <tt>unix</tt> line endings. This rule is disabled by default.
-            """
+            '''
 
     lintLine: (line, lineApi) ->
         ending = lineApi.config[@rule.name]?.value
@@ -25,6 +23,6 @@ module.exports = class LineEndings
         else
             throw new Error("unknown line ending type: #{ending}")
         if not valid
-            return {context:"Expected #{ending}"}
+            return { context: "Expected #{ending}" }
         else
             return null

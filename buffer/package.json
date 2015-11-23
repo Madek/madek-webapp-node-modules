@@ -6,15 +6,16 @@
     ]
   ],
   "_from": "buffer@>=3.0.0 <4.0.0",
-  "_id": "buffer@3.5.1",
+  "_id": "buffer@3.5.2",
   "_inCache": true,
+  "_installable": true,
   "_location": "/buffer",
-  "_nodeVersion": "4.1.2",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
     "email": "feross@feross.org",
     "name": "feross"
   },
-  "_npmVersion": "2.14.4",
+  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
     "name": "buffer",
@@ -25,11 +26,10 @@
     "type": "range"
   },
   "_requiredBy": [
-    "/browserify",
-    "/coffeelint/browserify"
+    "/browserify"
   ],
-  "_resolved": "https://registry.npmjs.org/buffer/-/buffer-3.5.1.tgz",
-  "_shasum": "0549d54138f82c0fbef643307e654052ec987fe0",
+  "_resolved": "https://registry.npmjs.org/buffer/-/buffer-3.5.2.tgz",
+  "_shasum": "184a1016a31c2f0628c7ca0f717cea9863a552cc",
   "_shrinkwrap": null,
   "_spec": "buffer@^3.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/browserify",
@@ -71,12 +71,11 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "0549d54138f82c0fbef643307e654052ec987fe0",
-    "tarball": "http://registry.npmjs.org/buffer/-/buffer-3.5.1.tgz"
+    "shasum": "184a1016a31c2f0628c7ca0f717cea9863a552cc",
+    "tarball": "http://registry.npmjs.org/buffer/-/buffer-3.5.2.tgz"
   },
-  "gitHead": "2b3c6a6b3b95716147ceeb2f2f0209ddaa47fd18",
+  "gitHead": "d1c1e280da5501ca0aa4e13e0da0af32151c556f",
   "homepage": "https://github.com/feross/buffer",
-  "installable": true,
   "keywords": [
     "arraybuffer",
     "browser",
@@ -117,5 +116,5 @@
       "test/node/*.js"
     ]
   },
-  "version": "3.5.1"
+  "version": "3.5.2"
 }

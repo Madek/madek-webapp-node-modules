@@ -1,5 +1,3 @@
-
-
 module.exports = class NoInterpolationInSingleQuotes
 
     rule:
@@ -20,9 +18,9 @@ module.exports = class NoInterpolationInSingleQuotes
             default.
             '''
 
-    tokens: [ 'STRING' ]
+    tokens: ['STRING']
 
-    lintToken : (token, tokenApi) ->
+    lintToken: (token, tokenApi) ->
         tokenValue = token[1]
         hasInterpolation = tokenValue.match(/^\'.*#\{[^}]+\}.*\'$/)
         return hasInterpolation

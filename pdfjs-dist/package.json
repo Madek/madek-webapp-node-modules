@@ -1,13 +1,14 @@
 {
   "_args": [
     [
-      "pdfjs-dist@1.1.542",
+      "pdfjs-dist@1.3.22",
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "pdfjs-dist@1.1.542",
-  "_id": "pdfjs-dist@1.1.542",
+  "_from": "pdfjs-dist@1.3.22",
+  "_id": "pdfjs-dist@1.3.22",
   "_inCache": true,
+  "_installable": true,
   "_location": "/pdfjs-dist",
   "_npmUser": {
     "email": "ydelendik@mozilla.com",
@@ -17,19 +18,19 @@
   "_phantomChildren": {},
   "_requested": {
     "name": "pdfjs-dist",
-    "raw": "pdfjs-dist@1.1.542",
-    "rawSpec": "1.1.542",
+    "raw": "pdfjs-dist@1.3.22",
+    "rawSpec": "1.3.22",
     "scope": null,
-    "spec": "1.1.542",
+    "spec": "1.3.22",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.1.542.tgz",
-  "_shasum": "7711cab4e4a0ffeb8a398c605fc1d810470e8125",
+  "_resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.3.22.tgz",
+  "_shasum": "93557527d76e6ff78b1edf3e68bc33223039e959",
   "_shrinkwrap": null,
-  "_spec": "pdfjs-dist@1.1.542",
+  "_spec": "pdfjs-dist@1.3.22",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "bugs": {
     "url": "https://github.com/mozilla/pdf.js/issues"
@@ -39,11 +40,10 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "7711cab4e4a0ffeb8a398c605fc1d810470e8125",
-    "tarball": "http://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.1.542.tgz"
+    "shasum": "93557527d76e6ff78b1edf3e68bc33223039e959",
+    "tarball": "http://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.3.22.tgz"
   },
   "homepage": "http://mozilla.github.io/pdf.js/",
-  "installable": true,
   "keywords": [
     "Mozilla",
     "pdf",
@@ -62,5 +62,5 @@
     "type": "git",
     "url": "https://github.com/mozilla/pdfjs-dist"
   },
-  "version": "1.1.542"
+  "version": "1.3.22"
 }

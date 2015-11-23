@@ -15,8 +15,8 @@
 
     CSVReporter.prototype.publish = function() {
       var e, errors, f, header, path, ref, results;
-      header = ["path", "lineNumber", "lineNumberEnd", "level", "message"];
-      this.print(header.join(","));
+      header = ['path', 'lineNumber', 'lineNumberEnd', 'level', 'message'];
+      this.print(header.join(','));
       ref = this.errorReport.paths;
       results = [];
       for (path in ref) {
@@ -30,7 +30,7 @@
               e.message += " " + e.context + ".";
             }
             f = [path, e.lineNumber, (ref1 = e.lineNumberEnd) != null ? ref1 : e.lineNumberEnd, e.level, e.message];
-            results1.push(this.print(f.join(",")));
+            results1.push(this.print(f.join(',')));
           }
           return results1;
         }).call(this));

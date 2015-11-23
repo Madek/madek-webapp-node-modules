@@ -1,15 +1,15 @@
 module.exports = class CSVReporter
 
-    constructor : (@errorReport, options = {}) ->
+    constructor: (@errorReport, options = {}) ->
 
-    print : (message) ->
+    print: (message) ->
         # coffeelint: disable=no_debugger
         console.log message
         # coffeelint: enable=no_debugger
 
-    publish : () ->
-        header = ["path","lineNumber", "lineNumberEnd", "level", "message"]
-        @print header.join(",")
+    publish: () ->
+        header = ['path', 'lineNumber', 'lineNumberEnd', 'level', 'message']
+        @print header.join(',')
         for path, errors of @errorReport.paths
             for e in errors
                 # Having the context is useful for the cyclomatic_complexity
@@ -22,4 +22,4 @@ module.exports = class CSVReporter
                     e.level
                     e.message
                 ]
-                @print f.join(",")
+                @print f.join(',')

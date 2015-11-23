@@ -1,14 +1,14 @@
-
 module.exports = class EmptyConstructorNeedsParens
 
     rule:
         name: 'empty_constructor_needs_parens'
         level: 'ignore'
         message: 'Invoking a constructor without parens and without arguments'
-        description:
-            "Requires constructors with no parameters to include the parens"
+        description: '''
+            Requires constructors with no parameters to include the parens
+            '''
 
-    tokens: [ 'UNARY' ]
+    tokens: ['UNARY']
 
     # Return an error if the given indentation token is not correct.
     lintToken: (token, tokenApi) ->

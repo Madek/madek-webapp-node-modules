@@ -1,6 +1,6 @@
 ## Getting Started
 
-The first thing you'll need to do is create a [history object](Terms.md#history). The main `history` module exports several different [`create*` methods](Terms.md#createhistory) that you can use depending on your environment.
+The first thing you'll need to do is create a [history object](Glossary.md#history). The main `history` module exports several different [`create*` methods](Glossary.md#createhistory) that you can use depending on your environment.
 
 - `createHistory` is for use in modern web browsers that support the [HTML5 history API](http://diveintohtml5.info/history.html) (see [cross-browser compatibility](http://caniuse.com/#feat=history))
 - `createHashHistory` is for use in legacy web browsers (see [caveats of using hash history](HashHistoryCaveats.md))
@@ -33,7 +33,12 @@ You can also use a `history` object to programmatically change the current `loca
 - `goBack()`
 - `goForward()`
 
-The [`path`](Terms.md#path) argument to `pushState` and `replaceState` represents a complete URL path, including the [query string](Terms.md#querystring). The [`state`](Terms.md#locationstate) argument should be a JSON-serializable object.
+There are also two handy methods that allow you not to specify `state` object during transitions:
+
+- `push(path[, state])`
+- `replace(path[, state])`
+
+The [`path`](Glossary.md#path) argument to `pushState`, `push`, `replaceState` and `replace` represents a complete URL path, including the [search string](Glossary.md#search) and [hash](Glossary.md#hash). The [`state`](Glossary.md#locationstate) argument should be a JSON-serializable object.
 
 ```js
 // Push a new entry onto the history stack.
@@ -41,6 +46,9 @@ history.pushState({ some: 'state' }, '/home')
 
 // Replace the current entry on the history stack.
 history.replaceState({ some: 'other state' }, '/profile')
+
+// Push a new history entry, omitting `state` object (it will be set to `null`)
+history.push('/about')
 
 // Go back to the previous history entry. The following
 // two lines are synonymous.
@@ -63,12 +71,12 @@ let href = history.createHref('/the/path')
 Using the main `history` module is a great way to get up and running quickly. However, you probably don't need to include all the various history implementations in your production bundle. To keep your build as small as possible, import only the functions you need directly from `history/lib`.
 
 ```js
-// HTML5 history
+// HTML5 history, recommended
 import createHistory from 'history/lib/createBrowserHistory'
 
 // Hash history
-import createHashHistory from 'history/lib/createHashHistory'
+import createHistory from 'history/lib/createHashHistory'
 
 // Memory history
-import createMemoryHistory from 'history/lib/createMemoryHistory'
+import createHistory from 'history/lib/createMemoryHistory'
 ```

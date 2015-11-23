@@ -1,14 +1,13 @@
-
 regexes =
-    camelCase : /^[A-Z_][a-zA-Z\d]*$/
+    camelCase: /^[A-Z_][a-zA-Z\d]*$/
 
 module.exports = class CamelCaseClasses
 
     rule:
         name: 'camel_case_classes'
-        level : 'error'
-        message : 'Class name should be UpperCamelCased'
-        description: """
+        level: 'error'
+        message: 'Class name should be UpperCamelCased'
+        description: '''
             This rule mandates that all class names are UpperCamelCased.
             Camel casing class names is a generally accepted way of
             distinguishing constructor functions - which require the 'new'
@@ -22,9 +21,9 @@ module.exports = class CamelCaseClasses
             </code>
             </pre>
             This rule is enabled by default.
-            """
+            '''
 
-    tokens: [ 'CLASS' ]
+    tokens: ['CLASS']
 
     lintToken: (token, tokenApi) ->
         # TODO: you can do some crazy shit in CoffeeScript, like
@@ -49,4 +48,4 @@ module.exports = class CamelCaseClasses
 
         # Now check for the error.
         if not regexes.camelCase.test(className)
-            return {context: "class name: #{className}"}
+            return { context: "class name: #{className}" }

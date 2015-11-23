@@ -141,8 +141,8 @@ coffeelint.trimConfig = function(userConfig) {
 coffeelint.invertLiterate = function(source) {
   var len, line, n, newSource, ref;
   source = CoffeeScript.helpers.invertLiterate(source);
-  newSource = "";
-  ref = source.split("\n");
+  newSource = '';
+  ref = source.split('\n');
   for (n = 0, len = ref.length; n < len; n++) {
     line = ref[n];
     if (line.match(/^#/)) {
@@ -162,24 +162,24 @@ coffeelint.registerRule = function(RuleConstructor, ruleName) {
     ruleName = void 0;
   }
   p = new RuleConstructor;
-  name = (p != null ? (ref = p.rule) != null ? ref.name : void 0 : void 0) || "(unknown)";
+  name = (p != null ? (ref = p.rule) != null ? ref.name : void 0 : void 0) || '(unknown)';
   e = function(msg) {
     throw new Error("Invalid rule: " + name + " " + msg);
   };
   if (p.rule == null) {
-    e("Rules must provide rule attribute with a default configuration.");
+    e('Rules must provide rule attribute with a default configuration.');
   }
   if (p.rule.name == null) {
-    e("Rule defaults require a name");
+    e('Rule defaults require a name');
   }
   if ((ruleName != null) && ruleName !== p.rule.name) {
     e("Mismatched rule name: " + ruleName);
   }
   if (p.rule.message == null) {
-    e("Rule defaults require a message");
+    e('Rule defaults require a message');
   }
   if (p.rule.description == null) {
-    e("Rule defaults require a description");
+    e('Rule defaults require a description');
   }
   if ((ref1 = p.rule.level) !== 'ignore' && ref1 !== 'warn' && ref1 !== 'error') {
     e("Default level must be 'ignore', 'warn', or 'error'");
@@ -189,7 +189,7 @@ coffeelint.registerRule = function(RuleConstructor, ruleName) {
       e("'tokens' is required for 'lintToken'");
     }
   } else if (typeof p.lintLine !== 'function' && typeof p.lintAST !== 'function') {
-    e("Rules must implement lintToken, lintLine, or lintAST");
+    e('Rules must implement lintToken, lintLine, or lintAST');
   }
   RULES[p.rule.name] = p.rule;
   return _rules[p.rule.name] = RuleConstructor;
@@ -295,7 +295,7 @@ coffeelint.getErrorReport = function() {
 };
 
 coffeelint.lint = function(source, userConfig, literate) {
-  var all_errors, astErrors, block_config, cmd, config, disabled, disabled_initially, e, errors, i, l, len, len1, len2, lexErrors, lexicalLinter, lineErrors, lineLinter, m, n, name, next_line, o, q, r, ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8, ruleLoader, rules, s, sourceLength, t, tokensByLine, transform;
+  var allErrors, astErrors, cmd, config, disabled, disabledInitially, e, errors, i, inlineConfig, l, len, len1, lexErrors, lexicalLinter, lineErrors, lineLinter, m, n, name, nextLine, o, q, ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8, regex, rule, ruleLoader, rules, set, sourceLength, tokensByLine, transform;
   if (userConfig == null) {
     userConfig = {};
   }
@@ -314,7 +314,7 @@ coffeelint.lint = function(source, userConfig, literate) {
     source = this.invertLiterate(source);
   }
   if ((userConfig != null ? (ref = userConfig.coffeelint) != null ? ref.transforms : void 0 : void 0) != null) {
-    sourceLength = source.split("\n").length;
+    sourceLength = source.split('\n').length;
     ref2 = userConfig != null ? (ref1 = userConfig.coffeelint) != null ? ref1.transforms : void 0 : void 0;
     for (n = 0, len = ref2.length; n < len; n++) {
       m = ref2[n];
@@ -324,7 +324,7 @@ coffeelint.lint = function(source, userConfig, literate) {
         source = transform(source);
       } catch (undefined) {}
     }
-    if (sourceLength !== source.split("\n").length && config.transform_messes_up_line_numbers.level !== 'ignore') {
+    if (sourceLength !== source.split('\n').length && config.transform_messes_up_line_numbers.level !== 'ignore') {
       errors.push(extend({
         lineNumber: 1,
         context: "File was transformed from " + sourceLength + " lines to " + (source.split("\n").length) + " lines"
@@ -341,24 +341,14 @@ coffeelint.lint = function(source, userConfig, literate) {
       }
     }
   }
-  disabled_initially = [];
+  disabledInitially = [];
   ref4 = source.split('\n');
   for (o = 0, len1 = ref4.length; o < len1; o++) {
     l = ref4[o];
-    s = LineLinter.configStatement.exec(l);
-    if ((s != null ? s.length : void 0) > 2 && indexOf.call(s, 'enable') >= 0) {
-      ref5 = s.slice(1);
-      for (q = 0, len2 = ref5.length; q < len2; q++) {
-        r = ref5[q];
-        if (r !== 'enable' && r !== 'disable') {
-          if (!(r in config && ((ref6 = config[r].level) === 'warn' || ref6 === 'error'))) {
-            disabled_initially.push(r);
-            config[r] = {
-              level: 'error'
-            };
-          }
-        }
-      }
+    ref5 = LineLinter.configStatement.exec(l) || [], regex = ref5[0], set = ref5[1], rule = ref5[2];
+    if (set === 'enable' && ((ref6 = config[rule]) != null ? ref6.level : void 0) === 'ignore') {
+      disabledInitially.push(rule);
+      config[rule].level = 'error';
     }
   }
   astErrors = new ASTLinter(source, config, _rules, CoffeeScript).lint();
@@ -371,9 +361,9 @@ coffeelint.lint = function(source, userConfig, literate) {
     lineLinter = new LineLinter(source, config, _rules, tokensByLine, literate);
     lineErrors = lineLinter.lint();
     errors = errors.concat(lineErrors);
-    block_config = lineLinter.block_config;
+    inlineConfig = lineLinter.inlineConfig;
   } else {
-    block_config = {
+    inlineConfig = {
       enable: {},
       disable: {}
     };
@@ -381,13 +371,13 @@ coffeelint.lint = function(source, userConfig, literate) {
   errors.sort(function(a, b) {
     return a.lineNumber - b.lineNumber;
   });
-  all_errors = errors;
+  allErrors = errors;
   errors = [];
-  disabled = disabled_initially;
-  next_line = 0;
-  for (i = t = 0, ref7 = source.split('\n').length; 0 <= ref7 ? t < ref7 : t > ref7; i = 0 <= ref7 ? ++t : --t) {
-    for (cmd in block_config) {
-      rules = block_config[cmd][i];
+  disabled = disabledInitially;
+  nextLine = 0;
+  for (i = q = 0, ref7 = source.split('\n').length; 0 <= ref7 ? q < ref7 : q > ref7; i = 0 <= ref7 ? ++q : --q) {
+    for (cmd in inlineConfig) {
+      rules = inlineConfig[cmd][i];
       if (rules != null) {
         ({
           'disable': function() {
@@ -396,17 +386,17 @@ coffeelint.lint = function(source, userConfig, literate) {
           'enable': function() {
             difference(disabled, rules);
             if (rules.length === 0) {
-              return disabled = disabled_initially;
+              return disabled = disabledInitially;
             }
           }
         })[cmd]();
       }
     }
-    while (next_line === i && all_errors.length > 0) {
-      next_line = all_errors[0].lineNumber - 1;
-      e = all_errors[0];
+    while (nextLine === i && allErrors.length > 0) {
+      nextLine = allErrors[0].lineNumber - 1;
+      e = allErrors[0];
       if (e.lineNumber === i + 1 || (e.lineNumber == null)) {
-        e = all_errors.shift();
+        e = allErrors.shift();
         if (ref8 = e.rule, indexOf.call(disabled, ref8) < 0) {
           errors.push(e);
         }
@@ -429,7 +419,7 @@ coffeelint.setCache = function(obj) {
 module.exports={
   "name": "coffeelint",
   "description": "Lint your CoffeeScript",
-  "version": "1.13.0",
+  "version": "1.14.1",
   "homepage": "http://www.coffeelint.org",
   "keywords": [
     "lint",
@@ -643,7 +633,7 @@ module.exports = BaseLinter = (function() {
     }
     level = attrs.level;
     if (level !== 'ignore' && level !== 'warn' && level !== 'error') {
-      throw new Error("unknown level " + level);
+      throw new Error("unknown level " + level + " for rule: " + ruleName);
     }
     if (level === 'error' || level === 'warn') {
       attrs.rule = ruleName;
@@ -654,7 +644,7 @@ module.exports = BaseLinter = (function() {
   };
 
   BaseLinter.prototype.acceptRule = function(rule) {
-    throw new Error("acceptRule needs to be overridden in the subclass");
+    throw new Error('acceptRule needs to be overridden in the subclass');
   };
 
   BaseLinter.prototype.setupRules = function(rules) {
@@ -672,7 +662,7 @@ module.exports = BaseLinter = (function() {
           results.push(void 0);
         }
       } else if (level !== 'ignore') {
-        throw new Error("unknown level " + level);
+        throw new Error("unknown level " + level + " for rule: " + rule);
       } else {
         results.push(void 0);
       }
@@ -848,15 +838,8 @@ module.exports = LexicalLinter = (function(superClass) {
   };
 
   LexicalLinter.prototype.lintToken = function(token) {
-    var base, errors, j, len, lineNumber, ref, ref1, rule, type, v, value;
-    type = token[0], value = token[1], lineNumber = token[2];
-    if (typeof lineNumber === "object") {
-      if (type === 'OUTDENT' || type === 'INDENT') {
-        lineNumber = lineNumber.last_line;
-      } else {
-        lineNumber = lineNumber.first_line;
-      }
-    }
+    var base, errors, j, len, lineNumber, ref, ref1, ref2, rule, type, v, value;
+    type = token[0], value = token[1], (ref = token[2], lineNumber = ref.first_line);
     if ((base = this.tokensByLine)[lineNumber] == null) {
       base[lineNumber] = [];
     }
@@ -864,10 +847,10 @@ module.exports = LexicalLinter = (function(superClass) {
     this.lineNumber = lineNumber || this.lineNumber || 0;
     this.tokenApi.lineNumber = this.lineNumber;
     errors = [];
-    ref = this.rules;
-    for (j = 0, len = ref.length; j < len; j++) {
-      rule = ref[j];
-      if (!(ref1 = token[0], indexOf.call(rule.tokens, ref1) >= 0)) {
+    ref1 = this.rules;
+    for (j = 0, len = ref1.length; j < len; j++) {
+      rule = ref1[j];
+      if (!(ref2 = token[0], indexOf.call(rule.tokens, ref2) >= 0)) {
         continue;
       }
       v = this.normalizeResult(rule, rule.lintToken(token, this.tokenApi));
@@ -1004,7 +987,7 @@ module.exports = LineLinter = (function(superClass) {
     }
     LineLinter.__super__.constructor.call(this, source, config, rules);
     this.lineApi = new LineApi(source, config, tokensByLine, literate);
-    this.block_config = {
+    this.inlineConfig = {
       enable: {},
       disable: {}
     };
@@ -1057,10 +1040,10 @@ module.exports = LineLinter = (function(superClass) {
         ref = result[2].split(',');
         for (i = 0, len = ref.length; i < len; i++) {
           r = ref[i];
-          rules.push(r.replace(/^\s+|\s+$/g, ""));
+          rules.push(r.replace(/^\s+|\s+$/g, ''));
         }
       }
-      this.block_config[cmd][this.lineNumber] = rules;
+      this.inlineConfig[cmd][this.lineNumber] = rules;
     }
     return null;
   };
@@ -1109,7 +1092,7 @@ module.exports = ArrowSpacing = (function() {
     name: 'arrow_spacing',
     level: 'ignore',
     message: 'Function arrows (-> and =>) must be spaced properly',
-    description: "<p>This rule checks to see that there is spacing before and after\nthe arrow operator that declares a function. This rule is disabled\nby default.</p> <p>Note that if arrow_spacing is enabled, and you\npass an empty function as a parameter, arrow_spacing will accept\neither a space or no space in-between the arrow operator and the\nparenthesis</p>\n<pre><code># Both of this will not trigger an error,\n# even with arrow_spacing enabled.\nx(-> 3)\nx( -> 3)\n\n# However, this will trigger an error\nx((a,b)-> 3)\n</code>\n</pre>"
+    description: '<p>This rule checks to see that there is spacing before and after\nthe arrow operator that declares a function. This rule is disabled\nby default.</p> <p>Note that if arrow_spacing is enabled, and you\npass an empty function as a parameter, arrow_spacing will accept\neither a space or no space in-between the arrow operator and the\nparenthesis</p>\n<pre><code># Both of this will not trigger an error,\n# even with arrow_spacing enabled.\nx(-> 3)\nx( -> 3)\n\n# However, this will trigger an error\nx((a,b)-> 3)\n</code>\n</pre>'
   };
 
   ArrowSpacing.prototype.tokens = ['->', '=>'];
@@ -1122,7 +1105,7 @@ module.exports = ArrowSpacing = (function() {
     }
     if (!token.spaced && tokenApi.peek(1)[0] === 'INDENT' && tokenApi.peek(2)[0] === 'OUTDENT') {
       return null;
-    } else if (!(((token.spaced != null) || (token.newLine != null)) && (((pp.spaced != null) || pp[0] === 'TERMINATOR') || (pp.generated != null) || pp[0] === "INDENT" || (pp[1] === "(" && (pp.generated == null))))) {
+    } else if (!(((token.spaced != null) || (token.newLine != null)) && (((pp.spaced != null) || pp[0] === 'TERMINATOR') || (pp.generated != null) || pp[0] === 'INDENT' || (pp[1] === '(' && (pp.generated == null))))) {
       return true;
     } else {
       return null;
@@ -1228,7 +1211,7 @@ module.exports = CamelCaseClasses = (function() {
     name: 'camel_case_classes',
     level: 'error',
     message: 'Class name should be UpperCamelCased',
-    description: "This rule mandates that all class names are UpperCamelCased.\nCamel casing class names is a generally accepted way of\ndistinguishing constructor functions - which require the 'new'\nprefix to behave properly - from plain old functions.\n<pre>\n<code># Good!\nclass BoaConstrictor\n\n# Bad!\nclass boaConstrictor\n</code>\n</pre>\nThis rule is enabled by default."
+    description: 'This rule mandates that all class names are UpperCamelCased.\nCamel casing class names is a generally accepted way of\ndistinguishing constructor functions - which require the \'new\'\nprefix to behave properly - from plain old functions.\n<pre>\n<code># Good!\nclass BoaConstrictor\n\n# Bad!\nclass boaConstrictor\n</code>\n</pre>\nThis rule is enabled by default.'
   };
 
   CamelCaseClasses.prototype.tokens = ['CLASS'];
@@ -1276,7 +1259,7 @@ module.exports = ColonAssignmentSpacing = (function() {
       left: 0,
       right: 0
     },
-    description: "<p>This rule checks to see that there is spacing before and\nafter the colon in a colon assignment (i.e., classes, objects).\nThe spacing amount is specified by\nspacing.left and spacing.right, respectively.\nA zero value means no spacing required.\n</p>\n<pre><code>\n#\n# If spacing.left and spacing.right is 1\n#\n\n# Good\nobject = {spacing : true}\nclass Dog\n  canBark : true\n\n# Bad\nobject = {spacing: true}\nclass Cat\n  canBark: false\n</code></pre>"
+    description: '<p>This rule checks to see that there is spacing before and\nafter the colon in a colon assignment (i.e., classes, objects).\nThe spacing amount is specified by\nspacing.left and spacing.right, respectively.\nA zero value means no spacing required.\n</p>\n<pre><code>\n#\n# If spacing.left and spacing.right is 1\n#\n\n# Doesn\'t throw an error\nobject = {spacing : true}\nclass Dog\n  canBark : true\n\n# Throws an error\nobject = {spacing: true}\nclass Cat\n  canBark: false\n</code></pre>'
   };
 
   ColonAssignmentSpacing.prototype.tokens = [':'];
@@ -1306,7 +1289,7 @@ module.exports = ColonAssignmentSpacing = (function() {
       return null;
     } else {
       return {
-        context: "Incorrect spacing around column " + token[2].first_column + ".\nExpected left: " + spaceRules.left + ", right: " + spaceRules.right + ".\nGot left: " + leftSpacing + ", right: " + rightSpacing + "."
+        context: "Incorrect spacing around column " + token[2].first_column
       };
     }
   };
@@ -1325,10 +1308,10 @@ module.exports = CyclomaticComplexity = (function() {
 
   CyclomaticComplexity.prototype.rule = {
     name: 'cyclomatic_complexity',
-    value: 10,
     level: 'ignore',
     message: 'The cyclomatic complexity is too damn high',
-    description: 'Examine the complexity of your application.'
+    value: 10,
+    description: 'Examine the complexity of your function.'
   };
 
   CyclomaticComplexity.prototype.getComplexity = function(node) {
@@ -1344,16 +1327,16 @@ module.exports = CyclomaticComplexity = (function() {
     return void 0;
   };
 
-  CyclomaticComplexity.prototype.lintNode = function(node, line) {
+  CyclomaticComplexity.prototype.lintNode = function(node) {
     var complexity, error, name, ref, rule;
     name = (ref = this.astApi) != null ? ref.getNodeName(node) : void 0;
     complexity = this.getComplexity(node);
     node.eachChild((function(_this) {
       return function(childNode) {
-        var nodeLine;
-        nodeLine = childNode.locationData.first_line;
-        if (childNode) {
-          return complexity += _this.lintNode(childNode, nodeLine);
+        var childComplexity, ref1;
+        childComplexity = _this.lintNode(childNode);
+        if (((ref1 = _this.astApi) != null ? ref1.getNodeName(childNode) : void 0) !== 'Code') {
+          return complexity += childComplexity;
         }
       };
     })(this));
@@ -1361,7 +1344,7 @@ module.exports = CyclomaticComplexity = (function() {
     if (name === 'Code' && complexity >= rule.value) {
       error = this.astApi.createError({
         context: complexity + 1,
-        lineNumber: line + 1,
+        lineNumber: node.locationData.first_line + 1,
         lineNumberEnd: node.locationData.last_line + 1
       });
       if (error) {
@@ -1385,7 +1368,7 @@ module.exports = DuplicateKey = (function() {
     name: 'duplicate_key',
     level: 'error',
     message: 'Duplicate key defined in object or class',
-    description: "Prevents defining duplicate keys in object literals and classes"
+    description: 'Prevents defining duplicate keys in object literals and classes'
   };
 
   DuplicateKey.prototype.tokens = ['IDENTIFIER', '{', '}'];
@@ -1457,7 +1440,7 @@ module.exports = EmptyConstructorNeedsParens = (function() {
     name: 'empty_constructor_needs_parens',
     level: 'ignore',
     message: 'Invoking a constructor without parens and without arguments',
-    description: "Requires constructors with no parameters to include the parens"
+    description: 'Requires constructors with no parameters to include the parens'
   };
 
   EmptyConstructorNeedsParens.prototype.tokens = ['UNARY'];
@@ -1611,7 +1594,7 @@ module.exports = EOLLast = (function() {
     name: 'eol_last',
     level: 'ignore',
     message: 'File does not end with a single newline',
-    description: "Checks that the file ends with a single newline"
+    description: 'Checks that the file ends with a single newline'
   };
 
   EOLLast.prototype.lintLine = function(line, lineApi) {
@@ -1642,7 +1625,7 @@ module.exports = Indentation = (function() {
     value: 2,
     level: 'error',
     message: 'Line contains inconsistent indentation',
-    description: "This rule imposes a standard number of spaces to be used for\nindentation. Since whitespace is significant in CoffeeScript, it's\ncritical that a project chooses a standard indentation format and\nstays consistent. Other roads lead to darkness. <pre> <code>#\nEnabling this option will prevent this ugly\n# but otherwise valid CoffeeScript.\ntwoSpaces = () ->\n  fourSpaces = () ->\n      eightSpaces = () ->\n            'this is valid CoffeeScript'\n\n</code>\n</pre>\nTwo space indentation is enabled by default."
+    description: 'This rule imposes a standard number of spaces to be used for\nindentation. Since whitespace is significant in CoffeeScript, it\'s\ncritical that a project chooses a standard indentation format and\nstays consistent. Other roads lead to darkness. <pre> <code>#\nEnabling this option will prevent this ugly\n# but otherwise valid CoffeeScript.\ntwoSpaces = () ->\n  fourSpaces = () ->\n      eightSpaces = () ->\n            \'this is valid CoffeeScript\'\n\n</code>\n</pre>\nTwo space indentation is enabled by default.'
   };
 
   Indentation.prototype.tokens = ['INDENT', '[', ']', '.'];
@@ -1829,7 +1812,7 @@ module.exports = LineEndings = (function() {
     level: 'ignore',
     value: 'unix',
     message: 'Line contains incorrect line endings',
-    description: "This rule ensures your project uses only <tt>windows</tt> or\n<tt>unix</tt> line endings. This rule is disabled by default."
+    description: 'This rule ensures your project uses only <tt>windows</tt> or\n<tt>unix</tt> line endings. This rule is disabled by default.'
   };
 
   LineEndings.prototype.lintLine = function(line, lineApi) {
@@ -1880,7 +1863,7 @@ module.exports = MaxLineLength = (function() {
     level: 'error',
     limitComments: true,
     message: 'Line exceeds maximum allowed length',
-    description: "This rule imposes a maximum line length on your code. <a\nhref=\"http://www.python.org/dev/peps/pep-0008/\">Python's style\nguide</a> does a good job explaining why you might want to limit the\nlength of your lines, though this is a matter of taste.\n\nLines can be no longer than eighty characters by default."
+    description: 'This rule imposes a maximum line length on your code. <a\nhref="http://www.python.org/dev/peps/pep-0008/">Python\'s style\nguide</a> does a good job explaining why you might want to limit the\nlength of your lines, though this is a matter of taste.\n\nLines can be no longer than eighty characters by default.'
   };
 
   MaxLineLength.prototype.lintLine = function(line, lineApi) {
@@ -2072,7 +2055,7 @@ module.exports = NewlinesAfterClasses = (function() {
     value: 3,
     level: 'ignore',
     message: 'Wrong count of newlines between a class and other code',
-    description: "<p>Checks the number of newlines between classes and other code.</p>\n\nOptions:\n- <pre><code>value</code></pre> - The number of required newlines\nafter class definitions. Defaults to 3."
+    description: '<p>Checks the number of newlines between classes and other code.</p>\n\nOptions:\n- <pre><code>value</code></pre> - The number of required newlines\nafter class definitions. Defaults to 3.'
   };
 
   NewlinesAfterClasses.prototype.tokens = ['CLASS', '}', '{'];
@@ -2147,10 +2130,10 @@ module.exports = NoBackticks = (function() {
     name: 'no_backticks',
     level: 'error',
     message: 'Backticks are forbidden',
-    description: "Backticks allow snippets of JavaScript to be embedded in\nCoffeeScript. While some folks consider backticks useful in a few\nniche circumstances, they should be avoided because so none of\nJavaScript's \"bad parts\", like <tt>with</tt> and <tt>eval</tt>,\nsneak into CoffeeScript.\nThis rule is enabled by default."
+    description: 'Backticks allow snippets of JavaScript to be embedded in\nCoffeeScript. While some folks consider backticks useful in a few\nniche circumstances, they should be avoided because so none of\nJavaScript\'s "bad parts", like <tt>with</tt> and <tt>eval</tt>,\nsneak into CoffeeScript.\nThis rule is enabled by default.'
   };
 
-  NoBackticks.prototype.tokens = ["JS"];
+  NoBackticks.prototype.tokens = ['JS'];
 
   NoBackticks.prototype.lintToken = function(token, tokenApi) {
     return true;
@@ -2173,10 +2156,10 @@ module.exports = NoDebugger = (function() {
     level: 'warn',
     message: 'Found debugging code',
     console: false,
-    description: "This rule detects `debugger` and optionally `console` calls\nThis rule is `warn` by default."
+    description: 'This rule detects `debugger` and optionally `console` calls\nThis rule is `warn` by default.'
   };
 
-  NoDebugger.prototype.tokens = ["DEBUGGER", "IDENTIFIER"];
+  NoDebugger.prototype.tokens = ['DEBUGGER', 'IDENTIFIER'];
 
   NoDebugger.prototype.lintToken = function(token, tokenApi) {
     var method, ref, ref1;
@@ -2217,7 +2200,7 @@ module.exports = NoEmptyFunctions = (function() {
     name: 'no_empty_functions',
     level: 'ignore',
     message: 'Empty function',
-    description: "Disallows declaring empty functions. The goal of this rule is that\nunintentional empty callbacks can be detected:\n<pre>\n<code>someFunctionWithCallback ->\ndoSomethingSignificant()\n</code>\n</pre>\nThe problem is that the call to\n<tt>doSomethingSignificant</tt> will be made regardless\nof <tt>someFunctionWithCallback</tt>'s execution. It can\nbe because you did not indent the call to\n<tt>doSomethingSignificant</tt> properly.\n\nIf you really meant that <tt>someFunctionWithCallback</tt>\nshould call a callback that does nothing, you can write your code\nthis way:\n<pre>\n<code>someFunctionWithCallback ->\n    undefined\ndoSomethingSignificant()\n</code>\n</pre>"
+    description: 'Disallows declaring empty functions. The goal of this rule is that\nunintentional empty callbacks can be detected:\n<pre>\n<code>someFunctionWithCallback ->\ndoSomethingSignificant()\n</code>\n</pre>\nThe problem is that the call to\n<tt>doSomethingSignificant</tt> will be made regardless\nof <tt>someFunctionWithCallback</tt>\'s execution. It can\nbe because you did not indent the call to\n<tt>doSomethingSignificant</tt> properly.\n\nIf you really meant that <tt>someFunctionWithCallback</tt>\nshould call a callback that does nothing, you can write your code\nthis way:\n<pre>\n<code>someFunctionWithCallback ->\n    undefined\ndoSomethingSignificant()\n</code>\n</pre>'
   };
 
   NoEmptyFunctions.prototype.lintAST = function(node, astApi) {
@@ -2256,10 +2239,10 @@ module.exports = NoEmptyParamList = (function() {
     name: 'no_empty_param_list',
     level: 'ignore',
     message: 'Empty parameter list is forbidden',
-    description: "This rule prohibits empty parameter lists in function definitions.\n<pre>\n<code># The empty parameter list in here is unnecessary:\nmyFunction = () -&gt;\n\n# We might favor this instead:\nmyFunction = -&gt;\n</code>\n</pre>\nEmpty parameter lists are permitted by default."
+    description: 'This rule prohibits empty parameter lists in function definitions.\n<pre>\n<code># The empty parameter list in here is unnecessary:\nmyFunction = () -&gt;\n\n# We might favor this instead:\nmyFunction = -&gt;\n</code>\n</pre>\nEmpty parameter lists are permitted by default.'
   };
 
-  NoEmptyParamList.prototype.tokens = ["PARAM_START"];
+  NoEmptyParamList.prototype.tokens = ['PARAM_START'];
 
   NoEmptyParamList.prototype.lintToken = function(token, tokenApi) {
     var nextType;
@@ -2301,7 +2284,7 @@ module.exports = NoImplicitBraces = (function() {
     if (type === 'IDENTIFIER' && this.isClass && ((this.className == null) || tokenApi.peek(-1)[0] === 'EXTENDS')) {
       this.className = val;
     }
-    if (token.generated && type === "{") {
+    if (token.generated && type === '{') {
       if (!tokenApi.config[this.rule.name].strict) {
         prevToken = tokenApi.peek(-1)[0];
         if (prevToken === 'INDENT' || prevToken === 'TERMINATOR') {
@@ -2349,10 +2332,10 @@ module.exports = NoImplicitParens = (function() {
 
   NoImplicitParens.prototype.rule = {
     name: 'no_implicit_parens',
-    strict: true,
     level: 'ignore',
     message: 'Implicit parens are forbidden',
-    description: "This rule prohibits implicit parens on function calls.\n<pre>\n<code># Some folks don't like this style of coding.\nmyFunction a, b, c\n\n# And would rather it always be written like this:\nmyFunction(a, b, c)\n</code>\n</pre>\nImplicit parens are permitted by default, since their use is\nidiomatic CoffeeScript."
+    strict: true,
+    description: 'This rule prohibits implicit parens on function calls.\n<pre>\n<code># Some folks don\'t like this style of coding.\nmyFunction a, b, c\n\n# And would rather it always be written like this:\nmyFunction(a, b, c)\n</code>\n</pre>\nImplicit parens are permitted by default, since their use is\nidiomatic CoffeeScript.'
   };
 
   NoImplicitParens.prototype.tokens = ['CALL_END'];
@@ -2472,10 +2455,10 @@ module.exports = NoPlusPlus = (function() {
     name: 'no_plusplus',
     level: 'ignore',
     message: 'The increment and decrement operators are forbidden',
-    description: "This rule forbids the increment and decrement arithmetic operators.\nSome people believe the <tt>++</tt> and <tt>--</tt> to be cryptic\nand the cause of bugs due to misunderstandings of their precedence\nrules.\nThis rule is disabled by default."
+    description: 'This rule forbids the increment and decrement arithmetic operators.\nSome people believe the <tt>++</tt> and <tt>--</tt> to be cryptic\nand the cause of bugs due to misunderstandings of their precedence\nrules.\nThis rule is disabled by default.'
   };
 
-  NoPlusPlus.prototype.tokens = ["++", "--"];
+  NoPlusPlus.prototype.tokens = ['++', '--'];
 
   NoPlusPlus.prototype.lintToken = function(token, tokenApi) {
     return {
@@ -2507,7 +2490,7 @@ module.exports = NoPrivateFunctionFatArrows = (function() {
     name: 'no_private_function_fat_arrows',
     level: 'warn',
     message: 'Used the fat arrow for a private function',
-    description: "Warns when you use the fat arrow for a private function\ninside a class definition scope. It is not necessary and\nit does not do anything."
+    description: 'Warns when you use the fat arrow for a private function\ninside a class definition scope. It is not necessary and\nit does not do anything.'
   };
 
   NoPrivateFunctionFatArrows.prototype.lintAST = function(node, astApi) {
@@ -2597,7 +2580,7 @@ module.exports = NoStandAloneAt = (function() {
     name: 'no_stand_alone_at',
     level: 'ignore',
     message: '@ must not be used stand alone',
-    description: 'This rule checks that no stand alone @ are in use, they are\ndiscouraged. Further information in CoffeScript issue <a\nhref="https://github.com/jashkenas/coffee-script/issues/1601">\n#1601</a>'
+    description: 'This rule checks that no stand alone @ are in use, they are\ndiscouraged. Further information in CoffeeScript issue <a\nhref="https://github.com/jashkenas/coffee-script/issues/1601">\n#1601</a>'
   };
 
   NoStandAloneAt.prototype.tokens = ['@'];
@@ -2637,7 +2620,7 @@ module.exports = NoTabs = (function() {
     name: 'no_tabs',
     level: 'error',
     message: 'Line contains tab indentation',
-    description: "This rule forbids tabs in indentation. Enough said. It is enabled by\ndefault."
+    description: 'This rule forbids tabs in indentation. Enough said. It is enabled by\ndefault.'
   };
 
   NoTabs.prototype.lintLine = function(line, lineApi) {
@@ -2696,7 +2679,7 @@ module.exports = NoThrowingStrings = (function() {
     name: 'no_throwing_strings',
     level: 'error',
     message: 'Throwing strings is forbidden',
-    description: "This rule forbids throwing string literals or interpolations. While\nJavaScript (and CoffeeScript by extension) allow any expression to\nbe thrown, it is best to only throw <a\nhref=\"https://developer.mozilla.org\n/en/JavaScript/Reference/Global_Objects/Error\"> Error</a> objects,\nbecause they contain valuable debugging information like the stack\ntrace. Because of JavaScript's dynamic nature, CoffeeLint cannot\nensure you are always throwing instances of <tt>Error</tt>. It will\nonly catch the simple but real case of throwing literal strings.\n<pre>\n<code># CoffeeLint will catch this:\nthrow \"i made a boo boo\"\n\n# ... but not this:\nthrow getSomeString()\n</code>\n</pre>\nThis rule is enabled by default."
+    description: 'This rule forbids throwing string literals or interpolations. While\nJavaScript (and CoffeeScript by extension) allow any expression to\nbe thrown, it is best to only throw <a\nhref="https://developer.mozilla.org\n/en/JavaScript/Reference/Global_Objects/Error"> Error</a> objects,\nbecause they contain valuable debugging information like the stack\ntrace. Because of JavaScript\'s dynamic nature, CoffeeLint cannot\nensure you are always throwing instances of <tt>Error</tt>. It will\nonly catch the simple but real case of throwing literal strings.\n<pre>\n<code># CoffeeLint will catch this:\nthrow "i made a boo boo"\n\n# ... but not this:\nthrow getSomeString()\n</code>\n</pre>\nThis rule is enabled by default.'
   };
 
   NoThrowingStrings.prototype.tokens = ['THROW'];
@@ -2730,7 +2713,7 @@ module.exports = NoTrailingSemicolons = (function() {
     name: 'no_trailing_semicolons',
     level: 'error',
     message: 'Line contains a trailing semicolon',
-    description: "This rule prohibits trailing semicolons, since they are needless\ncruft in CoffeeScript.\n<pre>\n<code># This semicolon is meaningful.\nx = '1234'; console.log(x)\n\n# This semicolon is redundant.\nalert('end of line');\n</code>\n</pre>\nTrailing semicolons are forbidden by default."
+    description: 'This rule prohibits trailing semicolons, since they are needless\ncruft in CoffeeScript.\n<pre>\n<code># This semicolon is meaningful.\nx = \'1234\'; console.log(x)\n\n# This semicolon is redundant.\nalert(\'end of line\');\n</code>\n</pre>\nTrailing semicolons are forbidden by default.'
   };
 
   NoTrailingSemicolons.prototype.lintLine = function(line, lineApi) {
@@ -2785,7 +2768,7 @@ module.exports = NoTrailingWhitespace = (function() {
     message: 'Line ends with trailing whitespace',
     allowed_in_comments: false,
     allowed_in_empty_lines: true,
-    description: "This rule forbids trailing whitespace in your code, since it is\nneedless cruft. It is enabled by default."
+    description: 'This rule forbids trailing whitespace in your code, since it is\nneedless cruft. It is enabled by default.'
   };
 
   NoTrailingWhitespace.prototype.lintLine = function(line, lineApi) {
@@ -2909,7 +2892,7 @@ module.exports = NoUnnecessaryFatArrows = (function() {
     name: 'no_unnecessary_fat_arrows',
     level: 'warn',
     message: 'Unnecessary fat arrow',
-    description: "Disallows defining functions with fat arrows when `this`\nis not used within the function."
+    description: 'Disallows defining functions with fat arrows when `this`\nis not used within the function.'
   };
 
   NoUnnecessaryFatArrows.prototype.lintAST = function(node, astApi) {
@@ -2989,7 +2972,7 @@ module.exports = NonEmptyConstructorNeedsParens = (function(superClass) {
     name: 'non_empty_constructor_needs_parens',
     level: 'ignore',
     message: 'Invoking a constructor without parens and with arguments',
-    description: "Requires constructors with parameters to include the parens"
+    description: 'Requires constructors with parameters to include the parens'
   };
 
   NonEmptyConstructorNeedsParens.prototype.handleExpectedCallStart = function(expectedCallStart) {
@@ -3012,10 +2995,10 @@ module.exports = PreferEnglishOperator = (function() {
 
   PreferEnglishOperator.prototype.rule = {
     name: 'prefer_english_operator',
-    description: 'This rule prohibits &&, ||, ==, != and !.\nUse and, or, is, isnt, and not instead.\n!! for converting to a boolean is ignored.',
     level: 'ignore',
+    message: 'Don\'t use &&, ||, ==, !=, or !',
     doubleNotLevel: 'ignore',
-    message: 'Don\'t use &&, ||, ==, !=, or !'
+    description: 'This rule prohibits &&, ||, ==, != and !.\nUse and, or, is, isnt, and not instead.\n!! for converting to a boolean is ignored.'
   };
 
   PreferEnglishOperator.prototype.tokens = ['COMPARE', 'UNARY_MATH', 'LOGIC'];
@@ -3075,7 +3058,7 @@ module.exports = SpaceOperators = (function() {
     name: 'space_operators',
     level: 'ignore',
     message: 'Operators must be spaced properly',
-    description: "This rule enforces that operators have space around them."
+    description: 'This rule enforces that operators have spaces around them.'
   };
 
   SpaceOperators.prototype.tokens = ['+', '-', '=', '**', 'MATH', 'COMPARE', 'LOGIC', 'COMPOUND_ASSIGN', 'STRING_START', 'STRING_END', 'CALL_START', 'CALL_END'];
@@ -3181,9 +3164,9 @@ var SpacingAfterComma;
 module.exports = SpacingAfterComma = (function() {
   SpacingAfterComma.prototype.rule = {
     name: 'spacing_after_comma',
-    description: 'This rule requires a space after commas.',
     level: 'ignore',
-    message: 'Spaces are required after commas'
+    message: 'a space is required after commas',
+    description: 'This rule checks to make sure you have a space after commas.'
   };
 
   SpacingAfterComma.prototype.tokens = [',', 'REGEX_START', 'REGEX_END'];
@@ -3204,9 +3187,7 @@ module.exports = SpacingAfterComma = (function() {
       return;
     }
     if (!(token.spaced || token.newLine || token.generated || this.isRegexFlag(token, tokenApi))) {
-      return {
-        context: token[1]
-      };
+      return true;
     }
   };
 
@@ -3235,7 +3216,7 @@ module.exports = TransformMessesUpLineNumbers = (function() {
     name: 'transform_messes_up_line_numbers',
     level: 'warn',
     message: 'Transforming source messes up line numbers',
-    description: "This rule detects when changes are made by transform function,\nand warns that line numbers are probably incorrect."
+    description: 'This rule detects when changes are made by transform function,\nand warns that line numbers are probably incorrect.'
   };
 
   TransformMessesUpLineNumbers.prototype.tokens = [];

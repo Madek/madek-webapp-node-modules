@@ -1,14 +1,15 @@
-
 indentationRegex = /\S/
+
 module.exports = class NoTabs
+
     rule:
         name: 'no_tabs'
-        level : 'error'
-        message : 'Line contains tab indentation'
-        description: """
+        level: 'error'
+        message: 'Line contains tab indentation'
+        description: '''
             This rule forbids tabs in indentation. Enough said. It is enabled by
             default.
-            """
+            '''
 
     lintLine: (line, lineApi) ->
         # Only check lines that have compiled tokens. This helps
