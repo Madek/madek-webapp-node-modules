@@ -1,36 +1,37 @@
 {
   "_args": [
     [
-      "react-file-drop@0.1.6",
+      "react-file-drop@0.1.7",
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-file-drop@0.1.6",
-  "_id": "react-file-drop@0.1.6",
+  "_from": "react-file-drop@0.1.7",
+  "_id": "react-file-drop@0.1.7",
   "_inCache": true,
+  "_installable": true,
   "_location": "/react-file-drop",
-  "_nodeVersion": "0.12.2",
+  "_nodeVersion": "5.0.0",
   "_npmUser": {
     "email": "sarink87@gmail.com",
     "name": "sarink"
   },
-  "_npmVersion": "2.10.0",
+  "_npmVersion": "3.4.0",
   "_phantomChildren": {},
   "_requested": {
     "name": "react-file-drop",
-    "raw": "react-file-drop@0.1.6",
-    "rawSpec": "0.1.6",
+    "raw": "react-file-drop@0.1.7",
+    "rawSpec": "0.1.7",
     "scope": null,
-    "spec": "0.1.6",
+    "spec": "0.1.7",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.6.tgz",
-  "_shasum": "1287ba7acfb17073787b052c7f6f07ce6a76de5f",
+  "_resolved": "https://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.7.tgz",
+  "_shasum": "7cac543db8fc0119788b4ef440d5c25a1bc12ae2",
   "_shrinkwrap": null,
-  "_spec": "react-file-drop@0.1.6",
+  "_spec": "react-file-drop@0.1.7",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Kabir Sarin"
@@ -43,12 +44,11 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "1287ba7acfb17073787b052c7f6f07ce6a76de5f",
-    "tarball": "http://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.6.tgz"
+    "shasum": "7cac543db8fc0119788b4ef440d5c25a1bc12ae2",
+    "tarball": "http://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.7.tgz"
   },
-  "gitHead": "8bb01b737aa9353fd1c36f3a4c45d9670c905a8f",
+  "gitHead": "881898a347471cf5fd79a25db2c2414646dcb655",
   "homepage": "https://github.com/sarink/react-file-drop#readme",
-  "installable": true,
   "keywords": [
     "document",
     "drag",
@@ -80,12 +80,12 @@
   "name": "react-file-drop",
   "optionalDependencies": {},
   "peerDependencies": {
-    "react": "^0.13 || 0.14.0-beta1"
+    "react": ">=0.13"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sarink/react-file-drop.git"
   },
   "scripts": {},
-  "version": "0.1.6"
+  "version": "0.1.7"
 }
