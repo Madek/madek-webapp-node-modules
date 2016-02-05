@@ -33,7 +33,7 @@
               level = 'warning';
             }
             context = (ref1 = e.context) != null ? ref1 : '';
-            this.print('<error line="#{e.lineNumber}"\n    severity="#{@escape(level)}"\n    message="#{@escape(e.message+\'; context: \'+context)}"\n    source="coffeelint"/>');
+            this.print("<error line=\"" + e.lineNumber + "\"\n    severity=\"" + (this.escape(level)) + "\"\n    message=\"" + (this.escape(e.message + '; context: ' + context)) + "\"\n    source=\"coffeelint\"/>");
           }
           this.print('</file>');
         }

@@ -78,6 +78,7 @@
   ],
   "name": "ignore",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/kaelzhang/node-ignore.git"

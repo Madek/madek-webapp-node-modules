@@ -1,36 +1,37 @@
 {
   "_args": [
     [
-      "jquery-ujs@1.1.0-1",
+      "jquery-ujs@^1.1.0-1",
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "jquery-ujs@1.1.0-1",
-  "_id": "jquery-ujs@1.1.0-1",
+  "_from": "jquery-ujs@>=1.1.0-1 <2.0.0",
+  "_id": "jquery-ujs@1.2.0",
   "_inCache": true,
+  "_installable": true,
   "_location": "/jquery-ujs",
-  "_nodeVersion": "0.12.7",
+  "_nodeVersion": "4.2.1",
   "_npmUser": {
-    "email": "justin@shakacode.com",
-    "name": "shakacode"
+    "email": "callum@macr.ae",
+    "name": "callumacrae"
   },
-  "_npmVersion": "2.13.4",
+  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
     "name": "jquery-ujs",
-    "raw": "jquery-ujs@1.1.0-1",
-    "rawSpec": "1.1.0-1",
+    "raw": "jquery-ujs@^1.1.0-1",
+    "rawSpec": "^1.1.0-1",
     "scope": null,
-    "spec": "1.1.0-1",
-    "type": "version"
+    "spec": ">=1.1.0-1 <2.0.0",
+    "type": "range"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.1.0-1.tgz",
-  "_shasum": "0eba3c9b42e8ef4ed33a8501d8db2253a60bb02e",
+  "_resolved": "https://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.2.0.tgz",
+  "_shasum": "056434948a784a43b578b47c3e86167dfd456241",
   "_shrinkwrap": null,
-  "_spec": "jquery-ujs@1.1.0-1",
+  "_spec": "jquery-ujs@^1.1.0-1",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Stephen St. Martin"
@@ -56,12 +57,11 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "0eba3c9b42e8ef4ed33a8501d8db2253a60bb02e",
-    "tarball": "http://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.1.0-1.tgz"
+    "shasum": "056434948a784a43b578b47c3e86167dfd456241",
+    "tarball": "http://registry.npmjs.org/jquery-ujs/-/jquery-ujs-1.2.0.tgz"
   },
-  "gitHead": "1f5cee5986f863450acba7c0a0bcf872d100cf88",
+  "gitHead": "de5638f2c4e109e5acf16c47838472670179148e",
   "homepage": "https://github.com/shakacode/jquery-ujs",
-  "installable": true,
   "license": "MIT",
   "main": "src/rails.js",
   "maintainers": [
@@ -76,6 +76,7 @@
   ],
   "name": "jquery-ujs",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shakacode/jquery-ujs.git"
@@ -83,5 +84,5 @@
   "scripts": {
     "test": "echo \"See the wiki: https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing\" && exit 1"
   },
-  "version": "1.1.0-1"
+  "version": "1.2.0"
 }
