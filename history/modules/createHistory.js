@@ -1,4 +1,6 @@
+import warning from 'warning'
 import deepEqual from 'deep-equal'
+import { parsePath } from './PathUtils'
 import { loopAsync } from './AsyncUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import _createLocation from './createLocation'
@@ -116,11 +118,10 @@ function createHistory(options={}) {
       if (ok) {
         // treat PUSH to current path like REPLACE to be consistent with browsers
         if (nextLocation.action === PUSH) {
-          let { pathname, search } = getCurrentLocation()
-          let currentPath = pathname + search
-          let path = nextLocation.pathname + nextLocation.search
+          const prevPath = createPath(location)
+          const nextPath = createPath(nextLocation)
 
-          if (currentPath === path)
+          if (nextPath === prevPath && deepEqual(location.state, nextLocation.state))
             nextLocation.action = REPLACE
         }
 
@@ -136,24 +137,16 @@ function createHistory(options={}) {
     })
   }
 
-  function pushState(state, path) {
+  function push(location) {
     transitionTo(
-      createLocation(path, state, PUSH, createKey())
+      createLocation(location, PUSH, createKey())
     )
   }
 
-  function push(path) {
-    pushState(null, path)
-  }
-
-  function replaceState(state, path) {
+  function replace(location) {
     transitionTo(
-      createLocation(path, state, REPLACE, createKey())
+      createLocation(location, REPLACE, createKey())
     )
-  }
-
-  function replace(path) {
-    replaceState(null, path)
   }
 
   function goBack() {
@@ -168,11 +161,11 @@ function createHistory(options={}) {
     return createRandomKey(keyLength)
   }
 
-  function createPath(path) {
-    if (path == null || typeof path === 'string')
-      return path
+  function createPath(location) {
+    if (location == null || typeof location === 'string')
+      return location
 
-    const { pathname, search, hash } = path
+    const { pathname, search, hash } = location
 
     let result = pathname
 
@@ -185,12 +178,28 @@ function createHistory(options={}) {
     return result
   }
 
-  function createHref(path) {
-    return createPath(path)
+  function createHref(location) {
+    return createPath(location)
   }
 
-  function createLocation(path, state, action, key=createKey()) {
-    return _createLocation(path, state, action, key)
+  function createLocation(location, action, key=createKey()) {
+    if (typeof action === 'object') {
+      warning(
+        false,
+        'The state (2nd) argument to history.createLocation is deprecated; use a ' +
+        'location descriptor instead'
+      )
+
+      if (typeof location === 'string')
+        location = parsePath(location)
+
+      location = { ...location, state: action }
+
+      action = key
+      key = arguments[3] || createKey()
+    }
+
+    return _createLocation(location, action, key)
   }
 
   // deprecated
@@ -219,12 +228,26 @@ function createHistory(options={}) {
     transitionHooks = transitionHooks.filter(item => item !== hook)
   }
 
+  // deprecated
+  function pushState(state, path) {
+    if (typeof path === 'string')
+      path = parsePath(path)
+
+    push({ state, ...path })
+  }
+
+  // deprecated
+  function replaceState(state, path) {
+    if (typeof path === 'string')
+      path = parsePath(path)
+
+    replace({ state, ...path })
+  }
+
   return {
     listenBefore,
     listen,
     transitionTo,
-    pushState,
-    replaceState,
     push,
     replace,
     go,
@@ -246,6 +269,14 @@ function createHistory(options={}) {
     unregisterTransitionHook: deprecate(
       unregisterTransitionHook,
       'unregisterTransitionHook is deprecated; use the callback returned from listenBefore instead'
+    ),
+    pushState: deprecate(
+      pushState,
+      'pushState is deprecated; use push instead'
+    ),
+    replaceState: deprecate(
+      replaceState,
+      'replaceState is deprecated; use replace instead'
     )
   }
 }

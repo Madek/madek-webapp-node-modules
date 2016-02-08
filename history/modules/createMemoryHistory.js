@@ -1,4 +1,6 @@
+import warning from 'warning'
 import invariant from 'invariant'
+import { parsePath } from './PathUtils'
 import { PUSH, REPLACE, POP } from './Actions'
 import createHistory from './createHistory'
 
@@ -84,7 +86,9 @@ function createMemoryHistory(options={}) {
       entry.key = key
     }
 
-    return history.createLocation(path, state, undefined, key)
+    const location = parsePath(path)
+
+    return history.createLocation({ ...location, state }, undefined, key)
   }
 
   function canGo(n) {
@@ -94,11 +98,14 @@ function createMemoryHistory(options={}) {
 
   function go(n) {
     if (n) {
-      invariant(
-        canGo(n),
-        'Cannot go(%s) there is not enough history',
-        n
-      )
+      if (!canGo(n)) {
+        warning(
+          false,
+          'Cannot go(%s) there is not enough history',
+          n
+        )
+        return
+      }
 
       current += n
 

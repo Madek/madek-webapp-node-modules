@@ -1,7 +1,7 @@
 import { canUseDOM } from './ExecutionEnvironment'
+import { extractPath, parsePath } from './PathUtils'
 import runTransitionHook from './runTransitionHook'
-import extractPath from './extractPath'
-import parsePath from './parsePath'
+import deprecate from './deprecate'
 
 function useBasename(createHistory) {
   return function (options={}) {
@@ -33,20 +33,20 @@ function useBasename(createHistory) {
       return location
     }
 
-    function prependBasename(path) {
+    function prependBasename(location) {
       if (!basename)
-        return path
+        return location
 
-      if (typeof path === 'string')
-        path = parsePath(path)
+      if (typeof location === 'string')
+        location = parsePath(location)
 
-      const pname = path.pathname
+      const pname = location.pathname
       const normalizedBasename = basename.slice(-1) === '/' ? basename : basename + '/'
       const normalizedPathname = pname.charAt(0) === '/' ? pname.slice(1) : pname
       const pathname = normalizedBasename + normalizedPathname
 
       return {
-        ...path,
+        ...location,
         pathname
       }
     }
@@ -65,45 +65,62 @@ function useBasename(createHistory) {
     }
 
     // Override all write methods with basename-aware versions.
+    function push(location) {
+      history.push(prependBasename(location))
+    }
+
+    function replace(location) {
+      history.replace(prependBasename(location))
+    }
+
+    function createPath(location) {
+      return history.createPath(prependBasename(location))
+    }
+
+    function createHref(location) {
+      return history.createHref(prependBasename(location))
+    }
+
+    function createLocation(location, ...args) {
+      return addBasename(
+        history.createLocation(prependBasename(location), ...args)
+      )
+    }
+
+    // deprecated
     function pushState(state, path) {
-      history.pushState(state, prependBasename(path))
+      if (typeof path === 'string')
+        path = parsePath(path)
+
+      push({ state, ...path })
     }
 
-    function push(path) {
-      pushState(null, path)
-    }
-
+    // deprecated
     function replaceState(state, path) {
-      history.replaceState(state, prependBasename(path))
-    }
+      if (typeof path === 'string')
+        path = parsePath(path)
 
-    function replace(path) {
-      replaceState(null, path)
-    }
-
-    function createPath(path) {
-      return history.createPath(prependBasename(path))
-    }
-
-    function createHref(path) {
-      return history.createHref(prependBasename(path))
-    }
-
-    function createLocation() {
-      return addBasename(history.createLocation.apply(history, arguments))
+      replace({ state, ...path })
     }
 
     return {
       ...history,
       listenBefore,
       listen,
-      pushState,
       push,
-      replaceState,
       replace,
       createPath,
       createHref,
-      createLocation
+      createLocation,
+
+      pushState: deprecate(
+        pushState,
+        'pushState is deprecated; use push instead'
+      ),
+      replaceState: deprecate(
+        replaceState,
+        'replaceState is deprecated; use replace instead'
+      )
     }
   }
 }

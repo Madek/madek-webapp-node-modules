@@ -2,7 +2,11 @@
 import warning from 'warning'
 
 const KeyPrefix = '@@History/'
-const QuotaExceededError = 'QuotaExceededError'
+const QuotaExceededErrors = [
+  'QuotaExceededError',
+  'QUOTA_EXCEEDED_ERR'
+]
+
 const SecurityError = 'SecurityError'
 
 function createKey(key) {
@@ -11,7 +15,11 @@ function createKey(key) {
 
 export function saveState(key, state) {
   try {
-    window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+    if (state == null) {
+      window.sessionStorage.removeItem(createKey(key))
+    } else {
+      window.sessionStorage.setItem(createKey(key), JSON.stringify(state))
+    }
   } catch (error) {
     if (error.name === SecurityError) {
       // Blocking cookies in Chrome/Firefox/Safari throws SecurityError on any
@@ -24,7 +32,7 @@ export function saveState(key, state) {
       return
     }
 
-    if (error.name === QuotaExceededError && window.sessionStorage.length === 0) {
+    if (QuotaExceededErrors.indexOf(error.name) >= 0 && window.sessionStorage.length === 0) {
       // Safari "private mode" throws QuotaExceededError.
       warning(
         false,

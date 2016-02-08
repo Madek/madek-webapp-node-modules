@@ -1,6 +1,7 @@
 import warning from 'warning'
 import invariant from 'invariant'
 import { PUSH, POP } from './Actions'
+import { parsePath } from './PathUtils'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getHashPath, replaceHashPath, supportsGoWithoutReloadUsingHash } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
@@ -66,7 +67,9 @@ function createHashHistory(options={}) {
       key = state = null
     }
 
-    return history.createLocation(path, state, undefined, key)
+    const location = parsePath(path)
+
+    return history.createLocation({ ...location, state }, undefined, key)
   }
 
   function startHashChangeListener({ transitionTo }) {
@@ -156,22 +159,22 @@ function createHashHistory(options={}) {
     }
   }
 
-  function pushState(state, path) {
+  function push(location) {
     warning(
-      queryKey || state == null,
+      queryKey || location.state == null,
       'You cannot use state without a queryKey it will be dropped'
     )
 
-    history.pushState(state, path)
+    history.push(location)
   }
 
-  function replaceState(state, path) {
+  function replace(location) {
     warning(
-      queryKey || state == null,
+      queryKey || location.state == null,
       'You cannot use state without a queryKey it will be dropped'
     )
 
-    history.replaceState(state, path)
+    history.replace(location)
   }
 
   let goIsSupportedWithoutReload = supportsGoWithoutReloadUsingHash()
@@ -205,16 +208,39 @@ function createHashHistory(options={}) {
       stopHashChangeListener()
   }
 
+  // deprecated
+  function pushState(state, path) {
+    warning(
+      queryKey || state == null,
+      'You cannot use state without a queryKey it will be dropped'
+    )
+
+    history.pushState(state, path)
+  }
+
+  // deprecated
+  function replaceState(state, path) {
+    warning(
+      queryKey || state == null,
+      'You cannot use state without a queryKey it will be dropped'
+    )
+
+    history.replaceState(state, path)
+  }
+
   return {
     ...history,
     listenBefore,
     listen,
-    pushState,
-    replaceState,
+    push,
+    replace,
     go,
     createHref,
-    registerTransitionHook,
-    unregisterTransitionHook
+
+    registerTransitionHook, // deprecated - warning is in createHistory
+    unregisterTransitionHook, // deprecated - warning is in createHistory
+    pushState, // deprecated - warning is in createHistory
+    replaceState // deprecated - warning is in createHistory
   }
 }
 

@@ -1,5 +1,6 @@
 import invariant from 'invariant'
 import { PUSH, POP } from './Actions'
+import { parsePath } from './PathUtils'
 import { canUseDOM } from './ExecutionEnvironment'
 import { addEventListener, removeEventListener, getWindowPath, supportsHistory } from './DOMUtils'
 import { saveState, readState } from './DOMStateStorage'
@@ -41,7 +42,9 @@ function createBrowserHistory(options={}) {
         window.history.replaceState({ ...historyState, key }, null, path)
     }
 
-    return history.createLocation(path, state, undefined, key)
+    const location = parsePath(path)
+
+    return history.createLocation({ ...location, state }, undefined, key)
   }
 
   function startPopStateListener({ transitionTo }) {
