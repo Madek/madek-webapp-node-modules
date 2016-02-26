@@ -6,13 +6,13 @@
     ]
   ],
   "_from": "pdfjs-dist@>=1.4.44 <2.0.0",
-  "_id": "pdfjs-dist@1.4.44",
+  "_id": "pdfjs-dist@1.4.95",
   "_inCache": true,
   "_installable": true,
   "_location": "/pdfjs-dist",
   "_npmOperationalInternal": {
-    "host": "packages-6-west.internal.npmjs.com",
-    "tmp": "tmp/pdfjs-dist-1.4.44.tgz_1454611985599_0.2084500293713063"
+    "host": "packages-9-west.internal.npmjs.com",
+    "tmp": "tmp/pdfjs-dist-1.4.95.tgz_1456438817358_0.7661890843883157"
   },
   "_npmUser": {
     "email": "ydelendik@mozilla.com",
@@ -31,8 +31,8 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.4.44.tgz",
-  "_shasum": "3acd8ef8b194e5c9a14032227e9c0f888997f345",
+  "_resolved": "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.4.95.tgz",
+  "_shasum": "fb1d10a42587b45273dddeaf187bebf0b6cad67d",
   "_shrinkwrap": null,
   "_spec": "pdfjs-dist@^1.4.44",
   "_where": "/Users/ma/CODE/Madek/webapp",
@@ -44,8 +44,8 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "3acd8ef8b194e5c9a14032227e9c0f888997f345",
-    "tarball": "http://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.4.44.tgz"
+    "shasum": "fb1d10a42587b45273dddeaf187bebf0b6cad67d",
+    "tarball": "http://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-1.4.95.tgz"
   },
   "homepage": "http://mozilla.github.io/pdf.js/",
   "keywords": [
@@ -68,5 +68,5 @@
     "type": "git",
     "url": "git+https://github.com/mozilla/pdfjs-dist.git"
   },
-  "version": "1.4.44"
+  "version": "1.4.95"
 }
