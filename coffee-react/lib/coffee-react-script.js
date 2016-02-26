@@ -9,7 +9,7 @@ helpers = require('./helpers');
 
 CoffeeScript = require('coffee-script/lib/coffee-script/coffee-script');
 
-jsSyntaxTransform = require('./js-syntax-transform');
+jsSyntaxTransform = require('coffee-react-jstransform');
 
 if (!CoffeeScript._cjsx) {
   CoffeeScript._cjsx = true;
