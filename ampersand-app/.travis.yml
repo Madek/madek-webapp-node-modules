@@ -1,0 +1,22 @@
+sudo: false
+language: node_js
+node_js: '4'
+cache:
+  directories: node_modules
+before_script: npm prune
+branches:
+  except: /^v\d+\.\d+\.\d+$/
+notifications:
+  webhooks:
+    urls: https://webhooks.gitter.im/e/df4440290bd89d941fb4
+    on_success: change
+    on_failure: always
+    on_start: false
+  email: false
+script: npm run test-ci
+addons:
+  sauce_connect: true
+env:
+  global:
+  - secure: dGuolLdxndFtqK2MF3olcJ0iusuZpR4l7xxURDChyaItVapd1mmRtu9WCP/ni+nx3eyR5g+OKy96zTK5ueCfzO1jra5Gj/O4LlRd0O55WdM6glWQ/AoOYJQrDW0M33hqaz60tARauuPmqQRFo79UXqtI5q8/EqngPJHjBm4+5SE=
+  - secure: GIgTOMX+r4K2rSlNNvO3TXbbiCsDOmh+/4YxowYgCWqf7KE5xHuOXg9XwYq2vcO/ooclWOProyv/cGtKO6ftHpwZbQ/OMX1ZhNbbT7+eamzrpoeWGywEQsIBn1ZRpYTR9ewBEIUVN3Ha122Dkckc1mruZw//Yl2J9WpaAcOpiJk=
