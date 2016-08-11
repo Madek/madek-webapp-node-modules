@@ -1,0 +1,68 @@
+{
+  "_args": [
+    [
+      {
+        "name": "@eins78/typopro-open-sans",
+        "raw": "@eins78/typopro-open-sans",
+        "rawSpec": "",
+        "scope": "@eins78",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "@eins78/typopro-open-sans@latest",
+  "_id": "@eins78/typopro-open-sans@0.0.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/@eins78/typopro-open-sans",
+  "_nodeVersion": "5.7.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/typopro-open-sans-0.0.0.tgz_1470909374466_0.0948339938186109"
+  },
+  "_npmUser": {
+    "email": "1@178.is",
+    "name": "eins78"
+  },
+  "_npmVersion": "3.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "@eins78/typopro-open-sans",
+    "raw": "@eins78/typopro-open-sans",
+    "rawSpec": "",
+    "scope": "@eins78",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@eins78/typopro-open-sans/-/typopro-open-sans-0.0.0.tgz",
+  "_shasum": "92c8015a02b00528d3374da8fb788e73c98718e6",
+  "_shrinkwrap": null,
+  "_spec": "@eins78/typopro-open-sans",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "dependencies": {},
+  "description": "(testing)",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "92c8015a02b00528d3374da8fb788e73c98718e6",
+    "tarball": "https://registry.npmjs.org/@eins78/typopro-open-sans/-/typopro-open-sans-0.0.0.tgz"
+  },
+  "license": "SEE LICENSE IN https://www.npmjs.com/package/typopro",
+  "main": "dist/TypoPRO-OpenSans.css",
+  "maintainers": [
+    {
+      "email": "1@178.is",
+      "name": "eins78"
+    }
+  ],
+  "name": "@eins78/typopro-open-sans",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "0.0.0"
+}
