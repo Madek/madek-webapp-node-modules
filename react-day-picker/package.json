@@ -1,0 +1,120 @@
+{
+  "name": "react-day-picker",
+  "version": "2.4.1",
+  "description": "Flexible date picker component for React",
+  "main": "DayPicker.js",
+  "style": "lib/style.css",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "clean": "rimraf lib coverage dist",
+    "lint": "eslint src test",
+    "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive --reporter spec",
+    "test:watch": "npm test -- --watch",
+    "test:files": "mocha --compilers js:babel-core/register --require ./test/setup.js --reporter spec --bail --watch",
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover -- _mocha --recursive --reporter spec",
+    "check": "npm run lint && npm run test",
+    "prerelease": "npm run check && npm run dist && npm run build",
+    "dist": "webpack -p",
+    "build": "babel ./src -d ./lib --source-maps && postcss --use autoprefixer src/style.css -d lib/",
+    "examples:clean": "rimraf examples/built",
+    "examples:build": "npm run examples:clean && cd examples && npm run build && cd ..",
+    "docs:clean": "rimraf _book",
+    "docs:prepare": "gitbook install",
+    "docs:build": "npm run docs:prepare && gitbook build",
+    "docs:serve": "gitbook serve",
+    "docs:publish": "npm run docs:clean && npm run docs:build && npm run examples:build && rimraf _book/examples && mv examples/built _book/examples && cd _book && git init && git commit --allow-empty -m 'Update docs and examples' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'Update docs and examples' && git push git@github.com:gpbl/react-day-picker gh-pages --force"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gpbl/react-day-picker.git"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "component",
+    "calendar",
+    "date-picker",
+    "datepicker",
+    "date",
+    "picker",
+    "moment",
+    "momentjs"
+  ],
+  "author": {
+    "name": "Giampaolo Bellavite",
+    "email": "io@gpbl.org"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gpbl/react-day-picker/issues"
+  },
+  "homepage": "https://github.com/gpbl/react-day-picker",
+  "peerDependencies": {
+    "react": "~0.13.x || ~0.14.x || ^15.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "6.3.7",
+    "babel-cli": "6.11.4",
+    "babel-core": "6.11.4",
+    "babel-eslint": "6.1.2",
+    "babel-loader": "6.2.4",
+    "babel-preset-es2015": "6.9.0",
+    "babel-preset-react": "6.11.1",
+    "babel-preset-stage-0": "6.5.0",
+    "chai": "3.5.0",
+    "chai-enzyme": "0.5.0",
+    "cheerio": "0.20.0",
+    "coveralls": "2.11.12",
+    "enzyme": "2.4.1",
+    "eslint": "2.13.1",
+    "eslint-config-airbnb": "9.0.1",
+    "eslint-plugin-import": "1.12.0",
+    "eslint-plugin-jsx-a11y": "1.5.3",
+    "eslint-plugin-react": "5.2.2",
+    "gitbook-cli": "2.3.0",
+    "istanbul": "1.1.0-alpha.1",
+    "jsdom": "9.0.0",
+    "mocha": "2.5.3",
+    "moment": "2.14.1",
+    "postcss-cli": "2.5.2",
+    "react": "15.3.0",
+    "react-addons-test-utils": "15.3.0",
+    "react-dom": "15.3.0",
+    "react-hot-loader": "1.3.0",
+    "rimraf": "2.5.4",
+    "sinon": "1.17.5",
+    "sinon-chai": "2.8.0",
+    "webpack": "1.13.1"
+  },
+  "dependencies": {
+    "react-is-deprecated": "0.1.2"
+  },
+  "gitHead": "5cf1d5ab207334ac2ee4b2f263aecaf04ec1c19c",
+  "_id": "react-day-picker@2.4.1",
+  "_shasum": "30baa92cbfa875e669633f0fc37b4d9d7900a889",
+  "_from": "react-day-picker@>=2.4.1 <3.0.0",
+  "_npmVersion": "2.15.6",
+  "_nodeVersion": "4.4.5",
+  "_npmUser": {
+    "name": "gpbl",
+    "email": "io@gpbl.org"
+  },
+  "dist": {
+    "shasum": "30baa92cbfa875e669633f0fc37b4d9d7900a889",
+    "tarball": "https://registry.npmjs.org/react-day-picker/-/react-day-picker-2.4.1.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "gpbl",
+      "email": "io@gpbl.org"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/react-day-picker-2.4.1.tgz_1469974778074_0.22745984722860157"
+  },
+  "_resolved": "https://registry.npmjs.org/react-day-picker/-/react-day-picker-2.4.1.tgz",
+  "readme": "ERROR: No README data found!"
+}
