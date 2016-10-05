@@ -1,0 +1,120 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+        "scope": "@eins78",
+        "escapedName": "@eins78%2frspec-render-docs",
+        "name": "@eins78/rspec-render-docs",
+        "rawSpec": "1.0.0-alpha.3",
+        "spec": "1.0.0-alpha.3",
+        "type": "version"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+  "_id": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/@eins78/rspec-render-docs",
+  "_nodeVersion": "6.7.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/rspec-render-docs-1.0.0-alpha.3.tgz_1475693117688_0.4404398980550468"
+  },
+  "_npmUser": {
+    "name": "eins78",
+    "email": "1@178.is"
+  },
+  "_npmVersion": "3.10.7",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+    "scope": "@eins78",
+    "escapedName": "@eins78%2frspec-render-docs",
+    "name": "@eins78/rspec-render-docs",
+    "rawSpec": "1.0.0-alpha.3",
+    "spec": "1.0.0-alpha.3",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/@eins78/rspec-render-docs/-/rspec-render-docs-1.0.0-alpha.3.tgz",
+  "_shasum": "e8a511baebdb7a87a259779ad5fc07192629ca0a",
+  "_shrinkwrap": null,
+  "_spec": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Max F. Albrecht",
+    "email": "1@178.is"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "bin": {
+    "rspec-to-docs": "bin/rspec-to-docs",
+    "rspec-render-docs": "bin/rspec-render-docs",
+    "rspec-to-json": "bin/rspec-to-json"
+  },
+  "bugs": {
+    "url": "https://github.com/eins78/rspec-render-docs/issues"
+  },
+  "dependencies": {},
+  "description": "render readable docs from `rspec` JSON output",
+  "devDependencies": {
+    "active-lodash": "^1.2.2",
+    "babel-preset-react-app": "^0.2.1",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-markdown": "^2.4.2",
+    "react-syntax-highlighter": "^2.7.0",
+    "standard": "^8.2.0",
+    "uglify": "^0.1.5"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "e8a511baebdb7a87a259779ad5fc07192629ca0a",
+    "tarball": "https://registry.npmjs.org/@eins78/rspec-render-docs/-/rspec-render-docs-1.0.0-alpha.3.tgz"
+  },
+  "files": [
+    "bin",
+    "rspec",
+    "src"
+  ],
+  "gitHead": "91a39d751613abbf0c211f5eecf747c0b4116b5d",
+  "homepage": "https://github.com/eins78/rspec-render-docs#readme",
+  "jsnext:main": "src/rspec-render-docs.js",
+  "keywords": [
+    "rspec",
+    "docs"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "eins78",
+      "email": "1@178.is"
+    }
+  ],
+  "name": "@eins78/rspec-render-docs",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eins78/rspec-render-docs.git"
+  },
+  "scripts": {
+    "build": "echo '#!/usr/bin/env node' >bin/rspec-render-docs && NODE_ENV=production browserify --node -t babelify src/rspec-render-docs.js | uglifyjs >>bin/rspec-render-docs && chmod +x bin/rspec-render-docs",
+    "lint": "standard --verbose *.js **/*.js",
+    "prepublish": "npm run -s test && npm run -s build",
+    "rspec-docs": "babel-node ./rspec-render-docs.js",
+    "test": "npm run -s lint"
+  },
+  "version": "1.0.0-alpha.3"
+}

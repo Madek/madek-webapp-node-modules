@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+# use bundled scripts
+PKG_DIR="$(dirname "${BASH_SOURCE}")/$(dirname "$(readlink "${BASH_SOURCE}")")/.."
+# run rspec with json output and pipe to renderer
+"${PKG_DIR}/bin/rspec-to-json" "$1" | "${PKG_DIR}/bin/rspec-render-docs"
