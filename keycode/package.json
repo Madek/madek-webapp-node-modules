@@ -2,10 +2,11 @@
   "_args": [
     [
       {
-        "name": "keycode",
         "raw": "keycode@^2.1.2",
-        "rawSpec": "^2.1.2",
         "scope": null,
+        "escapedName": "keycode",
+        "name": "keycode",
+        "rawSpec": "^2.1.2",
         "spec": ">=2.1.2 <3.0.0",
         "type": "range"
       },
@@ -13,40 +14,41 @@
     ]
   ],
   "_from": "keycode@>=2.1.2 <3.0.0",
-  "_id": "keycode@2.1.4",
+  "_id": "keycode@2.1.7",
   "_inCache": true,
   "_installable": true,
   "_location": "/keycode",
   "_nodeVersion": "6.3.1",
   "_npmOperationalInternal": {
     "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/keycode-2.1.4.tgz_1469911640310_0.2877988100517541"
+    "tmp": "tmp/keycode-2.1.7.tgz_1474603589559_0.2023061728104949"
   },
   "_npmUser": {
-    "email": "secoif@gmail.com",
-    "name": "timoxley"
+    "name": "timoxley",
+    "email": "secoif@gmail.com"
   },
-  "_npmVersion": "3.10.3",
+  "_npmVersion": "3.10.7",
   "_phantomChildren": {},
   "_requested": {
-    "name": "keycode",
     "raw": "keycode@^2.1.2",
-    "rawSpec": "^2.1.2",
     "scope": null,
+    "escapedName": "keycode",
+    "name": "keycode",
+    "rawSpec": "^2.1.2",
     "spec": ">=2.1.2 <3.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/react-bootstrap"
   ],
-  "_resolved": "https://registry.npmjs.org/keycode/-/keycode-2.1.4.tgz",
-  "_shasum": "faa717f03ceb1661b9f322c6c89d239eee96bcde",
+  "_resolved": "https://registry.npmjs.org/keycode/-/keycode-2.1.7.tgz",
+  "_shasum": "7b9255919f6cff562b09a064d222dca70b020f5c",
   "_shrinkwrap": null,
   "_spec": "keycode@^2.1.2",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/react-bootstrap",
   "author": {
-    "email": "secoif@gmail.com",
-    "name": "Tim Oxley"
+    "name": "Tim Oxley",
+    "email": "secoif@gmail.com"
   },
   "bugs": {
     "url": "https://github.com/timoxley/keycode/issues"
@@ -54,17 +56,17 @@
   "dependencies": {},
   "description": "Convert between keyboard keycodes and keynames and vice versa.",
   "devDependencies": {
-    "mocha": "^2.4.5"
+    "mocha": "^3.0.2"
   },
   "directories": {
     "example": "examples",
     "test": "test"
   },
   "dist": {
-    "shasum": "faa717f03ceb1661b9f322c6c89d239eee96bcde",
-    "tarball": "https://registry.npmjs.org/keycode/-/keycode-2.1.4.tgz"
+    "shasum": "7b9255919f6cff562b09a064d222dca70b020f5c",
+    "tarball": "https://registry.npmjs.org/keycode/-/keycode-2.1.7.tgz"
   },
-  "gitHead": "99053f0147375432ba34a1fde50dd79f8a07222b",
+  "gitHead": "64aa2c645c2cf2696420e270c38e6b5796238ea4",
   "homepage": "https://github.com/timoxley/keycode",
   "keywords": [
     "keyboard",
@@ -81,8 +83,8 @@
   "main": "index.js",
   "maintainers": [
     {
-      "email": "secoif@gmail.com",
-      "name": "timoxley"
+      "name": "timoxley",
+      "email": "secoif@gmail.com"
     }
   ],
   "name": "keycode",
@@ -96,5 +98,5 @@
     "test": "mocha test/keycode.js"
   },
   "typings": "./keycode.d.ts",
-  "version": "2.1.4"
+  "version": "2.1.7"
 }

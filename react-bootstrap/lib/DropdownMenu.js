@@ -167,30 +167,27 @@ var DropdownMenu = function (_React$Component) {
 
     var classes = (0, _extends4['default'])({}, (0, _bootstrapUtils.getClassSet)(bsProps), (_extends2 = {}, _extends2[(0, _bootstrapUtils.prefix)(bsProps, 'right')] = pullRight, _extends2));
 
-    var list = _react2['default'].createElement(
-      'ul',
-      (0, _extends4['default'])({}, elementProps, {
-        role: 'menu',
-        className: (0, _classnames2['default'])(className, classes),
-        'aria-labelledby': labelledBy
-      }),
-      _ValidComponentChildren2['default'].map(children, function (child) {
-        return _react2['default'].cloneElement(child, {
-          onKeyDown: (0, _createChainedFunction2['default'])(child.props.onKeyDown, _this2.handleKeyDown),
-          onSelect: (0, _createChainedFunction2['default'])(child.props.onSelect, onSelect)
-        });
-      })
+    return _react2['default'].createElement(
+      _RootCloseWrapper2['default'],
+      {
+        disabled: !open,
+        onRootClose: onClose
+      },
+      _react2['default'].createElement(
+        'ul',
+        (0, _extends4['default'])({}, elementProps, {
+          role: 'menu',
+          className: (0, _classnames2['default'])(className, classes),
+          'aria-labelledby': labelledBy
+        }),
+        _ValidComponentChildren2['default'].map(children, function (child) {
+          return _react2['default'].cloneElement(child, {
+            onKeyDown: (0, _createChainedFunction2['default'])(child.props.onKeyDown, _this2.handleKeyDown),
+            onSelect: (0, _createChainedFunction2['default'])(child.props.onSelect, onSelect)
+          });
+        })
+      )
     );
-
-    if (open) {
-      return _react2['default'].createElement(
-        _RootCloseWrapper2['default'],
-        { noWrap: true, onRootClose: onClose },
-        list
-      );
-    }
-
-    return list;
   };
 
   return DropdownMenu;

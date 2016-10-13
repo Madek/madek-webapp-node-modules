@@ -8,6 +8,7 @@ import React from 'react';
 
 import Dropdown from './Dropdown';
 import splitComponentProps from './utils/splitComponentProps';
+import ValidComponentChildren from './utils/ValidComponentChildren';
 
 var propTypes = _extends({}, Dropdown.propTypes, {
 
@@ -32,21 +33,40 @@ var NavDropdown = function (_React$Component) {
     return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
   }
 
+  NavDropdown.prototype.isActive = function isActive(_ref, activeKey, activeHref) {
+    var props = _ref.props;
+
+    var _this2 = this;
+
+    if (props.active || activeKey != null && props.eventKey === activeKey || activeHref && props.href === activeHref) {
+      return true;
+    }
+
+    if (ValidComponentChildren.some(props.children, function (child) {
+      return _this2.isActive(child, activeKey, activeHref);
+    })) {
+      return true;
+    }
+
+    return props.active;
+  };
+
   NavDropdown.prototype.render = function render() {
+    var _this3 = this;
+
     var _props = this.props;
     var title = _props.title;
-    var active = _props.active;
+    var activeKey = _props.activeKey;
+    var activeHref = _props.activeHref;
     var className = _props.className;
     var style = _props.style;
     var children = _props.children;
 
-    var props = _objectWithoutProperties(_props, ['title', 'active', 'className', 'style', 'children']);
+    var props = _objectWithoutProperties(_props, ['title', 'activeKey', 'activeHref', 'className', 'style', 'children']);
 
-    delete props.eventKey;
-
-    // These are injected down by `<Nav>` for building `<SubNav>`s.
-    delete props.activeKey;
-    delete props.activeHref;
+    var active = this.isActive(this, activeKey, activeHref);
+    delete props.active; // Accessed via this.isActive().
+    delete props.eventKey; // Accessed via this.isActive().
 
     var _splitComponentProps = splitComponentProps(props, Dropdown.ControlledComponent);
 
@@ -71,7 +91,11 @@ var NavDropdown = function (_React$Component) {
       React.createElement(
         Dropdown.Menu,
         null,
-        children
+        ValidComponentChildren.map(children, function (child) {
+          return React.cloneElement(child, {
+            active: _this3.isActive(child, activeKey, activeHref)
+          });
+        })
       )
     );
   };

@@ -152,12 +152,11 @@ var Collapse = function (_React$Component) {
   Collapse.prototype.handleExit = function handleExit(elem) {
     var dimension = this._dimension();
     elem.style[dimension] = this.props.getDimensionValue(dimension, elem) + 'px';
+    triggerBrowserReflow(elem);
   };
 
   Collapse.prototype.handleExiting = function handleExiting(elem) {
     var dimension = this._dimension();
-
-    triggerBrowserReflow(elem);
     elem.style[dimension] = '0';
   };
 

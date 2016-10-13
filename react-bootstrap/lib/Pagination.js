@@ -119,8 +119,8 @@ var Pagination = function (_React$Component) {
 
     if (maxButtons) {
       var hiddenPagesBefore = activePage - parseInt(maxButtons / 2, 10);
-      startPage = hiddenPagesBefore > 1 ? hiddenPagesBefore : 1;
-      hasHiddenPagesAfter = startPage + maxButtons <= items;
+      startPage = hiddenPagesBefore > 2 ? hiddenPagesBefore : 1;
+      hasHiddenPagesAfter = startPage + maxButtons < items;
 
       if (!hasHiddenPagesAfter) {
         endPage = items;
@@ -159,7 +159,7 @@ var Pagination = function (_React$Component) {
         _react2['default'].createElement(
           'span',
           { 'aria-label': 'More' },
-          ellipsis === true ? '…' : ellipsis
+          ellipsis === true ? '\u2026' : ellipsis
         )
       ));
 
@@ -185,7 +185,7 @@ var Pagination = function (_React$Component) {
         _react2['default'].createElement(
           'span',
           { 'aria-label': 'More' },
-          ellipsis === true ? '…' : ellipsis
+          ellipsis === true ? '\u2026' : ellipsis
         )
       ));
 
@@ -248,7 +248,7 @@ var Pagination = function (_React$Component) {
         _react2['default'].createElement(
           'span',
           { 'aria-label': 'First' },
-          first === true ? '«' : first
+          first === true ? '\xAB' : first
         )
       ),
       prev && _react2['default'].createElement(
@@ -260,7 +260,7 @@ var Pagination = function (_React$Component) {
         _react2['default'].createElement(
           'span',
           { 'aria-label': 'Previous' },
-          prev === true ? '‹' : prev
+          prev === true ? '\u2039' : prev
         )
       ),
       this.renderPageButtons(activePage, items, maxButtons, boundaryLinks, ellipsis, buttonProps),
@@ -273,7 +273,7 @@ var Pagination = function (_React$Component) {
         _react2['default'].createElement(
           'span',
           { 'aria-label': 'Next' },
-          next === true ? '›' : next
+          next === true ? '\u203A' : next
         )
       ),
       last && _react2['default'].createElement(
@@ -285,7 +285,7 @@ var Pagination = function (_React$Component) {
         _react2['default'].createElement(
           'span',
           { 'aria-label': 'Last' },
-          last === true ? '»' : last
+          last === true ? '\xBB' : last
         )
       )
     );

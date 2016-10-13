@@ -130,7 +130,7 @@ var Panel = function (_React$Component) {
 
     return (0, _react.cloneElement)(header, {
       className: (0, _classnames2['default'])(header.props.className, titleClassName),
-      children: this.renderAnchor(header.props.children, role)
+      children: this.renderAnchor(header.props.children, id, role, expanded)
     });
   };
 

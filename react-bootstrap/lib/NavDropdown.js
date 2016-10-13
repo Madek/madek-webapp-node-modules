@@ -38,6 +38,10 @@ var _splitComponentProps2 = require('./utils/splitComponentProps');
 
 var _splitComponentProps3 = _interopRequireDefault(_splitComponentProps2);
 
+var _ValidComponentChildren = require('./utils/ValidComponentChildren');
+
+var _ValidComponentChildren2 = _interopRequireDefault(_ValidComponentChildren);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = (0, _extends3['default'])({}, _Dropdown2['default'].propTypes, {
@@ -62,21 +66,40 @@ var NavDropdown = function (_React$Component) {
     return (0, _possibleConstructorReturn3['default'])(this, _React$Component.apply(this, arguments));
   }
 
+  NavDropdown.prototype.isActive = function isActive(_ref, activeKey, activeHref) {
+    var props = _ref.props;
+
+    var _this2 = this;
+
+    if (props.active || activeKey != null && props.eventKey === activeKey || activeHref && props.href === activeHref) {
+      return true;
+    }
+
+    if (_ValidComponentChildren2['default'].some(props.children, function (child) {
+      return _this2.isActive(child, activeKey, activeHref);
+    })) {
+      return true;
+    }
+
+    return props.active;
+  };
+
   NavDropdown.prototype.render = function render() {
+    var _this3 = this;
+
     var _props = this.props;
     var title = _props.title;
-    var active = _props.active;
+    var activeKey = _props.activeKey;
+    var activeHref = _props.activeHref;
     var className = _props.className;
     var style = _props.style;
     var children = _props.children;
-    var props = (0, _objectWithoutProperties3['default'])(_props, ['title', 'active', 'className', 'style', 'children']);
+    var props = (0, _objectWithoutProperties3['default'])(_props, ['title', 'activeKey', 'activeHref', 'className', 'style', 'children']);
 
 
-    delete props.eventKey;
-
-    // These are injected down by `<Nav>` for building `<SubNav>`s.
-    delete props.activeKey;
-    delete props.activeHref;
+    var active = this.isActive(this, activeKey, activeHref);
+    delete props.active; // Accessed via this.isActive().
+    delete props.eventKey; // Accessed via this.isActive().
 
     var _splitComponentProps = (0, _splitComponentProps3['default'])(props, _Dropdown2['default'].ControlledComponent);
 
@@ -101,7 +124,11 @@ var NavDropdown = function (_React$Component) {
       _react2['default'].createElement(
         _Dropdown2['default'].Menu,
         null,
-        children
+        _ValidComponentChildren2['default'].map(children, function (child) {
+          return _react2['default'].cloneElement(child, {
+            active: _this3.isActive(child, activeKey, activeHref)
+          });
+        })
       )
     );
   };

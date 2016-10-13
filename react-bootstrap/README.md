@@ -2,7 +2,7 @@
 
 [Bootstrap 3][bootstrap] components built with [React][react].
 
-[![Coveralls][coveralls-badge]][coveralls]
+[![Codecov][codecov-badge]][codecov]
 [![Discord][discord-badge]][discord]
 [![Thinkful][thinkful-badge]][thinkful]
 
@@ -20,7 +20,7 @@ See the [documentation][documentation] with live editable examples.
 
 - Install the dependencies with `npm install`
 - Run tests `npm test`
-- Run tests in watch mode `npm run test-watch`
+- Run tests in watch mode `npm run tdd`
 - Run the docs site in development mode with `npm run docs`. This will watch
   for file changes as you work. Simply refresh the page to see the updates.
 - Build with `npm run build`
@@ -47,8 +47,8 @@ Yes please! See the [contributing guidelines][contributing] for details.
 [thinkful-badge]: https://tf-assets-staging.s3.amazonaws.com/badges/thinkful_repo_badge.svg
 [thinkful]: http://start.thinkful.com/react/?utm_source=github&utm_medium=badge&utm_campaign=react-bootstrap
 
-[coveralls-badge]: https://coveralls.io/repos/react-bootstrap/react-bootstrap/badge.svg?branch=master&service=github
-[coveralls]: https://coveralls.io/github/react-bootstrap/react-bootstrap?branch=master
+[codecov-badge]: https://img.shields.io/codecov/c/github/react-bootstrap/react-bootstrap/master.svg
+[codecov]: https://codecov.io/gh/react-bootstrap/react-bootstrap
 
 [discord-badge]: https://img.shields.io/badge/Discord-Join%20chat%20%E2%86%92-738bd7.svg
 [discord]: https://discord.gg/0ZcbPKXt5bXLs9XK

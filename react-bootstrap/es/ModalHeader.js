@@ -88,7 +88,7 @@ var ModalHeader = function (_React$Component) {
         React.createElement(
           'span',
           { 'aria-hidden': 'true' },
-          '×'
+          '\xD7'
         )
       ),
       children

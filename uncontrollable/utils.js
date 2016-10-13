@@ -2,7 +2,6 @@
 
 exports.__esModule = true;
 exports.version = undefined;
-exports.customPropType = customPropType;
 exports.uncontrolledPropTypes = uncontrolledPropTypes;
 exports.getType = getType;
 exports.getValue = getValue;
@@ -11,8 +10,8 @@ exports.defaultKey = defaultKey;
 exports.chain = chain;
 exports.transform = transform;
 exports.each = each;
-exports.isReactComponent = isReactComponent;
 exports.has = has;
+exports.isReactComponent = isReactComponent;
 
 var _react = require('react');
 
@@ -24,20 +23,12 @@ var _invariant2 = _interopRequireDefault(_invariant);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function customPropType(handler, propType, name) {
-
-  return function (props, propName, wrappedName) {
-
+function readOnlyPropType(handler, name) {
+  return function (props, propName) {
     if (props[propName] !== undefined) {
       if (!props[handler]) {
         return new Error('You have provided a `' + propName + '` prop to ' + '`' + name + '` without an `' + handler + '` handler. This will render a read-only field. ' + 'If the field should be mutable use `' + defaultKey(propName) + '`. Otherwise, set `' + handler + '`');
       }
-
-      for (var _len = arguments.length, args = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
-        args[_key - 3] = arguments[_key];
-      }
-
-      return propType && propType.apply(undefined, [props, propName, name].concat(args));
     }
   };
 }
@@ -47,13 +38,9 @@ function uncontrolledPropTypes(controlledValues, basePropTypes, displayName) {
 
   if (process.env.NODE_ENV !== 'production' && basePropTypes) {
     transform(controlledValues, function (obj, handler, prop) {
-      var type = basePropTypes[prop];
-
       (0, _invariant2.default)(typeof handler === 'string' && handler.trim().length, 'Uncontrollable - [%s]: the prop `%s` needs a valid handler key name in order to make it uncontrollable', displayName, prop);
 
-      obj[prop] = customPropType(handler, type, displayName);
-
-      if (type !== undefined) obj[defaultKey(prop)] = type;
+      obj[prop] = readOnlyPropType(handler, displayName);
     }, propTypes);
   }
 
@@ -90,8 +77,8 @@ function defaultKey(key) {
 
 function chain(thisArg, a, b) {
   return function chainedFunction() {
-    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
     a && a.call.apply(a, [thisArg].concat(args));
@@ -112,6 +99,10 @@ function each(obj, cb, thisArg) {
   }
 }
 
+function has(o, k) {
+  return o ? Object.prototype.hasOwnProperty.call(o, k) : false;
+}
+
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -122,8 +113,4 @@ function each(obj, cb, thisArg) {
  */
 function isReactComponent(component) {
   return !!(component && component.prototype && component.prototype.isReactComponent);
-}
-
-function has(o, k) {
-  return o ? Object.prototype.hasOwnProperty.call(o, k) : false;
 }

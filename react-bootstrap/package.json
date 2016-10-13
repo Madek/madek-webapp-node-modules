@@ -2,54 +2,57 @@
   "_args": [
     [
       {
-        "name": "react-bootstrap",
-        "raw": "react-bootstrap@^0.30.2",
-        "rawSpec": "^0.30.2",
+        "raw": "react-bootstrap@latest",
         "scope": null,
-        "spec": ">=0.30.2 <0.31.0",
-        "type": "range"
+        "escapedName": "react-bootstrap",
+        "name": "react-bootstrap",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-bootstrap@>=0.30.2 <0.31.0",
-  "_id": "react-bootstrap@0.30.2",
+  "_from": "react-bootstrap@latest",
+  "_id": "react-bootstrap@0.30.5",
   "_inCache": true,
   "_installable": true,
   "_location": "/react-bootstrap",
   "_nodeVersion": "6.3.1",
   "_npmOperationalInternal": {
     "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/react-bootstrap-0.30.2.tgz_1470328795664_0.40996254910714924"
+    "tmp": "tmp/react-bootstrap-0.30.5.tgz_1475514739989_0.043912566266953945"
   },
   "_npmUser": {
-    "email": "tesrin@gmail.com",
-    "name": "taion"
+    "name": "taion",
+    "email": "tesrin@gmail.com"
   },
-  "_npmVersion": "3.10.3",
+  "_npmVersion": "3.10.5",
   "_phantomChildren": {
     "loose-envify": "1.1.0",
     "regenerator-runtime": "0.9.5"
   },
   "_requested": {
-    "name": "react-bootstrap",
-    "raw": "react-bootstrap@^0.30.2",
-    "rawSpec": "^0.30.2",
+    "raw": "react-bootstrap@latest",
     "scope": null,
-    "spec": ">=0.30.2 <0.31.0",
-    "type": "range"
+    "escapedName": "react-bootstrap",
+    "name": "react-bootstrap",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
+    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.30.2.tgz",
-  "_shasum": "33efb3312243705385ff1ea5e7d81dc90a913496",
+  "_resolved": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.30.5.tgz",
+  "_shasum": "22d9bdab13b9eec04918206602709e1c8a0d76e2",
   "_shrinkwrap": null,
-  "_spec": "react-bootstrap@^0.30.2",
+  "_spec": "react-bootstrap@latest",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "stevoland@gmail.com",
-    "name": "Stephen J. Collings"
+    "name": "Stephen J. Collings",
+    "email": "stevoland@gmail.com"
   },
   "bugs": {
     "url": "https://github.com/react-bootstrap/react-bootstrap/issues"
@@ -60,7 +63,7 @@
     "dom-helpers": "^2.4.0",
     "invariant": "^2.2.1",
     "keycode": "^2.1.2",
-    "react-overlays": "^0.6.6",
+    "react-overlays": "^0.6.10",
     "react-prop-types": "^0.4.0",
     "uncontrollable": "^4.0.1",
     "warning": "^3.0.0"
@@ -68,26 +71,28 @@
   "description": "Bootstrap 3 components built with React",
   "devDependencies": {
     "babel-cli": "^6.11.4",
-    "babel-eslint": "^6.1.0",
-    "babel-loader": "^6.2.4",
+    "babel-core": "^6.13.2",
+    "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.5",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-dev-expression": "^0.2.1",
+    "babel-plugin-istanbul": "^1.0.3",
     "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
     "babel-plugin-transform-es3-property-literals": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.12.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-es2015-loose": "^7.0.0",
-    "babel-preset-es2015-webpack": "^6.4.2",
-    "babel-preset-es2015-webpack-loose": "^6.3.14",
+    "babel-preset-es2015": "^6.13.2",
     "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-1": "^6.5.0",
+    "babel-preset-stage-1": "^6.13.0",
+    "babel-register": "^6.11.6",
     "babel-standalone": "^6.12.0",
     "bootstrap": "^3.3.6",
     "brfs": "^1.4.3",
     "chai": "^3.5.0",
     "child-process-promise": "^2.0.3",
+    "codecov": "^1.0.1",
     "codemirror": "^5.16.0",
     "colors": "^1.1.2",
+    "cross-env": "^2.0.0",
     "css-loader": "^0.23.1",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^0.1.1",
@@ -99,15 +104,14 @@
     "file-loader": "^0.9.0",
     "fs-extra": "^0.30.0",
     "fs-promise": "^0.5.0",
+    "glob": "^7.1.0",
     "http-proxy": "^1.14.0",
     "ip": "^1.1.3",
-    "isparta-loader": "^2.0.0",
     "json-loader": "^0.5.4",
     "karma": "^1.1.1",
     "karma-chrome-launcher": "^1.0.1",
     "karma-cli": "^1.0.1",
     "karma-coverage": "^1.1.0",
-    "karma-coveralls": "^1.1.2",
     "karma-firefox-launcher": "^1.0.0",
     "karma-mocha": "^1.1.1",
     "karma-mocha-reporter": "^2.0.4",
@@ -117,7 +121,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "lodash": "^4.13.1",
-    "marked": "^0.3.5",
+    "marked": "^0.3.6",
     "mocha": "^2.5.3",
     "node-libs-browser": "^1.0.0",
     "nodemon": "^1.9.2",
@@ -139,13 +143,12 @@
     "transform-loader": "^0.2.3",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
-    "webpack-merge": "^0.14.0",
     "yargs": "^4.7.1"
   },
   "directories": {},
   "dist": {
-    "shasum": "33efb3312243705385ff1ea5e7d81dc90a913496",
-    "tarball": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.30.2.tgz"
+    "shasum": "22d9bdab13b9eec04918206602709e1c8a0d76e2",
+    "tarball": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.30.5.tgz"
   },
   "files": [
     "CHANGELOG.md",
@@ -153,7 +156,7 @@
     "dist",
     "es"
   ],
-  "gitHead": "5910e954c3c6cfefb8a0cac583d41fe49b1f551b",
+  "gitHead": "b4a516afa597dae8590eb3feb89026827d5ad121",
   "homepage": "https://react-bootstrap.github.io/",
   "jsnext:main": "es/index.js",
   "keywords": [
@@ -166,20 +169,20 @@
   "main": "lib/index.js",
   "maintainers": [
     {
-      "email": "stevoland@gmail.com",
-      "name": "stevoland"
+      "name": "stevoland",
+      "email": "stevoland@gmail.com"
     },
     {
-      "email": "mtscout6@gmail.com",
-      "name": "mtscout6"
+      "name": "mtscout6",
+      "email": "mtscout6@gmail.com"
     },
     {
-      "email": "tesrin@gmail.com",
-      "name": "taion"
+      "name": "taion",
+      "email": "tesrin@gmail.com"
     },
     {
-      "email": "monastic.panic@gmail.com",
-      "name": "monastic.panic"
+      "name": "monastic.panic",
+      "email": "monastic.panic@gmail.com"
     }
   ],
   "module": "es/index.js",
@@ -202,14 +205,14 @@
     "build": "babel-node tools/build-cli.js",
     "docs": "babel-node docs/dev-run.js",
     "docs-build": "babel-node tools/build-cli.js --docs-only",
-    "docs-prod": "npm run docs-build && NODE_ENV=production babel-node docs/server.js",
-    "docs-prod-unoptimized": "npm run docs-build -- --dev && NODE_ENV=production babel-node docs/server.js",
+    "docs-prod": "npm run docs-build && cross-env NODE_ENV=production babel-node docs/server.js",
+    "docs-prod-unoptimized": "npm run docs-build -- --dev && cross-env NODE_ENV=production babel-node docs/server.js",
     "lint": "eslint docs src test tools webpack *.js",
     "release": "release",
     "tdd": "karma start",
     "test": "npm run lint && npm run test-browser && npm run test-node",
-    "test-browser": "karma start --single-run",
-    "test-node": "mocha --compilers js:babel-core/register test/server/*Spec.js"
+    "test-browser": "cross-env NODE_ENV=test karma start --single-run",
+    "test-node": "mocha --compilers js:babel-register test/server/*Spec.js"
   },
-  "version": "0.30.2"
+  "version": "0.30.5"
 }

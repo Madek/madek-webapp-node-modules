@@ -124,30 +124,27 @@ var DropdownMenu = function (_React$Component) {
 
     var classes = _extends({}, getClassSet(bsProps), (_extends2 = {}, _extends2[prefix(bsProps, 'right')] = pullRight, _extends2));
 
-    var list = React.createElement(
-      'ul',
-      _extends({}, elementProps, {
-        role: 'menu',
-        className: classNames(className, classes),
-        'aria-labelledby': labelledBy
-      }),
-      ValidComponentChildren.map(children, function (child) {
-        return React.cloneElement(child, {
-          onKeyDown: createChainedFunction(child.props.onKeyDown, _this2.handleKeyDown),
-          onSelect: createChainedFunction(child.props.onSelect, onSelect)
-        });
-      })
+    return React.createElement(
+      RootCloseWrapper,
+      {
+        disabled: !open,
+        onRootClose: onClose
+      },
+      React.createElement(
+        'ul',
+        _extends({}, elementProps, {
+          role: 'menu',
+          className: classNames(className, classes),
+          'aria-labelledby': labelledBy
+        }),
+        ValidComponentChildren.map(children, function (child) {
+          return React.cloneElement(child, {
+            onKeyDown: createChainedFunction(child.props.onKeyDown, _this2.handleKeyDown),
+            onSelect: createChainedFunction(child.props.onSelect, onSelect)
+          });
+        })
+      )
     );
-
-    if (open) {
-      return React.createElement(
-        RootCloseWrapper,
-        { noWrap: true, onRootClose: onClose },
-        list
-      );
-    }
-
-    return list;
   };
 
   return DropdownMenu;

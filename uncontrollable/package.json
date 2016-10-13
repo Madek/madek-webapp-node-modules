@@ -2,10 +2,11 @@
   "_args": [
     [
       {
-        "name": "uncontrollable",
         "raw": "uncontrollable@^4.0.1",
-        "rawSpec": "^4.0.1",
         "scope": null,
+        "escapedName": "uncontrollable",
+        "name": "uncontrollable",
+        "rawSpec": "^4.0.1",
         "spec": ">=4.0.1 <5.0.0",
         "type": "range"
       },
@@ -13,40 +14,41 @@
     ]
   ],
   "_from": "uncontrollable@>=4.0.1 <5.0.0",
-  "_id": "uncontrollable@4.0.1",
+  "_id": "uncontrollable@4.0.3",
   "_inCache": true,
   "_installable": true,
   "_location": "/uncontrollable",
   "_nodeVersion": "5.10.1",
   "_npmOperationalInternal": {
-    "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/uncontrollable-4.0.1.tgz_1470078071714_0.7825562618672848"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/uncontrollable-4.0.3.tgz_1471884508191_0.18680998519994318"
   },
   "_npmUser": {
-    "email": "monastic.panic@gmail.com",
-    "name": "monastic.panic"
+    "name": "monastic.panic",
+    "email": "monastic.panic@gmail.com"
   },
   "_npmVersion": "3.8.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "uncontrollable",
     "raw": "uncontrollable@^4.0.1",
-    "rawSpec": "^4.0.1",
     "scope": null,
+    "escapedName": "uncontrollable",
+    "name": "uncontrollable",
+    "rawSpec": "^4.0.1",
     "spec": ">=4.0.1 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/react-bootstrap"
   ],
-  "_resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.1.tgz",
-  "_shasum": "e1f69b7eb97d39b6bee502db179ba2b9fee8d8a2",
+  "_resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.3.tgz",
+  "_shasum": "06ec76cb9e02914756085d9cea0354fc746b09b4",
   "_shrinkwrap": null,
   "_spec": "uncontrollable@^4.0.1",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/react-bootstrap",
   "author": {
-    "email": "monastic.panic@gmail.com",
-    "name": "Jason Quense"
+    "name": "Jason Quense",
+    "email": "monastic.panic@gmail.com"
   },
   "bugs": {
     "url": "https://github.com/jquense/uncontrollable/issues"
@@ -58,8 +60,8 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "e1f69b7eb97d39b6bee502db179ba2b9fee8d8a2",
-    "tarball": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.1.tgz"
+    "shasum": "06ec76cb9e02914756085d9cea0354fc746b09b4",
+    "tarball": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.3.tgz"
   },
   "homepage": "https://github.com/jquense/uncontrollable#readme",
   "keywords": [
@@ -74,8 +76,8 @@
   "main": "index.js",
   "maintainers": [
     {
-      "email": "monastic.panic@gmail.com",
-      "name": "monastic.panic"
+      "name": "monastic.panic",
+      "email": "monastic.panic@gmail.com"
     }
   ],
   "name": "uncontrollable",
@@ -89,5 +91,5 @@
     "url": "git+https://github.com/jquense/uncontrollable.git"
   },
   "scripts": {},
-  "version": "4.0.1"
+  "version": "4.0.3"
 }

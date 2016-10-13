@@ -41,7 +41,7 @@ var Alert = function (_React$Component) {
       React.createElement(
         'span',
         null,
-        '×'
+        '\xD7'
       )
     );
   };
