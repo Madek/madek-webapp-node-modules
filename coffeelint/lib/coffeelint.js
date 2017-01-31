@@ -1,425 +1,8 @@
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.coffeelint=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
-/*
-CoffeeLint
-
-Copyright (c) 2011 Matthew Perpick.
-CoffeeLint is freely distributable under the MIT license.
- */
-var ASTLinter, CoffeeScript, ERROR, ErrorReport, IGNORE, LexicalLinter, LineLinter, RULES, WARN, _rules, cache, coffeelint, defaults, difference, extend, hasSyntaxError, mergeDefaultConfig, nodeRequire, packageJSON, sameJSON,
-  slice = [].slice,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-coffeelint = exports;
-
-nodeRequire = require;
-
-if (typeof window !== "undefined" && window !== null) {
-  CoffeeScript = window.CoffeeScript;
-}
-
-if (CoffeeScript == null) {
-  CoffeeScript = nodeRequire('coffee-script');
-}
-
-if (CoffeeScript == null) {
-  throw new Error('Unable to find CoffeeScript');
-}
-
-packageJSON = require('./../package.json');
-
-coffeelint.VERSION = packageJSON.version;
-
-ERROR = 'error';
-
-WARN = 'warn';
-
-IGNORE = 'ignore';
-
-coffeelint.RULES = RULES = require('./rules.coffee');
-
-extend = function() {
-  var destination, k, len, n, source, sources, v;
-  destination = arguments[0], sources = 2 <= arguments.length ? slice.call(arguments, 1) : [];
-  for (n = 0, len = sources.length; n < len; n++) {
-    source = sources[n];
-    for (k in source) {
-      v = source[k];
-      destination[k] = v;
-    }
-  }
-  return destination;
-};
-
-defaults = function(source, defaults) {
-  return extend({}, defaults, source);
-};
-
-difference = function(a, b) {
-  var j, ref, results;
-  j = 0;
-  results = [];
-  while (j < a.length) {
-    if (ref = a[j], indexOf.call(b, ref) >= 0) {
-      results.push(a.splice(j, 1));
-    } else {
-      results.push(j++);
-    }
-  }
-  return results;
-};
-
-LineLinter = require('./line_linter.coffee');
-
-LexicalLinter = require('./lexical_linter.coffee');
-
-ASTLinter = require('./ast_linter.coffee');
-
-cache = null;
-
-mergeDefaultConfig = function(userConfig) {
-  var config, rule, ruleConfig, ruleLoader;
-  try {
-    ruleLoader = nodeRequire('./ruleLoader');
-    ruleLoader.loadFromConfig(coffeelint, userConfig);
-  } catch (undefined) {}
-  config = {};
-  if (userConfig.coffeelint) {
-    config.coffeelint = userConfig.coffeelint;
-  }
-  for (rule in RULES) {
-    ruleConfig = RULES[rule];
-    config[rule] = defaults(userConfig[rule], ruleConfig);
-  }
-  return config;
-};
-
-sameJSON = function(a, b) {
-  return JSON.stringify(a) === JSON.stringify(b);
-};
-
-coffeelint.trimConfig = function(userConfig) {
-  var config, dConfig, dValue, key, newConfig, ref, rule, value;
-  newConfig = {};
-  userConfig = mergeDefaultConfig(userConfig);
-  for (rule in userConfig) {
-    config = userConfig[rule];
-    dConfig = RULES[rule];
-    if (rule === 'coffeelint') {
-      config.transforms = config._transforms;
-      delete config._transforms;
-      config.coffeescript = config._coffeescript;
-      delete config._coffeescript;
-      newConfig[rule] = config;
-    } else if ((config.level === (ref = dConfig.level) && ref === 'ignore')) {
-      void 0;
-    } else if (config.level === 'ignore') {
-      newConfig[rule] = {
-        level: 'ignore'
-      };
-    } else {
-      config.module = config._module;
-      delete config._module;
-      for (key in config) {
-        value = config[key];
-        if (key === 'message' || key === 'description' || key === 'name') {
-          continue;
-        }
-        dValue = dConfig[key];
-        if (value !== dValue && !sameJSON(value, dValue)) {
-          if (newConfig[rule] == null) {
-            newConfig[rule] = {};
-          }
-          newConfig[rule][key] = value;
-        }
-      }
-    }
-  }
-  return newConfig;
-};
-
-coffeelint.invertLiterate = function(source) {
-  var len, line, n, newSource, ref;
-  source = CoffeeScript.helpers.invertLiterate(source);
-  newSource = '';
-  ref = source.split('\n');
-  for (n = 0, len = ref.length; n < len; n++) {
-    line = ref[n];
-    if (line.match(/^#/)) {
-      line = line.replace(/\s*$/, '');
-    }
-    line = line.replace(/^\s{4}/g, '');
-    newSource += line + "\n";
-  }
-  return newSource;
-};
-
-_rules = {};
-
-coffeelint.registerRule = function(RuleConstructor, ruleName) {
-  var e, name, p, ref, ref1;
-  if (ruleName == null) {
-    ruleName = void 0;
-  }
-  p = new RuleConstructor;
-  name = (p != null ? (ref = p.rule) != null ? ref.name : void 0 : void 0) || '(unknown)';
-  e = function(msg) {
-    throw new Error("Invalid rule: " + name + " " + msg);
-  };
-  if (p.rule == null) {
-    e('Rules must provide rule attribute with a default configuration.');
-  }
-  if (p.rule.name == null) {
-    e('Rule defaults require a name');
-  }
-  if ((ruleName != null) && ruleName !== p.rule.name) {
-    e("Mismatched rule name: " + ruleName);
-  }
-  if (p.rule.message == null) {
-    e('Rule defaults require a message');
-  }
-  if (p.rule.description == null) {
-    e('Rule defaults require a description');
-  }
-  if ((ref1 = p.rule.level) !== 'ignore' && ref1 !== 'warn' && ref1 !== 'error') {
-    e("Default level must be 'ignore', 'warn', or 'error'");
-  }
-  if (typeof p.lintToken === 'function') {
-    if (!p.tokens) {
-      e("'tokens' is required for 'lintToken'");
-    }
-  } else if (typeof p.lintLine !== 'function' && typeof p.lintAST !== 'function') {
-    e('Rules must implement lintToken, lintLine, or lintAST');
-  }
-  RULES[p.rule.name] = p.rule;
-  return _rules[p.rule.name] = RuleConstructor;
-};
-
-coffeelint.getRules = function() {
-  var key, len, n, output, ref;
-  output = {};
-  ref = Object.keys(RULES).sort();
-  for (n = 0, len = ref.length; n < len; n++) {
-    key = ref[n];
-    output[key] = RULES[key];
-  }
-  return output;
-};
-
-coffeelint.registerRule(require('./rules/arrow_spacing.coffee'));
-
-coffeelint.registerRule(require('./rules/braces_spacing.coffee'));
-
-coffeelint.registerRule(require('./rules/no_tabs.coffee'));
-
-coffeelint.registerRule(require('./rules/no_trailing_whitespace.coffee'));
-
-coffeelint.registerRule(require('./rules/max_line_length.coffee'));
-
-coffeelint.registerRule(require('./rules/line_endings.coffee'));
-
-coffeelint.registerRule(require('./rules/no_trailing_semicolons.coffee'));
-
-coffeelint.registerRule(require('./rules/indentation.coffee'));
-
-coffeelint.registerRule(require('./rules/camel_case_classes.coffee'));
-
-coffeelint.registerRule(require('./rules/colon_assignment_spacing.coffee'));
-
-coffeelint.registerRule(require('./rules/no_implicit_braces.coffee'));
-
-coffeelint.registerRule(require('./rules/no_nested_string_interpolation.coffee'));
-
-coffeelint.registerRule(require('./rules/no_plusplus.coffee'));
-
-coffeelint.registerRule(require('./rules/no_throwing_strings.coffee'));
-
-coffeelint.registerRule(require('./rules/no_backticks.coffee'));
-
-coffeelint.registerRule(require('./rules/no_implicit_parens.coffee'));
-
-coffeelint.registerRule(require('./rules/no_empty_param_list.coffee'));
-
-coffeelint.registerRule(require('./rules/no_stand_alone_at.coffee'));
-
-coffeelint.registerRule(require('./rules/space_operators.coffee'));
-
-coffeelint.registerRule(require('./rules/duplicate_key.coffee'));
-
-coffeelint.registerRule(require('./rules/empty_constructor_needs_parens.coffee'));
-
-coffeelint.registerRule(require('./rules/cyclomatic_complexity.coffee'));
-
-coffeelint.registerRule(require('./rules/newlines_after_classes.coffee'));
-
-coffeelint.registerRule(require('./rules/no_unnecessary_fat_arrows.coffee'));
-
-coffeelint.registerRule(require('./rules/missing_fat_arrows.coffee'));
-
-coffeelint.registerRule(require('./rules/non_empty_constructor_needs_parens.coffee'));
-
-coffeelint.registerRule(require('./rules/no_unnecessary_double_quotes.coffee'));
-
-coffeelint.registerRule(require('./rules/no_debugger.coffee'));
-
-coffeelint.registerRule(require('./rules/no_interpolation_in_single_quotes.coffee'));
-
-coffeelint.registerRule(require('./rules/no_empty_functions.coffee'));
-
-coffeelint.registerRule(require('./rules/prefer_english_operator.coffee'));
-
-coffeelint.registerRule(require('./rules/spacing_after_comma.coffee'));
-
-coffeelint.registerRule(require('./rules/transform_messes_up_line_numbers.coffee'));
-
-coffeelint.registerRule(require('./rules/ensure_comprehensions.coffee'));
-
-coffeelint.registerRule(require('./rules/no_this.coffee'));
-
-coffeelint.registerRule(require('./rules/eol_last.coffee'));
-
-coffeelint.registerRule(require('./rules/no_private_function_fat_arrows.coffee'));
-
-hasSyntaxError = function(source) {
-  try {
-    CoffeeScript.tokens(source);
-    return false;
-  } catch (undefined) {}
-  return true;
-};
-
-ErrorReport = require('./error_report.coffee');
-
-coffeelint.getErrorReport = function() {
-  return new ErrorReport(coffeelint);
-};
-
-coffeelint.lint = function(source, userConfig, literate) {
-  var allErrors, astErrors, cmd, config, disabled, disabledInitially, e, errors, i, inlineConfig, l, len, len1, lexErrors, lexicalLinter, lineErrors, lineLinter, m, n, name, nextLine, o, q, ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8, regex, rule, ruleLoader, rules, set, sourceLength, tokensByLine, transform;
-  if (userConfig == null) {
-    userConfig = {};
-  }
-  if (literate == null) {
-    literate = false;
-  }
-  errors = [];
-  if (cache != null) {
-    cache.setConfig(userConfig);
-  }
-  if (cache != null ? cache.has(source) : void 0) {
-    return cache != null ? cache.get(source) : void 0;
-  }
-  config = mergeDefaultConfig(userConfig);
-  if (literate) {
-    source = this.invertLiterate(source);
-  }
-  if ((userConfig != null ? (ref = userConfig.coffeelint) != null ? ref.transforms : void 0 : void 0) != null) {
-    sourceLength = source.split('\n').length;
-    ref2 = userConfig != null ? (ref1 = userConfig.coffeelint) != null ? ref1.transforms : void 0 : void 0;
-    for (n = 0, len = ref2.length; n < len; n++) {
-      m = ref2[n];
-      try {
-        ruleLoader = nodeRequire('./ruleLoader');
-        transform = ruleLoader.require(m);
-        source = transform(source);
-      } catch (undefined) {}
-    }
-    if (sourceLength !== source.split('\n').length && config.transform_messes_up_line_numbers.level !== 'ignore') {
-      errors.push(extend({
-        lineNumber: 1,
-        context: "File was transformed from " + sourceLength + " lines to " + (source.split("\n").length) + " lines"
-      }, config.transform_messes_up_line_numbers));
-    }
-  }
-  if ((userConfig != null ? (ref3 = userConfig.coffeelint) != null ? ref3.coffeescript : void 0 : void 0) != null) {
-    CoffeeScript = ruleLoader.require(userConfig.coffeelint.coffeescript);
-  }
-  for (name in userConfig) {
-    if (name !== 'coffeescript_error' && name !== '_comment') {
-      if (_rules[name] == null) {
-        void 0;
-      }
-    }
-  }
-  disabledInitially = [];
-  ref4 = source.split('\n');
-  for (o = 0, len1 = ref4.length; o < len1; o++) {
-    l = ref4[o];
-    ref5 = LineLinter.configStatement.exec(l) || [], regex = ref5[0], set = ref5[1], rule = ref5[2];
-    if (set === 'enable' && ((ref6 = config[rule]) != null ? ref6.level : void 0) === 'ignore') {
-      disabledInitially.push(rule);
-      config[rule].level = 'error';
-    }
-  }
-  astErrors = new ASTLinter(source, config, _rules, CoffeeScript).lint();
-  errors = errors.concat(astErrors);
-  if (!hasSyntaxError(source)) {
-    lexicalLinter = new LexicalLinter(source, config, _rules, CoffeeScript);
-    lexErrors = lexicalLinter.lint();
-    errors = errors.concat(lexErrors);
-    tokensByLine = lexicalLinter.tokensByLine;
-    lineLinter = new LineLinter(source, config, _rules, tokensByLine, literate);
-    lineErrors = lineLinter.lint();
-    errors = errors.concat(lineErrors);
-    inlineConfig = lineLinter.inlineConfig;
-  } else {
-    inlineConfig = {
-      enable: {},
-      disable: {}
-    };
-  }
-  errors.sort(function(a, b) {
-    return a.lineNumber - b.lineNumber;
-  });
-  allErrors = errors;
-  errors = [];
-  disabled = disabledInitially;
-  nextLine = 0;
-  for (i = q = 0, ref7 = source.split('\n').length; 0 <= ref7 ? q < ref7 : q > ref7; i = 0 <= ref7 ? ++q : --q) {
-    for (cmd in inlineConfig) {
-      rules = inlineConfig[cmd][i];
-      if (rules != null) {
-        ({
-          'disable': function() {
-            return disabled = disabled.concat(rules);
-          },
-          'enable': function() {
-            difference(disabled, rules);
-            if (rules.length === 0) {
-              return disabled = disabledInitially;
-            }
-          }
-        })[cmd]();
-      }
-    }
-    while (nextLine === i && allErrors.length > 0) {
-      nextLine = allErrors[0].lineNumber - 1;
-      e = allErrors[0];
-      if (e.lineNumber === i + 1 || (e.lineNumber == null)) {
-        e = allErrors.shift();
-        if (ref8 = e.rule, indexOf.call(disabled, ref8) < 0) {
-          errors.push(e);
-        }
-      }
-    }
-  }
-  if (cache != null) {
-    cache.set(source, errors);
-  }
-  return errors;
-};
-
-coffeelint.setCache = function(obj) {
-  return cache = obj;
-};
-
-
-
-},{"./../package.json":2,"./ast_linter.coffee":3,"./error_report.coffee":5,"./lexical_linter.coffee":6,"./line_linter.coffee":7,"./rules.coffee":8,"./rules/arrow_spacing.coffee":9,"./rules/braces_spacing.coffee":10,"./rules/camel_case_classes.coffee":11,"./rules/colon_assignment_spacing.coffee":12,"./rules/cyclomatic_complexity.coffee":13,"./rules/duplicate_key.coffee":14,"./rules/empty_constructor_needs_parens.coffee":15,"./rules/ensure_comprehensions.coffee":16,"./rules/eol_last.coffee":17,"./rules/indentation.coffee":18,"./rules/line_endings.coffee":19,"./rules/max_line_length.coffee":20,"./rules/missing_fat_arrows.coffee":21,"./rules/newlines_after_classes.coffee":22,"./rules/no_backticks.coffee":23,"./rules/no_debugger.coffee":24,"./rules/no_empty_functions.coffee":25,"./rules/no_empty_param_list.coffee":26,"./rules/no_implicit_braces.coffee":27,"./rules/no_implicit_parens.coffee":28,"./rules/no_interpolation_in_single_quotes.coffee":29,"./rules/no_nested_string_interpolation.coffee":30,"./rules/no_plusplus.coffee":31,"./rules/no_private_function_fat_arrows.coffee":32,"./rules/no_stand_alone_at.coffee":33,"./rules/no_tabs.coffee":34,"./rules/no_this.coffee":35,"./rules/no_throwing_strings.coffee":36,"./rules/no_trailing_semicolons.coffee":37,"./rules/no_trailing_whitespace.coffee":38,"./rules/no_unnecessary_double_quotes.coffee":39,"./rules/no_unnecessary_fat_arrows.coffee":40,"./rules/non_empty_constructor_needs_parens.coffee":41,"./rules/prefer_english_operator.coffee":42,"./rules/space_operators.coffee":43,"./rules/spacing_after_comma.coffee":44,"./rules/transform_messes_up_line_numbers.coffee":45}],2:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.coffeelint = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 module.exports={
   "name": "coffeelint",
   "description": "Lint your CoffeeScript",
-  "version": "1.14.2",
+  "version": "1.16.0",
   "homepage": "http://www.coffeelint.org",
   "keywords": [
     "lint",
@@ -440,15 +23,15 @@ module.exports={
     "coffeelint": "./bin/coffeelint"
   },
   "dependencies": {
-    "coffee-script": "^1.9.1",
-    "glob": "^4.0.0",
-    "ignore": "^2.2.15",
+    "coffee-script": "~1.11.0",
+    "glob": "^7.0.6",
+    "ignore": "^3.0.9",
     "optimist": "^0.6.1",
     "resolve": "^0.6.3",
     "strip-json-comments": "^1.0.2"
   },
   "devDependencies": {
-    "vows": ">=0.6.0",
+    "vows": ">=0.8.1",
     "underscore": ">=1.4.4"
   },
   "license": "MIT",
@@ -466,7 +49,7 @@ module.exports={
     "compile": "cake compile"
   }
 }
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 var ASTApi, ASTLinter, BaseLinter, hasChildren, node_children,
   hasProp = {}.hasOwnProperty,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -532,7 +115,7 @@ module.exports = ASTLinter = (function(superClass) {
   };
 
   ASTLinter.prototype.lint = function() {
-    var coffeeError, err, error, errors, j, len, ref, rule, v;
+    var coffeeError, err, errors, j, len, ref, rule, v;
     errors = [];
     try {
       this.node = this.CoffeeScript.nodes(this.source);
@@ -590,8 +173,7 @@ module.exports = ASTLinter = (function(superClass) {
 })(BaseLinter);
 
 
-
-},{"./base_linter.coffee":4}],4:[function(require,module,exports){
+},{"./base_linter.coffee":3}],3:[function(require,module,exports){
 var BaseLinter, defaults, extend,
   slice = [].slice;
 
@@ -684,8 +266,477 @@ module.exports = BaseLinter = (function() {
 })();
 
 
+},{}],4:[function(require,module,exports){
 
-},{}],5:[function(require,module,exports){
+/*
+CoffeeLint
+
+Copyright (c) 2011 Matthew Perpick.
+CoffeeLint is freely distributable under the MIT license.
+ */
+var ASTLinter, CoffeeScript, ERROR, ErrorReport, IGNORE, LexicalLinter, LineLinter, RULES, WARN, _rules, cache, coffeelint, defaults, difference, extend, hasSyntaxError, mergeDefaultConfig, nodeRequire, packageJSON, sameJSON, union,
+  slice = [].slice,
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+coffeelint = exports;
+
+nodeRequire = require;
+
+if (typeof window !== "undefined" && window !== null) {
+  CoffeeScript = window.CoffeeScript;
+}
+
+if (CoffeeScript == null) {
+  CoffeeScript = nodeRequire('coffee-script');
+}
+
+if (CoffeeScript == null) {
+  throw new Error('Unable to find CoffeeScript');
+}
+
+packageJSON = require('./../package.json');
+
+coffeelint.VERSION = packageJSON.version;
+
+ERROR = 'error';
+
+WARN = 'warn';
+
+IGNORE = 'ignore';
+
+coffeelint.RULES = RULES = require('./rules.coffee');
+
+extend = function() {
+  var destination, j, k, len, source, sources, v;
+  destination = arguments[0], sources = 2 <= arguments.length ? slice.call(arguments, 1) : [];
+  for (j = 0, len = sources.length; j < len; j++) {
+    source = sources[j];
+    for (k in source) {
+      v = source[k];
+      destination[k] = v;
+    }
+  }
+  return destination;
+};
+
+defaults = function(source, defaults) {
+  return extend({}, defaults, source);
+};
+
+union = function(a, b) {
+  var c, j, len, len1, n, results, x;
+  c = {};
+  for (j = 0, len = a.length; j < len; j++) {
+    x = a[j];
+    c[x] = true;
+  }
+  for (n = 0, len1 = b.length; n < len1; n++) {
+    x = b[n];
+    c[x] = true;
+  }
+  results = [];
+  for (x in c) {
+    results.push(x);
+  }
+  return results;
+};
+
+difference = function(a, b) {
+  var j, len, results, x;
+  results = [];
+  for (j = 0, len = a.length; j < len; j++) {
+    x = a[j];
+    if (indexOf.call(b, x) < 0) {
+      results.push(x);
+    }
+  }
+  return results;
+};
+
+LineLinter = require('./line_linter.coffee');
+
+LexicalLinter = require('./lexical_linter.coffee');
+
+ASTLinter = require('./ast_linter.coffee');
+
+cache = null;
+
+mergeDefaultConfig = function(userConfig) {
+  var config, rule, ruleConfig, ruleLoader;
+  try {
+    ruleLoader = nodeRequire('./ruleLoader');
+    ruleLoader.loadFromConfig(coffeelint, userConfig);
+  } catch (error) {}
+  config = {};
+  if (userConfig.coffeelint) {
+    config.coffeelint = userConfig.coffeelint;
+  }
+  for (rule in RULES) {
+    ruleConfig = RULES[rule];
+    config[rule] = defaults(userConfig[rule], ruleConfig);
+  }
+  return config;
+};
+
+sameJSON = function(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+};
+
+coffeelint.trimConfig = function(userConfig) {
+  var config, dConfig, dValue, key, newConfig, ref, rule, value;
+  newConfig = {};
+  userConfig = mergeDefaultConfig(userConfig);
+  for (rule in userConfig) {
+    config = userConfig[rule];
+    dConfig = RULES[rule];
+    if (rule === 'coffeelint') {
+      config.transforms = config._transforms;
+      delete config._transforms;
+      config.coffeescript = config._coffeescript;
+      delete config._coffeescript;
+      newConfig[rule] = config;
+    } else if ((config.level === (ref = dConfig.level) && ref === 'ignore')) {
+      void 0;
+    } else if (config.level === 'ignore') {
+      newConfig[rule] = {
+        level: 'ignore'
+      };
+    } else {
+      config.module = config._module;
+      delete config._module;
+      for (key in config) {
+        value = config[key];
+        if (key === 'message' || key === 'description' || key === 'name') {
+          continue;
+        }
+        dValue = dConfig[key];
+        if (value !== dValue && !sameJSON(value, dValue)) {
+          if (newConfig[rule] == null) {
+            newConfig[rule] = {};
+          }
+          newConfig[rule][key] = value;
+        }
+      }
+    }
+  }
+  return newConfig;
+};
+
+coffeelint.invertLiterate = function(source) {
+  var j, len, line, newSource, ref;
+  source = CoffeeScript.helpers.invertLiterate(source);
+  newSource = '';
+  ref = source.split('\n');
+  for (j = 0, len = ref.length; j < len; j++) {
+    line = ref[j];
+    if (line.match(/^#/)) {
+      line = line.replace(/\s*$/, '');
+    }
+    line = line.replace(/^[ ]{4}|^\t/g, '');
+    newSource += line + "\n";
+  }
+  return newSource;
+};
+
+_rules = {};
+
+coffeelint.registerRule = function(RuleConstructor, ruleName) {
+  var e, name, p, ref, ref1;
+  if (ruleName == null) {
+    ruleName = void 0;
+  }
+  p = new RuleConstructor;
+  name = (p != null ? (ref = p.rule) != null ? ref.name : void 0 : void 0) || '(unknown)';
+  e = function(msg) {
+    throw new Error("Invalid rule: " + name + " " + msg);
+  };
+  if (p.rule == null) {
+    e('Rules must provide rule attribute with a default configuration.');
+  }
+  if (p.rule.name == null) {
+    e('Rule defaults require a name');
+  }
+  if ((ruleName != null) && ruleName !== p.rule.name) {
+    e("Mismatched rule name: " + ruleName);
+  }
+  if (p.rule.message == null) {
+    e('Rule defaults require a message');
+  }
+  if (p.rule.description == null) {
+    e('Rule defaults require a description');
+  }
+  if ((ref1 = p.rule.level) !== 'ignore' && ref1 !== 'warn' && ref1 !== 'error') {
+    e("Default level must be 'ignore', 'warn', or 'error'");
+  }
+  if (typeof p.lintToken === 'function') {
+    if (!p.tokens) {
+      e("'tokens' is required for 'lintToken'");
+    }
+  } else if (typeof p.lintLine !== 'function' && typeof p.lintAST !== 'function') {
+    e('Rules must implement lintToken, lintLine, or lintAST');
+  }
+  RULES[p.rule.name] = p.rule;
+  return _rules[p.rule.name] = RuleConstructor;
+};
+
+coffeelint.getRules = function() {
+  var j, key, len, output, ref;
+  output = {};
+  ref = Object.keys(RULES).sort();
+  for (j = 0, len = ref.length; j < len; j++) {
+    key = ref[j];
+    output[key] = RULES[key];
+  }
+  return output;
+};
+
+coffeelint.registerRule(require('./rules/arrow_spacing.coffee'));
+
+coffeelint.registerRule(require('./rules/braces_spacing.coffee'));
+
+coffeelint.registerRule(require('./rules/no_tabs.coffee'));
+
+coffeelint.registerRule(require('./rules/no_trailing_whitespace.coffee'));
+
+coffeelint.registerRule(require('./rules/max_line_length.coffee'));
+
+coffeelint.registerRule(require('./rules/line_endings.coffee'));
+
+coffeelint.registerRule(require('./rules/no_trailing_semicolons.coffee'));
+
+coffeelint.registerRule(require('./rules/indentation.coffee'));
+
+coffeelint.registerRule(require('./rules/camel_case_classes.coffee'));
+
+coffeelint.registerRule(require('./rules/colon_assignment_spacing.coffee'));
+
+coffeelint.registerRule(require('./rules/no_implicit_braces.coffee'));
+
+coffeelint.registerRule(require('./rules/no_nested_string_interpolation.coffee'));
+
+coffeelint.registerRule(require('./rules/no_plusplus.coffee'));
+
+coffeelint.registerRule(require('./rules/no_throwing_strings.coffee'));
+
+coffeelint.registerRule(require('./rules/no_backticks.coffee'));
+
+coffeelint.registerRule(require('./rules/no_implicit_parens.coffee'));
+
+coffeelint.registerRule(require('./rules/no_empty_param_list.coffee'));
+
+coffeelint.registerRule(require('./rules/no_stand_alone_at.coffee'));
+
+coffeelint.registerRule(require('./rules/space_operators.coffee'));
+
+coffeelint.registerRule(require('./rules/duplicate_key.coffee'));
+
+coffeelint.registerRule(require('./rules/empty_constructor_needs_parens.coffee'));
+
+coffeelint.registerRule(require('./rules/cyclomatic_complexity.coffee'));
+
+coffeelint.registerRule(require('./rules/newlines_after_classes.coffee'));
+
+coffeelint.registerRule(require('./rules/no_unnecessary_fat_arrows.coffee'));
+
+coffeelint.registerRule(require('./rules/missing_fat_arrows.coffee'));
+
+coffeelint.registerRule(require('./rules/non_empty_constructor_needs_parens.coffee'));
+
+coffeelint.registerRule(require('./rules/no_unnecessary_double_quotes.coffee'));
+
+coffeelint.registerRule(require('./rules/no_debugger.coffee'));
+
+coffeelint.registerRule(require('./rules/no_interpolation_in_single_quotes.coffee'));
+
+coffeelint.registerRule(require('./rules/no_empty_functions.coffee'));
+
+coffeelint.registerRule(require('./rules/prefer_english_operator.coffee'));
+
+coffeelint.registerRule(require('./rules/spacing_after_comma.coffee'));
+
+coffeelint.registerRule(require('./rules/transform_messes_up_line_numbers.coffee'));
+
+coffeelint.registerRule(require('./rules/ensure_comprehensions.coffee'));
+
+coffeelint.registerRule(require('./rules/no_this.coffee'));
+
+coffeelint.registerRule(require('./rules/eol_last.coffee'));
+
+coffeelint.registerRule(require('./rules/no_private_function_fat_arrows.coffee'));
+
+hasSyntaxError = function(source) {
+  try {
+    CoffeeScript.tokens(source);
+    return false;
+  } catch (error) {}
+  return true;
+};
+
+ErrorReport = require('./error_report.coffee');
+
+coffeelint.getErrorReport = function() {
+  return new ErrorReport(coffeelint);
+};
+
+coffeelint.lint = function(source, userConfig, literate) {
+  var allErrors, astErrors, cmd, config, disabled, disabledEntirely, disabledInitially, disabledLine, e, errors, i, inlineConfig, j, l, len, len1, lexErrors, lexicalLinter, lineErrors, lineLinter, m, n, name, nextLine, o, ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7, ref8, regex, rule, ruleLoader, rules, set, sourceLength, tokensByLine, transform;
+  if (userConfig == null) {
+    userConfig = {};
+  }
+  if (literate == null) {
+    literate = false;
+  }
+  errors = [];
+  if (cache != null) {
+    cache.setConfig(userConfig);
+  }
+  if (cache != null ? cache.has(source) : void 0) {
+    return cache != null ? cache.get(source) : void 0;
+  }
+  config = mergeDefaultConfig(userConfig);
+  if (literate) {
+    source = this.invertLiterate(source);
+  }
+  if ((userConfig != null ? (ref = userConfig.coffeelint) != null ? ref.transforms : void 0 : void 0) != null) {
+    sourceLength = source.split('\n').length;
+    ref2 = userConfig != null ? (ref1 = userConfig.coffeelint) != null ? ref1.transforms : void 0 : void 0;
+    for (j = 0, len = ref2.length; j < len; j++) {
+      m = ref2[j];
+      try {
+        ruleLoader = nodeRequire('./ruleLoader');
+        transform = ruleLoader.require(m);
+        source = transform(source);
+      } catch (error) {}
+    }
+    if (sourceLength !== source.split('\n').length && config.transform_messes_up_line_numbers.level !== 'ignore') {
+      errors.push(extend({
+        lineNumber: 1,
+        context: "File was transformed from " + sourceLength + " lines to " + (source.split("\n").length) + " lines"
+      }, config.transform_messes_up_line_numbers));
+    }
+  }
+  if ((userConfig != null ? (ref3 = userConfig.coffeelint) != null ? ref3.coffeescript : void 0 : void 0) != null) {
+    CoffeeScript = ruleLoader.require(userConfig.coffeelint.coffeescript);
+  }
+  for (name in userConfig) {
+    if (name !== 'coffeescript_error' && name !== '_comment') {
+      if (_rules[name] == null) {
+        void 0;
+      }
+    }
+  }
+  disabledInitially = [];
+  ref4 = source.split('\n');
+  for (n = 0, len1 = ref4.length; n < len1; n++) {
+    l = ref4[n];
+    ref5 = LineLinter.getDirective(l) || [], regex = ref5[0], set = ref5[1], rule = ref5[ref5.length - 1];
+    if ((set === 'enable' || set === 'enable-line') && ((ref6 = config[rule]) != null ? ref6.level : void 0) === 'ignore') {
+      disabledInitially.push(rule);
+      config[rule].level = 'error';
+    }
+  }
+  astErrors = new ASTLinter(source, config, _rules, CoffeeScript).lint();
+  errors = errors.concat(astErrors);
+  if (!hasSyntaxError(source)) {
+    lexicalLinter = new LexicalLinter(source, config, _rules, CoffeeScript);
+    lexErrors = lexicalLinter.lint();
+    errors = errors.concat(lexErrors);
+    tokensByLine = lexicalLinter.tokensByLine;
+    lineLinter = new LineLinter(source, config, _rules, tokensByLine, literate);
+    lineErrors = lineLinter.lint();
+    errors = errors.concat(lineErrors);
+    inlineConfig = lineLinter.inlineConfig;
+  } else {
+    inlineConfig = {
+      enable: {},
+      disable: {},
+      'enable-line': {},
+      'disable-line': {}
+    };
+  }
+  errors.sort(function(a, b) {
+    return a.lineNumber - b.lineNumber;
+  });
+  disabledEntirely = (function() {
+    var len2, map, o, ref7, result;
+    result = [];
+    map = {};
+    ref7 = errors || [];
+    for (o = 0, len2 = ref7.length; o < len2; o++) {
+      name = ref7[o].name;
+      if (!map[name]) {
+        result.push(name);
+        map[name] = true;
+      }
+    }
+    return result;
+  })();
+  allErrors = errors;
+  errors = [];
+  disabled = disabledInitially;
+  nextLine = 0;
+  for (i = o = 0, ref7 = source.split('\n').length; 0 <= ref7 ? o < ref7 : o > ref7; i = 0 <= ref7 ? ++o : --o) {
+    disabledLine = disabled;
+    for (cmd in inlineConfig) {
+      rules = inlineConfig[cmd][i];
+      if (rules != null) {
+        ({
+          'disable': function() {
+            if (rules.length) {
+              disabled = union(disabled, rules);
+              return disabledLine = union(disabledLine, rules);
+            } else {
+              return disabled = disabledLine = disabledEntirely;
+            }
+          },
+          'disable-line': function() {
+            if (rules.length) {
+              return disabledLine = union(disabledLine, rules);
+            } else {
+              return disabledLine = disabledEntirely;
+            }
+          },
+          'enable': function() {
+            if (rules.length) {
+              disabled = difference(disabled, rules);
+              return disabledLine = difference(disabledLine, rules);
+            } else {
+              return disabled = disabledLine = disabledInitially;
+            }
+          },
+          'enable-line': function() {
+            if (rules.length) {
+              return disabledLine = difference(disabledLine, rules);
+            } else {
+              return disabledLine = disabledInitially;
+            }
+          }
+        })[cmd]();
+      }
+    }
+    while (nextLine === i && allErrors.length > 0) {
+      nextLine = allErrors[0].lineNumber - 1;
+      e = allErrors[0];
+      if (e.lineNumber === i + 1 || (e.lineNumber == null)) {
+        e = allErrors.shift();
+        if (ref8 = e.rule, indexOf.call(disabledLine, ref8) < 0) {
+          errors.push(e);
+        }
+      }
+    }
+  }
+  if (cache != null) {
+    cache.set(source, errors);
+  }
+  return errors;
+};
+
+coffeelint.setCache = function(obj) {
+  return cache = obj;
+};
+
+
+},{"./../package.json":1,"./ast_linter.coffee":2,"./error_report.coffee":5,"./lexical_linter.coffee":6,"./line_linter.coffee":7,"./rules.coffee":8,"./rules/arrow_spacing.coffee":9,"./rules/braces_spacing.coffee":10,"./rules/camel_case_classes.coffee":11,"./rules/colon_assignment_spacing.coffee":12,"./rules/cyclomatic_complexity.coffee":13,"./rules/duplicate_key.coffee":14,"./rules/empty_constructor_needs_parens.coffee":15,"./rules/ensure_comprehensions.coffee":16,"./rules/eol_last.coffee":17,"./rules/indentation.coffee":18,"./rules/line_endings.coffee":19,"./rules/max_line_length.coffee":20,"./rules/missing_fat_arrows.coffee":21,"./rules/newlines_after_classes.coffee":22,"./rules/no_backticks.coffee":23,"./rules/no_debugger.coffee":24,"./rules/no_empty_functions.coffee":25,"./rules/no_empty_param_list.coffee":26,"./rules/no_implicit_braces.coffee":27,"./rules/no_implicit_parens.coffee":28,"./rules/no_interpolation_in_single_quotes.coffee":29,"./rules/no_nested_string_interpolation.coffee":30,"./rules/no_plusplus.coffee":31,"./rules/no_private_function_fat_arrows.coffee":32,"./rules/no_stand_alone_at.coffee":33,"./rules/no_tabs.coffee":34,"./rules/no_this.coffee":35,"./rules/no_throwing_strings.coffee":36,"./rules/no_trailing_semicolons.coffee":37,"./rules/no_trailing_whitespace.coffee":38,"./rules/no_unnecessary_double_quotes.coffee":39,"./rules/no_unnecessary_fat_arrows.coffee":40,"./rules/non_empty_constructor_needs_parens.coffee":41,"./rules/prefer_english_operator.coffee":42,"./rules/space_operators.coffee":43,"./rules/spacing_after_comma.coffee":44,"./rules/transform_messes_up_line_numbers.coffee":45}],5:[function(require,module,exports){
 var ErrorReport;
 
 module.exports = ErrorReport = (function() {
@@ -775,7 +826,6 @@ module.exports = ErrorReport = (function() {
   return ErrorReport;
 
 })();
-
 
 
 },{}],6:[function(require,module,exports){
@@ -878,9 +928,8 @@ module.exports = LexicalLinter = (function(superClass) {
 })(BaseLinter);
 
 
-
-},{"./base_linter.coffee":4}],7:[function(require,module,exports){
-var BaseLinter, LineApi, LineLinter, configStatement,
+},{"./base_linter.coffee":3}],7:[function(require,module,exports){
+var BaseLinter, LineApi, LineLinter, configShortcuts, configStatement,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
@@ -974,12 +1023,23 @@ LineApi = (function() {
 
 BaseLinter = require('./base_linter.coffee');
 
-configStatement = /coffeelint:\s*(disable|enable)(?:=([\w\s,]*))?/;
+configStatement = /coffeelint:\s*((disable|enable)(-line)?)(?:=([\w\s,]*))?/;
+
+configShortcuts = [[/\#.*noqa/, 'coffeelint: disable-line']];
 
 module.exports = LineLinter = (function(superClass) {
   extend(LineLinter, superClass);
 
-  LineLinter.configStatement = configStatement;
+  LineLinter.getDirective = function(line) {
+    var i, len, ref, replacement, shortcut;
+    for (i = 0, len = configShortcuts.length; i < len; i++) {
+      ref = configShortcuts[i], shortcut = ref[0], replacement = ref[1];
+      if (line.match(shortcut)) {
+        return configStatement.exec(replacement);
+      }
+    }
+    return configStatement.exec(line);
+  };
 
   function LineLinter(source, config, rules, tokensByLine, literate) {
     if (literate == null) {
@@ -989,7 +1049,9 @@ module.exports = LineLinter = (function(superClass) {
     this.lineApi = new LineApi(source, config, tokensByLine, literate);
     this.inlineConfig = {
       enable: {},
-      disable: {}
+      disable: {},
+      'enable-line': {},
+      'disable-line': {}
     };
   }
 
@@ -1032,12 +1094,12 @@ module.exports = LineLinter = (function(superClass) {
 
   LineLinter.prototype.collectInlineConfig = function(line) {
     var cmd, i, len, r, ref, result, rules;
-    result = configStatement.exec(line);
+    result = this.constructor.getDirective(line);
     if (result != null) {
       cmd = result[1];
       rules = [];
-      if (result[2] != null) {
-        ref = result[2].split(',');
+      if (result[4] != null) {
+        ref = result[4].split(',');
         for (i = 0, len = ref.length; i < len; i++) {
           r = ref[i];
           rules.push(r.replace(/^\s+|\s+$/g, ''));
@@ -1063,8 +1125,7 @@ module.exports = LineLinter = (function(superClass) {
 })(BaseLinter);
 
 
-
-},{"./base_linter.coffee":4}],8:[function(require,module,exports){
+},{"./base_linter.coffee":3}],8:[function(require,module,exports){
 var ERROR, IGNORE, WARN;
 
 ERROR = 'error';
@@ -1079,7 +1140,6 @@ module.exports = {
     message: ''
   }
 };
-
 
 
 },{}],9:[function(require,module,exports){
@@ -1115,7 +1175,6 @@ module.exports = ArrowSpacing = (function() {
   return ArrowSpacing;
 
 })();
-
 
 
 },{}],10:[function(require,module,exports){
@@ -1196,7 +1255,6 @@ module.exports = BracesSpacing = (function() {
 })();
 
 
-
 },{}],11:[function(require,module,exports){
 var CamelCaseClasses, regexes;
 
@@ -1242,7 +1300,6 @@ module.exports = CamelCaseClasses = (function() {
   return CamelCaseClasses;
 
 })();
-
 
 
 },{}],12:[function(require,module,exports){
@@ -1297,7 +1354,6 @@ module.exports = ColonAssignmentSpacing = (function() {
   return ColonAssignmentSpacing;
 
 })();
-
 
 
 },{}],13:[function(require,module,exports){
@@ -1359,7 +1415,6 @@ module.exports = CyclomaticComplexity = (function() {
 })();
 
 
-
 },{}],14:[function(require,module,exports){
 var DuplicateKey;
 
@@ -1371,7 +1426,7 @@ module.exports = DuplicateKey = (function() {
     description: 'Prevents defining duplicate keys in object literals and classes'
   };
 
-  DuplicateKey.prototype.tokens = ['IDENTIFIER', '{', '}'];
+  DuplicateKey.prototype.tokens = ['IDENTIFIER', 'PROPERTY', '{', '}'];
 
   function DuplicateKey() {
     this.braceScopes = [];
@@ -1384,7 +1439,7 @@ module.exports = DuplicateKey = (function() {
       this.lintBrace.apply(this, arguments);
       return void 0;
     }
-    if (type === 'IDENTIFIER') {
+    if (type === 'IDENTIFIER' || type === 'PROPERTY') {
       return this.lintIdentifier.apply(this, arguments);
     }
   };
@@ -1429,7 +1484,6 @@ module.exports = DuplicateKey = (function() {
 })();
 
 
-
 },{}],15:[function(require,module,exports){
 var EmptyConstructorNeedsParens;
 
@@ -1446,35 +1500,35 @@ module.exports = EmptyConstructorNeedsParens = (function() {
   EmptyConstructorNeedsParens.prototype.tokens = ['UNARY'];
 
   EmptyConstructorNeedsParens.prototype.lintToken = function(token, tokenApi) {
-    var expectedCallStart, expectedIdentifier, identifierIndex, peek, ref;
+    var identIndex, isIdent, nextToken, peek, ref, ref1, ref2;
     if (token[1] === 'new') {
       peek = tokenApi.peek.bind(tokenApi);
-      identifierIndex = 1;
+      identIndex = 1;
       while (true) {
-        expectedIdentifier = peek(identifierIndex);
-        expectedCallStart = peek(identifierIndex + 1);
-        if ((expectedIdentifier != null ? expectedIdentifier[0] : void 0) === 'IDENTIFIER') {
-          if ((expectedCallStart != null ? expectedCallStart[0] : void 0) === '.') {
-            identifierIndex += 2;
+        isIdent = (ref = (ref1 = peek(identIndex)) != null ? ref1[0] : void 0) === 'IDENTIFIER' || ref === 'PROPERTY';
+        nextToken = peek(identIndex + 1);
+        if (isIdent) {
+          if ((nextToken != null ? nextToken[0] : void 0) === '.') {
+            identIndex += 2;
             continue;
           }
-          if ((expectedCallStart != null ? expectedCallStart[0] : void 0) === 'INDEX_START') {
-            while (((ref = peek(identifierIndex)) != null ? ref[0] : void 0) !== 'INDEX_END') {
-              identifierIndex++;
+          if ((nextToken != null ? nextToken[0] : void 0) === 'INDEX_START') {
+            while (((ref2 = peek(identIndex)) != null ? ref2[0] : void 0) !== 'INDEX_END') {
+              identIndex++;
             }
             continue;
           }
         }
         break;
       }
-      if ((expectedIdentifier != null ? expectedIdentifier[0] : void 0) === 'IDENTIFIER' && (expectedCallStart != null)) {
-        return this.handleExpectedCallStart(expectedCallStart);
+      if (isIdent && (nextToken != null)) {
+        return this.handleExpectedCallStart(nextToken);
       }
     }
   };
 
-  EmptyConstructorNeedsParens.prototype.handleExpectedCallStart = function(expectedCallStart) {
-    if (expectedCallStart[0] !== 'CALL_START') {
+  EmptyConstructorNeedsParens.prototype.handleExpectedCallStart = function(isCallStart) {
+    if (isCallStart[0] !== 'CALL_START') {
       return true;
     }
   };
@@ -1482,7 +1536,6 @@ module.exports = EmptyConstructorNeedsParens = (function() {
   return EmptyConstructorNeedsParens;
 
 })();
-
 
 
 },{}],16:[function(require,module,exports){
@@ -1583,7 +1636,6 @@ module.exports = EnsureComprehensions = (function() {
 })();
 
 
-
 },{}],17:[function(require,module,exports){
 var EOLLast;
 
@@ -1612,7 +1664,6 @@ module.exports = EOLLast = (function() {
   return EOLLast;
 
 })();
-
 
 
 },{}],18:[function(require,module,exports){
@@ -1800,7 +1851,6 @@ module.exports = Indentation = (function() {
 })();
 
 
-
 },{}],19:[function(require,module,exports){
 var LineEndings;
 
@@ -1843,7 +1893,6 @@ module.exports = LineEndings = (function() {
   return LineEndings;
 
 })();
-
 
 
 },{}],20:[function(require,module,exports){
@@ -1889,7 +1938,6 @@ module.exports = MaxLineLength = (function() {
   return MaxLineLength;
 
 })();
-
 
 
 },{}],21:[function(require,module,exports){
@@ -2043,7 +2091,6 @@ module.exports = MissingFatArrows = (function() {
 })();
 
 
-
 },{}],22:[function(require,module,exports){
 var NewlinesAfterClasses;
 
@@ -2085,7 +2132,7 @@ module.exports = NewlinesAfterClasses = (function() {
           comment = 0;
           outdent = token.origin[2].first_line;
           start = Math.min(lineNumber, outdent);
-          trueLine = Infinity;
+          trueLine = 2e308;
           while (/^\s*(#|$)/.test(lines[start + afters])) {
             if (/^\s*#/.test(lines[start + afters])) {
               comment += 1;
@@ -2119,7 +2166,6 @@ module.exports = NewlinesAfterClasses = (function() {
 })();
 
 
-
 },{}],23:[function(require,module,exports){
 var NoBackticks;
 
@@ -2144,7 +2190,6 @@ module.exports = NoBackticks = (function() {
 })();
 
 
-
 },{}],24:[function(require,module,exports){
 var NoDebugger;
 
@@ -2159,17 +2204,17 @@ module.exports = NoDebugger = (function() {
     description: 'This rule detects `debugger` and optionally `console` calls\nThis rule is `warn` by default.'
   };
 
-  NoDebugger.prototype.tokens = ['DEBUGGER', 'IDENTIFIER'];
+  NoDebugger.prototype.tokens = ['STATEMENT', 'DEBUGGER', 'IDENTIFIER'];
 
   NoDebugger.prototype.lintToken = function(token, tokenApi) {
-    var method, ref, ref1;
-    if (token[0] === 'DEBUGGER') {
+    var method, ref, ref1, ref2;
+    if (((ref = token[0]) === 'DEBUGGER' || ref === 'STATEMENT') && token[1] === 'debugger') {
       return {
         context: "found '" + token[0] + "'"
       };
     }
-    if ((ref = tokenApi.config[this.rule.name]) != null ? ref.console : void 0) {
-      if (token[1] === 'console' && ((ref1 = tokenApi.peek(1)) != null ? ref1[0] : void 0) === '.') {
+    if ((ref1 = tokenApi.config[this.rule.name]) != null ? ref1.console : void 0) {
+      if (token[1] === 'console' && ((ref2 = tokenApi.peek(1)) != null ? ref2[0] : void 0) === '.') {
         method = tokenApi.peek(2);
         return {
           context: "found 'console." + method[1] + "'"
@@ -2181,7 +2226,6 @@ module.exports = NoDebugger = (function() {
   return NoDebugger;
 
 })();
-
 
 
 },{}],25:[function(require,module,exports){
@@ -2228,7 +2272,6 @@ module.exports = NoEmptyFunctions = (function() {
 })();
 
 
-
 },{}],26:[function(require,module,exports){
 var NoEmptyParamList;
 
@@ -2255,7 +2298,6 @@ module.exports = NoEmptyParamList = (function() {
 })();
 
 
-
 },{}],27:[function(require,module,exports){
 var NoImplicitBraces;
 
@@ -2268,21 +2310,29 @@ module.exports = NoImplicitBraces = (function() {
     description: 'This rule prohibits implicit braces when declaring object literals.\nImplicit braces can make code more difficult to understand,\nespecially when used in combination with optional parenthesis.\n<pre>\n<code># Do you find this code ambiguous? Is it a\n# function call with three arguments or four?\nmyFunction a, b, 1:2, 3:4\n\n# While the same code written in a more\n# explicit manner has no ambiguity.\nmyFunction(a, b, {1:2, 3:4})\n</code>\n</pre>\nImplicit braces are permitted by default, since their use is\nidiomatic CoffeeScript.'
   };
 
-  NoImplicitBraces.prototype.tokens = ['{', 'OUTDENT', 'CLASS', 'IDENTIFIER'];
+  NoImplicitBraces.prototype.tokens = ['{', 'OUTDENT', 'CLASS', 'IDENTIFIER', 'EXTENDS'];
 
   function NoImplicitBraces() {
     this.isClass = false;
-    this.className = void 0;
+    this.className = '';
   }
 
   NoImplicitBraces.prototype.lintToken = function(token, tokenApi) {
-    var lineNum, peekTwo, prevToken, type, val;
+    var _type, _val, c, lineNum, peekIdent, prevToken, ref, ref1, type, val;
     type = token[0], val = token[1], lineNum = token[2];
     if (type === 'OUTDENT' || type === 'CLASS') {
       return this.trackClass.apply(this, arguments);
     }
-    if (type === 'IDENTIFIER' && this.isClass && ((this.className == null) || tokenApi.peek(-1)[0] === 'EXTENDS')) {
-      this.className = val;
+    if (type === 'EXTENDS') {
+      this.className = '';
+      return;
+    }
+    if (type === 'IDENTIFIER' && this.isClass && this.className === '') {
+      c = 0;
+      while ((ref = tokenApi.peek(c)[0]) === 'IDENTIFIER' || ref === 'PROPERTY' || ref === '.') {
+        this.className += tokenApi.peek(c)[1];
+        c++;
+      }
     }
     if (token.generated && type === '{') {
       if (!tokenApi.config[this.rule.name].strict) {
@@ -2296,8 +2346,16 @@ module.exports = NoImplicitBraces = (function() {
         if (prevToken === 'TERMINATOR') {
           return;
         }
-        peekTwo = tokenApi.peek(-2);
-        if (peekTwo[0] === 'IDENTIFIER' && peekTwo[1] === this.className) {
+        peekIdent = '';
+        c = -2;
+        while ((ref1 = tokenApi.peek(c), _type = ref1[0], _val = ref1[1], ref1)) {
+          if (_type !== 'IDENTIFIER' && _type !== 'PROPERTY' && _type !== '.') {
+            break;
+          }
+          peekIdent = _val + peekIdent;
+          c--;
+        }
+        if (peekIdent === this.className) {
           return;
         }
       }
@@ -2313,7 +2371,7 @@ module.exports = NoImplicitBraces = (function() {
     }
     if (n0 === 'CLASS') {
       this.isClass = true;
-      this.className = void 0;
+      this.className = '';
     }
     return null;
   };
@@ -2321,7 +2379,6 @@ module.exports = NoImplicitBraces = (function() {
   return NoImplicitBraces;
 
 })();
-
 
 
 },{}],28:[function(require,module,exports){
@@ -2366,7 +2423,6 @@ module.exports = NoImplicitParens = (function() {
 })();
 
 
-
 },{}],29:[function(require,module,exports){
 var NoInterpolationInSingleQuotes;
 
@@ -2392,7 +2448,6 @@ module.exports = NoInterpolationInSingleQuotes = (function() {
   return NoInterpolationInSingleQuotes;
 
 })();
-
 
 
 },{}],30:[function(require,module,exports){
@@ -2444,7 +2499,6 @@ module.exports = NoNestedStringInterpolation = (function() {
 })();
 
 
-
 },{}],31:[function(require,module,exports){
 var NoPlusPlus;
 
@@ -2469,7 +2523,6 @@ module.exports = NoPlusPlus = (function() {
   return NoPlusPlus;
 
 })();
-
 
 
 },{}],32:[function(require,module,exports){
@@ -2569,7 +2622,6 @@ module.exports = NoPrivateFunctionFatArrows = (function() {
 })();
 
 
-
 },{}],33:[function(require,module,exports){
 var NoStandAloneAt;
 
@@ -2586,17 +2638,14 @@ module.exports = NoStandAloneAt = (function() {
   NoStandAloneAt.prototype.tokens = ['@'];
 
   NoStandAloneAt.prototype.lintToken = function(token, tokenApi) {
-    var isDot, isIdentifier, isIndexStart, isValidProtoProperty, nextToken, protoProperty, spaced;
-    nextToken = tokenApi.peek();
-    spaced = token.spaced;
-    isIdentifier = nextToken[0] === 'IDENTIFIER';
-    isIndexStart = nextToken[0] === 'INDEX_START';
-    isDot = nextToken[0] === '.';
-    if (nextToken[0] === '::') {
-      protoProperty = tokenApi.peek(2);
-      isValidProtoProperty = protoProperty[0] === 'IDENTIFIER';
-    }
-    if (spaced || (!isIdentifier && !isIndexStart && !isDot && !isValidProtoProperty)) {
+    var isAStart, isDot, isProp, isProtoProp, nextToken, noSpace, ref, ref1;
+    nextToken = tokenApi.peek()[0];
+    noSpace = !token.spaced;
+    isProp = nextToken === 'IDENTIFIER' || nextToken === 'PROPERTY';
+    isAStart = nextToken === 'INDEX_START' || nextToken === 'CALL_START';
+    isDot = nextToken === '.';
+    isProtoProp = nextToken === '::' && ((ref = (ref1 = tokenApi.peek(2)) != null ? ref1[0] : void 0) === 'IDENTIFIER' || ref === 'PROPERTY');
+    if (!(isDot || (noSpace && (isProp || isAStart || isProtoProp)))) {
       return true;
     }
   };
@@ -2604,7 +2653,6 @@ module.exports = NoStandAloneAt = (function() {
   return NoStandAloneAt;
 
 })();
-
 
 
 },{}],34:[function(require,module,exports){
@@ -2638,7 +2686,6 @@ module.exports = NoTabs = (function() {
 })();
 
 
-
 },{}],35:[function(require,module,exports){
 var NoThis;
 
@@ -2668,7 +2715,6 @@ module.exports = NoThis = (function() {
 })();
 
 
-
 },{}],36:[function(require,module,exports){
 var NoThrowingStrings;
 
@@ -2694,7 +2740,6 @@ module.exports = NoThrowingStrings = (function() {
   return NoThrowingStrings;
 
 })();
-
 
 
 },{}],37:[function(require,module,exports){
@@ -2747,7 +2792,6 @@ module.exports = NoTrailingSemicolons = (function() {
   return NoTrailingSemicolons;
 
 })();
-
 
 
 },{}],38:[function(require,module,exports){
@@ -2813,7 +2857,6 @@ module.exports = NoTrailingWhitespace = (function() {
 })();
 
 
-
 },{}],39:[function(require,module,exports){
 var NoUnnecessaryDoubleQuotes;
 
@@ -2869,7 +2912,6 @@ module.exports = NoUnnecessaryDoubleQuotes = (function() {
   return NoUnnecessaryDoubleQuotes;
 
 })();
-
 
 
 },{}],40:[function(require,module,exports){
@@ -2929,7 +2971,8 @@ module.exports = NoUnnecessaryFatArrows = (function() {
   };
 
   NoUnnecessaryFatArrows.prototype.isThis = function(node) {
-    return this.isValue(node) && node.base.value === 'this';
+    var ref;
+    return ((ref = node.constructor) != null ? ref.name : void 0) === 'ThisLiteral' || this.isValue(node) && node.base.value === 'this';
   };
 
   NoUnnecessaryFatArrows.prototype.needsFatArrow = function(node) {
@@ -2939,8 +2982,9 @@ module.exports = NoUnnecessaryFatArrows = (function() {
       };
     })(this)) || (node.body.contains(this.isThis) != null) || (node.body.contains((function(_this) {
       return function(child) {
+        var ref;
         if (!_this.astApi.getNodeName(child)) {
-          return (child.isSuper != null) && child.isSuper;
+          return ((ref = child.constructor) != null ? ref.name : void 0) === 'SuperCall' || ((child.isSuper != null) && child.isSuper);
         } else {
           return _this.isFatArrowCode(child) && _this.needsFatArrow(child);
         }
@@ -2951,7 +2995,6 @@ module.exports = NoUnnecessaryFatArrows = (function() {
   return NoUnnecessaryFatArrows;
 
 })();
-
 
 
 },{}],41:[function(require,module,exports){
@@ -2975,8 +3018,8 @@ module.exports = NonEmptyConstructorNeedsParens = (function(superClass) {
     description: 'Requires constructors with parameters to include the parens'
   };
 
-  NonEmptyConstructorNeedsParens.prototype.handleExpectedCallStart = function(expectedCallStart) {
-    if (expectedCallStart[0] === 'CALL_START' && expectedCallStart.generated) {
+  NonEmptyConstructorNeedsParens.prototype.handleExpectedCallStart = function(isCallStart) {
+    if (isCallStart[0] === 'CALL_START' && isCallStart.generated) {
       return true;
     }
   };
@@ -2984,7 +3027,6 @@ module.exports = NonEmptyConstructorNeedsParens = (function(superClass) {
   return NonEmptyConstructorNeedsParens;
 
 })(ParentClass);
-
 
 
 },{"./empty_constructor_needs_parens.coffee":15}],42:[function(require,module,exports){
@@ -3046,7 +3088,6 @@ module.exports = PreferEnglishOperator = (function() {
   return PreferEnglishOperator;
 
 })();
-
 
 
 },{}],43:[function(require,module,exports){
@@ -3157,7 +3198,6 @@ module.exports = SpaceOperators = (function() {
 })();
 
 
-
 },{}],44:[function(require,module,exports){
 var SpacingAfterComma;
 
@@ -3205,7 +3245,6 @@ module.exports = SpacingAfterComma = (function() {
 })();
 
 
-
 },{}],45:[function(require,module,exports){
 var TransformMessesUpLineNumbers;
 
@@ -3228,6 +3267,5 @@ module.exports = TransformMessesUpLineNumbers = (function() {
 })();
 
 
-
-},{}]},{},[1])(1)
+},{}]},{},[4])(4)
 });

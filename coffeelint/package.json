@@ -1,41 +1,61 @@
 {
   "_args": [
     [
-      "coffeelint@^1.14.2",
+      {
+        "raw": "coffeelint@latest",
+        "scope": null,
+        "escapedName": "coffeelint",
+        "name": "coffeelint",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "coffeelint@>=1.14.2 <2.0.0",
-  "_id": "coffeelint@1.14.2",
+  "_from": "coffeelint@latest",
+  "_id": "coffeelint@1.16.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/coffeelint",
-  "_nodeVersion": "4.0.0",
-  "_npmUser": {
-    "email": "shuanwang@gmail.com",
-    "name": "swang"
+  "_nodeVersion": "6.5.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/coffeelint-1.16.0.tgz_1475452581921_0.8223380178678781"
   },
-  "_npmVersion": "2.14.2",
-  "_phantomChildren": {},
+  "_npmUser": {
+    "name": "swang",
+    "email": "shuanwang@gmail.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {
+    "brace-expansion": "1.1.1",
+    "fs.realpath": "1.0.0",
+    "inflight": "1.0.4",
+    "inherits": "2.0.1",
+    "path-is-absolute": "1.0.0",
+    "wrappy": "1.0.1"
+  },
   "_requested": {
-    "name": "coffeelint",
-    "raw": "coffeelint@^1.14.2",
-    "rawSpec": "^1.14.2",
+    "raw": "coffeelint@latest",
     "scope": null,
-    "spec": ">=1.14.2 <2.0.0",
-    "type": "range"
+    "escapedName": "coffeelint",
+    "name": "coffeelint",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
-    "#DEV:/"
+    "#DEV:/",
+    "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/coffeelint/-/coffeelint-1.14.2.tgz",
-  "_shasum": "42478843a974b8a967205bcdff5fc2d5d362bba5",
+  "_resolved": "https://registry.npmjs.org/coffeelint/-/coffeelint-1.16.0.tgz",
+  "_shasum": "83d8ed1dafde3a677de44e7b8a18be607761e6d8",
   "_shrinkwrap": null,
-  "_spec": "coffeelint@^1.14.2",
+  "_spec": "coffeelint@latest",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "clutchski@gmail.com",
-    "name": "Matthew Perpick"
+    "name": "Matthew Perpick",
+    "email": "clutchski@gmail.com"
   },
   "bin": {
     "coffeelint": "./bin/coffeelint"
@@ -44,9 +64,9 @@
     "url": "https://github.com/clutchski/coffeelint/issues"
   },
   "dependencies": {
-    "coffee-script": "^1.9.1",
-    "glob": "^4.0.0",
-    "ignore": "^2.2.15",
+    "coffee-script": "~1.11.0",
+    "glob": "^7.0.6",
+    "ignore": "^3.0.9",
     "optimist": "^0.6.1",
     "resolve": "^0.6.3",
     "strip-json-comments": "^1.0.2"
@@ -54,23 +74,23 @@
   "description": "Lint your CoffeeScript",
   "devDependencies": {
     "underscore": ">=1.4.4",
-    "vows": ">=0.6.0"
+    "vows": ">=0.8.1"
   },
   "directories": {},
   "dist": {
-    "shasum": "42478843a974b8a967205bcdff5fc2d5d362bba5",
-    "tarball": "http://registry.npmjs.org/coffeelint/-/coffeelint-1.14.2.tgz"
+    "shasum": "83d8ed1dafde3a677de44e7b8a18be607761e6d8",
+    "tarball": "https://registry.npmjs.org/coffeelint/-/coffeelint-1.16.0.tgz"
   },
   "engines": {
     "node": ">=0.8.0",
     "npm": ">=1.3.7"
   },
-  "gitHead": "d8df418ce7cecb4ef5645c806f5de7b231aefbbf",
+  "gitHead": "2013313ff7b9ecd28d99b5c71abb51fbfa450bfe",
   "homepage": "http://www.coffeelint.org",
   "keywords": [
-    "coffee-script",
+    "lint",
     "coffeescript",
-    "lint"
+    "coffee-script"
   ],
   "license": "MIT",
   "main": "./lib/coffeelint.js",
@@ -112,5 +132,5 @@
     "test": "./vowsrunner.js --spec test/*.coffee test/*.litcoffee",
     "testrule": "npm run compile && ./vowsrunner.js --spec"
   },
-  "version": "1.14.2"
+  "version": "1.16.0"
 }

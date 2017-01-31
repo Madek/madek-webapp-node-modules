@@ -1,38 +1,51 @@
 {
   "_args": [
     [
-      "coffee-react-transform@^3.1.0",
-      "/Users/ma/CODE/Madek/webapp/node_modules/coffee-react"
+      {
+        "raw": "coffee-react-transform@latest",
+        "scope": null,
+        "escapedName": "coffee-react-transform",
+        "name": "coffee-react-transform",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "coffee-react-transform@>=3.1.0 <4.0.0",
-  "_id": "coffee-react-transform@3.3.0",
+  "_from": "coffee-react-transform@latest",
+  "_id": "coffee-react-transform@5.0.0",
   "_inCache": true,
   "_location": "/coffee-react-transform",
-  "_nodeVersion": "4.0.0",
-  "_npmUser": {
-    "email": "james@jsdf.co",
-    "name": "jsdf"
+  "_nodeVersion": "4.4.1",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/coffee-react-transform-5.0.0.tgz_1475478380415_0.24101632158271968"
   },
-  "_npmVersion": "2.14.2",
+  "_npmUser": {
+    "name": "jsdf",
+    "email": "james@jsdf.co"
+  },
+  "_npmVersion": "2.14.20",
   "_phantomChildren": {},
   "_requested": {
-    "name": "coffee-react-transform",
-    "raw": "coffee-react-transform@^3.1.0",
-    "rawSpec": "^3.1.0",
+    "raw": "coffee-react-transform@latest",
     "scope": null,
-    "spec": ">=3.1.0 <4.0.0",
-    "type": "range"
+    "escapedName": "coffee-react-transform",
+    "name": "coffee-react-transform",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
     "#DEV:/",
-    "/coffee-react"
+    "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/coffee-react-transform/-/coffee-react-transform-3.3.0.tgz",
-  "_shasum": "f1f90fa22de8d767fca2793e3b70f0f7d7a2e467",
+  "_resolved": "https://registry.npmjs.org/coffee-react-transform/-/coffee-react-transform-5.0.0.tgz",
+  "_shasum": "b62e8ae1b113fce9b1a5990b06c9bc44651ae9c5",
   "_shrinkwrap": null,
-  "_spec": "coffee-react-transform@^3.1.0",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/coffee-react",
+  "_spec": "coffee-react-transform@latest",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "James Friend"
   },
@@ -51,23 +64,22 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "f1f90fa22de8d767fca2793e3b70f0f7d7a2e467",
-    "tarball": "http://registry.npmjs.org/coffee-react-transform/-/coffee-react-transform-3.3.0.tgz"
+    "shasum": "b62e8ae1b113fce9b1a5990b06c9bc44651ae9c5",
+    "tarball": "https://registry.npmjs.org/coffee-react-transform/-/coffee-react-transform-5.0.0.tgz"
   },
   "files": [
-    "bin/",
     "index.js",
-    "lib/"
+    "lib/",
+    "bin/"
   ],
-  "gitHead": "0b89838e8300a6db914754caf0034c48fe50c58d",
+  "gitHead": "216fa2b69e58349401e1aabd5a39684c7b5cfe2c",
   "homepage": "https://github.com/jsdf/coffee-react-transform",
-  "installable": true,
   "keywords": [
-    "cjsx",
-    "coffee-react",
     "coffeescript",
+    "react",
     "jsx",
-    "react"
+    "cjsx",
+    "coffee-react"
   ],
   "licenses": [
     {
@@ -83,6 +95,7 @@
   ],
   "name": "coffee-react-transform",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/jsdf/coffee-react-transform.git"
@@ -91,5 +104,5 @@
     "prepublish": "cake build",
     "test": "cake build && cake test"
   },
-  "version": "3.3.0"
+  "version": "5.0.0"
 }

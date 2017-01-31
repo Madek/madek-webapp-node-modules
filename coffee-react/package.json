@@ -1,38 +1,51 @@
 {
   "_args": [
     [
-      "coffee-react@^4.1.0",
+      {
+        "raw": "coffee-react@latest",
+        "scope": null,
+        "escapedName": "coffee-react",
+        "name": "coffee-react",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "coffee-react@>=4.1.0 <5.0.0",
-  "_id": "coffee-react@4.1.0",
+  "_from": "coffee-react@latest",
+  "_id": "coffee-react@5.0.1",
   "_inCache": true,
-  "_installable": true,
   "_location": "/coffee-react",
-  "_nodeVersion": "4.1.1",
-  "_npmUser": {
-    "email": "james@jsdf.co",
-    "name": "jsdf"
+  "_nodeVersion": "4.4.1",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/coffee-react-5.0.1.tgz_1475478772282_0.45682854298502207"
   },
-  "_npmVersion": "2.14.4",
+  "_npmUser": {
+    "name": "jsdf",
+    "email": "james@jsdf.co"
+  },
+  "_npmVersion": "2.14.20",
   "_phantomChildren": {},
   "_requested": {
-    "name": "coffee-react",
-    "raw": "coffee-react@^4.1.0",
-    "rawSpec": "^4.1.0",
+    "raw": "coffee-react@latest",
     "scope": null,
-    "spec": ">=4.1.0 <5.0.0",
-    "type": "range"
+    "escapedName": "coffee-react",
+    "name": "coffee-react",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
     "#DEV:/",
+    "#USER",
     "/coffee-reactify"
   ],
-  "_resolved": "https://registry.npmjs.org/coffee-react/-/coffee-react-4.1.0.tgz",
-  "_shasum": "1af1042c5ea12735ab267b5436d855718f0d9d25",
+  "_resolved": "https://registry.npmjs.org/coffee-react/-/coffee-react-5.0.1.tgz",
+  "_shasum": "3d03566e8646894c962193c42c2e895f91f49ecb",
   "_shrinkwrap": null,
-  "_spec": "coffee-react@^4.1.0",
+  "_spec": "coffee-react@latest",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "James Friend"
@@ -45,8 +58,8 @@
   },
   "dependencies": {
     "coffee-react-jstransform": "^1.0.0",
-    "coffee-react-transform": "^3.1.0",
-    "coffee-script": "^1.9.1",
+    "coffee-react-transform": "^4.0.0",
+    "coffee-script": "^1.10.0",
     "mkdirp": "^0.5.0"
   },
   "description": "Coffeescript compiler wrapper adding coffee-react-transform CJSX support",
@@ -57,22 +70,22 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "1af1042c5ea12735ab267b5436d855718f0d9d25",
-    "tarball": "http://registry.npmjs.org/coffee-react/-/coffee-react-4.1.0.tgz"
+    "shasum": "3d03566e8646894c962193c42c2e895f91f49ecb",
+    "tarball": "https://registry.npmjs.org/coffee-react/-/coffee-react-5.0.1.tgz"
   },
   "files": [
+    "register.js",
     "bin/",
-    "lib/",
-    "register.js"
+    "lib/"
   ],
-  "gitHead": "eeb584422b5593301a534042c368d3019f92daa6",
+  "gitHead": "4f742f8b457f979a6223510201024618f9a08b18",
   "homepage": "https://github.com/jsdf/coffee-react",
   "keywords": [
-    "cjsx",
-    "coffee-react",
     "coffeescript",
+    "react",
     "jsx",
-    "react"
+    "cjsx",
+    "coffee-react"
   ],
   "licenses": [
     {
@@ -98,5 +111,5 @@
     "prepublish": "cake build",
     "test": "tap test/*.coffee"
   },
-  "version": "4.1.0"
+  "version": "5.0.1"
 }

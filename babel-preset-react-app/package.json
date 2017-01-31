@@ -28,6 +28,7 @@
   },
   "_npmVersion": "3.10.8",
   "_phantomChildren": {
+    "core-js": "2.4.1",
     "regenerator-runtime": "0.9.5"
   },
   "_requested": {

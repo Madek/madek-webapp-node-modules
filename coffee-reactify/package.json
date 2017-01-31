@@ -1,36 +1,50 @@
 {
   "_args": [
     [
-      "coffee-reactify@4.0.0",
+      {
+        "raw": "coffee-reactify@latest",
+        "scope": null,
+        "escapedName": "coffee-reactify",
+        "name": "coffee-reactify",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "coffee-reactify@4.0.0",
-  "_id": "coffee-reactify@4.0.0",
+  "_from": "coffee-reactify@latest",
+  "_id": "coffee-reactify@5.1.0",
   "_inCache": true,
   "_location": "/coffee-reactify",
-  "_nodeVersion": "0.10.26",
-  "_npmUser": {
-    "email": "james@jsdf.co",
-    "name": "jsdf"
+  "_nodeVersion": "4.4.1",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/coffee-reactify-5.1.0.tgz_1475479474231_0.42676708451472223"
   },
-  "_npmVersion": "2.4.1",
+  "_npmUser": {
+    "name": "jsdf",
+    "email": "james@jsdf.co"
+  },
+  "_npmVersion": "2.14.20",
   "_phantomChildren": {},
   "_requested": {
-    "name": "coffee-reactify",
-    "raw": "coffee-reactify@4.0.0",
-    "rawSpec": "4.0.0",
+    "raw": "coffee-reactify@latest",
     "scope": null,
-    "spec": "4.0.0",
-    "type": "version"
+    "escapedName": "coffee-reactify",
+    "name": "coffee-reactify",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
-    "/"
+    "#DEV:/",
+    "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/coffee-reactify/-/coffee-reactify-4.0.0.tgz",
-  "_shasum": "946263ace43851d4718d5cef1ac4a2e830eba19b",
+  "_resolved": "https://registry.npmjs.org/coffee-reactify/-/coffee-reactify-5.1.0.tgz",
+  "_shasum": "5418e093ca3b539cfabc7efe2b96ae1690d4f3b8",
   "_shrinkwrap": null,
-  "_spec": "coffee-reactify@4.0.0",
+  "_spec": "coffee-reactify@latest",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "bugs": {
     "url": "https://github.com/jsdf/coffee-reactify/issues"
@@ -53,7 +67,7 @@
     }
   ],
   "dependencies": {
-    "coffee-react": "^4.0.0",
+    "coffee-react": "^5.0.0",
     "convert-source-map": "~0.3.3",
     "through": "~2.3.4"
   },
@@ -65,16 +79,15 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "946263ace43851d4718d5cef1ac4a2e830eba19b",
-    "tarball": "http://registry.npmjs.org/coffee-reactify/-/coffee-reactify-4.0.0.tgz"
+    "shasum": "5418e093ca3b539cfabc7efe2b96ae1690d4f3b8",
+    "tarball": "https://registry.npmjs.org/coffee-reactify/-/coffee-reactify-5.1.0.tgz"
   },
-  "gitHead": "f1dfaf0156f956e8ceaa0c86710ef034f1bb393c",
+  "gitHead": "925b133480400c4de8f8cc4cd202a035976e1086",
   "homepage": "https://github.com/jsdf/coffee-reactify",
-  "installable": true,
   "keywords": [
-    "browserify",
     "coffee-script",
     "react",
+    "browserify",
     "transform"
   ],
   "license": "MIT",
@@ -87,6 +100,7 @@
   ],
   "name": "coffee-reactify",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/jsdf/coffee-reactify.git"
@@ -94,5 +108,5 @@
   "scripts": {
     "test": "tap test/*.js"
   },
-  "version": "4.0.0"
+  "version": "5.1.0"
 }

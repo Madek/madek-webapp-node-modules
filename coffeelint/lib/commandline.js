@@ -82,7 +82,9 @@ CoffeeLint is freely distributable under the MIT license.
         files.push(p);
       }
     }
-    return files;
+    return files.map(function(p) {
+      return path.join(p);
+    });
   };
 
   lintFiles = function(files, config) {
@@ -114,7 +116,7 @@ CoffeeLint is freely distributable under the MIT license.
     text = read(path);
     try {
       jsonIndentation = text.split('\n')[1].match(/^\s+/)[0].length;
-    } catch (undefined) {}
+    } catch (error) {}
     return JSON.parse(stripComments(text));
   };
 
@@ -170,10 +172,11 @@ CoffeeLint is freely distributable under the MIT license.
       strReporter = 'default';
     }
     SelectedReporter = (ref = coreReporters[strReporter]) != null ? ref : (function() {
-      var error, reporterPath;
+      var reporterPath;
       try {
         reporterPath = resolve(strReporter, {
-          basedir: process.cwd()
+          basedir: process.cwd(),
+          extensions: ['.js', '.coffee', '.litcoffee', '.coffee.md']
         });
       } catch (error) {
         reporterPath = strReporter;
@@ -243,7 +246,9 @@ CoffeeLint is freely distributable under the MIT license.
     } else {
       paths = options.argv._;
       scripts = findCoffeeScripts(paths, options.argv.ext);
-      scripts = ignore().addIgnoreFile('.coffeelintignore').filter(scripts);
+      if (fs.existsSync('.coffeelintignore')) {
+        scripts = ignore().add(fs.readFileSync('.coffeelintignore').toString()).filter(scripts);
+      }
       errorReport = lintFiles(scripts, config, options.argv.literate);
       reportAndExit(errorReport, options);
     }

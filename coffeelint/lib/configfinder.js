@@ -43,7 +43,7 @@ JSHint does.
   };
 
   loadJSON = function(filename) {
-    var e, error;
+    var e;
     try {
       return JSON.parse(stripComments(fs.readFileSync(filename).toString()));
     } catch (error) {
@@ -82,7 +82,8 @@ JSHint does.
       }
       config[ruleName]._module = config[ruleName].module;
       config[ruleName].module = resolve(data.module, {
-        basedir: dir
+        basedir: dir,
+        extensions: ['.js', '.coffee', '.litcoffee', '.coffee.md']
       });
     }
     coffeelint = config.coffeelint;
@@ -90,14 +91,16 @@ JSHint does.
       coffeelint._transforms = coffeelint.transforms;
       coffeelint.transforms = coffeelint.transforms.map(function(moduleName) {
         return resolve(moduleName, {
-          basedir: dir
+          basedir: dir,
+          extensions: ['.js', '.coffee', '.litcoffee', '.coffee.md']
         });
       });
     }
     if ((coffeelint != null ? coffeelint.coffeescript : void 0) != null) {
       coffeelint._coffeescript = coffeelint.coffeescript;
       coffeelint.coffeescript = resolve(coffeelint.coffeescript, {
-        basedir: dir
+        basedir: dir,
+        extensions: ['.js', '.coffee', '.litcoffee', '.coffee.md']
       });
     }
     return config;
