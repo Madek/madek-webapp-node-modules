@@ -1,58 +1,54 @@
 {
   "_args": [
     [
-      "cheerio@^0.20.0",
+      {
+        "raw": "cheerio@latest",
+        "scope": null,
+        "escapedName": "cheerio",
+        "name": "cheerio",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "cheerio@>=0.20.0 <0.21.0",
-  "_id": "cheerio@0.20.0",
+  "_from": "cheerio@latest",
+  "_id": "cheerio@0.22.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/cheerio",
-  "_nodeVersion": "5.5.0",
+  "_nodeVersion": "6.2.2",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/cheerio-0.22.0.tgz_1471954900169_0.12557715992443264"
+  },
   "_npmUser": {
-    "email": "me@feedic.com",
-    "name": "feedic"
+    "name": "mattmueller",
+    "email": "mattmuelle@gmail.com"
   },
-  "_npmVersion": "3.6.0",
-  "_phantomChildren": {
-    "abab": "1.0.3",
-    "amdefine": "1.0.0",
-    "cssom": "0.3.1",
-    "cssstyle": "0.2.34",
-    "estraverse": "1.9.3",
-    "esutils": "2.0.2",
-    "nwmatcher": "1.3.7",
-    "optionator": "0.8.1",
-    "parse5": "1.5.1",
-    "request": "2.65.0",
-    "sax": "1.1.5",
-    "symbol-tree": "3.1.4",
-    "tough-cookie": "2.2.0",
-    "webidl-conversions": "2.0.1",
-    "whatwg-url-compat": "0.6.5",
-    "xml-name-validator": "2.0.1"
-  },
+  "_npmVersion": "3.10.6",
+  "_phantomChildren": {},
   "_requested": {
-    "name": "cheerio",
-    "raw": "cheerio@^0.20.0",
-    "rawSpec": "^0.20.0",
+    "raw": "cheerio@latest",
     "scope": null,
-    "spec": ">=0.20.0 <0.21.0",
-    "type": "range"
+    "escapedName": "cheerio",
+    "name": "cheerio",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
-    "#DEV:/"
+    "#DEV:/",
+    "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/cheerio/-/cheerio-0.20.0.tgz",
-  "_shasum": "5c710f2bab95653272842ba01c6ea61b3545ec35",
+  "_resolved": "https://registry.npmjs.org/cheerio/-/cheerio-0.22.0.tgz",
+  "_shasum": "a9baa860a3f9b595a6b81b1a86873121ed3a269e",
   "_shrinkwrap": null,
-  "_spec": "cheerio@^0.20.0",
+  "_spec": "cheerio@latest",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "mattmuelle@gmail.com",
     "name": "Matt Mueller",
+    "email": "mattmuelle@gmail.com",
     "url": "mat.io"
   },
   "bugs": {
@@ -62,24 +58,36 @@
     "css-select": "~1.2.0",
     "dom-serializer": "~0.1.0",
     "entities": "~1.1.1",
-    "htmlparser2": "~3.8.1",
-    "jsdom": "^7.0.2",
-    "lodash": "^4.1.0"
+    "htmlparser2": "^3.9.1",
+    "lodash.assignin": "^4.0.9",
+    "lodash.bind": "^4.1.4",
+    "lodash.defaults": "^4.0.1",
+    "lodash.filter": "^4.4.0",
+    "lodash.flatten": "^4.2.0",
+    "lodash.foreach": "^4.3.0",
+    "lodash.map": "^4.4.0",
+    "lodash.merge": "^4.4.0",
+    "lodash.pick": "^4.2.1",
+    "lodash.reduce": "^4.4.0",
+    "lodash.reject": "^4.4.0",
+    "lodash.some": "^4.4.0"
   },
   "description": "Tiny, fast, and elegant implementation of core jQuery designed specifically for the server",
   "devDependencies": {
-    "benchmark": "~1.0.0",
-    "coveralls": "~2.10",
+    "benchmark": "^2.1.0",
+    "coveralls": "^2.11.9",
     "expect.js": "~0.3.1",
-    "istanbul": "~0.2",
-    "jshint": "~2.5.1",
-    "mocha": "*",
+    "istanbul": "^0.4.3",
+    "jquery": "^3.0.0",
+    "jsdom": "^9.2.1",
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3",
     "xyz": "~0.5.0"
   },
   "directories": {},
   "dist": {
-    "shasum": "5c710f2bab95653272842ba01c6ea61b3545ec35",
-    "tarball": "http://registry.npmjs.org/cheerio/-/cheerio-0.20.0.tgz"
+    "shasum": "a9baa860a3f9b595a6b81b1a86873121ed3a269e",
+    "tarball": "https://registry.npmjs.org/cheerio/-/cheerio-0.22.0.tgz"
   },
   "engines": {
     "node": ">= 0.6"
@@ -88,15 +96,15 @@
     "index.js",
     "lib"
   ],
-  "gitHead": "c3ec1cd7bff41da0033bdc45375d77844f0f81c0",
+  "gitHead": "35c4917205dca9d08139c95419e2626c0689e38a",
   "homepage": "https://github.com/cheeriojs/cheerio#readme",
   "keywords": [
-    "html",
     "htmlparser",
     "jquery",
-    "parser",
+    "selector",
     "scraper",
-    "selector"
+    "parser",
+    "html"
   ],
   "license": "MIT",
   "main": "./index.js",
@@ -119,9 +127,7 @@
     }
   ],
   "name": "cheerio",
-  "optionalDependencies": {
-    "jsdom": "^7.0.2"
-  },
+  "optionalDependencies": {},
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
@@ -130,5 +136,5 @@
   "scripts": {
     "test": "make test"
   },
-  "version": "0.20.0"
+  "version": "0.22.0"
 }

@@ -1,24 +1,80 @@
 {
-  "name": "bulkify",
-  "version": "1.1.1",
-  "description": "transform inline bulk-require calls into statically resolvable require maps",
-  "main": "index.js",
+  "_args": [
+    [
+      {
+        "raw": "bulkify@latest",
+        "scope": null,
+        "escapedName": "bulkify",
+        "name": "bulkify",
+        "rawSpec": "latest",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "bulkify@latest",
+  "_id": "bulkify@1.4.2",
+  "_inCache": true,
+  "_location": "/bulkify",
+  "_nodeVersion": "6.2.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/bulkify-1.4.2.tgz_1467225900305_0.9164207929279655"
+  },
+  "_npmUser": {
+    "name": "jameskyburz",
+    "email": "james.kyburz@gmail.com"
+  },
+  "_npmVersion": "3.9.5",
+  "_phantomChildren": {
+    "inherits": "2.0.1",
+    "lru-cache": "2.7.0",
+    "readable-stream": "1.0.33",
+    "sigmund": "1.0.1"
+  },
+  "_requested": {
+    "raw": "bulkify@latest",
+    "scope": null,
+    "escapedName": "bulkify",
+    "name": "bulkify",
+    "rawSpec": "latest",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/bulkify/-/bulkify-1.4.2.tgz",
+  "_shasum": "7848f0f3ab97f12a41b923bf90e53e09eaafba4c",
+  "_shrinkwrap": null,
+  "_spec": "bulkify@latest",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "bugs": {
+    "url": "https://github.com/substack/bulkify/issues"
+  },
   "dependencies": {
-    "bulk-require": "~0.2.0",
+    "bulk-require": "^1.0.0",
+    "concat-stream": "^1.4.5",
     "static-module": "^1.1.2",
     "through2": "~0.4.1"
   },
+  "description": "transform inline bulk-require calls into statically resolvable require maps",
   "devDependencies": {
-    "concat-stream": "^1.4.5",
     "tape": "^2.12.1"
   },
-  "scripts": {
-    "test": "tape test/*.js"
+  "directories": {},
+  "dist": {
+    "shasum": "7848f0f3ab97f12a41b923bf90e53e09eaafba4c",
+    "tarball": "https://registry.npmjs.org/bulkify/-/bulkify-1.4.2.tgz"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/substack/bulkify.git"
-  },
+  "gitHead": "7c9e3d3250b0c3e8f96d3946b855974cd5bfa5f3",
   "homepage": "https://github.com/substack/bulkify",
   "keywords": [
     "browserify-transform",
@@ -27,36 +83,31 @@
     "nested",
     "require"
   ],
-  "author": {
-    "name": "James Halliday",
-    "email": "mail@substack.net",
-    "url": "http://substack.net"
-  },
   "license": "MIT",
-  "gitHead": "799f4420c1aa9173ed395a2425f7974077e06333",
-  "bugs": {
-    "url": "https://github.com/substack/bulkify/issues"
-  },
-  "_id": "bulkify@1.1.1",
-  "_shasum": "23001106678bf268c35694204e5237170f26186c",
-  "_from": "bulkify@1.1.1",
-  "_npmVersion": "2.3.0",
-  "_nodeVersion": "0.12.0",
-  "_npmUser": {
-    "name": "substack",
-    "email": "mail@substack.net"
-  },
+  "main": "index.js",
   "maintainers": [
     {
+      "name": "gmaclennan",
+      "email": "gmaclennan@digital-democracy.org"
+    },
+    {
+      "name": "jameskyburz",
+      "email": "james.kyburz@gmail.com"
+    },
+    {
       "name": "substack",
-      "email": "mail@substack.net"
+      "email": "substack@gmail.com"
     }
   ],
-  "dist": {
-    "shasum": "23001106678bf268c35694204e5237170f26186c",
-    "tarball": "http://registry.npmjs.org/bulkify/-/bulkify-1.1.1.tgz"
+  "name": "bulkify",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/bulkify.git"
   },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/bulkify/-/bulkify-1.1.1.tgz",
-  "readme": "ERROR: No README data found!"
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "version": "1.4.2"
 }

@@ -1,17 +1,11 @@
 var fs = require('fs');
-var path = require('path');
-var util = require('util');
 var assert = require('assert');
-var splicer = require('labeled-stream-splicer');
 var through = require('through2');
-var async = require('async');
 var assign = require('xtend/mutable');
 
 var assertExists = require('./assertExists');
 var proxyEvent = require('./proxyEvent');
 var Cache = require('./Cache');
-var invalidateFilesPackagePaths = require('./invalidateFilesPackagePaths');
-var invalidatePackageCache = require('./invalidatePackageCache');
 var invalidateCache = require('./invalidateCache');
 var invalidateDependentFiles = require('./invalidateDependentFiles');
 
@@ -22,13 +16,12 @@ function BrowserifyCache(b, opts) {
   if (BrowserifyCache.getCache(b)) return b; // already attached
 
   // certain opts must have been set when browserify instance was created
-  assert(b._options.fullPaths, "required browserify 'fullPaths' opt not set");
   assert(b._options.cache, "required browserify 'cache' opt not set");
 
   // load cache from file specified by cacheFile opt
   var cacheFile = opts.cacheFile || opts.cachefile || b._options && b._options.cacheFile || null;
   var cacheData = loadCacheData(b, cacheFile);
-  
+
   // b._options.cache is a shared object into which loaded module cache is merged.
   // it will be reused for each build, and mutated when the cache is invalidated.
   assign(b._options.cache, cacheData.modules);
@@ -37,14 +30,17 @@ function BrowserifyCache(b, opts) {
   var cache = Cache(cacheData);
   BrowserifyCache.setCache(b, cache);
 
-  attachCacheHooksToPipeline(b);  
+  attachCacheHooksToPipeline(b);
   attachCacheDiscoveryHandlers(b);
   attachCachePersistHandler(b, cacheFile);
 
   return b;
 }
 
-BrowserifyCache.args = {cache: {}, packageCache: {}, fullPaths: true};
+BrowserifyCache.args = {
+  cache: {},
+  packageCache: {},
+};
 
 BrowserifyCache.getCache = function(b) {
   return b.__cacheObjects;
@@ -54,28 +50,32 @@ BrowserifyCache.setCache = function(b, cache) {
   b.__cacheObjects = cache;
 };
 
-BrowserifyCache.getModuleCache = function(b) {
-  var cache = BrowserifyCache.getCache(b);
-  return cache.modules;
-};
+// keep track of deps which are pending for the purpose of writing cache file
+// (eg. being transformed)
+function addCacheBlocker(b) {
+  if (b.__cacheBlockerCount == null) {
+    b.__cacheBlockerCount = 0;
+  }
 
-BrowserifyCache.getPackageCache = function(b) {
-  var cache = BrowserifyCache.getCache(b);
-  // rebuild packageCache from packages
-  return Object.keys(cache.filesPackagePaths).reduce(function(packageCache, file) {
-    packageCache[file] = cache.packages[cache.filesPackagePaths[file]];
-    return packageCache;
-  }, {});
-};
+  b.__cacheBlockerCount++;
+}
+
+function removeCacheBlocker(b) {
+  assert(b.__cacheBlockerCount >= 1);
+
+  b.__cacheBlockerCount--;
+
+  if (b.__cacheBlockerCount === 0) {
+    b.emit('_cacheReadyToWrite');
+  }
+}
 
 function attachCacheHooksToPipeline(b) {
-  var cache = BrowserifyCache.getCache(b);
-
   var prevBundle = b.bundle;
   b.bundle = function(cb) {
     var outputStream = through.obj();
 
-    invalidateCacheBeforeBundling(b, function(err, invalidated) {
+    invalidateCacheBeforeBundling(b, function(err) {
       if (err) return outputStream.emit('error', err);
 
       var bundleStream = prevBundle.call(b, cb);
@@ -93,60 +93,92 @@ function attachCacheHooksToPipeline(b) {
 function invalidateCacheBeforeBundling(b, done) {
   var cache = BrowserifyCache.getCache(b);
 
-  invalidateFilesPackagePaths(cache.filesPackagePaths, function() {
-    invalidatePackageCache(cache.mtimes, cache.packages, function() {
-      invalidateCache(cache.mtimes, cache.modules, function(err, invalidated, deleted) {
-        invalidateDependentFiles(cache, [].concat(invalidated, deleted), function(err) {
-          b.emit('changedDeps', invalidated, deleted);
-          done(err, invalidated);
-        });
-      });
+  invalidateCache(cache.mtimes, cache.modules, function(err, invalidated, deleted) {
+    invalidateDependentFiles(cache, [].concat(invalidated, deleted), function(err) {
+      b.emit('changedDeps', invalidated, deleted);
+      done(err, invalidated);
     });
   });
 }
 
 function attachCacheDiscoveryHandlers(b) {
-  b.on('dep', function(dep) {
-    updateCacheOnDep(b, dep);
-  });
+  // based on how watchify adds deps to cache
+  function insertDepCollector() {
+    b.pipeline.get('deps').push(through.obj(function(row, enc, next) {
+      var file = row.expose ? b._expose[row.id] : row.file;
+
+      var dep = {
+        file: file,
+        source: row.source,
+        deps: assign({}, row.deps),
+      };
+
+      addCacheBlocker(b);
+      updateCacheOnDep(b, dep, function(err) {
+        if (err) b.emit('error', err);
+        removeCacheBlocker(b);
+      });
+
+      this.push(row);
+      next();
+    }));
+  }
+
+  b.on('reset', insertDepCollector);
+  insertDepCollector();
 
   b.on('transform', function(transformStream, moduleFile) {
     transformStream.on('file', function(dependentFile) {
-      updateCacheOnTransformFile(b, moduleFile, dependentFile);
+      addCacheBlocker(b);
+      updateCacheOnTransformFile(b, moduleFile, dependentFile, function(err) {
+        if (err) b.emit('error', err);
+        removeCacheBlocker(b);
+      });
     });
   });
 }
 
-function updateCacheOnDep(b, dep) {
+function updateCacheOnDep(b, dep, done) {
   var cache = BrowserifyCache.getCache(b);
+
   var file = dep.file || dep.id;
   if (typeof file === 'string') {
     if (dep.source != null) {
       cache.modules[file] = dep;
-      if (!cache.mtimes[file]) updateMtime(cache.mtimes, file);
+      if (!cache.mtimes[file])
+        return updateMtime(cache.mtimes, file, done);
     } else {
       console.warn('missing source for dep', file);
     }
   } else {
     console.warn('got dep missing file or string id', file);
   }
+  done();
 }
 
-function updateCacheOnTransformFile(b, moduleFile, dependentFile) {
+function updateCacheOnTransformFile(b, moduleFile, dependentFile, done) {
   var cache = BrowserifyCache.getCache(b);
   if (cache.dependentFiles[dependentFile] == null) {
     cache.dependentFiles[dependentFile] = {};
   }
   cache.dependentFiles[dependentFile][moduleFile] = true;
-  if (!cache.mtimes[dependentFile]) updateMtime(cache.mtimes, dependentFile);
+  if (!cache.mtimes[dependentFile])
+    return updateMtime(cache.mtimes, dependentFile, done);
+  done();
 }
 
 function attachCachePersistHandler(b, cacheFile) {
   if (!cacheFile) return;
 
   b.on('bundle', function(bundleStream) {
-    // store on completion
+    addCacheBlocker(b);
     bundleStream.on('end', function() {
+      removeCacheBlocker(b);
+    });
+    // We need to wait until the cache is done being populated.
+    // Use .once because the `b` browserify object can be re-used for multiple
+    // bundles. We only want to save the cache once per bundle call.
+    b.once('_cacheReadyToWrite', function() {
       storeCache(b, cacheFile);
     });
   });
@@ -177,12 +209,13 @@ function loadCacheData(b, cacheFile) {
   return cacheData;
 }
 
-function updateMtime(mtimes, file) {
+function updateMtime(mtimes, file, done) {
   assertExists(mtimes);
   assertExists(file);
 
   fs.stat(file, function(err, stat) {
     if (!err) mtimes[file] = stat.mtime.getTime();
+    done();
   });
 }
 

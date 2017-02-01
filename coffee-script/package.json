@@ -10,7 +10,7 @@
         "spec": "latest",
         "type": "tag"
       },
-      "/Users/ma/CODE/Madek/webapp/node_modules"
+      "/Users/ma/CODE/Madek/webapp"
     ]
   ],
   "_from": "coffee-script@latest",
@@ -46,7 +46,7 @@
   "_shasum": "de5f4b1b934a4e9f915c57acd7ad323f68f715db",
   "_shrinkwrap": null,
   "_spec": "coffee-script@latest",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Jeremy Ashkenas"
   },
