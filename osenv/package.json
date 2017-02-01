@@ -1,7 +1,15 @@
 {
   "_args": [
     [
-      "osenv@0.0.3",
+      {
+        "raw": "osenv@0.0.3",
+        "scope": null,
+        "escapedName": "osenv",
+        "name": "osenv",
+        "rawSpec": "0.0.3",
+        "spec": "0.0.3",
+        "type": "version"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/bower-config"
     ]
   ],
@@ -11,10 +19,11 @@
   "_location": "/osenv",
   "_phantomChildren": {},
   "_requested": {
-    "name": "osenv",
     "raw": "osenv@0.0.3",
-    "rawSpec": "0.0.3",
     "scope": null,
+    "escapedName": "osenv",
+    "name": "osenv",
+    "rawSpec": "0.0.3",
     "spec": "0.0.3",
     "type": "version"
   },
@@ -27,9 +36,12 @@
   "_spec": "osenv@0.0.3",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/bower-config",
   "author": {
-    "email": "i@izs.me",
     "name": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
     "url": "http://blog.izs.me/"
+  },
+  "bugs": {
+    "url": "https://github.com/isaacs/osenv/issues"
   },
   "dependencies": {},
   "description": "Look up environment settings specific to different operating systems",
@@ -41,17 +53,17 @@
   },
   "dist": {
     "shasum": "cd6ad8ddb290915ad9e22765576025d411f29cb6",
-    "tarball": "http://registry.npmjs.org/osenv/-/osenv-0.0.3.tgz"
+    "tarball": "https://registry.npmjs.org/osenv/-/osenv-0.0.3.tgz"
   },
-  "installable": true,
+  "homepage": "https://github.com/isaacs/osenv#readme",
   "keywords": [
     "environment",
+    "variable",
     "home",
+    "tmpdir",
     "path",
     "prompt",
-    "ps1",
-    "tmpdir",
-    "variable"
+    "ps1"
   ],
   "license": "BSD",
   "main": "osenv.js",
@@ -63,9 +75,10 @@
   ],
   "name": "osenv",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git://github.com/isaacs/osenv"
+    "url": "git://github.com/isaacs/osenv.git"
   },
   "scripts": {
     "test": "tap test/*.js"

@@ -14,7 +14,7 @@ const defaultParseQueryString = parse
 
 function isNestedObject(object) {
   for (const p in object)
-    if (object.hasOwnProperty(p) &&
+    if (Object.prototype.hasOwnProperty.call(object, p) &&
         typeof object[p] === 'object' &&
         !Array.isArray(object[p]) &&
         object[p] !== null)
@@ -29,8 +29,9 @@ function isNestedObject(object) {
  */
 function useQueries(createHistory) {
   return function (options={}) {
-    let { stringifyQuery, parseQueryString, ...historyOptions } = options
-    let history = createHistory(historyOptions)
+    const history = createHistory(options)
+
+    let { stringifyQuery, parseQueryString } = options
 
     if (typeof stringifyQuery !== 'function')
       stringifyQuery = defaultStringifyQuery

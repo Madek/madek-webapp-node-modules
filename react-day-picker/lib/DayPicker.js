@@ -74,7 +74,7 @@ var DayPicker = function (_Component) {
   function DayPicker(props) {
     _classCallCheck(this, DayPicker);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DayPicker).call(this, props));
+    var _this = _possibleConstructorReturn(this, (DayPicker.__proto__ || Object.getPrototypeOf(DayPicker)).call(this, props));
 
     _initialiseProps.call(_this);
 
@@ -98,21 +98,9 @@ var DayPicker = function (_Component) {
       }
     }
   }, {
-    key: 'getModifiersFromProps',
-    value: function getModifiersFromProps(props) {
-      var modifiers = _extends({}, props.modifiers);
-      if (props.selectedDays) {
-        modifiers.selected = props.selectedDays;
-      }
-      if (props.disabledDays) {
-        modifiers.disabled = props.disabledDays;
-      }
-      return modifiers;
-    }
-  }, {
     key: 'getDayNodes',
     value: function getDayNodes() {
-      return this.refs.dayPicker.querySelectorAll('.DayPicker-Day:not(.DayPicker-Day--outside)');
+      return this.dayPicker.querySelectorAll('.DayPicker-Day:not(.DayPicker-Day--outside)');
     }
   }, {
     key: 'getNextNavigableMonth',
@@ -417,7 +405,7 @@ var DayPicker = function (_Component) {
       if (day.getMonth() !== month.getMonth()) {
         dayModifiers.push('outside');
       }
-      dayModifiers = [].concat(_toConsumableArray(dayModifiers), _toConsumableArray(Helpers.getModifiersForDay(day, this.getModifiersFromProps(this.props))));
+      dayModifiers = [].concat(_toConsumableArray(dayModifiers), _toConsumableArray(Helpers.getModifiersForDay(day, Helpers.getModifiersFromProps(this.props))));
 
       var isOutside = day.getMonth() !== month.getMonth();
       var tabIndex = null;
@@ -460,7 +448,7 @@ var DayPicker = function (_Component) {
       var months = [];
       var firstDayOfWeek = this.props.localeUtils.getFirstDayOfWeek(this.props.locale);
 
-      for (var i = 0; i < this.props.numberOfMonths; i++) {
+      for (var i = 0; i < this.props.numberOfMonths; i += 1) {
         var month = DateUtils.addMonths(this.state.currentMonth, i);
 
         months.push(_react2.default.createElement(
@@ -495,6 +483,8 @@ var DayPicker = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this7 = this;
+
       var customProps = Helpers.getCustomProps(this.props, DayPicker.propTypes);
       var className = 'DayPicker DayPicker--' + this.props.locale;
 
@@ -509,7 +499,9 @@ var DayPicker = function (_Component) {
         'div',
         _extends({}, customProps, {
           className: className,
-          ref: 'dayPicker',
+          ref: function ref(el) {
+            _this7.dayPicker = el;
+          },
           role: 'application',
           tabIndex: this.props.canChangeMonth && this.props.tabIndex,
           onKeyDown: this.handleKeyDown
@@ -523,7 +515,7 @@ var DayPicker = function (_Component) {
   return DayPicker;
 }(_react.Component);
 
-DayPicker.VERSION = '2.3.3';
+DayPicker.VERSION = '2.5.0';
 DayPicker.propTypes = {
   initialMonth: _react.PropTypes.instanceOf(Date),
   numberOfMonths: _react.PropTypes.number,
@@ -597,6 +589,8 @@ var _initialiseProps = function _initialiseProps() {
     }
     return { currentMonth: currentMonth };
   };
+
+  this.dayPicker = null;
 };
 
 exports.default = DayPicker;

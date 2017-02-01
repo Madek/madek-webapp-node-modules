@@ -23,7 +23,8 @@ function handleEvent(handler, day, modifiers) {
     e.persist();
     handler(e, day, dayState);
   };
-}
+} /* eslint-disable jsx-a11y/no-static-element-interactions, react/forbid-prop-types */
+
 function Day(_ref) {
   var day = _ref.day;
   var tabIndex = _ref.tabIndex;

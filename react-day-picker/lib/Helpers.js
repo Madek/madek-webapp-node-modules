@@ -3,10 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.cancelEvent = cancelEvent;
 exports.getCustomProps = getCustomProps;
 exports.getFirstDayOfMonth = getFirstDayOfMonth;
 exports.getDaysInMonth = getDaysInMonth;
+exports.getModifiersFromProps = getModifiersFromProps;
 exports.getModifiersForDay = getModifiersForDay;
 exports.getMonthsDiff = getMonthsDiff;
 exports.getWeekArray = getWeekArray;
@@ -24,7 +28,7 @@ function cancelEvent(e) {
 function getCustomProps(props, propTypes) {
   var customProps = {};
   Object.keys(props).filter(function (propName) {
-    return !propTypes.hasOwnProperty(propName);
+    return !{}.hasOwnProperty.call(propTypes, propName);
   }).forEach(function (propName) {
     customProps[propName] = props[propName];
   });
@@ -44,8 +48,19 @@ function getDaysInMonth(d) {
   return resultDate.getDate();
 }
 
+function getModifiersFromProps(props) {
+  var modifiers = _extends({}, props.modifiers);
+  if (props.selectedDays) {
+    modifiers.selected = props.selectedDays;
+  }
+  if (props.disabledDays) {
+    modifiers.disabled = props.disabledDays;
+  }
+  return modifiers;
+}
+
 function getModifiersForDay(d) {
-  var modifierFunctions = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var modifierFunctions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   return Object.keys(modifierFunctions).reduce(function (modifiers, modifier) {
     var func = modifierFunctions[modifier];
@@ -61,7 +76,7 @@ function getMonthsDiff(d1, d2) {
 }
 
 function getWeekArray(d) {
-  var firstDayOfWeek = arguments.length <= 1 || arguments[1] === undefined ? (0, _LocaleUtils.getFirstDayOfWeek)() : arguments[1];
+  var firstDayOfWeek = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0, _LocaleUtils.getFirstDayOfWeek)();
   var fixedWeeks = arguments[2];
 
   var daysInMonth = getDaysInMonth(d);
@@ -70,7 +85,7 @@ function getWeekArray(d) {
   var week = [];
   var weekArray = [];
 
-  for (var i = 1; i <= daysInMonth; i++) {
+  for (var i = 1; i <= daysInMonth; i += 1) {
     dayArray.push(new Date(d.getFullYear(), d.getMonth(), i, 12));
   }
 
@@ -87,7 +102,7 @@ function getWeekArray(d) {
 
   // unshift days to start the first week
   var firstWeek = weekArray[0];
-  for (var _i = 7 - firstWeek.length; _i > 0; _i--) {
+  for (var _i = 7 - firstWeek.length; _i > 0; _i -= 1) {
     var outsideDate = (0, _DateUtils.clone)(firstWeek[0]);
     outsideDate.setDate(firstWeek[0].getDate() - 1);
     firstWeek.unshift(outsideDate);
@@ -95,7 +110,7 @@ function getWeekArray(d) {
 
   // push days until the end of the last week
   var lastWeek = weekArray[weekArray.length - 1];
-  for (var _i2 = lastWeek.length; _i2 < 7; _i2++) {
+  for (var _i2 = lastWeek.length; _i2 < 7; _i2 += 1) {
     var _outsideDate = (0, _DateUtils.clone)(lastWeek[lastWeek.length - 1]);
     _outsideDate.setDate(lastWeek[lastWeek.length - 1].getDate() + 1);
     lastWeek.push(_outsideDate);
@@ -105,12 +120,12 @@ function getWeekArray(d) {
   if (fixedWeeks && weekArray.length < 6) {
     var lastExtraWeek = void 0;
 
-    for (var _i3 = weekArray.length; _i3 < 6; _i3++) {
+    for (var _i3 = weekArray.length; _i3 < 6; _i3 += 1) {
       lastExtraWeek = weekArray[weekArray.length - 1];
       var lastDay = lastExtraWeek[lastExtraWeek.length - 1];
       var extraWeek = [];
 
-      for (var j = 0; j < 7; j++) {
+      for (var j = 0; j < 7; j += 1) {
         var _outsideDate2 = (0, _DateUtils.clone)(lastDay);
         _outsideDate2.setDate(lastDay.getDate() + j + 1);
         extraWeek.push(_outsideDate2);

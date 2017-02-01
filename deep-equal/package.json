@@ -1,7 +1,15 @@
 {
   "_args": [
     [
-      "deep-equal@^1.0.0",
+      {
+        "raw": "deep-equal@^1.0.0",
+        "scope": null,
+        "escapedName": "deep-equal",
+        "name": "deep-equal",
+        "rawSpec": "^1.0.0",
+        "spec": ">=1.0.0 <2.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/history"
     ]
   ],
@@ -11,16 +19,17 @@
   "_location": "/deep-equal",
   "_nodeVersion": "2.4.0",
   "_npmUser": {
-    "email": "substack@gmail.com",
-    "name": "substack"
+    "name": "substack",
+    "email": "substack@gmail.com"
   },
   "_npmVersion": "3.2.2",
   "_phantomChildren": {},
   "_requested": {
-    "name": "deep-equal",
     "raw": "deep-equal@^1.0.0",
-    "rawSpec": "^1.0.0",
     "scope": null,
+    "escapedName": "deep-equal",
+    "name": "deep-equal",
+    "rawSpec": "^1.0.0",
     "spec": ">=1.0.0 <2.0.0",
     "type": "range"
   },
@@ -33,8 +42,8 @@
   "_spec": "deep-equal@^1.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/history",
   "author": {
-    "email": "mail@substack.net",
     "name": "James Halliday",
+    "email": "mail@substack.net",
     "url": "http://substack.net"
   },
   "bugs": {
@@ -46,21 +55,20 @@
     "tape": "^3.5.0"
   },
   "directories": {
-    "example": "example",
     "lib": ".",
+    "example": "example",
     "test": "test"
   },
   "dist": {
     "shasum": "f5d260292b660e084eff4cdbc9f08ad3247448b5",
-    "tarball": "http://registry.npmjs.org/deep-equal/-/deep-equal-1.0.1.tgz"
+    "tarball": "https://registry.npmjs.org/deep-equal/-/deep-equal-1.0.1.tgz"
   },
   "gitHead": "59c511f5aeae19e3dd1de054077a789d7302be34",
   "homepage": "https://github.com/substack/node-deep-equal#readme",
-  "installable": true,
   "keywords": [
-    "compare",
+    "equality",
     "equal",
-    "equality"
+    "compare"
   ],
   "license": "MIT",
   "main": "index.js",
@@ -72,6 +80,7 @@
   ],
   "name": "deep-equal",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/substack/node-deep-equal.git"
@@ -80,30 +89,30 @@
     "test": "tape test/*.js"
   },
   "testling": {
+    "files": "test/*.js",
     "browsers": {
-      "chrome": [
-        10,
-        22
-      ],
-      "ff": [
-        10,
-        15,
-        3.5
-      ],
       "ie": [
         6,
         7,
         8,
         9
       ],
-      "opera": [
-        12
+      "ff": [
+        3.5,
+        10,
+        15
+      ],
+      "chrome": [
+        10,
+        22
       ],
       "safari": [
         5.1
+      ],
+      "opera": [
+        12
       ]
-    },
-    "files": "test/*.js"
+    }
   },
   "version": "1.0.1"
 }

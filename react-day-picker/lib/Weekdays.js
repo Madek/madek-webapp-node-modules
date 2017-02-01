@@ -22,7 +22,7 @@ function Weekdays(_ref) {
   var weekdayElement = _ref.weekdayElement;
 
   var days = [];
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 7; i += 1) {
     var elementProps = {
       key: i,
       className: 'DayPicker-Weekday',

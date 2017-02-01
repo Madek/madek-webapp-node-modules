@@ -1,7 +1,15 @@
 {
   "_args": [
     [
-      "check-dependencies@0.11.0",
+      {
+        "raw": "check-dependencies@0.11.0",
+        "scope": null,
+        "escapedName": "check-dependencies",
+        "name": "check-dependencies",
+        "rawSpec": "0.11.0",
+        "spec": "0.11.0",
+        "type": "version"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
@@ -11,16 +19,17 @@
   "_location": "/check-dependencies",
   "_nodeVersion": "4.1.2",
   "_npmUser": {
-    "email": "m.goleb@gmail.com",
-    "name": "m_gol"
+    "name": "m_gol",
+    "email": "m.goleb@gmail.com"
   },
   "_npmVersion": "3.3.6",
   "_phantomChildren": {},
   "_requested": {
-    "name": "check-dependencies",
     "raw": "check-dependencies@0.11.0",
-    "rawSpec": "0.11.0",
     "scope": null,
+    "escapedName": "check-dependencies",
+    "name": "check-dependencies",
+    "rawSpec": "0.11.0",
     "spec": "0.11.0",
     "type": "version"
   },
@@ -33,8 +42,8 @@
   "_spec": "check-dependencies@0.11.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "m.goleb@gmail.com",
-    "name": "Michał Gołębiowski"
+    "name": "Michał Gołębiowski",
+    "email": "m.goleb@gmail.com"
   },
   "bin": {
     "check-dependencies": "./bin.js"
@@ -71,27 +80,26 @@
   "directories": {},
   "dist": {
     "shasum": "f6d8b118459c20f5c7b3ecf7fd8cb02c754e8580",
-    "tarball": "http://registry.npmjs.org/check-dependencies/-/check-dependencies-0.11.0.tgz"
+    "tarball": "https://registry.npmjs.org/check-dependencies/-/check-dependencies-0.11.0.tgz"
   },
   "engines": {
     "node": ">=0.12.7 <0.13 || >=4.1.1"
   },
   "files": [
-    "bin",
     "bin.js",
-    "dist/bin",
-    "dist/lib",
     "index.js",
-    "lib"
+    "bin",
+    "lib",
+    "dist/bin",
+    "dist/lib"
   ],
   "gitHead": "7df0baddc22cfeb2ed1429160bfab7ca75762bba",
   "homepage": "https://github.com/mzgol/check-dependencies",
-  "installable": true,
   "keywords": [
-    "dependencies",
     "dependency",
+    "packages",
     "modules",
-    "packages"
+    "dependencies"
   ],
   "license": "MIT",
   "maintainers": [
@@ -102,6 +110,7 @@
   ],
   "name": "check-dependencies",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mzgol/check-dependencies.git"

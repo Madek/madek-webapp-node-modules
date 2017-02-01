@@ -10,10 +10,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _PropTypes = require('./PropTypes');
-
-var _PropTypes2 = _interopRequireDefault(_PropTypes);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var buttonBaseClass = 'DayPicker-NavButton DayPicker-NavButton';
@@ -56,15 +52,11 @@ function Navbar(_ref) {
 
 var NavbarPropTypes = exports.NavbarPropTypes = {
   className: _react.PropTypes.string,
-  nextMonth: _react.PropTypes.instanceOf(Date),
-  previousMonth: _react.PropTypes.instanceOf(Date),
   showPreviousButton: _react.PropTypes.bool,
   showNextButton: _react.PropTypes.bool,
   onPreviousClick: _react.PropTypes.func,
   onNextClick: _react.PropTypes.func,
-  dir: _react.PropTypes.string,
-  locale: _react.PropTypes.string,
-  localeUtils: _PropTypes2.default.localeUtils
+  dir: _react.PropTypes.string
 };
 
 Navbar.propTypes = NavbarPropTypes;

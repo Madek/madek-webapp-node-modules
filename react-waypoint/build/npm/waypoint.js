@@ -25,26 +25,6 @@ var POSITIONS = {
   invisible: 'invisible'
 };
 
-var propTypes = {
-  debug: _react.PropTypes.bool,
-  onEnter: _react.PropTypes.func,
-  onLeave: _react.PropTypes.func,
-  onPositionChange: _react.PropTypes.func,
-  fireOnRapidScroll: _react.PropTypes.bool,
-  scrollableAncestor: _react.PropTypes.any,
-  throttleHandler: _react.PropTypes.func,
-  // `topOffset` can either be a number, in which case its a distance from the
-  // top of the container in pixels, or a string value. Valid string values are
-  // of the form "20px", which is parsed as pixels, or "20%", which is parsed
-  // as a percentage of the height of the containing element.
-  // For instance, if you pass "-20%", and the containing element is 100px tall,
-  // then the waypoint will be triggered when it has been scrolled 20px beyond
-  // the top of the containing element.
-  topOffset: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
-  // `bottomOffset` is like `topOffset`, but for the bottom of the container.
-  bottomOffset: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number])
-};
-
 var defaultProps = {
   topOffset: '0px',
   bottomOffset: '0px',
@@ -69,10 +49,10 @@ function debugLog() {
 var Waypoint = (function (_React$Component) {
   _inherits(Waypoint, _React$Component);
 
-  function Waypoint() {
+  function Waypoint(props) {
     _classCallCheck(this, Waypoint);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Waypoint).call(this));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Waypoint).call(this, props));
 
     _this.refElement = function (e) {
       return _this._ref = e;
@@ -183,6 +163,10 @@ var Waypoint = (function (_React$Component) {
   }, {
     key: '_handleScroll',
     value: function _handleScroll(event) {
+      if (!this._ref) {
+        // There's a chance we end up here after the component has been unmounted.
+        return;
+      }
       var bounds = this._getBounds();
       var currentPosition = this._currentPosition(bounds);
       var previousPosition = this._previousPosition || null;
@@ -385,7 +369,25 @@ var Waypoint = (function (_React$Component) {
 
 exports.default = Waypoint;
 
-Waypoint.propTypes = propTypes;
+Waypoint.propTypes = {
+  debug: _react.PropTypes.bool,
+  onEnter: _react.PropTypes.func,
+  onLeave: _react.PropTypes.func,
+  onPositionChange: _react.PropTypes.func,
+  fireOnRapidScroll: _react.PropTypes.bool,
+  scrollableAncestor: _react.PropTypes.any,
+  throttleHandler: _react.PropTypes.func,
+  // `topOffset` can either be a number, in which case its a distance from the
+  // top of the container in pixels, or a string value. Valid string values are
+  // of the form "20px", which is parsed as pixels, or "20%", which is parsed
+  // as a percentage of the height of the containing element.
+  // For instance, if you pass "-20%", and the containing element is 100px tall,
+  // then the waypoint will be triggered when it has been scrolled 20px beyond
+  // the top of the containing element.
+  topOffset: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
+  // `bottomOffset` is like `topOffset`, but for the bottom of the container.
+  bottomOffset: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number])
+};
 Waypoint.above = POSITIONS.above;
 Waypoint.below = POSITIONS.below;
 Waypoint.inside = POSITIONS.inside;

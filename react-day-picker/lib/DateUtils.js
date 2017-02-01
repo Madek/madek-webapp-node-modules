@@ -7,6 +7,7 @@ exports.clone = clone;
 exports.addMonths = addMonths;
 exports.isSameDay = isSameDay;
 exports.isPastDay = isPastDay;
+exports.isFutureDay = isFutureDay;
 exports.isDayBetween = isDayBetween;
 exports.addDayToRange = addDayToRange;
 exports.isDayInRange = isDayInRange;
@@ -60,6 +61,19 @@ function isPastDay(d) {
 }
 
 /**
+ * Return `true` if a day is in the future, e.g. tomorrow or any day
+ * after tomorrow.
+ *
+ * @param  {Date}  d
+ * @return {Boolean}
+ */
+function isFutureDay(d) {
+  var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+  tomorrow.setHours(0, 0, 0, 0);
+  return d >= tomorrow;
+}
+
+/**
  * Return `true` if day `d` is between days `d1` and `d2`,
  * without including them.
  *
@@ -88,7 +102,7 @@ function isDayBetween(d, d1, d2) {
  * @return {Object} Returns a new range object
  */
 function addDayToRange(day) {
-  var range = arguments.length <= 1 || arguments[1] === undefined ? { from: null, to: null } : arguments[1];
+  var range = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { from: null, to: null };
   var from = range.from;
   var to = range.to;
 
@@ -134,6 +148,7 @@ exports.default = {
   isSameDay: isSameDay,
   isDayInRange: isDayInRange,
   isDayBetween: isDayBetween,
-  isPastDay: isPastDay
+  isPastDay: isPastDay,
+  isFutureDay: isFutureDay
 };
 //# sourceMappingURL=DateUtils.js.map

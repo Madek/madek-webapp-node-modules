@@ -2,47 +2,48 @@
   "_args": [
     [
       {
-        "name": "react-waypoint",
-        "raw": "react-waypoint",
-        "rawSpec": "",
+        "raw": "react-waypoint@^3.1.0",
         "scope": null,
-        "spec": "latest",
-        "type": "tag"
+        "escapedName": "react-waypoint",
+        "name": "react-waypoint",
+        "rawSpec": "^3.1.0",
+        "spec": ">=3.1.0 <4.0.0",
+        "type": "range"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-waypoint@latest",
-  "_id": "react-waypoint@3.1.0",
+  "_from": "react-waypoint@>=3.1.0 <4.0.0",
+  "_id": "react-waypoint@3.1.3",
   "_inCache": true,
-  "_installable": true,
   "_location": "/react-waypoint",
   "_nodeVersion": "6.1.0",
   "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/react-waypoint-3.1.0.tgz_1468422468505_0.76824317779392"
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/react-waypoint-3.1.3.tgz_1475055060087_0.687174045946449"
   },
   "_npmUser": {
-    "email": "henric.trotzig@gmail.com",
-    "name": "trotzig"
+    "name": "trotzig",
+    "email": "henric.trotzig@gmail.com"
   },
   "_npmVersion": "3.8.6",
   "_phantomChildren": {},
   "_requested": {
-    "name": "react-waypoint",
-    "raw": "react-waypoint",
-    "rawSpec": "",
+    "raw": "react-waypoint@^3.1.0",
     "scope": null,
-    "spec": "latest",
-    "type": "tag"
+    "escapedName": "react-waypoint",
+    "name": "react-waypoint",
+    "rawSpec": "^3.1.0",
+    "spec": ">=3.1.0 <4.0.0",
+    "type": "range"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-3.1.0.tgz",
-  "_shasum": "add0de53983960d6c34bee83099ba9bd5b29d1d7",
+  "_resolved": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-3.1.3.tgz",
+  "_shasum": "1101fb8a27556a199150c7bfd34428606b5fc7e4",
   "_shrinkwrap": null,
-  "_spec": "react-waypoint",
+  "_spec": "react-waypoint@^3.1.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Brigade Engineering"
@@ -79,10 +80,10 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "add0de53983960d6c34bee83099ba9bd5b29d1d7",
-    "tarball": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-3.1.0.tgz"
+    "shasum": "1101fb8a27556a199150c7bfd34428606b5fc7e4",
+    "tarball": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-3.1.3.tgz"
   },
-  "gitHead": "5aa061348706faa95cfa188826bbe1472f1adc54",
+  "gitHead": "1ba3478551ffdbb8b069967504181611532b0ddb",
   "homepage": "https://github.com/brigade/react-waypoint",
   "keywords": [
     "react",
@@ -95,24 +96,24 @@
   "main": "build/npm/waypoint.js",
   "maintainers": [
     {
-      "email": "bigsley@gmail.com",
-      "name": "bigsley"
+      "name": "bigsley",
+      "email": "bigsley@gmail.com"
     },
     {
-      "email": "services+npm@brigade.com",
-      "name": "brigade"
+      "name": "brigade",
+      "email": "services+npm@brigade.com"
     },
     {
-      "email": "me@janpaulposma.nl",
-      "name": "janpaul123"
+      "name": "janpaul123",
+      "email": "me@janpaulposma.nl"
     },
     {
-      "email": "joe.lencioni@gmail.com",
-      "name": "lencioni"
+      "name": "lencioni",
+      "email": "joe.lencioni@gmail.com"
     },
     {
-      "email": "henric.trotzig@gmail.com",
-      "name": "trotzig"
+      "name": "trotzig",
+      "email": "henric.trotzig@gmail.com"
     }
   ],
   "name": "react-waypoint",
@@ -132,5 +133,5 @@
     "test": "npm run lint && npm run testonly",
     "testonly": "karma start"
   },
-  "version": "3.1.0"
+  "version": "3.1.3"
 }

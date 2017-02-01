@@ -1,73 +1,81 @@
 {
   "_args": [
     [
-      "jquery@^2.2.0",
+      {
+        "raw": "jquery@^2.2.1",
+        "scope": null,
+        "escapedName": "jquery",
+        "name": "jquery",
+        "rawSpec": "^2.2.1",
+        "spec": ">=2.2.1 <3.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "jquery@>=2.2.0 <3.0.0",
-  "_id": "jquery@2.2.1",
+  "_from": "jquery@>=2.2.1 <3.0.0",
+  "_id": "jquery@2.2.4",
   "_inCache": true,
-  "_installable": true,
   "_location": "/jquery",
-  "_nodeVersion": "0.10.42",
+  "_nodeVersion": "0.10.45",
   "_npmOperationalInternal": {
-    "host": "packages-9-west.internal.npmjs.com",
-    "tmp": "tmp/jquery-2.2.1.tgz_1456168325917_0.42471840139478445"
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/jquery-2.2.4.tgz_1463765166836_0.5834389675874263"
   },
   "_npmUser": {
-    "email": "timmywillisn@gmail.com",
-    "name": "timmywil"
+    "name": "timmywil",
+    "email": "timmywillisn@gmail.com"
   },
-  "_npmVersion": "2.14.19",
+  "_npmVersion": "2.15.1",
   "_phantomChildren": {},
   "_requested": {
-    "name": "jquery",
-    "raw": "jquery@^2.2.0",
-    "rawSpec": "^2.2.0",
+    "raw": "jquery@^2.2.1",
     "scope": null,
-    "spec": ">=2.2.0 <3.0.0",
+    "escapedName": "jquery",
+    "name": "jquery",
+    "rawSpec": "^2.2.1",
+    "spec": ">=2.2.1 <3.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/",
     "/@eins78/typeahead.js",
-    "/jquery-ujs"
+    "/linkifyjs"
   ],
-  "_resolved": "https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz",
-  "_shasum": "3c3e16854ad3d2ac44ac65021b17426d22ad803f",
+  "_resolved": "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz",
+  "_shasum": "2c89d6889b5eac522a7eea32c14521559c6cbf02",
   "_shrinkwrap": null,
-  "_spec": "jquery@^2.2.0",
+  "_spec": "jquery@^2.2.1",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "jQuery Foundation and other contributors",
-    "url": "https://github.com/jquery/jquery/blob/2.2.1/AUTHORS.txt"
+    "url": "https://github.com/jquery/jquery/blob/2.2.4/AUTHORS.txt"
   },
   "bugs": {
     "url": "https://github.com/jquery/jquery/issues"
   },
   "commitplease": {
     "components": [
+      "Docs",
+      "Tests",
+      "Build",
+      "Release",
+      "Core",
       "Ajax",
       "Attributes",
-      "Build",
-      "CSS",
       "Callbacks",
-      "Core",
+      "CSS",
       "Data",
       "Deferred",
       "Deprecated",
       "Dimensions",
-      "Docs",
       "Effects",
       "Event",
       "Manipulation",
       "Offset",
       "Queue",
-      "Release",
       "Selector",
       "Serialize",
-      "Tests",
       "Traversing",
       "Wrap"
     ]
@@ -102,15 +110,15 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "3c3e16854ad3d2ac44ac65021b17426d22ad803f",
-    "tarball": "http://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz"
+    "shasum": "2c89d6889b5eac522a7eea32c14521559c6cbf02",
+    "tarball": "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz"
   },
-  "gitHead": "788eaba2f83e7b7445c7a83a50c81c0704423874",
+  "gitHead": "c0185ab7c75aab88762c5aae780b9d83b80eda72",
   "homepage": "http://jquery.com",
   "keywords": [
-    "browser",
-    "javascript",
     "jquery",
+    "javascript",
+    "browser",
     "library"
   ],
   "license": "MIT",
@@ -146,5 +154,5 @@
     "test": "grunt && grunt test"
   },
   "title": "jQuery",
-  "version": "2.2.1"
+  "version": "2.2.4"
 }

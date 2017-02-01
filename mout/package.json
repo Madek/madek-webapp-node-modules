@@ -1,7 +1,15 @@
 {
   "_args": [
     [
-      "mout@~0.9.0",
+      {
+        "raw": "mout@~0.9.0",
+        "scope": null,
+        "escapedName": "mout",
+        "name": "mout",
+        "rawSpec": "~0.9.0",
+        "spec": ">=0.9.0 <0.10.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/bower-config"
     ]
   ],
@@ -10,16 +18,17 @@
   "_inCache": true,
   "_location": "/mout",
   "_npmUser": {
-    "email": "miller@millermedeiros.com",
-    "name": "millermedeiros"
+    "name": "millermedeiros",
+    "email": "miller@millermedeiros.com"
   },
   "_npmVersion": "1.4.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "mout",
     "raw": "mout@~0.9.0",
-    "rawSpec": "~0.9.0",
     "scope": null,
+    "escapedName": "mout",
+    "name": "mout",
+    "rawSpec": "~0.9.0",
     "spec": ">=0.9.0 <0.10.0",
     "type": "range"
   },
@@ -91,15 +100,14 @@
   },
   "dist": {
     "shasum": "84f0f3fd6acc7317f63de2affdcc0cee009b0477",
-    "tarball": "http://registry.npmjs.org/mout/-/mout-0.9.1.tgz"
+    "tarball": "https://registry.npmjs.org/mout/-/mout-0.9.1.tgz"
   },
   "homepage": "http://moutjs.com/",
-  "installable": true,
   "keywords": [
-    "amd-utils",
+    "utilities",
     "functional",
-    "stdlib",
-    "utilities"
+    "amd-utils",
+    "stdlib"
   ],
   "licenses": [
     {
@@ -128,6 +136,7 @@
   ],
   "name": "mout",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/mout/mout.git"
@@ -137,26 +146,21 @@
     "test": "istanbul test tests/runner.js --hook-run-in-context"
   },
   "testling": {
+    "preprocess": "node build testling",
     "browsers": {
-      "chrome": [
-        23,
-        "canary"
+      "ie": [
+        7,
+        8,
+        9,
+        10
       ],
       "firefox": [
         17,
         "nightly"
       ],
-      "ie": [
-        10,
-        7,
-        8,
-        9
-      ],
-      "ipad": [
-        6
-      ],
-      "iphone": [
-        6
+      "chrome": [
+        23,
+        "canary"
       ],
       "opera": [
         12,
@@ -165,17 +169,22 @@
       "safari": [
         5.1,
         6
+      ],
+      "iphone": [
+        6
+      ],
+      "ipad": [
+        6
       ]
     },
-    "preprocess": "node build testling",
     "scripts": [
-      "tests/lib/jasmine/jasmine-tap.js",
-      "tests/lib/jasmine/jasmine.async.js",
       "tests/lib/jasmine/jasmine.js",
+      "tests/lib/jasmine/jasmine.async.js",
+      "tests/lib/jasmine/jasmine-tap.js",
       "tests/lib/requirejs/require.js",
-      "tests/runner.js",
+      "tests/testling/src.js",
       "tests/testling/specs.js",
-      "tests/testling/src.js"
+      "tests/runner.js"
     ]
   },
   "version": "0.9.1"
