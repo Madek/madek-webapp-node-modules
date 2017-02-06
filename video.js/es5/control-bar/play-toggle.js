@@ -22,16 +22,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Button to toggle between play and pause
+ * Button to toggle between play and pause.
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Button
- * @class PlayToggle
  */
 var PlayToggle = function (_Button) {
   _inherits(PlayToggle, _Button);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function PlayToggle(player, options) {
     _classCallCheck(this, PlayToggle);
 
@@ -43,10 +49,10 @@ var PlayToggle = function (_Button) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -55,13 +61,19 @@ var PlayToggle = function (_Button) {
   };
 
   /**
-   * Handle click to toggle between play and pause
+   * This gets called when an `PlayToggle` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  PlayToggle.prototype.handleClick = function handleClick() {
+  PlayToggle.prototype.handleClick = function handleClick(event) {
     if (this.player_.paused()) {
       this.player_.play();
     } else {
@@ -70,13 +82,16 @@ var PlayToggle = function (_Button) {
   };
 
   /**
-   * Add the vjs-playing class to the element so it can change appearance
+   * Add the vjs-playing class to the element so it can change appearance.
    *
-   * @method handlePlay
+   * @param {EventTarget~Event} [event]
+   *        The event that caused this function to run.
+   *
+   * @listens Player#play
    */
 
 
-  PlayToggle.prototype.handlePlay = function handlePlay() {
+  PlayToggle.prototype.handlePlay = function handlePlay(event) {
     this.removeClass('vjs-paused');
     this.addClass('vjs-playing');
     // change the button text to "Pause"
@@ -84,13 +99,16 @@ var PlayToggle = function (_Button) {
   };
 
   /**
-   * Add the vjs-paused class to the element so it can change appearance
+   * Add the vjs-paused class to the element so it can change appearance.
    *
-   * @method handlePause
+   * @param {EventTarget~Event} [event]
+   *        The event that caused this function to run.
+   *
+   * @listens Player#pause
    */
 
 
-  PlayToggle.prototype.handlePause = function handlePause() {
+  PlayToggle.prototype.handlePause = function handlePause(event) {
     this.removeClass('vjs-playing');
     this.addClass('vjs-paused');
     // change the button text to "Play"
@@ -99,6 +117,14 @@ var PlayToggle = function (_Button) {
 
   return PlayToggle;
 }(_button2['default']);
+
+/**
+ * The text that should display over the `PlayToggle`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
+
 
 PlayToggle.prototype.controlText_ = 'Play';
 

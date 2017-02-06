@@ -1,11 +1,11 @@
 'use strict';
 
 exports.__esModule = true;
-exports.BACKGROUND_SIZE_SUPPORTED = exports.TOUCH_ENABLED = exports.IE_VERSION = exports.IS_IE8 = exports.IS_CHROME = exports.IS_EDGE = exports.IS_FIREFOX = exports.IS_NATIVE_ANDROID = exports.IS_OLD_ANDROID = exports.ANDROID_VERSION = exports.IS_ANDROID = exports.IOS_VERSION = exports.IS_IOS = exports.IS_IPOD = exports.IS_IPHONE = exports.IS_IPAD = undefined;
+exports.BACKGROUND_SIZE_SUPPORTED = exports.TOUCH_ENABLED = exports.IS_ANY_SAFARI = exports.IS_SAFARI = exports.IE_VERSION = exports.IS_IE8 = exports.IS_CHROME = exports.IS_EDGE = exports.IS_FIREFOX = exports.IS_NATIVE_ANDROID = exports.IS_OLD_ANDROID = exports.ANDROID_VERSION = exports.IS_ANDROID = exports.IOS_VERSION = exports.IS_IOS = exports.IS_IPOD = exports.IS_IPHONE = exports.IS_IPAD = undefined;
 
-var _document = require('global/document');
+var _dom = require('./dom');
 
-var _document2 = _interopRequireDefault(_document);
+var Dom = _interopRequireWildcard(_dom);
 
 var _window = require('global/window');
 
@@ -13,8 +13,11 @@ var _window2 = _interopRequireDefault(_window);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 /**
  * @file browser.js
+ * @module browser
  */
 var USER_AGENT = _window2['default'].navigator && _window2['default'].navigator.userAgent || '';
 var webkitVersionMap = /AppleWebKit\/([\d.]+)/i.exec(USER_AGENT);
@@ -78,5 +81,9 @@ var IE_VERSION = exports.IE_VERSION = function (result) {
   return result && parseFloat(result[1]);
 }(/MSIE\s(\d+)\.\d/.exec(USER_AGENT));
 
-var TOUCH_ENABLED = exports.TOUCH_ENABLED = !!('ontouchstart' in _window2['default'] || _window2['default'].DocumentTouch && _document2['default'] instanceof _window2['default'].DocumentTouch);
-var BACKGROUND_SIZE_SUPPORTED = exports.BACKGROUND_SIZE_SUPPORTED = 'backgroundSize' in _document2['default'].createElement('video').style;
+var IS_SAFARI = exports.IS_SAFARI = /Safari/i.test(USER_AGENT) && !IS_CHROME && !IS_ANDROID && !IS_EDGE;
+var IS_ANY_SAFARI = exports.IS_ANY_SAFARI = IS_SAFARI || IS_IOS;
+
+var TOUCH_ENABLED = exports.TOUCH_ENABLED = Dom.isReal() && ('ontouchstart' in _window2['default'] || _window2['default'].DocumentTouch && _window2['default'].document instanceof _window2['default'].DocumentTouch);
+
+var BACKGROUND_SIZE_SUPPORTED = exports.BACKGROUND_SIZE_SUPPORTED = Dom.isReal() && 'backgroundSize' in _window2['default'].document.createElement('video').style;

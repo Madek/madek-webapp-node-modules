@@ -30,14 +30,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Displays the duration
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class DurationDisplay
  */
 var DurationDisplay = function (_Component) {
   _inherits(DurationDisplay, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function DurationDisplay(player, options) {
     _classCallCheck(this, DurationDisplay);
 
@@ -54,10 +60,10 @@ var DurationDisplay = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -80,13 +86,19 @@ var DurationDisplay = function (_Component) {
   };
 
   /**
-   * Update duration time display
+   * Update duration time display.
    *
-   * @method updateContent
+   * @param {EventTarget~Event} [event]
+   *        The `durationchange`, `timeupdate`, or `loadedmetadata` event that caused
+   *        this function to be called.
+   *
+   * @listens Player#durationchange
+   * @listens Player#timeupdate
+   * @listens Player#loadedmetadata
    */
 
 
-  DurationDisplay.prototype.updateContent = function updateContent() {
+  DurationDisplay.prototype.updateContent = function updateContent(event) {
     var duration = this.player_.duration();
 
     if (duration && this.duration_ !== duration) {

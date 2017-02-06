@@ -40,16 +40,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * A button class with a popup menu
+ * A `MenuButton` class for any popup {@link Menu}.
  *
- * @param {Player|Object} player
- * @param {Object=} options
- * @extends Button
- * @class MenuButton
+ * @extends ClickableComponent
  */
 var MenuButton = function (_ClickableComponent) {
   _inherits(MenuButton, _ClickableComponent);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of player options.
+   */
   function MenuButton(player) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -68,9 +74,7 @@ var MenuButton = function (_ClickableComponent) {
   }
 
   /**
-   * Update menu
-   *
-   * @method update
+   * Update the menu based on the current state of its items.
    */
 
 
@@ -101,10 +105,10 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Create menu
+   * Create the menu and add all items to it.
    *
-   * @return {Menu} The constructed menu
-   * @method createMenu
+   * @return {Menu}
+   *         The constructed menu
    */
 
 
@@ -138,17 +142,17 @@ var MenuButton = function (_ClickableComponent) {
   /**
    * Create the list of menu items. Specific to each subclass.
    *
-   * @method createItems
+   * @abstract
    */
 
 
   MenuButton.prototype.createItems = function createItems() {};
 
   /**
-   * Create the component's DOM element
+   * Create the `MenuButtons`s DOM element.
    *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
 
 
@@ -159,10 +163,10 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -180,17 +184,23 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * When you click the button it adds focus, which
-   * will show the menu indefinitely.
-   * So we'll remove focus when the mouse leaves the button.
-   * Focus is needed for tab navigation.
-   * Allow sub components to stack CSS class names
+   * Handle a click on a `MenuButton`.
+   * See {@link ClickableComponent#handleClick} for instances where this is called.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} event
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  MenuButton.prototype.handleClick = function handleClick() {
+  MenuButton.prototype.handleClick = function handleClick(event) {
+    // When you click the button it adds focus, which will show the menu.
+    // So we'll remove focus when the mouse leaves the button. Focus is needed
+    // for tab navigation.
+
     this.one(this.menu.contentEl(), 'mouseleave', Fn.bind(this, function (e) {
       this.unpressButton();
       this.el_.blur();
@@ -203,10 +213,13 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Handle key press on menu
+   * Handle tab, escape, down arrow, and up arrow keys for `MenuButton`. See
+   * {@link ClickableComponent#handleKeyPress} for instances where this is called.
    *
-   * @param {Object} event Key press event
-   * @method handleKeyPress
+   * @param {EventTarget~Event} event
+   *        The `keydown` event that caused this function to be called.
+   *
+   * @listens keydown
    */
 
 
@@ -233,10 +246,13 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Handle key press on submenu
+   * Handle a `keydown` event on a sub-menu. The listener for this is added in
+   * the constructor.
    *
-   * @param {Object} event Key press event
-   * @method handleSubmenuKeyPress
+   * @param {EventTarget~Event} event
+   *        Key press event
+   *
+   * @listens keydown
    */
 
 
@@ -255,9 +271,7 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Makes changes based on button pressed
-   *
-   * @method pressButton
+   * Put the current `MenuButton` into a pressed state.
    */
 
 
@@ -272,9 +286,7 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Makes changes based on button unpressed
-   *
-   * @method unpressButton
+   * Take the current `MenuButton` out of a pressed state.
    */
 
 
@@ -289,10 +301,10 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Disable the menu button
+   * Disable the `MenuButton`. Don't allow it to be clicked.
    *
-   * @return {Component}
-   * @method disable
+   * @return {MenuButton}
+   *         Returns itself; method can be chained.
    */
 
 
@@ -308,10 +320,10 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
-   * Enable the menu button
+   * Enable the `MenuButton`. Allow it to be clicked.
    *
-   * @return {Component}
-   * @method disable
+   * @return {MenuButton}
+   *         Returns itself; method can be chained.
    */
 
 

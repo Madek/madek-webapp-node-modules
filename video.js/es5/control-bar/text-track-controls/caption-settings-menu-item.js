@@ -24,14 +24,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The menu item for caption track settings menu
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends TextTrackMenuItem
- * @class CaptionSettingsMenuItem
  */
 var CaptionSettingsMenuItem = function (_TextTrackMenuItem) {
   _inherits(CaptionSettingsMenuItem, _TextTrackMenuItem);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function CaptionSettingsMenuItem(player, options) {
     _classCallCheck(this, CaptionSettingsMenuItem);
 
@@ -55,13 +61,19 @@ var CaptionSettingsMenuItem = function (_TextTrackMenuItem) {
   }
 
   /**
-   * Handle click on menu item
+   * This gets called when an `CaptionSettingsMenuItem` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  CaptionSettingsMenuItem.prototype.handleClick = function handleClick() {
+  CaptionSettingsMenuItem.prototype.handleClick = function handleClick(event) {
     this.player().getChild('textTrackSettings').show();
     this.player().getChild('textTrackSettings').el_.focus();
   };

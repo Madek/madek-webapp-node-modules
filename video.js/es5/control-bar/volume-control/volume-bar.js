@@ -35,14 +35,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The bar that contains the volume level and can be clicked on to adjust the level
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Slider
- * @class VolumeBar
  */
 var VolumeBar = function (_Slider) {
   _inherits(VolumeBar, _Slider);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function VolumeBar(player, options) {
     _classCallCheck(this, VolumeBar);
 
@@ -54,10 +60,10 @@ var VolumeBar = function (_Slider) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -70,9 +76,12 @@ var VolumeBar = function (_Slider) {
   };
 
   /**
-   * Handle mouse move on volume bar
+   * Handle movement events on the {@link VolumeMenuButton}.
    *
-   * @method handleMouseMove
+   * @param {EventTarget~Event} event
+   *        The event that caused this function to run.
+   *
+   * @listens mousemove
    */
 
 
@@ -80,6 +89,11 @@ var VolumeBar = function (_Slider) {
     this.checkMuted();
     this.player_.volume(this.calculateDistance(event));
   };
+
+  /**
+   * If the player is muted unmute it.
+   */
+
 
   VolumeBar.prototype.checkMuted = function checkMuted() {
     if (this.player_.muted()) {
@@ -90,8 +104,8 @@ var VolumeBar = function (_Slider) {
   /**
    * Get percent of volume level
    *
-   * @retun {Number} Volume level percent
-   * @method getPercent
+   * @return {number}
+   *         Volume level percent as a decimal number.
    */
 
 
@@ -104,8 +118,6 @@ var VolumeBar = function (_Slider) {
 
   /**
    * Increase volume level for keyboard users
-   *
-   * @method stepForward
    */
 
 
@@ -116,8 +128,6 @@ var VolumeBar = function (_Slider) {
 
   /**
    * Decrease volume level for keyboard users
-   *
-   * @method stepBack
    */
 
 
@@ -129,11 +139,14 @@ var VolumeBar = function (_Slider) {
   /**
    * Update ARIA accessibility attributes
    *
-   * @method updateARIAAttributes
+   * @param {EventTarget~Event} [event]
+   *        The `volumechange` event that caused this function to run.
+   *
+   * @listens Player#volumechange
    */
 
 
-  VolumeBar.prototype.updateARIAAttributes = function updateARIAAttributes() {
+  VolumeBar.prototype.updateARIAAttributes = function updateARIAAttributes(event) {
     // Current value of volume bar as a percentage
     var volume = (this.player_.volume() * 100).toFixed(2);
 
@@ -144,11 +157,24 @@ var VolumeBar = function (_Slider) {
   return VolumeBar;
 }(_slider2['default']);
 
+/**
+ * Default options for the `VolumeBar`
+ *
+ * @type {Object}
+ * @private
+ */
+
+
 VolumeBar.prototype.options_ = {
   children: ['volumeLevel'],
   barName: 'volumeLevel'
 };
 
+/**
+ * Call the update event for this Slider when this event happens on the player.
+ *
+ * @type {string}
+ */
 VolumeBar.prototype.playerEvent = 'volumechange';
 
 _component2['default'].registerComponent('VolumeBar', VolumeBar);

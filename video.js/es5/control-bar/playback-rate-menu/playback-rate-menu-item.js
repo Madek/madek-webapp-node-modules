@@ -22,16 +22,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The specific menu item type for selecting a playback rate
+ * The specific menu item type for selecting a playback rate.
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuItem
- * @class PlaybackRateMenuItem
  */
 var PlaybackRateMenuItem = function (_MenuItem) {
   _inherits(PlaybackRateMenuItem, _MenuItem);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function PlaybackRateMenuItem(player, options) {
     _classCallCheck(this, PlaybackRateMenuItem);
 
@@ -52,30 +58,47 @@ var PlaybackRateMenuItem = function (_MenuItem) {
   }
 
   /**
-   * Handle click on menu item
+   * This gets called when an `PlaybackRateMenuItem` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  PlaybackRateMenuItem.prototype.handleClick = function handleClick() {
+  PlaybackRateMenuItem.prototype.handleClick = function handleClick(event) {
     _MenuItem.prototype.handleClick.call(this);
     this.player().playbackRate(this.rate);
   };
 
   /**
-   * Update playback rate with selected rate
+   * Update the PlaybackRateMenuItem when the playbackrate changes.
    *
-   * @method update
+   * @param {EventTarget~Event} [event]
+   *        The `ratechange` event that caused this function to run.
+   *
+   * @listens Player#ratechange
    */
 
 
-  PlaybackRateMenuItem.prototype.update = function update() {
+  PlaybackRateMenuItem.prototype.update = function update(event) {
     this.selected(this.player().playbackRate() === this.rate);
   };
 
   return PlaybackRateMenuItem;
 }(_menuItem2['default']);
+
+/**
+ * The text that should display over the `PlaybackRateMenuItem`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
+
 
 PlaybackRateMenuItem.prototype.contentElType = 'button';
 

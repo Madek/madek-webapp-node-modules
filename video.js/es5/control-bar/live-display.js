@@ -23,16 +23,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
+// TODO - Future make it click to snap to live
+
 /**
- * Displays the live indicator
- * TODO - Future make it click to snap to live
+ * Displays the live indicator when duration is Infinity.
  *
  * @extends Component
- * @class LiveDisplay
  */
 var LiveDisplay = function (_Component) {
   _inherits(LiveDisplay, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function LiveDisplay(player, options) {
     _classCallCheck(this, LiveDisplay);
 
@@ -44,10 +53,10 @@ var LiveDisplay = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -67,7 +76,18 @@ var LiveDisplay = function (_Component) {
     return el;
   };
 
-  LiveDisplay.prototype.updateShowing = function updateShowing() {
+  /**
+   * Check the duration to see if the LiveDisplay should be showing or not. Then show/hide
+   * it accordingly
+   *
+   * @param {EventTarget~Event} [event]
+   *        The {@link Player#durationchange} event that caused this function to run.
+   *
+   * @listens Player#durationchange
+   */
+
+
+  LiveDisplay.prototype.updateShowing = function updateShowing(event) {
     if (this.player().duration() === Infinity) {
       this.show();
     } else {

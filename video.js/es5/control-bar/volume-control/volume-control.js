@@ -25,14 +25,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The component for controlling the volume level
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class VolumeControl
  */
 var VolumeControl = function (_Component) {
   _inherits(VolumeControl, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of player options.
+   */
   function VolumeControl(player, options) {
     _classCallCheck(this, VolumeControl);
 
@@ -53,10 +59,10 @@ var VolumeControl = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -68,6 +74,14 @@ var VolumeControl = function (_Component) {
 
   return VolumeControl;
 }(_component2['default']);
+
+/**
+ * Default options for the `VolumeControl`
+ *
+ * @type {Object}
+ * @private
+ */
+
 
 VolumeControl.prototype.options_ = {
   children: ['volumeBar']

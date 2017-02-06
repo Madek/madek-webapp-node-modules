@@ -27,23 +27,37 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * A single audio text track as defined in:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html#audiotrack
+ * A representation of a single `AudioTrack`. If it is part of an {@link AudioTrackList}
+ * only one `AudioTrack` in the list will be enabled at a time.
  *
- * interface AudioTrack {
- *   readonly attribute DOMString id;
- *   readonly attribute DOMString kind;
- *   readonly attribute DOMString label;
- *   readonly attribute DOMString language;
- *   attribute boolean enabled;
- * };
- *
- * @param {Object=} options Object of option names and values
- * @class AudioTrack
+ * @see [Spec]{@link https://html.spec.whatwg.org/multipage/embedded-content.html#audiotrack}
+ * @extends Track
  */
 var AudioTrack = function (_Track) {
   _inherits(AudioTrack, _Track);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {Object} [options={}]
+   *        Object of option names and values
+   *
+   * @param {AudioTrack~Kind} [options.kind='']
+   *        A valid audio track kind
+   *
+   * @param {string} [options.id='vjs_track_' + Guid.newGUID()]
+   *        A unique id for this AudioTrack.
+   *
+   * @param {string} [options.label='']
+   *        The menu label for this track.
+   *
+   * @param {string} [options.language='']
+   *        A valid two character language code.
+   *
+   * @param {boolean} [options.enabled]
+   *        If this track is the one that is currently playing. If this track is part of
+   *        an {@link AudioTrackList}, only one {@link AudioTrack} will be enabled.
+   */
   function AudioTrack() {
     var _this, _ret;
 
@@ -66,7 +80,13 @@ var AudioTrack = function (_Track) {
         }
       }
     }
-
+    /**
+     * @member {boolean} enabled
+     *         If this `AudioTrack` is enabled or not. When setting this will
+     *         fire {@link AudioTrack#enabledchange} if the state of enabled is changed.
+     *
+     * @fires VideoTrack#selectedchange
+     */
     Object.defineProperty(track, 'enabled', {
       get: function get() {
         return enabled;
@@ -77,6 +97,17 @@ var AudioTrack = function (_Track) {
           return;
         }
         enabled = newEnabled;
+
+        /**
+         * An event that fires when enabled changes on this track. This allows
+         * the AudioTrackList that holds this track to act accordingly.
+         *
+         * > Note: This is not part of the spec! Native tracks will do
+         *         this internally without an event.
+         *
+         * @event AudioTrack#enabledchange
+         * @type {EventTarget~Event}
+         */
         this.trigger('enabledchange');
       }
     });

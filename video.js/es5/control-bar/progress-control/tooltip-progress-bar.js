@@ -30,14 +30,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Shows play progress
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class PlayProgressBar
  */
 var TooltipProgressBar = function (_Component) {
   _inherits(TooltipProgressBar, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function TooltipProgressBar(player, options) {
     _classCallCheck(this, TooltipProgressBar);
 
@@ -50,10 +56,10 @@ var TooltipProgressBar = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -68,7 +74,17 @@ var TooltipProgressBar = function (_Component) {
     return el;
   };
 
-  TooltipProgressBar.prototype.updateDataAttr = function updateDataAttr() {
+  /**
+   * Updatet the data-current-time attribute for TooltipProgressBar
+   *
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` event that caused this function to run.
+   *
+   * @listens Player#timeupdate
+   */
+
+
+  TooltipProgressBar.prototype.updateDataAttr = function updateDataAttr(event) {
     var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
     var formattedTime = (0, _formatTime2['default'])(time, this.player_.duration());
 

@@ -8,21 +8,22 @@ var _document2 = _interopRequireDefault(_document);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-/*
- * Store the browser-specific methods for the fullscreen API
- * @type {Object|undefined}
- * @private
+/**
+ * Store the browser-specific methods for the fullscreen API.
+ *
+ * @type {Object}
+ * @see [Specification]{@link https://fullscreen.spec.whatwg.org}
+ * @see [Map Approach From Screenfull.js]{@link https://github.com/sindresorhus/screenfull.js}
  */
 var FullscreenApi = {};
 
 // browser API methods
-// map approach from Screenful.js - https://github.com/sindresorhus/screenfull.js
 /**
  * @file fullscreen-api.js
+ * @module fullscreen-api
+ * @private
  */
-var apiMap = [
-// Spec: https://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html
-['requestFullscreen', 'exitFullscreen', 'fullscreenElement', 'fullscreenEnabled', 'fullscreenchange', 'fullscreenerror'],
+var apiMap = [['requestFullscreen', 'exitFullscreen', 'fullscreenElement', 'fullscreenEnabled', 'fullscreenchange', 'fullscreenerror'],
 // WebKit
 ['webkitRequestFullscreen', 'webkitExitFullscreen', 'webkitFullscreenElement', 'webkitFullscreenEnabled', 'webkitfullscreenchange', 'webkitfullscreenerror'],
 // Old WebKit (Safari 5.1)

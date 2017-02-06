@@ -28,11 +28,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * anywhere we call this function we diverge from the spec
+ * Anywhere we call this function we diverge from the spec
  * as we only support one enabled audiotrack at a time
  *
- * @param {Array|AudioTrackList} list list to work on
- * @param {AudioTrack} track the track to skip
+ * @param {AudioTrackList} list
+ *        list to work on
+ *
+ * @param {AudioTrack} track
+ *        The track to skip
+ *
+ * @private
  */
 var disableOthers = function disableOthers(list, track) {
   for (var i = 0; i < list.length; i++) {
@@ -45,28 +50,21 @@ var disableOthers = function disableOthers(list, track) {
 };
 
 /**
- * A list of possible audio tracks. All functionality is in the
- * base class Tracklist and the spec for AudioTrackList is located at:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html#audiotracklist
+ * The current list of {@link AudioTrack} for a media file.
  *
- * interface AudioTrackList : EventTarget {
- *   readonly attribute unsigned long length;
- *   getter AudioTrack (unsigned long index);
- *   AudioTrack? getTrackById(DOMString id);
- *
- *   attribute EventHandler onchange;
- *   attribute EventHandler onaddtrack;
- *   attribute EventHandler onremovetrack;
- * };
- *
- * @param {AudioTrack[]} tracks a list of audio tracks to instantiate the list with
+ * @see [Spec]{@link https://html.spec.whatwg.org/multipage/embedded-content.html#audiotracklist}
  * @extends TrackList
- * @class AudioTrackList
  */
 
 var AudioTrackList = function (_TrackList) {
   _inherits(AudioTrackList, _TrackList);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {AudioTrack[]} [tracks=[]]
+   *        A list of `AudioTrack` to instantiate the list with.
+   */
   function AudioTrackList() {
     var _this, _ret;
 
@@ -107,6 +105,17 @@ var AudioTrackList = function (_TrackList) {
     return _ret = list, _possibleConstructorReturn(_this, _ret);
   }
 
+  /**
+   * Add an {@link AudioTrack} to the `AudioTrackList`.
+   *
+   * @param {AudioTrack} track
+   *        The AudioTrack to add to the list
+   *
+   * @fires Track#addtrack
+   * @private
+   */
+
+
   AudioTrackList.prototype.addTrack_ = function addTrack_(track) {
     var _this2 = this;
 
@@ -120,6 +129,10 @@ var AudioTrackList = function (_TrackList) {
       return;
     }
 
+    /**
+     * @listens AudioTrack#enabledchange
+     * @fires TrackList#change
+     */
     track.addEventListener('enabledchange', function () {
       // when we are disabling other tracks (since we don't support
       // more than one track at a time) we will set changing_
@@ -134,9 +147,29 @@ var AudioTrackList = function (_TrackList) {
     });
   };
 
+  /**
+   * Add an {@link AudioTrack} to the `AudioTrackList`.
+   *
+   * @param {AudioTrack} track
+   *        The AudioTrack to add to the list
+   *
+   * @fires Track#addtrack
+   */
+
+
   AudioTrackList.prototype.addTrack = function addTrack(track) {
     this.addTrack_(track);
   };
+
+  /**
+   * Remove an {@link AudioTrack} from the `AudioTrackList`.
+   *
+   * @param {AudioTrack} track
+   *        The AudioTrack to remove from the list
+   *
+   * @fires Track#removetrack
+   */
+
 
   AudioTrackList.prototype.removeTrack = function removeTrack(track) {
     _TrackList.prototype.removeTrack_.call(this, track);

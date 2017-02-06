@@ -32,14 +32,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The base class for buttons that toggle specific text track types (e.g. subtitles)
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuButton
- * @class TextTrackButton
  */
 var TextTrackButton = function (_TrackButton) {
   _inherits(TextTrackButton, _TrackButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of player options.
+   */
   function TextTrackButton(player) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -53,8 +59,11 @@ var TextTrackButton = function (_TrackButton) {
   /**
    * Create a menu item for each text track
    *
-   * @return {Array} Array of menu items
-   * @method createItems
+   * @param {TextTrackMenuItem[]} [items=[]]
+   *        Existing array of items to use during creation
+   *
+   * @return {TextTrackMenuItem[]}
+   *         Array of menu items that were created
    */
 
 

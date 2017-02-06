@@ -36,16 +36,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The component that handles showing the poster image.
+ * A `ClickableComponent` that handles showing the poster image for the player.
  *
- * @param {Player|Object} player
- * @param {Object=} options
- * @extends Button
- * @class PosterImage
+ * @extends ClickableComponent
  */
 var PosterImage = function (_ClickableComponent) {
   _inherits(PosterImage, _ClickableComponent);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should attach to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function PosterImage(player, options) {
     _classCallCheck(this, PosterImage);
 
@@ -57,9 +63,7 @@ var PosterImage = function (_ClickableComponent) {
   }
 
   /**
-   * Clean up the poster image
-   *
-   * @method dispose
+   * Clean up and dispose of the `PosterImage`.
    */
 
 
@@ -69,10 +73,10 @@ var PosterImage = function (_ClickableComponent) {
   };
 
   /**
-   * Create the poster's image element
+   * Create the `PosterImage`s DOM element.
    *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
 
 
@@ -97,13 +101,16 @@ var PosterImage = function (_ClickableComponent) {
   };
 
   /**
-   * Event handler for updates to the player's poster source
+   * An {@link EventTarget~EventListener} for {@link Player#posterchange} events.
    *
-   * @method update
+   * @listens Player#posterchange
+   *
+   * @param {EventTarget~Event} [event]
+   *        The `Player#posterchange` event that triggered this function.
    */
 
 
-  PosterImage.prototype.update = function update() {
+  PosterImage.prototype.update = function update(event) {
     var url = this.player().poster();
 
     this.setSrc(url);
@@ -118,10 +125,10 @@ var PosterImage = function (_ClickableComponent) {
   };
 
   /**
-   * Set the poster source depending on the display method
+   * Set the source of the `PosterImage` depending on the display method.
    *
-   * @param {String} url The URL to the poster source
-   * @method setSrc
+   * @param {string} url
+   *        The URL to the source for the `PosterImage`.
    */
 
 
@@ -142,15 +149,24 @@ var PosterImage = function (_ClickableComponent) {
   };
 
   /**
-   * Event handler for clicks on the poster image
+   * An {@link EventTarget~EventListener} for clicks on the `PosterImage`. See
+   * {@link ClickableComponent#handleClick} for instances where this will be triggered.
    *
-   * @method handleClick
+   * @listens tap
+   * @listens click
+   * @listens keydown
+   *
+   * @param {EventTarget~Event} event
+   +        The `click`, `tap` or `keydown` event that caused this function to be called.
    */
 
 
-  PosterImage.prototype.handleClick = function handleClick() {
+  PosterImage.prototype.handleClick = function handleClick(event) {
     // We don't want a click to trigger playback when controls are disabled
-    // but CSS should be hiding the poster to prevent that from happening
+    if (!this.player_.controls()) {
+      return;
+    }
+
     if (this.player_.paused()) {
       this.player_.play();
     } else {

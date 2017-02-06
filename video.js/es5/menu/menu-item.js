@@ -10,9 +10,7 @@ var _component = require('../component.js');
 
 var _component2 = _interopRequireDefault(_component);
 
-var _object = require('object.assign');
-
-var _object2 = _interopRequireDefault(_object);
+var _obj = require('../utils/obj');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -28,14 +26,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The component for a menu item. `<li>`
  *
- * @param {Player|Object} player
- * @param {Object=} options
- * @extends Button
- * @class MenuItem
+ * @extends ClickableComponent
  */
 var MenuItem = function (_ClickableComponent) {
   _inherits(MenuItem, _ClickableComponent);
 
+  /**
+   * Creates an instance of the this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of player options.
+   *
+   */
   function MenuItem(player, options) {
     _classCallCheck(this, MenuItem);
 
@@ -56,17 +61,24 @@ var MenuItem = function (_ClickableComponent) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `MenuItem's DOM element
    *
-   * @param {String=} type Desc
-   * @param {Object=} props Desc
+   * @param {string} [type=li]
+   *        Element's node type, not actually used, always set to `li`.
+   *
+   * @param {Object} [props={}]
+   *        An object of properties that should be set on the element
+   *
+   * @param {Object} [attrs={}]
+   *        An object of attributes that should be set on the element
+   *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
 
 
   MenuItem.prototype.createEl = function createEl(type, props, attrs) {
-    return _ClickableComponent.prototype.createEl.call(this, 'li', (0, _object2['default'])({
+    return _ClickableComponent.prototype.createEl.call(this, 'li', (0, _obj.assign)({
       className: 'vjs-menu-item',
       innerHTML: this.localize(this.options_.label),
       tabIndex: -1
@@ -74,21 +86,27 @@ var MenuItem = function (_ClickableComponent) {
   };
 
   /**
-   * Handle a click on the menu item, and set it to selected
+   * Any click on a `MenuItem` puts int into the selected state.
+   * See {@link ClickableComponent#handleClick} for instances where this is called.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} event
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  MenuItem.prototype.handleClick = function handleClick() {
+  MenuItem.prototype.handleClick = function handleClick(event) {
     this.selected(true);
   };
 
   /**
-   * Set this menu item as selected or not
+   * Set the state for this menu item as selected or not.
    *
-   * @param  {Boolean} selected
-   * @method selected
+   * @param {boolean} selected
+   *        if the menu item is selected or not
    */
 
 

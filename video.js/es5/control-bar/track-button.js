@@ -28,16 +28,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The base class for buttons that toggle specific text track types (e.g. subtitles)
+ * The base class for buttons that toggle specific  track types (e.g. subtitles).
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuButton
- * @class TrackButton
  */
 var TrackButton = function (_MenuButton) {
   _inherits(TrackButton, _MenuButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function TrackButton(player, options) {
     _classCallCheck(this, TrackButton);
 

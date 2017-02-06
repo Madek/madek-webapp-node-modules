@@ -36,16 +36,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The component for controlling the playback rate
+ * The component for controlling the playback rate.
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuButton
- * @class PlaybackRateMenuButton
  */
 var PlaybackRateMenuButton = function (_MenuButton) {
   _inherits(PlaybackRateMenuButton, _MenuButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function PlaybackRateMenuButton(player, options) {
     _classCallCheck(this, PlaybackRateMenuButton);
 
@@ -60,10 +66,10 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -81,10 +87,10 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   };
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -95,8 +101,8 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   /**
    * Create the playback rate menu
    *
-   * @return {Menu} Menu object populated with items
-   * @method createMenu
+   * @return {Menu}
+   *         Menu object populated with {@link PlaybackRateMenuItem}s
    */
 
 
@@ -115,8 +121,6 @@ var PlaybackRateMenuButton = function (_MenuButton) {
 
   /**
    * Updates ARIA accessibility attributes
-   *
-   * @method updateARIAAttributes
    */
 
 
@@ -126,13 +130,19 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   };
 
   /**
-   * Handle menu item click
+   * This gets called when an `PlaybackRateMenuButton` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  PlaybackRateMenuButton.prototype.handleClick = function handleClick() {
+  PlaybackRateMenuButton.prototype.handleClick = function handleClick(event) {
     // select next rate option
     var currentRate = this.player().playbackRate();
     var rates = this.playbackRates();
@@ -152,8 +162,8 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   /**
    * Get possible playback rates
    *
-   * @return {Array} Possible playback rates
-   * @method playbackRates
+   * @return {Array}
+   *         All possible playback rates
    */
 
 
@@ -165,8 +175,8 @@ var PlaybackRateMenuButton = function (_MenuButton) {
    * Get whether playback rates is supported by the tech
    * and an array of playback rates exists
    *
-   * @return {Boolean} Whether changing playback rate is supported
-   * @method playbackRateSupported
+   * @return {boolean}
+   *         Whether changing playback rate is supported
    */
 
 
@@ -177,11 +187,14 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   /**
    * Hide playback rate controls when they're no playback rate options to select
    *
-   * @method updateVisibility
+   * @param {EventTarget~Event} [event]
+   *        The event that caused this function to run.
+   *
+   * @listens Player#loadstart
    */
 
 
-  PlaybackRateMenuButton.prototype.updateVisibility = function updateVisibility() {
+  PlaybackRateMenuButton.prototype.updateVisibility = function updateVisibility(event) {
     if (this.playbackRateSupported()) {
       this.removeClass('vjs-hidden');
     } else {
@@ -192,11 +205,14 @@ var PlaybackRateMenuButton = function (_MenuButton) {
   /**
    * Update button label when rate changed
    *
-   * @method updateLabel
+   * @param {EventTarget~Event} [event]
+   *        The event that caused this function to run.
+   *
+   * @listens Player#ratechange
    */
 
 
-  PlaybackRateMenuButton.prototype.updateLabel = function updateLabel() {
+  PlaybackRateMenuButton.prototype.updateLabel = function updateLabel(event) {
     if (this.playbackRateSupported()) {
       this.labelEl_.innerHTML = this.player().playbackRate() + 'x';
     }
@@ -204,6 +220,14 @@ var PlaybackRateMenuButton = function (_MenuButton) {
 
   return PlaybackRateMenuButton;
 }(_menuButton2['default']);
+
+/**
+ * The text that should display over the `FullscreenToggle`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
+
 
 PlaybackRateMenuButton.prototype.controlText_ = 'Playback Rate';
 

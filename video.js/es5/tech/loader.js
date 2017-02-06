@@ -26,18 +26,26 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The Media Loader is the component that decides which playback technology to load
- * when the player is initialized.
+ * The `MediaLoader` is the `Component` that decides which playback technology to load
+ * when a player is initialized.
  *
- * @param {Object} player  Main Player
- * @param {Object=} options Object of option names and values
- * @param {Function=} ready    Ready callback function
  * @extends Component
- * @class MediaLoader
  */
 var MediaLoader = function (_Component) {
   _inherits(MediaLoader, _Component);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should attach to.
+   *
+   * @param {Object} [options]
+   *        The key/value stroe of player options.
+   *
+   * @param {Component~ReadyCallback} [ready]
+   *        The function that is run when this component is ready.
+   */
   function MediaLoader(player, options, ready) {
     _classCallCheck(this, MediaLoader);
 

@@ -26,19 +26,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Display that an error has occurred making the video unplayable.
+ * A display that indicates an error has occurred. This means that the video
+ * is unplayable.
  *
  * @extends ModalDialog
- * @class ErrorDisplay
  */
 var ErrorDisplay = function (_ModalDialog) {
   _inherits(ErrorDisplay, _ModalDialog);
 
   /**
-   * Constructor for error display modal.
+   * Creates an instance of this class.
    *
    * @param  {Player} player
+   *         The `Player` that this class should be attached to.
+   *
    * @param  {Object} [options]
+   *         The key/value store of player options.
    */
   function ErrorDisplay(player, options) {
     _classCallCheck(this, ErrorDisplay);
@@ -50,13 +53,12 @@ var ErrorDisplay = function (_ModalDialog) {
   }
 
   /**
-   * Include the old class for backward-compatibility.
+   * Builds the default DOM `className`.
    *
-   * This can be removed in 6.0.
+   * @return {string}
+   *         The DOM `className` for this object.
    *
-   * @method buildCSSClass
-   * @deprecated
-   * @return {String}
+   * @deprecated Since version 5.
    */
 
 
@@ -65,9 +67,10 @@ var ErrorDisplay = function (_ModalDialog) {
   };
 
   /**
-   * Generates the modal content based on the player error.
+   * Gets the localized error message based on the `Player`s error.
    *
-   * @return {String|Null}
+   * @return {string}
+   *         The `Player`s error message localized or an empty string.
    */
 
 
@@ -79,6 +82,13 @@ var ErrorDisplay = function (_ModalDialog) {
 
   return ErrorDisplay;
 }(_modalDialog2['default']);
+
+/**
+ * The default options for an `ErrorDisplay`.
+ *
+ * @private
+ */
+
 
 ErrorDisplay.prototype.options_ = (0, _mergeOptions2['default'])(_modalDialog2['default'].prototype.options_, {
   fillAlways: true,

@@ -22,48 +22,57 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Initial play button. Shows before the video has played. The hiding of the
- * big play button is done via CSS and player states.
+ * The initial play button that shows before the video has played. The hiding of the
+ * `BigPlayButton` get done via CSS and `Player` states.
  *
- * @param {Object} player  Main Player
- * @param {Object=} options Object of option names and values
  * @extends Button
- * @class BigPlayButton
  */
 var BigPlayButton = function (_Button) {
   _inherits(BigPlayButton, _Button);
 
-  function BigPlayButton(player, options) {
+  function BigPlayButton() {
     _classCallCheck(this, BigPlayButton);
 
-    return _possibleConstructorReturn(this, _Button.call(this, player, options));
+    return _possibleConstructorReturn(this, _Button.apply(this, arguments));
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object. Always returns 'vjs-big-play-button'.
    */
-
-
   BigPlayButton.prototype.buildCSSClass = function buildCSSClass() {
     return 'vjs-big-play-button';
   };
 
   /**
-   * Handles click for play
+   * This gets called when a `BigPlayButton` "clicked". See {@link ClickableComponent}
+   * for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} event
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  BigPlayButton.prototype.handleClick = function handleClick() {
+  BigPlayButton.prototype.handleClick = function handleClick(event) {
     this.player_.play();
   };
 
   return BigPlayButton;
 }(_button2['default']);
+
+/**
+ * The text that should display over the `BigPlayButton`s controls. Added to for localization.
+ *
+ * @type {string}
+ * @private
+ */
+
 
 BigPlayButton.prototype.controlText_ = 'Play Video';
 

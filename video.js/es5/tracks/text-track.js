@@ -52,10 +52,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * takes a webvtt file contents and parses it into cues
+ * Takes a webvtt file contents and parses it into cues
  *
- * @param {String} srcContent webVTT file contents
- * @param {Track} track track to addcues to
+ * @param {string} srcContent
+ *        webVTT file contents
+ *
+ * @param {TextTrack} track
+ *        TextTrack to add cues to. Cues come from the srcContent.
+ *
+ * @private
  */
 var parseCues = function parseCues(srcContent, track) {
   var parser = new _window2['default'].WebVTT.Parser(_window2['default'], _window2['default'].vttjs, _window2['default'].WebVTT.StringDecoder());
@@ -93,10 +98,15 @@ var parseCues = function parseCues(srcContent, track) {
 };
 
 /**
- * load a track from a  specifed url
+ * Load a `TextTrack` from a specifed url.
  *
- * @param {String} src url to load track from
- * @param {Track} track track to addcues to
+ * @param {string} src
+ *        Url to load track from.
+ *
+ * @param {TextTrack} track
+ *        Track to add cues to. Comes from the content at the end of `url`.
+ *
+ * @private
  */
 var loadTrack = function loadTrack(src, track) {
   var opts = {
@@ -138,36 +148,49 @@ var loadTrack = function loadTrack(src, track) {
 };
 
 /**
- * A single text track as defined in:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html#texttrack
+ * A representation of a single `TextTrack`.
  *
- * interface TextTrack : EventTarget {
- *   readonly attribute TextTrackKind kind;
- *   readonly attribute DOMString label;
- *   readonly attribute DOMString language;
- *
- *   readonly attribute DOMString id;
- *   readonly attribute DOMString inBandMetadataTrackDispatchType;
- *
- *   attribute TextTrackMode mode;
- *
- *   readonly attribute TextTrackCueList? cues;
- *   readonly attribute TextTrackCueList? activeCues;
- *
- *   void addCue(TextTrackCue cue);
- *   void removeCue(TextTrackCue cue);
- *
- *   attribute EventHandler oncuechange;
- * };
- *
- * @param {Object=} options Object of option names and values
+ * @see [Spec]{@link https://html.spec.whatwg.org/multipage/embedded-content.html#texttrack}
  * @extends Track
- * @class TextTrack
  */
 
 var TextTrack = function (_Track) {
   _inherits(TextTrack, _Track);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {Object} options={}
+   *        Object of option names and values
+   *
+   * @param {Tech} options.tech
+   *        A reference to the tech that owns this TextTrack.
+   *
+   * @param {TextTrack~Kind} [options.kind='subtitles']
+   *        A valid text track kind.
+   *
+   * @param {TextTrack~Mode} [options.mode='disabled']
+   *        A valid text track mode.
+   *
+   * @param {string} [options.id='vjs_track_' + Guid.newGUID()]
+   *        A unique id for this TextTrack.
+   *
+   * @param {string} [options.label='']
+   *        The menu label for this track.
+   *
+   * @param {string} [options.language='']
+   *        A valid two character language code.
+   *
+   * @param {string} [options.srclang='']
+   *        A valid two character language code. An alternative, but deprioritized
+   *        vesion of `options.language`
+   *
+   * @param {string} [options.src]
+   *        A url to TextTrack cues.
+   *
+   * @param {boolean} [options.default]
+   *        If this track should default to on or off.
+   */
   function TextTrack() {
     var _this, _ret2;
 
@@ -227,6 +250,13 @@ var TextTrack = function (_Track) {
       tt.tech_.on('timeupdate', timeupdateHandler);
     }
 
+    /**
+     * @member {boolean} default
+     *         If this track was set to be on or off by default. Cannot be changed after
+     *         creation.
+     *
+     * @readonly
+     */
     Object.defineProperty(tt, 'default', {
       get: function get() {
         return default_;
@@ -234,6 +264,13 @@ var TextTrack = function (_Track) {
       set: function set() {}
     });
 
+    /**
+     * @member {string} mode
+     *         Set the mode of this TextTrack to a valid {@link TextTrack~Mode}. Will
+     *         not be set if setting to an invalid mode.
+     *
+     * @fires TextTrack#modechange
+     */
     Object.defineProperty(tt, 'mode', {
       get: function get() {
         return mode;
@@ -246,10 +283,23 @@ var TextTrack = function (_Track) {
         if (mode === 'showing') {
           this.tech_.on('timeupdate', timeupdateHandler);
         }
+        /**
+         * An event that fires when mode changes on this track. This allows
+         * the TextTrackList that holds this track to act accordingly.
+         *
+         * > Note: This is not part of the spec!
+         *
+         * @event TextTrack#modechange
+         * @type {EventTarget~Event}
+         */
         this.trigger('modechange');
       }
     });
 
+    /**
+     * @member {TextTrackCueList} cues
+     *         The text track cue list for this TextTrack.
+     */
     Object.defineProperty(tt, 'cues', {
       get: function get() {
         if (!this.loaded_) {
@@ -261,6 +311,10 @@ var TextTrack = function (_Track) {
       set: function set() {}
     });
 
+    /**
+     * @member {TextTrackCueList} activeCues
+     *         The list text track cues that are currently active for this TextTrack.
+     */
     Object.defineProperty(tt, 'activeCues', {
       get: function get() {
         if (!this.loaded_) {
@@ -316,10 +370,10 @@ var TextTrack = function (_Track) {
   }
 
   /**
-   * add a cue to the internal list of cues
+   * Add a cue to the internal list of cues.
    *
-   * @param {Object} cue the cue to add to our internal list
-   * @method addCue
+   * @param {TextTrack~Cue} cue
+   *        The cue to add to our internal list
    */
 
 
@@ -339,10 +393,10 @@ var TextTrack = function (_Track) {
   };
 
   /**
-   * remvoe a cue from our internal list
+   * Remove a cue from our internal list
    *
-   * @param {Object} removeCue the cue to remove from our internal list
-   * @method removeCue
+   * @param {TextTrack~Cue} removeCue
+   *        The cue to remove from our internal list
    */
 
 

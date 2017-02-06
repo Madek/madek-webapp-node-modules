@@ -57,10 +57,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Container of main controls
+ * Container of main controls.
  *
  * @extends Component
- * @class ControlBar
  */
 var ControlBar = function (_Component) {
   _inherits(ControlBar, _Component);
@@ -72,10 +71,10 @@ var ControlBar = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
   ControlBar.prototype.createEl = function createEl() {
     return _Component.prototype.createEl.call(this, 'div', {
@@ -89,6 +88,14 @@ var ControlBar = function (_Component) {
 
   return ControlBar;
 }(_component2['default']);
+
+/**
+ * Default options for `ControlBar`
+ *
+ * @type {Object}
+ * @private
+ */
+
 
 ControlBar.prototype.options_ = {
   children: ['playToggle', 'volumeMenuButton', 'currentTimeDisplay', 'timeDivider', 'durationDisplay', 'progressControl', 'liveDisplay', 'remainingTimeDisplay', 'customControlSpacer', 'playbackRateMenuButton', 'chaptersButton', 'descriptionsButton', 'subtitlesButton', 'captionsButton', 'audioTrackButton', 'fullscreenToggle']

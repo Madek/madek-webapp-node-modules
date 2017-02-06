@@ -10,27 +10,13 @@ var _component = require('../../component.js');
 
 var _component2 = _interopRequireDefault(_component);
 
-var _textTrackMenuItem = require('./text-track-menu-item.js');
-
-var _textTrackMenuItem2 = _interopRequireDefault(_textTrackMenuItem);
-
 var _chaptersTrackMenuItem = require('./chapters-track-menu-item.js');
 
 var _chaptersTrackMenuItem2 = _interopRequireDefault(_chaptersTrackMenuItem);
 
-var _menu = require('../../menu/menu.js');
-
-var _menu2 = _interopRequireDefault(_menu);
-
-var _dom = require('../../utils/dom.js');
-
-var Dom = _interopRequireWildcard(_dom);
-
 var _toTitleCase = require('../../utils/to-title-case.js');
 
 var _toTitleCase2 = _interopRequireDefault(_toTitleCase);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -48,15 +34,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Chapters act much differently than other text tracks
  * Cues are navigation vs. other tracks of alternative languages
  *
- * @param {Object} player  Player object
- * @param {Object=} options Object of option names and values
- * @param {Function=} ready    Ready callback function
  * @extends TextTrackButton
- * @class ChaptersButton
  */
 var ChaptersButton = function (_TextTrackButton) {
   _inherits(ChaptersButton, _TextTrackButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   *
+   * @param {Component~ReadyCallback} [ready]
+   *        The function to call when this function is ready.
+   */
   function ChaptersButton(player, options, ready) {
     _classCallCheck(this, ChaptersButton);
 
@@ -67,10 +61,10 @@ var ChaptersButton = function (_TextTrackButton) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -79,123 +73,167 @@ var ChaptersButton = function (_TextTrackButton) {
   };
 
   /**
+   * Update the menu based on the current state of its items.
+   *
+   * @param {EventTarget~Event} [event]
+   *        An event that triggered this function to run.
+   *
+   * @listens TextTrackList#addtrack
+   * @listens TextTrackList#removetrack
+   * @listens TextTrackList#change
+   */
+
+
+  ChaptersButton.prototype.update = function update(event) {
+    if (!this.track_ || event && (event.type === 'addtrack' || event.type === 'removetrack')) {
+      this.setTrack(this.findChaptersTrack());
+    }
+    _TextTrackButton.prototype.update.call(this);
+  };
+
+  /**
+   * Set the currently selected track for the chapters button.
+   *
+   * @param {TextTrack} track
+   *        The new track to select. Nothing will change if this is the currently selected
+   *        track.
+   */
+
+
+  ChaptersButton.prototype.setTrack = function setTrack(track) {
+    if (this.track_ === track) {
+      return;
+    }
+
+    if (!this.updateHandler_) {
+      this.updateHandler_ = this.update.bind(this);
+    }
+
+    // here this.track_ refers to the old track instance
+    if (this.track_) {
+      var remoteTextTrackEl = this.player_.remoteTextTrackEls().getTrackElementByTrack_(this.track_);
+
+      if (remoteTextTrackEl) {
+        remoteTextTrackEl.removeEventListener('load', this.updateHandler_);
+      }
+
+      this.track_ = null;
+    }
+
+    this.track_ = track;
+
+    // here this.track_ refers to the new track instance
+    if (this.track_) {
+      this.track_.mode = 'hidden';
+
+      var _remoteTextTrackEl = this.player_.remoteTextTrackEls().getTrackElementByTrack_(this.track_);
+
+      if (_remoteTextTrackEl) {
+        _remoteTextTrackEl.addEventListener('load', this.updateHandler_);
+      }
+    }
+  };
+
+  /**
+   * Find the track object that is currently in use by this ChaptersButton
+   *
+   * @return {TextTrack|undefined}
+   *         The current track or undefined if none was found.
+   */
+
+
+  ChaptersButton.prototype.findChaptersTrack = function findChaptersTrack() {
+    var tracks = this.player_.textTracks() || [];
+
+    for (var i = tracks.length - 1; i >= 0; i--) {
+      // We will always choose the last track as our chaptersTrack
+      var track = tracks[i];
+
+      if (track.kind === this.kind_) {
+        return track;
+      }
+    }
+  };
+
+  /**
+   * Get the caption for the ChaptersButton based on the track label. This will also
+   * use the current tracks localized kind as a fallback if a label does not exist.
+   *
+   * @return {string}
+   *         The tracks current label or the localized track kind.
+   */
+
+
+  ChaptersButton.prototype.getMenuCaption = function getMenuCaption() {
+    if (this.track_ && this.track_.label) {
+      return this.track_.label;
+    }
+    return this.localize((0, _toTitleCase2['default'])(this.kind_));
+  };
+
+  /**
+   * Create menu from chapter track
+   *
+   * @return {Menu}
+   *         New menu for the chapter buttons
+   */
+
+
+  ChaptersButton.prototype.createMenu = function createMenu() {
+    this.options_.title = this.getMenuCaption();
+    return _TextTrackButton.prototype.createMenu.call(this);
+  };
+
+  /**
    * Create a menu item for each text track
    *
-   * @return {Array} Array of menu items
-   * @method createItems
+   * @return {TextTrackMenuItem[]}
+   *         Array of menu items
    */
 
 
   ChaptersButton.prototype.createItems = function createItems() {
     var items = [];
-    var tracks = this.player_.textTracks();
 
-    if (!tracks) {
+    if (!this.track_) {
       return items;
     }
 
-    for (var i = 0; i < tracks.length; i++) {
-      var track = tracks[i];
+    var cues = this.track_.cues;
 
-      if (track.kind === this.kind_) {
-        items.push(new _textTrackMenuItem2['default'](this.player_, { track: track }));
-      }
+    if (!cues) {
+      return items;
+    }
+
+    for (var i = 0, l = cues.length; i < l; i++) {
+      var cue = cues[i];
+      var mi = new _chaptersTrackMenuItem2['default'](this.player_, { track: this.track_, cue: cue });
+
+      items.push(mi);
     }
 
     return items;
   };
 
-  /**
-   * Create menu from chapter buttons
-   *
-   * @return {Menu} Menu of chapter buttons
-   * @method createMenu
-   */
-
-
-  ChaptersButton.prototype.createMenu = function createMenu() {
-    var _this2 = this;
-
-    var tracks = this.player_.textTracks() || [];
-    var chaptersTrack = void 0;
-    var items = this.items || [];
-
-    for (var i = tracks.length - 1; i >= 0; i--) {
-
-      // We will always choose the last track as our chaptersTrack
-      var track = tracks[i];
-
-      if (track.kind === this.kind_) {
-        chaptersTrack = track;
-
-        break;
-      }
-    }
-
-    var menu = this.menu;
-
-    if (menu === undefined) {
-      menu = new _menu2['default'](this.player_);
-
-      var title = Dom.createEl('li', {
-        className: 'vjs-menu-title',
-        innerHTML: (0, _toTitleCase2['default'])(this.kind_),
-        tabIndex: -1
-      });
-
-      menu.children_.unshift(title);
-      Dom.insertElFirst(title, menu.contentEl());
-    } else {
-      // We will empty out the menu children each time because we want a
-      // fresh new menu child list each time
-      items.forEach(function (item) {
-        return menu.removeChild(item);
-      });
-      // Empty out the ChaptersButton menu items because we no longer need them
-      items = [];
-    }
-
-    if (chaptersTrack && (chaptersTrack.cues === null || chaptersTrack.cues === undefined)) {
-      chaptersTrack.mode = 'hidden';
-
-      var remoteTextTrackEl = this.player_.remoteTextTrackEls().getTrackElementByTrack_(chaptersTrack);
-
-      if (remoteTextTrackEl) {
-        remoteTextTrackEl.addEventListener('load', function (event) {
-          return _this2.update();
-        });
-      }
-    }
-
-    if (chaptersTrack && chaptersTrack.cues && chaptersTrack.cues.length > 0) {
-      var cues = chaptersTrack.cues;
-
-      for (var _i = 0, l = cues.length; _i < l; _i++) {
-        var cue = cues[_i];
-
-        var mi = new _chaptersTrackMenuItem2['default'](this.player_, {
-          cue: cue,
-          track: chaptersTrack
-        });
-
-        items.push(mi);
-
-        menu.addChild(mi);
-      }
-    }
-
-    if (items.length > 0) {
-      this.show();
-    }
-    // Assigning the value of items back to this.items for next iteration
-    this.items = items;
-    return menu;
-  };
-
   return ChaptersButton;
 }(_textTrackButton2['default']);
 
+/**
+ * `kind` of TextTrack to look for to associate it with this menu.
+ *
+ * @type {string}
+ * @private
+ */
+
+
 ChaptersButton.prototype.kind_ = 'chapters';
+
+/**
+ * The text that should display over the `ChaptersButton`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
 ChaptersButton.prototype.controlText_ = 'Chapters';
 
 _component2['default'].registerComponent('ChaptersButton', ChaptersButton);

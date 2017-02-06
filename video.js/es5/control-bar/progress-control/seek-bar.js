@@ -2,10 +2,6 @@
 
 exports.__esModule = true;
 
-var _window = require('global/window');
-
-var _window2 = _interopRequireDefault(_window);
-
 var _slider = require('../../slider/slider.js');
 
 var _slider2 = _interopRequireDefault(_slider);
@@ -21,6 +17,10 @@ var Fn = _interopRequireWildcard(_fn);
 var _formatTime = require('../../utils/format-time.js');
 
 var _formatTime2 = _interopRequireDefault(_formatTime);
+
+var _computedStyle = require('../../utils/computed-style.js');
+
+var _computedStyle2 = _interopRequireDefault(_computedStyle);
 
 require('./load-progress-bar.js');
 
@@ -44,14 +44,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Seek Bar and holder for the progress bars
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Slider
- * @class SeekBar
  */
 var SeekBar = function (_Slider) {
   _inherits(SeekBar, _Slider);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function SeekBar(player, options) {
     _classCallCheck(this, SeekBar);
 
@@ -72,10 +78,10 @@ var SeekBar = function (_Slider) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -88,21 +94,25 @@ var SeekBar = function (_Slider) {
   };
 
   /**
-   * Update ARIA accessibility attributes
+   * Update the seek bars tooltip and width.
    *
-   * @method updateARIAAttributes
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` or `ended` event that caused this to run.
+   *
+   * @listens Player#timeupdate
+   * @listens Player#ended
    */
 
 
-  SeekBar.prototype.updateProgress = function updateProgress() {
+  SeekBar.prototype.updateProgress = function updateProgress(event) {
     this.updateAriaAttributes(this.el_);
 
     if (this.keepTooltipsInside) {
       this.updateAriaAttributes(this.tooltipProgressBar.el_);
       this.tooltipProgressBar.el_.style.width = this.bar.el_.style.width;
 
-      var playerWidth = parseFloat(_window2['default'].getComputedStyle(this.player().el()).width);
-      var tooltipWidth = parseFloat(_window2['default'].getComputedStyle(this.tooltipProgressBar.tooltip).width);
+      var playerWidth = parseFloat((0, _computedStyle2['default'])(this.player().el(), 'width'));
+      var tooltipWidth = parseFloat((0, _computedStyle2['default'])(this.tooltipProgressBar.tooltip, 'width'));
       var tooltipStyle = this.tooltipProgressBar.el().style;
 
       tooltipStyle.maxWidth = Math.floor(playerWidth - tooltipWidth / 2) + 'px';
@@ -110,6 +120,14 @@ var SeekBar = function (_Slider) {
       tooltipStyle.right = '-' + tooltipWidth / 2 + 'px';
     }
   };
+
+  /**
+   * Update ARIA accessibility attributes
+   *
+   * @param {Element} el
+   *        The element to update with aria accessibility attributes.
+   */
+
 
   SeekBar.prototype.updateAriaAttributes = function updateAriaAttributes(el) {
     // Allows for smooth scrubbing, when player can't keep up.
@@ -124,8 +142,8 @@ var SeekBar = function (_Slider) {
   /**
    * Get percentage of video played
    *
-   * @return {Number} Percentage played
-   * @method getPercent
+   * @return {number}
+   *         The percentage played
    */
 
 
@@ -138,23 +156,29 @@ var SeekBar = function (_Slider) {
   /**
    * Handle mouse down on seek bar
    *
-   * @method handleMouseDown
+   * @param {EventTarget~Event} event
+   *        The `mousedown` event that caused this to run.
+   *
+   * @listens mousedown
    */
 
 
   SeekBar.prototype.handleMouseDown = function handleMouseDown(event) {
-    _Slider.prototype.handleMouseDown.call(this, event);
-
     this.player_.scrubbing(true);
 
     this.videoWasPlaying = !this.player_.paused();
     this.player_.pause();
+
+    _Slider.prototype.handleMouseDown.call(this, event);
   };
 
   /**
    * Handle mouse move on seek bar
    *
-   * @method handleMouseMove
+   * @param {EventTarget~Event} event
+   *        The `mousemove` event that caused this to run.
+   *
+   * @listens mousemove
    */
 
 
@@ -173,7 +197,10 @@ var SeekBar = function (_Slider) {
   /**
    * Handle mouse up on seek bar
    *
-   * @method handleMouseUp
+   * @param {EventTarget~Event} event
+   *        The `mouseup` event that caused this to run.
+   *
+   * @listens mouseup
    */
 
 
@@ -188,8 +215,6 @@ var SeekBar = function (_Slider) {
 
   /**
    * Move more quickly fast forward for keyboard-only users
-   *
-   * @method stepForward
    */
 
 
@@ -200,8 +225,6 @@ var SeekBar = function (_Slider) {
 
   /**
    * Move more quickly rewind for keyboard-only users
-   *
-   * @method stepBack
    */
 
 
@@ -213,11 +236,24 @@ var SeekBar = function (_Slider) {
   return SeekBar;
 }(_slider2['default']);
 
+/**
+ * Default options for the `SeekBar`
+ *
+ * @type {Object}
+ * @private
+ */
+
+
 SeekBar.prototype.options_ = {
   children: ['loadProgressBar', 'mouseTimeDisplay', 'playProgressBar'],
   barName: 'playProgressBar'
 };
 
+/**
+ * Call the update event for this Slider when this event happens on the player.
+ *
+ * @type {string}
+ */
 SeekBar.prototype.playerEvent = 'timeupdate';
 
 _component2['default'].registerComponent('SeekBar', SeekBar);

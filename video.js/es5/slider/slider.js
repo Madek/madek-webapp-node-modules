@@ -10,9 +10,7 @@ var _dom = require('../utils/dom.js');
 
 var Dom = _interopRequireWildcard(_dom);
 
-var _object = require('object.assign');
-
-var _object2 = _interopRequireDefault(_object);
+var _obj = require('../utils/obj');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -28,16 +26,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The base functionality for sliders like the volume bar and seek bar
+ * The base functionality for a slider. Can be vertical or horizontal.
+ * For instance the volume bar or the seek bar on a video is a slider.
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class Slider
  */
 var Slider = function (_Component) {
   _inherits(Slider, _Component);
 
+  /**
+   * Create an instance of this class
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function Slider(player, options) {
     _classCallCheck(this, Slider);
 
@@ -61,12 +66,19 @@ var Slider = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Button`s DOM element.
    *
-   * @param {String} type Type of element to create
-   * @param {Object=} props List of properties in Object form
+   * @param {string} type
+   *        Type of element to create.
+   *
+   * @param {Object} [props={}]
+   *        List of properties in Object form.
+   *
+   * @param {Object} [attributes={}]
+   *        list of attributes in Object form.
+   *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
 
 
@@ -76,11 +88,11 @@ var Slider = function (_Component) {
 
     // Add the slider element class to all sub classes
     props.className = props.className + ' vjs-slider';
-    props = (0, _object2['default'])({
+    props = (0, _obj.assign)({
       tabIndex: 0
     }, props);
 
-    attributes = (0, _object2['default'])({
+    attributes = (0, _obj.assign)({
       'role': 'slider',
       'aria-valuenow': 0,
       'aria-valuemin': 0,
@@ -92,10 +104,14 @@ var Slider = function (_Component) {
   };
 
   /**
-   * Handle mouse down on slider
+   * Handle `mousedown` or `touchstart` events on the `Slider`.
    *
-   * @param {Object} event Mouse down event object
-   * @method handleMouseDown
+   * @param {EventTarget~Event} event
+   *        `mousedown` or `touchstart` event that triggered this function
+   *
+   * @listens mousedown
+   * @listens touchstart
+   * @fires Slider#slideractive
    */
 
 
@@ -106,6 +122,12 @@ var Slider = function (_Component) {
     Dom.blockTextSelection();
 
     this.addClass('vjs-sliding');
+    /**
+     * Triggered when the slider is in an active state
+     *
+     * @event Slider#slideractive
+     * @type {EventTarget~Event}
+     */
     this.trigger('slideractive');
 
     this.on(doc, 'mousemove', this.handleMouseMove);
@@ -117,18 +139,31 @@ var Slider = function (_Component) {
   };
 
   /**
-   * To be overridden by a subclass
+   * Handle the `mousemove`, `touchmove`, and `mousedown` events on this `Slider`.
+   * The `mousemove` and `touchmove` events will only only trigger this function during
+   * `mousedown` and `touchstart`. This is due to {@link Slider#handleMouseDown} and
+   * {@link Slider#handleMouseUp}.
    *
-   * @method handleMouseMove
+   * @param {EventTarget~Event} event
+   *        `mousedown`, `mousemove`, `touchstart`, or `touchmove` event that triggered
+   *        this function
+   *
+   * @listens mousemove
+   * @listens touchmove
    */
 
 
-  Slider.prototype.handleMouseMove = function handleMouseMove() {};
+  Slider.prototype.handleMouseMove = function handleMouseMove(event) {};
 
   /**
-   * Handle mouse up on Slider
+   * Handle `mouseup` or `touchend` events on the `Slider`.
    *
-   * @method handleMouseUp
+   * @param {EventTarget~Event} event
+   *        `mouseup` or `touchend` event that triggered this function.
+   *
+   * @listens touchend
+   * @listens mouseup
+   * @fires Slider#sliderinactive
    */
 
 
@@ -138,6 +173,12 @@ var Slider = function (_Component) {
     Dom.unblockTextSelection();
 
     this.removeClass('vjs-sliding');
+    /**
+     * Triggered when the slider is no longer in an active state.
+     *
+     * @event Slider#sliderinactive
+     * @type {EventTarget~Event}
+     */
     this.trigger('sliderinactive');
 
     this.off(doc, 'mousemove', this.handleMouseMove);
@@ -149,9 +190,7 @@ var Slider = function (_Component) {
   };
 
   /**
-   * Update slider
-   *
-   * @method update
+   * Update the progress bar of the `Slider`.
    */
 
 
@@ -192,8 +231,13 @@ var Slider = function (_Component) {
   /**
    * Calculate distance for slider
    *
-   * @param {Object} event Event object
-   * @method calculateDistance
+   * @param {EventTarget~Event} event
+   *        The event that caused this function to run.
+   *
+   * @return {number}
+   *         The current position of the Slider.
+   *         - postition.x for vertical `Slider`s
+   *         - postition.y for horizontal `Slider`s
    */
 
 
@@ -207,9 +251,12 @@ var Slider = function (_Component) {
   };
 
   /**
-   * Handle on focus for slider
+   * Handle a `focus` event on this `Slider`.
    *
-   * @method handleFocus
+   * @param {EventTarget~Event} event
+   *        The `focus` event that caused this function to run.
+   *
+   * @listens focus
    */
 
 
@@ -218,10 +265,14 @@ var Slider = function (_Component) {
   };
 
   /**
-   * Handle key press for slider
+   * Handle a `keydown` event on the `Slider`. Watches for left, rigth, up, and down
+   * arrow keys. This function will only be called when the slider has focus. See
+   * {@link Slider#handleFocus} and {@link Slider#handleBlur}.
    *
-   * @param {Object} event Event object
-   * @method handleKeyPress
+   * @param {EventTarget~Event} event
+   *        the `keydown` event that caused this function to run.
+   *
+   * @listens keydown
    */
 
 
@@ -239,11 +290,13 @@ var Slider = function (_Component) {
   };
 
   /**
-   * Handle on blur for slider
+   * Handle a `blur` event on this `Slider`.
    *
-   * @method handleBlur
+   * @param {EventTarget~Event} event
+   *        The `blur` event that caused this function to run.
+   *
+   * @listens blur
    */
-
 
   Slider.prototype.handleBlur = function handleBlur() {
     this.off(this.bar.el_.ownerDocument, 'keydown', this.handleKeyPress);
@@ -253,8 +306,8 @@ var Slider = function (_Component) {
    * Listener for click events on slider, used to prevent clicks
    *   from bubbling up to parent elements like button menus.
    *
-   * @param {Object} event Event object
-   * @method handleClick
+   * @param {Object} event
+   *        Event that caused this object to run
    */
 
 
@@ -266,9 +319,14 @@ var Slider = function (_Component) {
   /**
    * Get/set if slider is horizontal for vertical
    *
-   * @param {Boolean} bool True if slider is vertical, false is horizontal
-   * @return {Boolean} True if slider is vertical, false is horizontal
-   * @method vertical
+   * @param {boolean} [bool]
+   *        - true if slider is vertical,
+   *        - false is horizontal
+   *
+   * @return {boolean|Slider}
+   *         - true if slider is vertical, and getting
+   *         - false is horizontal, and getting
+   *         - a reference to this object when setting
    */
 
 

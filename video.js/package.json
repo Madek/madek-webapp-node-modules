@@ -2,25 +2,25 @@
   "_args": [
     [
       {
-        "raw": "video.js",
+        "raw": "video.js@^5.16.0",
         "scope": null,
         "escapedName": "video.js",
         "name": "video.js",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
+        "rawSpec": "^5.16.0",
+        "spec": ">=5.16.0 <6.0.0",
+        "type": "range"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "video.js@latest",
-  "_id": "video.js@5.12.6",
+  "_from": "video.js@>=5.16.0 <6.0.0",
+  "_id": "video.js@5.16.0",
   "_inCache": true,
   "_location": "/video.js",
   "_nodeVersion": "4.4.3",
   "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/video.js-5.12.6.tgz_1477421435262_0.869086365448311"
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/video.js-5.16.0.tgz_1484250927960_0.4700086014345288"
   },
   "_npmUser": {
     "name": "gkatsev",
@@ -28,25 +28,27 @@
   },
   "_npmVersion": "2.15.6",
   "_phantomChildren": {
-    "regenerator-runtime": "0.9.5"
+    "global": "4.3.0",
+    "is-function": "1.0.1",
+    "parse-headers": "2.0.1",
+    "xtend": "4.0.1"
   },
   "_requested": {
-    "raw": "video.js",
+    "raw": "video.js@^5.16.0",
     "scope": null,
     "escapedName": "video.js",
     "name": "video.js",
-    "rawSpec": "",
-    "spec": "latest",
-    "type": "tag"
+    "rawSpec": "^5.16.0",
+    "spec": ">=5.16.0 <6.0.0",
+    "type": "range"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/video.js/-/video.js-5.12.6.tgz",
-  "_shasum": "9a33ddc8921db51aab5ae940885da03aaa834734",
+  "_resolved": "https://registry.npmjs.org/video.js/-/video.js-5.16.0.tgz",
+  "_shasum": "f5e871d4e32852ec99979285e45dcb3e2251d1b5",
   "_shrinkwrap": null,
-  "_spec": "video.js",
+  "_spec": "video.js@^5.16.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Steve Heffernan"
@@ -63,18 +65,17 @@
   "dependencies": {
     "babel-runtime": "^6.9.2",
     "global": "4.3.0",
-    "lodash-compat": "3.10.2",
-    "object.assign": "^4.0.4",
     "safe-json-parse": "4.0.0",
     "tsml": "1.0.1",
     "videojs-font": "2.0.0",
     "videojs-ie8": "1.1.2",
     "videojs-swf": "5.1.0",
     "videojs-vtt.js": "0.12.1",
-    "xhr": "2.2.0"
+    "xhr": "2.2.2"
   },
   "description": "An HTML5 and Flash video player with a common API and skin for both.",
   "devDependencies": {
+    "aliasify": "^2.1.0",
     "babel-cli": "^6.11.4",
     "babel-plugin-inline-json": "^1.1.1",
     "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
@@ -85,7 +86,7 @@
     "babelify": "^7.3.0",
     "blanket": "^1.1.6",
     "browserify-derequire": "^0.9.4",
-    "browserify-istanbul": "^0.2.1",
+    "browserify-istanbul": "^2.0.0",
     "browserify-versionify": "^1.0.4",
     "bundle-collapser": "^1.2.1",
     "chg": "^0.3.2",
@@ -94,35 +95,37 @@
     "es5-shim": "^4.1.3",
     "es6-shim": "^0.35.1",
     "ghooks": "^1.3.2",
-    "gkatsev-grunt-sass": "^1.1.1",
-    "grunt": "^0.4.4",
-    "grunt-accessibility": "^4.1.0",
+    "grunt": "^0.4.5",
+    "grunt-accessibility": "^5.0.0",
     "grunt-babel": "^6.0.0",
-    "grunt-banner": "^0.4.0",
-    "grunt-browserify": "3.5.1",
-    "grunt-cli": "~0.1.13",
+    "grunt-banner": "^0.6.0",
+    "grunt-browserify": "5.0.0",
+    "grunt-cli": "~1.2.0",
     "grunt-concurrent": "^2.3.1",
-    "grunt-contrib-clean": "~0.4.0a",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-connect": "~0.7.1",
-    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-connect": "~1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "~1.0.2",
     "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-watch": "~0.1.4",
+    "grunt-contrib-watch": "~1.0.0",
     "grunt-coveralls": "^1.0.0",
     "grunt-fastly": "^0.1.3",
     "grunt-github-releaser": "^0.1.17",
     "grunt-karma": "^2.0.0",
+    "grunt-sass": "^2.0.0",
     "grunt-shell": "^2.0.0",
-    "grunt-version": "~0.3.0",
+    "grunt-version": "~1.1.1",
     "grunt-videojs-languages": "0.0.4",
-    "grunt-zip": "0.10.2",
+    "grunt-zip": "0.17.1",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.4.2",
     "karma": "^1.2.0",
     "karma-browserify": "^5.1.0",
     "karma-browserstack-launcher": "^1.0.1",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
-    "karma-detect-browsers": "^2.1.0",
+    "karma-detect-browsers": "~2.2.3",
     "karma-firefox-launcher": "^1.0.0",
     "karma-ie-launcher": "^1.0.0",
     "karma-opera-launcher": "^1.0.0",
@@ -130,23 +133,29 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-sinon": "^1.0.5",
     "load-grunt-tasks": "^3.1.0",
+    "lodash": "^4.16.6",
     "markdown-table": "^1.0.0",
     "npm-run": "^4.1.0",
     "proxyquireify": "^3.0.0",
-    "qunitjs": "^1.23.1",
+    "qunitjs": "1.23.1",
+    "remark-cli": "^2.1.0",
+    "remark-lint": "^5.2.0",
+    "remark-toc": "^3.1.0",
+    "remark-validate-links": "^5.0.0",
+    "shelljs": "^0.7.5",
     "sinon": "^1.16.1",
     "time-grunt": "^1.1.1",
     "uglify-js": "~2.7.3",
     "videojs-doc-generator": "0.0.1",
-    "videojs-standard": "^5.2.0",
+    "videojs-standard": "^6.0.1",
     "webpack": "^1.13.2"
   },
   "directories": {},
   "dist": {
-    "shasum": "9a33ddc8921db51aab5ae940885da03aaa834734",
-    "tarball": "https://registry.npmjs.org/video.js/-/video.js-5.12.6.tgz"
+    "shasum": "f5e871d4e32852ec99979285e45dcb3e2251d1b5",
+    "tarball": "https://registry.npmjs.org/video.js/-/video.js-5.16.0.tgz"
   },
-  "gitHead": "f87a15ef4f1e8ab9cb4155b45273490e328f243a",
+  "gitHead": "aa0fe379faff142bc0fa5728c747652a30448527",
   "homepage": "http://videojs.com",
   "keywords": [
     "flash",
@@ -159,24 +168,20 @@
   "main": "./es5/video.js",
   "maintainers": [
     {
-      "name": "jimbojw",
-      "email": "wilson.jim.r@gmail.com"
-    },
-    {
       "name": "dmlap",
       "email": "dlapalomento@gmail.com"
-    },
-    {
-      "name": "heff",
-      "email": "steve@zencoder.com"
     },
     {
       "name": "gkatsev",
       "email": "me@gkatsev.com"
     },
     {
+      "name": "heff",
+      "email": "npm@heff.me"
+    },
+    {
       "name": "mmcclure",
-      "email": "mmmcclure@brightcove.com"
+      "email": "mmcclure@brightcove.com"
     }
   ],
   "name": "video.js",
@@ -187,16 +192,22 @@
     "url": "git+https://github.com/videojs/video.js.git"
   },
   "scripts": {
+    "babel": "babel src/js -d es5",
     "build": "grunt dist",
     "change": "grunt chg-add",
     "changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
     "clean": "grunt clean",
+    "docs": "npm run docs:lint && npm run docs:api",
+    "docs:api": "jsdoc -r src/js -d docs/api -c .jsdoc.json",
+    "docs:fix": "remark --output -- './**/*.md'",
+    "docs:lint": "remark -- './**/*.md'",
+    "grunt": "grunt",
     "lint": "vjsstandard",
-    "start": "grunt watchAll",
+    "start": "grunt dev",
     "test": "grunt test"
   },
   "style": "./dist/video-js.css",
-  "version": "5.12.6",
+  "version": "5.16.0",
   "vjsstandard": {
     "ignore": [
       "**/Gruntfile.js",

@@ -35,7 +35,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * The Popup component is used to build pop up controls.
  *
  * @extends Component
- * @class Popup
  */
 var Popup = function (_Component) {
   _inherits(Popup, _Component);
@@ -49,8 +48,9 @@ var Popup = function (_Component) {
   /**
    * Add a popup item to the popup
    *
-   * @param {Object|String} component Component or component type to add
-   * @method addItem
+   * @param {Object|string} component
+   *        Component or component type to add
+   *
    */
   Popup.prototype.addItem = function addItem(component) {
     this.addChild(component);
@@ -60,10 +60,10 @@ var Popup = function (_Component) {
   };
 
   /**
-   * Create the component's DOM element
+   * Create the `PopupButton`s DOM element.
    *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
 
 

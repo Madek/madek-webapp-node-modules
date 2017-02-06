@@ -20,10 +20,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Shows volume level
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class VolumeLevel
  */
 var VolumeLevel = function (_Component) {
   _inherits(VolumeLevel, _Component);
@@ -35,10 +32,10 @@ var VolumeLevel = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
   VolumeLevel.prototype.createEl = function createEl() {
     return _Component.prototype.createEl.call(this, 'div', {

@@ -3,16 +3,13 @@
 exports.__esModule = true;
 exports.logByType = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
-                                                                                                                                                                                                                                                                               * @file log.js
-                                                                                                                                                                                                                                                                               */
-
-
 var _window = require('global/window');
 
 var _window2 = _interopRequireDefault(_window);
 
 var _browser = require('./browser');
+
+var _obj = require('./obj');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -21,13 +18,19 @@ var log = void 0;
 /**
  * Log messages to the console and history based on the type of message
  *
- * @param  {String} type
+ * @param  {string} type
  *         The name of the console method to use.
+ *
  * @param  {Array} args
  *         The arguments to be passed to the matching console method.
- * @param  {Boolean} [stringify]
+ *
+ * @param  {boolean} [stringify]
  *         By default, only old IEs should get console argument stringification,
  *         but this is exposed as a parameter to facilitate testing.
+ */
+/**
+ * @file log.js
+ * @module log
  */
 var logByType = exports.logByType = function logByType(type, args) {
   var stringify = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : !!_browser.IE_VERSION && _browser.IE_VERSION < 11;
@@ -62,7 +65,7 @@ var logByType = exports.logByType = function logByType(type, args) {
   // objects and arrays for those less-capable browsers.
   if (stringify) {
     args = args.map(function (a) {
-      if (a && (typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object' || Array.isArray(a)) {
+      if ((0, _obj.isObject)(a) || Array.isArray(a)) {
         try {
           return JSON.stringify(a);
         } catch (x) {
@@ -88,7 +91,8 @@ var logByType = exports.logByType = function logByType(type, args) {
 /**
  * Log plain debug messages
  *
- * @function log
+ * @param {Mixed[]} args
+ *        One or more messages or objects that should be logged.
  */
 log = function log() {
   for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -108,7 +112,8 @@ log.history = [];
 /**
  * Log error messages
  *
- * @method error
+ * @param {Mixed[]} args
+ *        One or more messages or objects that should be logged as an error
  */
 log.error = function () {
   for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
@@ -121,7 +126,8 @@ log.error = function () {
 /**
  * Log warning messages
  *
- * @method warn
+ * @param {Mixed[]} args
+ *        One or more messages or objects that should be logged as a warning.
  */
 log.warn = function () {
   for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {

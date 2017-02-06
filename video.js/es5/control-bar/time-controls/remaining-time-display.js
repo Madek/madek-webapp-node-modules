@@ -30,14 +30,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Displays the time left in the video
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class RemainingTimeDisplay
  */
 var RemainingTimeDisplay = function (_Component) {
   _inherits(RemainingTimeDisplay, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function RemainingTimeDisplay(player, options) {
     _classCallCheck(this, RemainingTimeDisplay);
 
@@ -49,10 +55,10 @@ var RemainingTimeDisplay = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -75,13 +81,17 @@ var RemainingTimeDisplay = function (_Component) {
   };
 
   /**
-   * Update remaining time display
+   * Update remaining time display.
    *
-   * @method updateContent
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` or `durationchange` event that caused this to run.
+   *
+   * @listens Player#timeupdate
+   * @listens Player#durationchange
    */
 
 
-  RemainingTimeDisplay.prototype.updateContent = function updateContent() {
+  RemainingTimeDisplay.prototype.updateContent = function updateContent(event) {
     if (this.player_.duration()) {
       var localizedText = this.localize('Remaining Time');
       var formattedTime = (0, _formatTime2['default'])(this.player_.remainingTime());

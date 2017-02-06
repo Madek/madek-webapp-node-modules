@@ -30,14 +30,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Displays the current time
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class CurrentTimeDisplay
  */
 var CurrentTimeDisplay = function (_Component) {
   _inherits(CurrentTimeDisplay, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function CurrentTimeDisplay(player, options) {
     _classCallCheck(this, CurrentTimeDisplay);
 
@@ -48,10 +54,10 @@ var CurrentTimeDisplay = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -76,11 +82,14 @@ var CurrentTimeDisplay = function (_Component) {
   /**
    * Update current time display
    *
-   * @method updateContent
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` event that caused this function to run.
+   *
+   * @listens Player#timeupdate
    */
 
 
-  CurrentTimeDisplay.prototype.updateContent = function updateContent() {
+  CurrentTimeDisplay.prototype.updateContent = function updateContent(event) {
     // Allows for smooth scrubbing, when player can't keep up.
     var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
     var localizedText = this.localize('Current Time');

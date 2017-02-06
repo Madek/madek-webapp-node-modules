@@ -21,10 +21,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * The separator between the current time and duration.
  * Can be hidden if it's not needed in the design.
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class TimeDivider
  */
 var TimeDivider = function (_Component) {
   _inherits(TimeDivider, _Component);
@@ -39,7 +36,7 @@ var TimeDivider = function (_Component) {
    * Create the component's DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
   TimeDivider.prototype.createEl = function createEl() {
     return _Component.prototype.createEl.call(this, 'div', {

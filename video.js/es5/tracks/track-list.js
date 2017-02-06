@@ -28,18 +28,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Common functionaliy between Text, Audio, and Video TrackLists
- * Interfaces defined in the following spec:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html
+ * Common functionaliy between {@link TextTrackList}, {@link AudioTrackList}, and
+ * {@link VideoTrackList}
  *
- * @param {Track[]} tracks A list of tracks to initialize the list with
- * @param {Object} list the child object with inheritance done manually for ie8
  * @extends EventTarget
- * @class TrackList
  */
 var TrackList = function (_EventTarget) {
   _inherits(TrackList, _EventTarget);
 
+  /**
+   * Create an instance of this class
+   *
+   * @param {Track[]} tracks
+   *        A list of tracks to initialize the list with.
+   *
+   * @param {Object} [list]
+   *        The child object with inheritance done manually for ie8.
+   *
+   * @abstract
+   */
   function TrackList() {
     var tracks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
@@ -64,6 +71,11 @@ var TrackList = function (_EventTarget) {
     }
 
     list.tracks_ = [];
+
+    /**
+     * @member {number} length
+     *         The current number of `Track`s in the this Trackist.
+     */
     Object.defineProperty(list, 'length', {
       get: function get() {
         return this.tracks_.length;
@@ -74,14 +86,18 @@ var TrackList = function (_EventTarget) {
       list.addTrack_(tracks[i]);
     }
 
+    // must return the object, as for ie8 it will not be this
+    // but a reference to a document object
     return _ret = list, _possibleConstructorReturn(_this, _ret);
   }
 
   /**
-   * Add a Track from TrackList
+   * Add a {@link Track} to the `TrackList`
    *
-   * @param {Mixed} track
-   * @method addTrack_
+   * @param {Track} track
+   *        The audio, video, or text track to add to the list.
+   *
+   * @fires TrackList#addtrack
    * @private
    */
 
@@ -100,6 +116,14 @@ var TrackList = function (_EventTarget) {
     // Do not add duplicate tracks
     if (this.tracks_.indexOf(track) === -1) {
       this.tracks_.push(track);
+      /**
+       * Triggered when a track is added to a track list.
+       *
+       * @event TrackList#addtrack
+       * @type {EventTarget~Event}
+       * @property {Track} track
+       *           A reference to track that was added.
+       */
       this.trigger({
         track: track,
         type: 'addtrack'
@@ -108,10 +132,12 @@ var TrackList = function (_EventTarget) {
   };
 
   /**
-   * Remove a Track from TrackList
+   * Remove a {@link Track} from the `TrackList`
    *
-   * @param {Track} rtrack track to be removed
-   * @method removeTrack_
+   * @param {Track} track
+   *        The audio, video, or text track to remove from the list.
+   *
+   * @fires TrackList#removetrack
    * @private
    */
 
@@ -136,6 +162,14 @@ var TrackList = function (_EventTarget) {
       return;
     }
 
+    /**
+     * Triggered when a track is removed from track list.
+     *
+     * @event TrackList#removetrack
+     * @type {EventTarget~Event}
+     * @property {Track} track
+     *           A reference to track that was removed.
+     */
     this.trigger({
       track: track,
       type: 'removetrack'
@@ -171,9 +205,17 @@ var TrackList = function (_EventTarget) {
 }(_eventTarget2['default']);
 
 /**
- * change - One or more tracks in the track list have been enabled or disabled.
- * addtrack - A track has been added to the track list.
- * removetrack - A track has been removed from the track list.
+ * Triggered when a different track is selected/enabled.
+ *
+ * @event TrackList#change
+ * @type {EventTarget~Event}
+ */
+
+/**
+ * Events that can be called with on + eventName. See {@link EventHandler}.
+ *
+ * @property {Object} TrackList#allowedEvents_
+ * @private
  */
 
 

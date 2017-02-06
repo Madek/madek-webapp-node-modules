@@ -1,13 +1,6 @@
 {
-  "_args": [
-    [
-      "abbrev@1",
-      "/Users/ma/CODE/Madek/webapp/node_modules/nopt"
-    ]
-  ],
-  "_from": "abbrev@>=1.0.0 <2.0.0",
+  "_from": "abbrev@1",
   "_id": "abbrev@1.0.7",
-  "_inCache": true,
   "_location": "/abbrev",
   "_nodeVersion": "2.0.1",
   "_npmUser": {
@@ -16,25 +9,15 @@
   },
   "_npmVersion": "2.10.1",
   "_phantomChildren": {},
-  "_requested": {
-    "name": "abbrev",
-    "raw": "abbrev@1",
-    "rawSpec": "1",
-    "scope": null,
-    "spec": ">=1.0.0 <2.0.0",
-    "type": "range"
-  },
   "_requiredBy": [
     "/nopt"
   ],
   "_resolved": "https://registry.npmjs.org/abbrev/-/abbrev-1.0.7.tgz",
   "_shasum": "5b6035b2ee9d4fb5cf859f08a9be81b208491843",
   "_shrinkwrap": null,
-  "_spec": "abbrev@1",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/nopt",
   "author": {
-    "email": "i@izs.me",
-    "name": "Isaac Z. Schlueter"
+    "name": "Isaac Z. Schlueter",
+    "email": "i@izs.me"
   },
   "bugs": {
     "url": "https://github.com/isaacs/abbrev-js/issues"
@@ -51,7 +34,6 @@
   },
   "gitHead": "821d09ce7da33627f91bbd8ed631497ed6f760c2",
   "homepage": "https://github.com/isaacs/abbrev-js#readme",
-  "installable": true,
   "license": "ISC",
   "main": "abbrev.js",
   "maintainers": [
@@ -62,6 +44,7 @@
   ],
   "name": "abbrev",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/isaacs/abbrev-js.git"

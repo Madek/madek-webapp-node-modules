@@ -28,45 +28,42 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * disable other video tracks before selecting the new one
+ * Un-select all other {@link VideoTrack}s that are selected.
  *
- * @param {Array|VideoTrackList} list list to work on
- * @param {VideoTrack} track the track to skip
+ * @param {VideoTrackList} list
+ *        list to work on
+ *
+ * @param {VideoTrack} track
+ *        The track to skip
+ *
+ * @private
  */
 var disableOthers = function disableOthers(list, track) {
   for (var i = 0; i < list.length; i++) {
     if (track.id === list[i].id) {
       continue;
     }
-    // another audio track is enabled, disable it
+    // another video track is enabled, disable it
     list[i].selected = false;
   }
 };
 
 /**
-* A list of possiblee video tracks. Most functionality is in the
- * base class Tracklist and the spec for VideoTrackList is located at:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html#videotracklist
+ * The current list of {@link VideoTrack} for a video.
  *
- * interface VideoTrackList : EventTarget {
- *   readonly attribute unsigned long length;
- *   getter VideoTrack (unsigned long index);
- *   VideoTrack? getTrackById(DOMString id);
- *   readonly attribute long selectedIndex;
- *
- *   attribute EventHandler onchange;
- *   attribute EventHandler onaddtrack;
- *   attribute EventHandler onremovetrack;
- * };
- *
- * @param {VideoTrack[]} tracks a list of video tracks to instantiate the list with
- # @extends TrackList
- * @class VideoTrackList
+ * @see [Spec]{@link https://html.spec.whatwg.org/multipage/embedded-content.html#videotracklist}
+ * @extends TrackList
  */
 
 var VideoTrackList = function (_TrackList) {
   _inherits(VideoTrackList, _TrackList);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {VideoTrack[]} [tracks=[]]
+   *        A list of `VideoTrack` to instantiate the list with.
+   */
   function VideoTrackList() {
     var _this, _ret;
 
@@ -104,6 +101,10 @@ var VideoTrackList = function (_TrackList) {
     list = (_this = _possibleConstructorReturn(this, _TrackList.call(this, tracks, list)), _this);
     list.changing_ = false;
 
+    /**
+     * @member {number} VideoTrackList#selectedIndex
+     *         The current index of the selected {@link VideoTrack`}.
+     */
     Object.defineProperty(list, 'selectedIndex', {
       get: function get() {
         for (var _i = 0; _i < this.length; _i++) {
@@ -119,6 +120,17 @@ var VideoTrackList = function (_TrackList) {
     return _ret = list, _possibleConstructorReturn(_this, _ret);
   }
 
+  /**
+   * Add a {@link VideoTrack} to the `VideoTrackList`.
+   *
+   * @param {VideoTrack} track
+   *        The VideoTrack to add to the list
+   *
+   * @fires TrackList#addtrack
+   * @private
+   */
+
+
   VideoTrackList.prototype.addTrack_ = function addTrack_(track) {
     var _this2 = this;
 
@@ -131,6 +143,11 @@ var VideoTrackList = function (_TrackList) {
     if (!track.addEventListener) {
       return;
     }
+
+    /**
+     * @listens VideoTrack#selectedchange
+     * @fires TrackList#change
+     */
     track.addEventListener('selectedchange', function () {
       if (_this2.changing_) {
         return;
@@ -142,9 +159,29 @@ var VideoTrackList = function (_TrackList) {
     });
   };
 
+  /**
+   * Add a {@link VideoTrack} to the `VideoTrackList`.
+   *
+   * @param {VideoTrack} track
+   *        The VideoTrack to add to the list
+   *
+   * @fires TrackList#addtrack
+   */
+
+
   VideoTrackList.prototype.addTrack = function addTrack(track) {
     this.addTrack_(track);
   };
+
+  /**
+   * Remove a {@link VideoTrack} to the `VideoTrackList`.
+   *
+   * @param {VideoTrack} track
+   *        The VideoTrack to remove from the list.
+   *
+   * @fires TrackList#removetrack
+   */
+
 
   VideoTrackList.prototype.removeTrack = function removeTrack(track) {
     _TrackList.prototype.removeTrack_.call(this, track);

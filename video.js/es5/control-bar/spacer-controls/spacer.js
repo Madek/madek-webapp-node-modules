@@ -22,7 +22,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Also can be used to create space between elements when necessary.
  *
  * @extends Component
- * @class Spacer
  */
 var Spacer = function (_Component) {
   _inherits(Spacer, _Component);
@@ -34,20 +33,20 @@ var Spacer = function (_Component) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
   Spacer.prototype.buildCSSClass = function buildCSSClass() {
     return 'vjs-spacer ' + _Component.prototype.buildCSSClass.call(this);
   };
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 

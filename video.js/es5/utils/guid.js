@@ -4,18 +4,20 @@ exports.__esModule = true;
 exports.newGUID = newGUID;
 /**
  * @file guid.js
- *
+ * @module guid
+ */
+
+/**
  * Unique ID for an element or function
  * @type {Number}
- * @private
  */
 var _guid = 1;
 
 /**
- * Get the next unique ID
+ * Get a unique auto-incrementing ID by number that has not been returned before.
  *
- * @return {String}
- * @function newGUID
+ * @return {number}
+ *         A new unique ID.
  */
 function newGUID() {
   return _guid++;

@@ -25,11 +25,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Toggle fullscreen video
  *
  * @extends Button
- * @class FullscreenToggle
  */
 var FullscreenToggle = function (_Button) {
   _inherits(FullscreenToggle, _Button);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function FullscreenToggle(player, options) {
     _classCallCheck(this, FullscreenToggle);
 
@@ -40,38 +48,50 @@ var FullscreenToggle = function (_Button) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
   FullscreenToggle.prototype.buildCSSClass = function buildCSSClass() {
     return 'vjs-fullscreen-control ' + _Button.prototype.buildCSSClass.call(this);
   };
+
   /**
-   * Handles Fullscreenchange on the component and change control text accordingly
+   * Handles fullscreenchange on the player and change control text accordingly.
    *
-   * @method handleFullscreenChange
+   * @param {EventTarget~Event} [event]
+   *        The {@link Player#fullscreenchange} event that caused this function to be
+   *        called.
+   *
+   * @listens Player#fullscreenchange
    */
 
 
-  FullscreenToggle.prototype.handleFullscreenChange = function handleFullscreenChange() {
+  FullscreenToggle.prototype.handleFullscreenChange = function handleFullscreenChange(event) {
     if (this.player_.isFullscreen()) {
       this.controlText('Non-Fullscreen');
     } else {
       this.controlText('Fullscreen');
     }
   };
+
   /**
-   * Handles click for full screen
+   * This gets called when an `FullscreenToggle` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  FullscreenToggle.prototype.handleClick = function handleClick() {
+  FullscreenToggle.prototype.handleClick = function handleClick(event) {
     if (!this.player_.isFullscreen()) {
       this.player_.requestFullscreen();
     } else {
@@ -81,6 +101,14 @@ var FullscreenToggle = function (_Button) {
 
   return FullscreenToggle;
 }(_button2['default']);
+
+/**
+ * The text that should display over the `FullscreenToggle`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
+
 
 FullscreenToggle.prototype.controlText_ = 'Fullscreen';
 

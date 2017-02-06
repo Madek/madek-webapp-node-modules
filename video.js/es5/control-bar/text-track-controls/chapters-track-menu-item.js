@@ -30,14 +30,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The chapter track menu item
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuItem
- * @class ChaptersTrackMenuItem
  */
 var ChaptersTrackMenuItem = function (_MenuItem) {
   _inherits(ChaptersTrackMenuItem, _MenuItem);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function ChaptersTrackMenuItem(player, options) {
     _classCallCheck(this, ChaptersTrackMenuItem);
 
@@ -46,6 +52,7 @@ var ChaptersTrackMenuItem = function (_MenuItem) {
     var currentTime = player.currentTime();
 
     // Modify options for parent MenuItem class's init.
+    options.selectable = true;
     options.label = cue.text;
     options.selected = cue.startTime <= currentTime && currentTime < cue.endTime;
 
@@ -58,13 +65,19 @@ var ChaptersTrackMenuItem = function (_MenuItem) {
   }
 
   /**
-   * Handle click on menu item
+   * This gets called when an `ChaptersTrackMenuItem` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  ChaptersTrackMenuItem.prototype.handleClick = function handleClick() {
+  ChaptersTrackMenuItem.prototype.handleClick = function handleClick(event) {
     _MenuItem.prototype.handleClick.call(this);
     this.player_.currentTime(this.cue.startTime);
     this.update(this.cue.startTime);
@@ -73,11 +86,14 @@ var ChaptersTrackMenuItem = function (_MenuItem) {
   /**
    * Update chapter menu item
    *
-   * @method update
+   * @param {EventTarget~Event} [event]
+   *        The `cuechange` event that caused this function to run.
+   *
+   * @listens TextTrack#cuechange
    */
 
 
-  ChaptersTrackMenuItem.prototype.update = function update() {
+  ChaptersTrackMenuItem.prototype.update = function update(event) {
     var cue = this.cue;
     var currentTime = this.player_.currentTime();
 

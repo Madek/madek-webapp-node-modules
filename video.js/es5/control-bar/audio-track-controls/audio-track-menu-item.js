@@ -28,16 +28,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The audio track menu item
+ * An {@link AudioTrack} {@link MenuItem}
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuItem
- * @class AudioTrackMenuItem
  */
 var AudioTrackMenuItem = function (_MenuItem) {
   _inherits(AudioTrackMenuItem, _MenuItem);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function AudioTrackMenuItem(player, options) {
     _classCallCheck(this, AudioTrackMenuItem);
 
@@ -66,9 +72,15 @@ var AudioTrackMenuItem = function (_MenuItem) {
   }
 
   /**
-   * Handle click on audio track
+   * This gets called when an `AudioTrackMenuItem is "clicked". See {@link ClickableComponent}
+   * for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
@@ -89,9 +101,12 @@ var AudioTrackMenuItem = function (_MenuItem) {
   };
 
   /**
-   * Handle audio track change
+   * Handle any {@link AudioTrack} change.
    *
-   * @method handleTracksChange
+   * @param {EventTarget~Event} [event]
+   *        The {@link AudioTrackList#change} event that caused this to run.
+   *
+   * @listens AudioTrackList#change
    */
 
 

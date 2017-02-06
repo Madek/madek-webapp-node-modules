@@ -18,7 +18,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                                                                                                                                                            * @file html-track-element-list.js
                                                                                                                                                            */
 
+/**
+ * The current list of {@link HtmlTrackElement}s.
+ */
 var HtmlTrackElementList = function () {
+
+  /**
+   * Create an instance of this class.
+   *
+   * @param {HtmlTrackElement[]} [tracks=[]]
+   *        A list of `HtmlTrackElement` to instantiate the list with.
+   */
   function HtmlTrackElementList() {
     var trackElements = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
@@ -38,6 +48,10 @@ var HtmlTrackElementList = function () {
 
     list.trackElements_ = [];
 
+    /**
+     * @member {number} length
+     *         The current number of `Track`s in the this Trackist.
+     */
     Object.defineProperty(list, 'length', {
       get: function get() {
         return this.trackElements_.length;
@@ -53,9 +67,46 @@ var HtmlTrackElementList = function () {
     }
   }
 
+  /**
+   * Add an {@link HtmlTrackElement} to the `HtmlTrackElementList`
+   *
+   * @param {HtmlTrackElement} trackElement
+   *        The track element to add to the list.
+   *
+   * @private
+   */
+
+
   HtmlTrackElementList.prototype.addTrackElement_ = function addTrackElement_(trackElement) {
-    this.trackElements_.push(trackElement);
+    var index = this.trackElements_.length;
+
+    if (!('' + index in this)) {
+      Object.defineProperty(this, index, {
+        get: function get() {
+          return this.trackElements_[index];
+        }
+      });
+    }
+
+    // Do not add duplicate elements
+    if (this.trackElements_.indexOf(trackElement) === -1) {
+      this.trackElements_.push(trackElement);
+    }
   };
+
+  /**
+   * Get an {@link HtmlTrackElement} from the `HtmlTrackElementList` given an
+   * {@link TextTrack}.
+   *
+   * @param {TextTrack} track
+   *        The track associated with a track element.
+   *
+   * @return {HtmlTrackElement|undefined}
+   *         The track element that was found or undefined.
+   *
+   * @private
+   */
+
 
   HtmlTrackElementList.prototype.getTrackElementByTrack_ = function getTrackElementByTrack_(track) {
     var trackElement_ = void 0;
@@ -70,6 +121,16 @@ var HtmlTrackElementList = function () {
 
     return trackElement_;
   };
+
+  /**
+   * Remove a {@link HtmlTrackElement} from the `HtmlTrackElementList`
+   *
+   * @param {HtmlTrackElement} trackElement
+   *        The track element to remove from the list.
+   *
+   * @private
+   */
+
 
   HtmlTrackElementList.prototype.removeTrackElement_ = function removeTrackElement_(trackElement) {
     for (var i = 0, length = this.trackElements_.length; i < length; i++) {

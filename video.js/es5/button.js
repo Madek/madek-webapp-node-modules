@@ -14,9 +14,7 @@ var _log = require('./utils/log.js');
 
 var _log2 = _interopRequireDefault(_log);
 
-var _object = require('object.assign');
-
-var _object2 = _interopRequireDefault(_object);
+var _obj = require('./utils/obj');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -30,39 +28,40 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Base class for all buttons
+ * Base class for all buttons.
  *
- * @param {Object} player  Main Player
- * @param {Object=} options Object of option names and values
  * @extends ClickableComponent
- * @class Button
  */
 var Button = function (_ClickableComponent) {
   _inherits(Button, _ClickableComponent);
 
-  function Button(player, options) {
+  function Button() {
     _classCallCheck(this, Button);
 
-    return _possibleConstructorReturn(this, _ClickableComponent.call(this, player, options));
+    return _possibleConstructorReturn(this, _ClickableComponent.apply(this, arguments));
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Button`s DOM element.
    *
-   * @param {String=} type Element's node type. e.g. 'div'
-   * @param {Object=} props An object of properties that should be set on the element
-   * @param {Object=} attributes An object of attributes that should be set on the element
+   * @param {string} [tag=button]
+   *        Element's node type. e.g. 'button'
+   *
+   * @param {Object} [props={}]
+   *        An object of properties that should be set on the element.
+   *
+   * @param {Object} [attributes={}]
+   *        An object of attributes that should be set on the element.
+   *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
-
-
   Button.prototype.createEl = function createEl() {
     var tag = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'button';
     var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var attributes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    props = (0, _object2['default'])({
+    props = (0, _obj.assign)({
       className: this.buildCSSClass()
     }, props);
 
@@ -70,18 +69,18 @@ var Button = function (_ClickableComponent) {
       _log2['default'].warn('Creating a Button with an HTML element of ' + tag + ' is deprecated; use ClickableComponent instead.');
 
       // Add properties for clickable element which is not a native HTML button
-      props = (0, _object2['default'])({
+      props = (0, _obj.assign)({
         tabIndex: 0
       }, props);
 
       // Add ARIA attributes for clickable element which is not a native HTML button
-      attributes = (0, _object2['default'])({
+      attributes = (0, _obj.assign)({
         role: 'button'
       }, attributes);
     }
 
     // Add attributes for button element
-    attributes = (0, _object2['default'])({
+    attributes = (0, _obj.assign)({
 
       // Necessary since the default button type is "submit"
       'type': 'button',
@@ -98,13 +97,20 @@ var Button = function (_ClickableComponent) {
   };
 
   /**
-   * Adds a child component inside this button
+   * Add a child `Component` inside of this `Button`.
    *
-   * @param {String|Component} child The class name or instance of a child to add
-   * @param {Object=} options Options, including options to be passed to children of the child.
-   * @return {Component} The child component (created by this process if a string was used)
-   * @deprecated
-   * @method addChild
+   * @param {string|Component} child
+   *        The name or instance of a child to add.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of options that will get passed to children of
+   *        the child.
+   *
+   * @return {Component}
+   *         The `Component` that gets added as a child. When using a string the
+   *         `Component` will get created by this process.
+   *
+   * @deprecated since version 5
    */
 
 
@@ -120,9 +126,35 @@ var Button = function (_ClickableComponent) {
   };
 
   /**
-   * Handle KeyPress (document level) - Extend with specific functionality for button
+   * Enable the `Button` element so that it can be activated or clicked. Use this with
+   * {@link Button#disable}.
+   */
+
+
+  Button.prototype.enable = function enable() {
+    _ClickableComponent.prototype.enable.call(this);
+    this.el_.removeAttribute('disabled');
+  };
+
+  /**
+   * Enable the `Button` element so that it cannot be activated or clicked. Use this with
+   * {@link Button#enable}.
+   */
+
+
+  Button.prototype.disable = function disable() {
+    _ClickableComponent.prototype.disable.call(this);
+    this.el_.setAttribute('disabled', 'disabled');
+  };
+
+  /**
+   * This gets called when a `Button` has focus and `keydown` is triggered via a key
+   * press.
    *
-   * @method handleKeyPress
+   * @param {EventTarget~Event} event
+   *        The event that caused this function to get called.
+   *
+   * @listens keydown
    */
 
 

@@ -32,27 +32,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * A list of possible text tracks. All functionality is in the
- * base class TrackList. The spec for TextTrackList is located at:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html#texttracklist
+ * The current list of {@link TextTrack} for a media file.
  *
- * interface TextTrackList : EventTarget {
- *   readonly attribute unsigned long length;
- *   getter TextTrack (unsigned long index);
- *   TextTrack? getTrackById(DOMString id);
- *
- *   attribute EventHandler onchange;
- *   attribute EventHandler onaddtrack;
- *   attribute EventHandler onremovetrack;
- * };
- *
- * @param {TextTrack[]} tracks A list of tracks to initialize the list with
+ * @see [Spec]{@link https://html.spec.whatwg.org/multipage/embedded-content.html#texttracklist}
  * @extends TrackList
- * @class TextTrackList
  */
 var TextTrackList = function (_TrackList) {
   _inherits(TextTrackList, _TrackList);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {TextTrack[]} [tracks=[]]
+   *        A list of `TextTrack` to instantiate the list with.
+   */
   function TextTrackList() {
     var _this, _ret;
 
@@ -82,72 +75,27 @@ var TextTrackList = function (_TrackList) {
     return _ret = list, _possibleConstructorReturn(_this, _ret);
   }
 
+  /**
+   * Add a {@link TextTrack} to the `TextTrackList`
+   *
+   * @param {TextTrack} track
+   *        The text track to add to the list.
+   *
+   * @fires TrackList#addtrack
+   * @private
+   */
+
+
   TextTrackList.prototype.addTrack_ = function addTrack_(track) {
     _TrackList.prototype.addTrack_.call(this, track);
+
+    /**
+     * @listens TextTrack#modechange
+     * @fires TrackList#change
+     */
     track.addEventListener('modechange', Fn.bind(this, function () {
       this.trigger('change');
     }));
-  };
-
-  /**
-   * Remove TextTrack from TextTrackList
-   * NOTE: Be mindful of what is passed in as it may be a HTMLTrackElement
-   *
-   * @param {TextTrack} rtrack
-   * @method removeTrack_
-   * @private
-   */
-
-
-  TextTrackList.prototype.removeTrack_ = function removeTrack_(rtrack) {
-    var track = void 0;
-
-    for (var i = 0, l = this.length; i < l; i++) {
-      if (this[i] === rtrack) {
-        track = this[i];
-        if (track.off) {
-          track.off();
-        }
-
-        this.tracks_.splice(i, 1);
-
-        break;
-      }
-    }
-
-    if (!track) {
-      return;
-    }
-
-    this.trigger({
-      track: track,
-      type: 'removetrack'
-    });
-  };
-
-  /**
-   * Get a TextTrack from TextTrackList by a tracks id
-   *
-   * @param {String} id - the id of the track to get
-   * @method getTrackById
-   * @return {TextTrack}
-   * @private
-   */
-
-
-  TextTrackList.prototype.getTrackById = function getTrackById(id) {
-    var result = null;
-
-    for (var i = 0, l = this.length; i < l; i++) {
-      var track = this[i];
-
-      if (track.id === id) {
-        result = track;
-        break;
-      }
-    }
-
-    return result;
   };
 
   return TextTrackList;

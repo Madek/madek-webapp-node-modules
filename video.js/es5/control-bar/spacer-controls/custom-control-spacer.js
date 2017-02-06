@@ -25,7 +25,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Spacer specifically meant to be used as an insertion point for new plugins, etc.
  *
  * @extends Spacer
- * @class CustomControlSpacer
  */
 var CustomControlSpacer = function (_Spacer) {
   _inherits(CustomControlSpacer, _Spacer);
@@ -37,20 +36,20 @@ var CustomControlSpacer = function (_Spacer) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
   CustomControlSpacer.prototype.buildCSSClass = function buildCSSClass() {
     return 'vjs-custom-control-spacer ' + _Spacer.prototype.buildCSSClass.call(this);
   };
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 

@@ -1,18 +1,26 @@
-"use strict";
+'use strict';
 
 exports.__esModule = true;
 /**
  * @file to-title-case.js
+ * @module to-title-case
+ */
+
+/**
+ * Uppercase the first letter of a string.
  *
- * Uppercase the first letter of a string
+ * @param {string} string
+ *        String to be uppercased
  *
- * @param  {String} string String to be uppercased
- * @return {String}
- * @private
- * @method toTitleCase
+ * @return {string}
+ *         The string with an uppercased first letter
  */
 function toTitleCase(string) {
+  if (typeof string !== 'string') {
+    return string;
+  }
+
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-exports["default"] = toTitleCase;
+exports['default'] = toTitleCase;

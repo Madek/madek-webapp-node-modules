@@ -42,14 +42,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Button for volume popup
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends PopupButton
- * @class VolumeMenuButton
  */
 var VolumeMenuButton = function (_PopupButton) {
   _inherits(VolumeMenuButton, _PopupButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of player options.
+   */
   function VolumeMenuButton(player) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -113,10 +119,10 @@ var VolumeMenuButton = function (_PopupButton) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -133,10 +139,10 @@ var VolumeMenuButton = function (_PopupButton) {
   };
 
   /**
-   * Allow sub components to stack CSS class names
+   * Create the VolumeMenuButton popup
    *
-   * @return {Popup} The volume popup button
-   * @method createPopup
+   * @return {Popup}
+   *         The popup that was created
    */
 
 
@@ -158,25 +164,58 @@ var VolumeMenuButton = function (_PopupButton) {
   };
 
   /**
-   * Handle click on volume popup and calls super
+   * This gets called when an `VolumeMenuButton` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} [event]
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
-  VolumeMenuButton.prototype.handleClick = function handleClick() {
+  VolumeMenuButton.prototype.handleClick = function handleClick(event) {
     _muteToggle2['default'].prototype.handleClick.call(this);
     _PopupButton.prototype.handleClick.call(this);
   };
+
+  /**
+   * Add events listeners to the created `VolumeBar`.
+   */
+
 
   VolumeMenuButton.prototype.attachVolumeBarEvents = function attachVolumeBarEvents() {
     this.menuContent.on(['mousedown', 'touchdown'], Fn.bind(this, this.handleMouseDown));
   };
 
+  /**
+   * Handle the `mousedown` and `touchdown` events on the `VolumeBar`
+   *
+   * @param {EventTarget~Event} [event]
+   *        The `mousedown` or `touchdown` event that caused this to run.
+   *
+   * @listens mousedown
+   * @listens touchdown
+   */
+
+
   VolumeMenuButton.prototype.handleMouseDown = function handleMouseDown(event) {
     this.on(['mousemove', 'touchmove'], Fn.bind(this.volumeBar, this.volumeBar.handleMouseMove));
     this.on(this.el_.ownerDocument, ['mouseup', 'touchend'], this.handleMouseUp);
   };
+
+  /**
+   * Handle the `mouseup` and `touchend` events on the `VolumeBar`
+   *
+   * @param {EventTarget~Event} [event]
+   *        The `mouseup` or `touchend` event that caused this to run.
+   *
+   * @listens mouseup
+   * @listens touchend
+   */
+
 
   VolumeMenuButton.prototype.handleMouseUp = function handleMouseUp(event) {
     this.off(['mousemove', 'touchmove'], Fn.bind(this.volumeBar, this.volumeBar.handleMouseMove));
@@ -185,7 +224,19 @@ var VolumeMenuButton = function (_PopupButton) {
   return VolumeMenuButton;
 }(_popupButton2['default']);
 
+/**
+ * @borrows MuteToggle#update as VolumeMenuButton#volumeUpdate
+ */
+
+
 VolumeMenuButton.prototype.volumeUpdate = _muteToggle2['default'].prototype.update;
+
+/**
+ * The text that should display over the `VolumeMenuButton`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
 VolumeMenuButton.prototype.controlText_ = 'Mute';
 
 _component2['default'].registerComponent('VolumeMenuButton', VolumeMenuButton);

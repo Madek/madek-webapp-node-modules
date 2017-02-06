@@ -30,15 +30,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The button component for toggling and selecting descriptions
  *
- * @param {Object} player  Player object
- * @param {Object=} options Object of option names and values
- * @param {Function=} ready    Ready callback function
  * @extends TextTrackButton
- * @class DescriptionsButton
  */
 var DescriptionsButton = function (_TextTrackButton) {
   _inherits(DescriptionsButton, _TextTrackButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   *
+   * @param {Component~ReadyCallback} [ready]
+   *        The function to call when this component is ready.
+   */
   function DescriptionsButton(player, options, ready) {
     _classCallCheck(this, DescriptionsButton);
 
@@ -64,7 +72,10 @@ var DescriptionsButton = function (_TextTrackButton) {
   /**
    * Handle text track change
    *
-   * @method handleTracksChange
+   * @param {EventTarget~Event} event
+   *        The event that caused this function to run
+   *
+   * @listens TextTrackList#change
    */
 
 
@@ -91,10 +102,10 @@ var DescriptionsButton = function (_TextTrackButton) {
   };
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -105,7 +116,22 @@ var DescriptionsButton = function (_TextTrackButton) {
   return DescriptionsButton;
 }(_textTrackButton2['default']);
 
+/**
+ * `kind` of TextTrack to look for to associate it with this menu.
+ *
+ * @type {string}
+ * @private
+ */
+
+
 DescriptionsButton.prototype.kind_ = 'descriptions';
+
+/**
+ * The text that should display over the `DescriptionsButton`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
 DescriptionsButton.prototype.controlText_ = 'Descriptions';
 
 _component2['default'].registerComponent('DescriptionsButton', DescriptionsButton);

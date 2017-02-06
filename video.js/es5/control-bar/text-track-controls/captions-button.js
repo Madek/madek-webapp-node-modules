@@ -28,15 +28,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The button component for toggling and selecting captions
  *
- * @param {Object} player  Player object
- * @param {Object=} options Object of option names and values
- * @param {Function=} ready    Ready callback function
  * @extends TextTrackButton
- * @class CaptionsButton
  */
 var CaptionsButton = function (_TextTrackButton) {
   _inherits(CaptionsButton, _TextTrackButton);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   *
+   * @param {Component~ReadyCallback} [ready]
+   *        The function to call when this component is ready.
+   */
   function CaptionsButton(player, options, ready) {
     _classCallCheck(this, CaptionsButton);
 
@@ -47,10 +55,10 @@ var CaptionsButton = function (_TextTrackButton) {
   }
 
   /**
-   * Allow sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String} The constructed class name
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -61,11 +69,16 @@ var CaptionsButton = function (_TextTrackButton) {
   /**
    * Update caption menu items
    *
-   * @method update
+   * @param {EventTarget~Event} [event]
+   *        The `addtrack` or `removetrack` event that caused this function to be
+   *        called.
+   *
+   * @listens TextTrackList#addtrack
+   * @listens TextTrackList#removetrack
    */
 
 
-  CaptionsButton.prototype.update = function update() {
+  CaptionsButton.prototype.update = function update(event) {
     var threshold = 2;
 
     _TextTrackButton.prototype.update.call(this);
@@ -85,8 +98,8 @@ var CaptionsButton = function (_TextTrackButton) {
   /**
    * Create caption menu items
    *
-   * @return {Array} Array of menu items
-   * @method createItems
+   * @return {CaptionSettingsMenuItem[]}
+   *         The array of current menu items.
    */
 
 
@@ -103,7 +116,22 @@ var CaptionsButton = function (_TextTrackButton) {
   return CaptionsButton;
 }(_textTrackButton2['default']);
 
+/**
+ * `kind` of TextTrack to look for to associate it with this menu.
+ *
+ * @type {string}
+ * @private
+ */
+
+
 CaptionsButton.prototype.kind_ = 'captions';
+
+/**
+ * The text that should display over the `CaptionsButton`s controls. Added for localization.
+ *
+ * @type {string}
+ * @private
+ */
 CaptionsButton.prototype.controlText_ = 'Captions';
 
 _component2['default'].registerComponent('CaptionsButton', CaptionsButton);

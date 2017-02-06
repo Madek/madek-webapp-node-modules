@@ -24,16 +24,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Shows load progress
+ * Shows loading progress
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class LoadProgressBar
  */
 var LoadProgressBar = function (_Component) {
   _inherits(LoadProgressBar, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function LoadProgressBar(player, options) {
     _classCallCheck(this, LoadProgressBar);
 
@@ -45,10 +51,10 @@ var LoadProgressBar = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
 
 
@@ -62,11 +68,14 @@ var LoadProgressBar = function (_Component) {
   /**
    * Update progress bar
    *
-   * @method update
+   * @param {EventTarget~Event} [event]
+   *        The `progress` event that caused this function to run.
+   *
+   * @listens Player#progress
    */
 
 
-  LoadProgressBar.prototype.update = function update() {
+  LoadProgressBar.prototype.update = function update(event) {
     var buffered = this.player_.buffered();
     var duration = this.player_.duration();
     var bufferedEnd = this.player_.bufferedEnd();

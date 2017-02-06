@@ -32,15 +32,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The Menu component is used to build pop up menus, including subtitle and
+ * The Menu component is used to build popup menus, including subtitle and
  * captions selection menus.
  *
  * @extends Component
- * @class Menu
  */
 var Menu = function (_Component) {
   _inherits(Menu, _Component);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {Player} player
+   *        the player that this component should attach to
+   *
+   * @param {Object} [options]
+   *        Object of option names and values
+   *
+   */
   function Menu(player, options) {
     _classCallCheck(this, Menu);
 
@@ -53,26 +62,27 @@ var Menu = function (_Component) {
   }
 
   /**
-   * Add a menu item to the menu
+   * Add a {@link MenuItem} to the menu.
    *
-   * @param {Object|String} component Component or component type to add
-   * @method addItem
+   * @param {Object|string} component
+   *        The name or instance of the `MenuItem` to add.
+   *
    */
 
 
   Menu.prototype.addItem = function addItem(component) {
     this.addChild(component);
-    component.on('click', Fn.bind(this, function () {
+    component.on('click', Fn.bind(this, function (event) {
       this.unlockShowing();
       // TODO: Need to set keyboard focus back to the menuButton
     }));
   };
 
   /**
-   * Create the component's DOM element
+   * Create the `Menu`s DOM element.
    *
    * @return {Element}
-   * @method createEl
+   *         the element that was created
    */
 
 
@@ -104,10 +114,12 @@ var Menu = function (_Component) {
   };
 
   /**
-   * Handle key press for menu
+   * Handle a `keydown` event on this menu. This listener is added in the constructor.
    *
-   * @param {Object} event Event object
-   * @method handleKeyPress
+   * @param {EventTarget~Event} event
+   *        A `keydown` event that happened on the menu.
+   *
+   * @listens keydown
    */
 
 
@@ -125,9 +137,7 @@ var Menu = function (_Component) {
   };
 
   /**
-   * Move to next (lower) menu item for keyboard users
-   *
-   * @method stepForward
+   * Move to next (lower) menu item for keyboard users.
    */
 
 
@@ -141,9 +151,7 @@ var Menu = function (_Component) {
   };
 
   /**
-   * Move to previous (higher) menu item for keyboard users
-   *
-   * @method stepBack
+   * Move to previous (higher) menu item for keyboard users.
    */
 
 
@@ -157,10 +165,10 @@ var Menu = function (_Component) {
   };
 
   /**
-   * Set focus on a menu item in the menu
+   * Set focus on a {@link MenuItem} in the `Menu`.
    *
-   * @param {Object|String} item Index of child item set focus on
-   * @method focus
+   * @param {Object|string} [item=0]
+   *        Index of child item set focus on.
    */
 
 

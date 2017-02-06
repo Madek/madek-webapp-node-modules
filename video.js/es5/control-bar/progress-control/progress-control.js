@@ -23,12 +23,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /**
  * The Progress Control component contains the seek bar, load progress,
- * and play progress
+ * and play progress.
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class ProgressControl
  */
 var ProgressControl = function (_Component) {
   _inherits(ProgressControl, _Component);
@@ -40,10 +37,10 @@ var ProgressControl = function (_Component) {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
   ProgressControl.prototype.createEl = function createEl() {
     return _Component.prototype.createEl.call(this, 'div', {
@@ -53,6 +50,14 @@ var ProgressControl = function (_Component) {
 
   return ProgressControl;
 }(_component2['default']);
+
+/**
+ * Default options for `ProgressControl`
+ *
+ * @type {Object}
+ * @private
+ */
+
 
 ProgressControl.prototype.options_ = {
   children: ['seekBar']

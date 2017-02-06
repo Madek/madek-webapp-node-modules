@@ -3,6 +3,10 @@
 exports.__esModule = true;
 exports.hasLoaded = exports.autoSetupTimeout = exports.autoSetup = undefined;
 
+var _dom = require('./utils/dom');
+
+var Dom = _interopRequireWildcard(_dom);
+
 var _events = require('./utils/events.js');
 
 var Events = _interopRequireWildcard(_events);
@@ -19,17 +23,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var _windowLoaded = false; /**
-                            * @file setup.js
-                            *
-                            * Functions for automatically setting up a player
-                            * based on the data-setup attribute of the video tag
-                            */
-
+/**
+ * @file setup.js - Functions for setting up a player without
+ * user interaction based on the data-setup `attribute` of the video tag.
+ *
+ * @module setup
+ */
+var _windowLoaded = false;
 var videojs = void 0;
 
-// Automatically set up any tags that have a data-setup attribute
+/**
+ * Set up any tags that have a data-setup `attribute` when the player is started.
+ */
 var autoSetup = function autoSetup() {
+
+  // Protect against breakage in non-browser environments.
+  if (!Dom.isReal()) {
+    return;
+  }
+
   // One day, when we stop supporting IE8, go back to this, but in the meantime...*hack hack hack*
   // var vids = Array.prototype.slice.call(document.getElementsByTagName('video'));
   // var audios = Array.prototype.slice.call(document.getElementsByTagName('audio'));
@@ -89,23 +101,40 @@ var autoSetup = function autoSetup() {
   }
 };
 
-// Pause to let the DOM keep processing
+/**
+ * Wait until the page is loaded before running autoSetup. This will be called in
+ * autoSetup if `hasLoaded` returns false.
+ *
+ * @param {number} wait
+ *        How long to wait in ms
+ *
+ * @param {videojs} [vjs]
+ *        The videojs library function
+ */
 function autoSetupTimeout(wait, vjs) {
   if (vjs) {
     videojs = vjs;
   }
 
-  setTimeout(autoSetup, wait);
+  _window2['default'].setTimeout(autoSetup, wait);
 }
 
-if (_document2['default'].readyState === 'complete') {
+if (Dom.isReal() && _document2['default'].readyState === 'complete') {
   _windowLoaded = true;
 } else {
+  /**
+   * Listen for the load event on window, and set _windowLoaded to true.
+   *
+   * @listens load
+   */
   Events.one(_window2['default'], 'load', function () {
     _windowLoaded = true;
   });
 }
 
+/**
+ * check if the document has been loaded
+ */
 var hasLoaded = function hasLoaded() {
   return _windowLoaded;
 };

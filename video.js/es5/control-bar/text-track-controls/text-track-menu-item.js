@@ -40,14 +40,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The specific menu item type for selecting a language within a text track kind
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuItem
- * @class TextTrackMenuItem
  */
 var TextTrackMenuItem = function (_MenuItem) {
   _inherits(TextTrackMenuItem, _MenuItem);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
   function TextTrackMenuItem(player, options) {
     _classCallCheck(this, TextTrackMenuItem);
 
@@ -106,9 +112,15 @@ var TextTrackMenuItem = function (_MenuItem) {
   }
 
   /**
-   * Handle click on text track
+   * This gets called when an `TextTrackMenuItem` is "clicked". See
+   * {@link ClickableComponent} for more detailed information on what a click can be.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} event
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
    */
 
 
@@ -138,9 +150,12 @@ var TextTrackMenuItem = function (_MenuItem) {
   };
 
   /**
-   * Handle text track change
+   * Handle text track list change
    *
-   * @method handleTracksChange
+   * @param {EventTarget~Event} event
+   *        The `change` event that caused this function to be called.
+   *
+   * @listens TextTrackList#change
    */
 
 

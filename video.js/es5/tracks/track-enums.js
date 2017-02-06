@@ -6,17 +6,11 @@ exports.__esModule = true;
  */
 
 /**
- * https://html.spec.whatwg.org/multipage/embedded-content.html#dom-videotrack-kind
+ * All possible `VideoTrackKind`s
  *
- * enum VideoTrackKind {
- *   "alternative",
- *   "captions",
- *   "main",
- *   "sign",
- *   "subtitles",
- *   "commentary",
- *   "",
- * };
+ * @see https://html.spec.whatwg.org/multipage/embedded-content.html#dom-videotrack-kind
+ * @typedef VideoTrack~Kind
+ * @enum
  */
 var VideoTrackKind = exports.VideoTrackKind = {
   alternative: 'alternative',
@@ -28,17 +22,11 @@ var VideoTrackKind = exports.VideoTrackKind = {
 };
 
 /**
- * https://html.spec.whatwg.org/multipage/embedded-content.html#dom-audiotrack-kind
+ * All possible `AudioTrackKind`s
  *
- * enum AudioTrackKind {
- *   "alternative",
- *   "descriptions",
- *   "main",
- *   "main-desc",
- *   "translation",
- *   "commentary",
- *   "",
- * };
+ * @see https://html.spec.whatwg.org/multipage/embedded-content.html#dom-audiotrack-kind
+ * @typedef AudioTrack~Kind
+ * @enum
  */
 var AudioTrackKind = exports.AudioTrackKind = {
   'alternative': 'alternative',
@@ -50,15 +38,11 @@ var AudioTrackKind = exports.AudioTrackKind = {
 };
 
 /**
- * https://html.spec.whatwg.org/multipage/embedded-content.html#texttrackkind
+ * All possible `TextTrackKind`s
  *
- * enum TextTrackKind {
- *   "subtitles",
- *   "captions",
- *   "descriptions",
- *   "chapters",
- *   "metadata"
- * };
+ * @see https://html.spec.whatwg.org/multipage/embedded-content.html#dom-texttrack-kind
+ * @typedef TextTrack~Kind
+ * @enum
  */
 var TextTrackKind = exports.TextTrackKind = {
   subtitles: 'subtitles',
@@ -69,9 +53,11 @@ var TextTrackKind = exports.TextTrackKind = {
 };
 
 /**
- * https://html.spec.whatwg.org/multipage/embedded-content.html#texttrackmode
+ * All possible `TextTrackMode`s
  *
- * enum TextTrackMode { "disabled",  "hidden",  "showing" };
+ * @see https://html.spec.whatwg.org/multipage/embedded-content.html#texttrackmode
+ * @typedef TextTrack~Mode
+ * @enum
  */
 var TextTrackMode = exports.TextTrackMode = {
   disabled: 'disabled',

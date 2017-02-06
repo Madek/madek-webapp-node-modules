@@ -26,9 +26,7 @@ var _document = require('global/document');
 
 var _document2 = _interopRequireDefault(_document);
 
-var _object = require('object.assign');
-
-var _object2 = _interopRequireDefault(_object);
+var _obj = require('./utils/obj');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -44,16 +42,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Clickable Component which is clickable or keyboard actionable, but is not a native HTML button
+ * Clickable Component which is clickable or keyboard actionable,
+ * but is not a native HTML button.
  *
- * @param {Object} player  Main Player
- * @param {Object=} options Object of option names and values
  * @extends Component
- * @class ClickableComponent
  */
 var ClickableComponent = function (_Component) {
   _inherits(ClickableComponent, _Component);
 
+  /**
+   * Creates an instance of this class.
+   *
+   * @param  {Player} player
+   *         The `Player` that this class should be attached to.
+   *
+   * @param  {Object} [options]
+   *         The key/value store of player options.
+   */
   function ClickableComponent(player, options) {
     _classCallCheck(this, ClickableComponent);
 
@@ -61,21 +66,24 @@ var ClickableComponent = function (_Component) {
 
     _this.emitTapEvents();
 
-    _this.on('tap', _this.handleClick);
-    _this.on('click', _this.handleClick);
-    _this.on('focus', _this.handleFocus);
-    _this.on('blur', _this.handleBlur);
+    _this.enable();
     return _this;
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`s DOM element.
    *
-   * @param {String=} type Element's node type. e.g. 'div'
-   * @param {Object=} props An object of properties that should be set on the element
-   * @param {Object=} attributes An object of attributes that should be set on the element
+   * @param {string} [tag=div]
+   *        The element's node type.
+   *
+   * @param {Object} [props={}]
+   *        An object of properties that should be set on the element.
+   *
+   * @param {Object} [attributes={}]
+   *        An object of attributes that should be set on the element.
+   *
    * @return {Element}
-   * @method createEl
+   *         The element that gets created.
    */
 
 
@@ -84,7 +92,7 @@ var ClickableComponent = function (_Component) {
     var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var attributes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    props = (0, _object2['default'])({
+    props = (0, _obj.assign)({
       className: this.buildCSSClass(),
       tabIndex: 0
     }, props);
@@ -94,12 +102,14 @@ var ClickableComponent = function (_Component) {
     }
 
     // Add ARIA attributes for clickable element which is not a native HTML button
-    attributes = (0, _object2['default'])({
+    attributes = (0, _obj.assign)({
       'role': 'button',
 
       // let the screen reader user know that the text of the element may change
       'aria-live': 'polite'
     }, attributes);
+
+    this.tabIndex_ = props.tabIndex;
 
     var el = _Component.prototype.createEl.call(this, tag, props, attributes);
 
@@ -109,11 +119,13 @@ var ClickableComponent = function (_Component) {
   };
 
   /**
-   * create control text
+   * Create a control text element on this `Component`
    *
-   * @param {Element} el Parent element for the control text
+   * @param {Element} [el]
+   *        Parent element for the control text.
+   *
    * @return {Element}
-   * @method controlText
+   *         The control text element that gets created.
    */
 
 
@@ -132,12 +144,17 @@ var ClickableComponent = function (_Component) {
   };
 
   /**
-   * Controls text - both request and localize
+   * Get or set the localize text to use for the controls on the `Component`.
    *
-   * @param {String}  text Text for element
-   * @param {Element=} el Element to set the title on
-   * @return {String}
-   * @method controlText
+   * @param {string} [text]
+   *        Control text for element.
+   *
+   * @param {Element} [el=this.el()]
+   *        Element to set the title on.
+   *
+   * @return {string|ClickableComponent}
+   *         - The control text when getting
+   *         - Returns itself when setting; method can be chained.
    */
 
 
@@ -158,10 +175,10 @@ var ClickableComponent = function (_Component) {
   };
 
   /**
-   * Allows sub components to stack CSS class names
+   * Builds the default DOM `className`.
    *
-   * @return {String}
-   * @method buildCSSClass
+   * @return {string}
+   *         The DOM `className` for this object.
    */
 
 
@@ -170,81 +187,97 @@ var ClickableComponent = function (_Component) {
   };
 
   /**
-   * Adds a child component inside this clickable-component
+   * Enable this `Component`s element.
    *
-   * @param {String|Component} child The class name or instance of a child to add
-   * @param {Object=} options Options, including options to be passed to children of the child.
-   * @return {Component} The child component (created by this process if a string was used)
-   * @method addChild
-   */
-
-
-  ClickableComponent.prototype.addChild = function addChild(child) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    // TODO: Fix adding an actionable child to a ClickableComponent; currently
-    // it will cause issues with assistive technology (e.g. screen readers)
-    // which support ARIA, since an element with role="button" cannot have
-    // actionable child elements.
-
-    // let className = this.constructor.name;
-    // log.warn(`Adding a child to a ClickableComponent (${className}) can cause issues with assistive technology which supports ARIA, since an element with role="button" cannot have actionable child elements.`);
-
-    return _Component.prototype.addChild.call(this, child, options);
-  };
-
-  /**
-   * Enable the component element
-   *
-   * @return {Component}
-   * @method enable
+   * @return {ClickableComponent}
+   *         Returns itself; method can be chained.
    */
 
 
   ClickableComponent.prototype.enable = function enable() {
     this.removeClass('vjs-disabled');
     this.el_.setAttribute('aria-disabled', 'false');
+    if (typeof this.tabIndex_ !== 'undefined') {
+      this.el_.setAttribute('tabIndex', this.tabIndex_);
+    }
+    this.on('tap', this.handleClick);
+    this.on('click', this.handleClick);
+    this.on('focus', this.handleFocus);
+    this.on('blur', this.handleBlur);
     return this;
   };
 
   /**
-   * Disable the component element
+   * Disable this `Component`s element.
    *
-   * @return {Component}
-   * @method disable
+   * @return {ClickableComponent}
+   *         Returns itself; method can be chained.
    */
 
 
   ClickableComponent.prototype.disable = function disable() {
     this.addClass('vjs-disabled');
     this.el_.setAttribute('aria-disabled', 'true');
+    if (typeof this.tabIndex_ !== 'undefined') {
+      this.el_.removeAttribute('tabIndex');
+    }
+    this.off('tap', this.handleClick);
+    this.off('click', this.handleClick);
+    this.off('focus', this.handleFocus);
+    this.off('blur', this.handleBlur);
     return this;
   };
 
   /**
-   * Handle Click - Override with specific functionality for component
+   * This gets called when a `ClickableComponent` gets:
+   * - Clicked (via the `click` event, listening starts in the constructor)
+   * - Tapped (via the `tap` event, listening starts in the constructor)
+   * - The following things happen in order:
+   *   1. {@link ClickableComponent#handleFocus} is called via a `focus` event on the
+   *      `ClickableComponent`.
+   *   2. {@link ClickableComponent#handleFocus} adds a listener for `keydown` on using
+   *      {@link ClickableComponent#handleKeyPress}.
+   *   3. `ClickableComponent` has not had a `blur` event (`blur` means that focus was lost). The user presses
+   *      the space or enter key.
+   *   4. {@link ClickableComponent#handleKeyPress} calls this function with the `keydown`
+   *      event as a parameter.
    *
-   * @method handleClick
+   * @param {EventTarget~Event} event
+   *        The `keydown`, `tap`, or `click` event that caused this function to be
+   *        called.
+   *
+   * @listens tap
+   * @listens click
+   * @abstract
    */
 
 
-  ClickableComponent.prototype.handleClick = function handleClick() {};
+  ClickableComponent.prototype.handleClick = function handleClick(event) {};
 
   /**
-   * Handle Focus - Add keyboard functionality to element
+   * This gets called when a `ClickableComponent` gains focus via a `focus` event.
+   * Turns on listening for `keydown` events. When they happen it
+   * calls `this.handleKeyPress`.
    *
-   * @method handleFocus
+   * @param {EventTarget~Event} event
+   *        The `focus` event that caused this function to be called.
+   *
+   * @listens focus
    */
 
 
-  ClickableComponent.prototype.handleFocus = function handleFocus() {
+  ClickableComponent.prototype.handleFocus = function handleFocus(event) {
     Events.on(_document2['default'], 'keydown', Fn.bind(this, this.handleKeyPress));
   };
 
   /**
-   * Handle KeyPress (document level) - Trigger click when Space or Enter key is pressed
+   * Called when this ClickableComponent has focus and a key gets pressed down. By
+   * default it will call `this.handleClick` when the key is space or enter.
    *
-   * @method handleKeyPress
+   * @param {EventTarget~Event} event
+   *        The `keydown` event that caused this function to be called.
+   *
+   * @listens keydown
    */
 
 
@@ -262,13 +295,17 @@ var ClickableComponent = function (_Component) {
   };
 
   /**
-   * Handle Blur - Remove keyboard triggers
+   * Called when a `ClickableComponent` loses focus. Turns off the listener for
+   * `keydown` events. Which Stops `this.handleKeyPress` from getting called.
    *
-   * @method handleBlur
+   * @param {EventTarget~Event} event
+   *        The `blur` event that caused this function to be called.
+   *
+   * @listens blur
    */
 
 
-  ClickableComponent.prototype.handleBlur = function handleBlur() {
+  ClickableComponent.prototype.handleBlur = function handleBlur(event) {
     Events.off(_document2['default'], 'keydown', Fn.bind(this, this.handleKeyPress));
   };
 

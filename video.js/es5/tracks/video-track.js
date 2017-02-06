@@ -27,23 +27,35 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * A single video text track as defined in:
- * @link https://html.spec.whatwg.org/multipage/embedded-content.html#videotrack
+ * A representation of a single `VideoTrack`.
  *
- * interface VideoTrack {
- *   readonly attribute DOMString id;
- *   readonly attribute DOMString kind;
- *   readonly attribute DOMString label;
- *   readonly attribute DOMString language;
- *   attribute boolean selected;
- * };
- *
- * @param {Object=} options Object of option names and values
- * @class VideoTrack
+ * @see [Spec]{@link https://html.spec.whatwg.org/multipage/embedded-content.html#videotrack}
+ * @extends Track
  */
 var VideoTrack = function (_Track) {
   _inherits(VideoTrack, _Track);
 
+  /**
+   * Create an instance of this class.
+   *
+   * @param {Object} [options={}]
+   *        Object of option names and values
+   *
+   * @param {string} [options.kind='']
+   *        A valid {@link VideoTrack~Kind}
+   *
+   * @param {string} [options.id='vjs_track_' + Guid.newGUID()]
+   *        A unique id for this AudioTrack.
+   *
+   * @param {string} [options.label='']
+   *        The menu label for this track.
+   *
+   * @param {string} [options.language='']
+   *        A valid two character language code.
+   *
+   * @param {boolean} [options.selected]
+   *        If this track is the one that is currently playing.
+   */
   function VideoTrack() {
     var _this, _ret;
 
@@ -68,6 +80,13 @@ var VideoTrack = function (_Track) {
       }
     }
 
+    /**
+     * @member {boolean} selected
+     *         If this `VideoTrack` is selected or not. When setting this will
+     *         fire {@link VideoTrack#selectedchange} if the state of selected changed.
+     *
+     * @fires VideoTrack#selectedchange
+     */
     Object.defineProperty(track, 'selected', {
       get: function get() {
         return selected;
@@ -78,6 +97,17 @@ var VideoTrack = function (_Track) {
           return;
         }
         selected = newSelected;
+
+        /**
+         * An event that fires when selected changes on this track. This allows
+         * the VideoTrackList that holds this track to act accordingly.
+         *
+         * > Note: This is not part of the spec! Native tracks will do
+         *         this internally without an event.
+         *
+         * @event VideoTrack#selectedchange
+         * @type {EventTarget~Event}
+         */
         this.trigger('selectedchange');
       }
     });
