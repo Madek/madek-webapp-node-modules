@@ -87,14 +87,27 @@ EventedTokenizer.prototype = {
     var entity = this.input.slice(this.index, endIndex);
     var chars = this.entityParser.parse(entity);
     if (chars) {
-      this.index = endIndex + 1;
+      var count = entity.length;
+      // consume the entity chars
+      while (count) {
+        this.consume();
+        count--;
+      }
+      // consume the `;`
+      this.consume();
+
       return chars;
     }
   },
 
   markTagStart: function markTagStart() {
+    // these properties to be removed in next major bump
     this.tagLine = this.line;
     this.tagColumn = this.column;
+
+    if (this.delegate.tagOpen) {
+      this.delegate.tagOpen();
+    }
   },
 
   states: {
@@ -146,7 +159,7 @@ EventedTokenizer.prototype = {
       var char = this.consume();
 
       if (char === "-" && this.input.charAt(this.index) === "-") {
-        this.index++;
+        this.consume();
         this.state = 'commentStart';
         this.delegate.beginComment();
       }
@@ -229,62 +242,76 @@ EventedTokenizer.prototype = {
     },
 
     beforeAttributeName: function beforeAttributeName() {
-      var char = this.consume();
+      var char = this.peek();
 
       if ((0, _utils.isSpace)(char)) {
+        this.consume();
         return;
       } else if (char === "/") {
         this.state = 'selfClosingStartTag';
+        this.consume();
       } else if (char === ">") {
+        this.consume();
         this.delegate.finishTag();
         this.state = 'beforeData';
       } else {
         this.state = 'attributeName';
         this.delegate.beginAttribute();
+        this.consume();
         this.delegate.appendToAttributeName(char);
       }
     },
 
     attributeName: function attributeName() {
-      var char = this.consume();
+      var char = this.peek();
 
       if ((0, _utils.isSpace)(char)) {
         this.state = 'afterAttributeName';
+        this.consume();
       } else if (char === "/") {
         this.delegate.beginAttributeValue(false);
         this.delegate.finishAttributeValue();
+        this.consume();
         this.state = 'selfClosingStartTag';
       } else if (char === "=") {
         this.state = 'beforeAttributeValue';
+        this.consume();
       } else if (char === ">") {
         this.delegate.beginAttributeValue(false);
         this.delegate.finishAttributeValue();
+        this.consume();
         this.delegate.finishTag();
         this.state = 'beforeData';
       } else {
+        this.consume();
         this.delegate.appendToAttributeName(char);
       }
     },
 
     afterAttributeName: function afterAttributeName() {
-      var char = this.consume();
+      var char = this.peek();
 
       if ((0, _utils.isSpace)(char)) {
+        this.consume();
         return;
       } else if (char === "/") {
         this.delegate.beginAttributeValue(false);
         this.delegate.finishAttributeValue();
+        this.consume();
         this.state = 'selfClosingStartTag';
       } else if (char === "=") {
+        this.consume();
         this.state = 'beforeAttributeValue';
       } else if (char === ">") {
         this.delegate.beginAttributeValue(false);
         this.delegate.finishAttributeValue();
+        this.consume();
         this.delegate.finishTag();
         this.state = 'beforeData';
       } else {
         this.delegate.beginAttributeValue(false);
         this.delegate.finishAttributeValue();
+        this.consume();
         this.state = 'attributeName';
         this.delegate.beginAttribute();
         this.delegate.appendToAttributeName(char);
@@ -292,22 +319,28 @@ EventedTokenizer.prototype = {
     },
 
     beforeAttributeValue: function beforeAttributeValue() {
-      var char = this.consume();
+      var char = this.peek();
 
-      if ((0, _utils.isSpace)(char)) {} else if (char === '"') {
+      if ((0, _utils.isSpace)(char)) {
+        this.consume();
+      } else if (char === '"') {
         this.state = 'attributeValueDoubleQuoted';
         this.delegate.beginAttributeValue(true);
+        this.consume();
       } else if (char === "'") {
         this.state = 'attributeValueSingleQuoted';
         this.delegate.beginAttributeValue(true);
+        this.consume();
       } else if (char === ">") {
         this.delegate.beginAttributeValue(false);
         this.delegate.finishAttributeValue();
+        this.consume();
         this.delegate.finishTag();
         this.state = 'beforeData';
       } else {
         this.state = 'attributeValueUnquoted';
         this.delegate.beginAttributeValue(false);
+        this.consume();
         this.delegate.appendToAttributeValue(char);
       }
     },
@@ -339,18 +372,22 @@ EventedTokenizer.prototype = {
     },
 
     attributeValueUnquoted: function attributeValueUnquoted() {
-      var char = this.consume();
+      var char = this.peek();
 
       if ((0, _utils.isSpace)(char)) {
         this.delegate.finishAttributeValue();
+        this.consume();
         this.state = 'beforeAttributeName';
       } else if (char === "&") {
+        this.consume();
         this.delegate.appendToAttributeValue(this.consumeCharRef(">") || "&");
       } else if (char === ">") {
         this.delegate.finishAttributeValue();
+        this.consume();
         this.delegate.finishTag();
         this.state = 'beforeData';
       } else {
+        this.consume();
         this.delegate.appendToAttributeValue(char);
       }
     },

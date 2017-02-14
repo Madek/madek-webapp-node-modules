@@ -16,6 +16,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var options = linkify.options;
+var Options = options.Options;
+
+
 var StartTag = 'StartTag';
 var EndTag = 'EndTag';
 var Chars = 'Chars';
@@ -26,14 +29,14 @@ var Comment = 'Comment';
 	parser.
 */
 function linkifyHtml(str) {
-	var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	var tokens = _simpleHtmlTokenizer2.default.tokenize(str);
 	var linkifiedTokens = [];
 	var linkified = [];
 	var i;
 
-	opts = linkify.options.normalize(opts);
+	opts = new Options(opts);
 
 	// Linkify the tokens given by the parser
 	for (i = 0; i < tokens.length; i++) {
@@ -45,7 +48,9 @@ function linkifyHtml(str) {
 			// Ignore all the contents of ignored tags
 			var tagName = token.tagName.toUpperCase();
 			var isIgnored = tagName === 'A' || options.contains(opts.ignoreTags, tagName);
-			if (!isIgnored) continue;
+			if (!isIgnored) {
+				continue;
+			}
 
 			var preskipLen = linkifiedTokens.length;
 			skipTagTokens(tagName, tokens, ++i, linkifiedTokens);
@@ -67,9 +72,9 @@ function linkifyHtml(str) {
 		var _token = linkifiedTokens[i];
 		switch (_token.type) {
 			case StartTag:
-				var attrs = attrsToStrings(_token.attributes);
 				var link = '<' + _token.tagName;
-				if (attrs.length > 0) {
+				if (_token.attributes.length > 0) {
+					var attrs = attrsToStrings(_token.attributes);
 					link += ' ' + attrs.join(' ');
 				}
 				link += '>';
@@ -100,7 +105,6 @@ function linkifyChars(str, opts) {
 
 	for (var i = 0; i < tokens.length; i++) {
 		var token = tokens[i];
-		var validated = token.isLink && linkify.options.resolve(opts.validate, token.toString(), token.type);
 
 		if (token.type === 'nl' && opts.nl2br) {
 			result.push({
@@ -110,35 +114,42 @@ function linkifyChars(str, opts) {
 				selfClosing: true
 			});
 			continue;
-		} else if (!token.isLink || !validated) {
+		} else if (!token.isLink || !opts.check(token)) {
 			result.push({ type: Chars, chars: token.toString() });
 			continue;
 		}
 
-		var href = token.toHref(opts.defaultProtocol);
-		var formatted = linkify.options.resolve(opts.format, token.toString(), token.type);
-		var formattedHref = linkify.options.resolve(opts.formatHref, href, token.type);
-		var attributesHash = linkify.options.resolve(opts.attributes, href, token.type);
-		var tagName = linkify.options.resolve(opts.tagName, href, token.type);
-		var linkClass = linkify.options.resolve(opts.linkClass, href, token.type);
-		var target = linkify.options.resolve(opts.target, href, token.type);
+		var _opts$resolve = opts.resolve(token),
+		    href = _opts$resolve.href,
+		    formatted = _opts$resolve.formatted,
+		    formattedHref = _opts$resolve.formattedHref,
+		    tagName = _opts$resolve.tagName,
+		    className = _opts$resolve.className,
+		    target = _opts$resolve.target,
+		    attributes = _opts$resolve.attributes;
 
 		// Build up attributes
-		var attributes = [['href', formattedHref], ['class', linkClass]];
 
-		if (target) {
-			attributes.push(['target', target]);
+
+		var attributeArray = [['href', formattedHref]];
+
+		if (className) {
+			attributeArray.push(['class', className]);
 		}
 
-		for (var attr in attributesHash) {
-			attributes.push([attr, attributesHash[attr]]);
+		if (target) {
+			attributeArray.push(['target', target]);
+		}
+
+		for (var attr in attributes) {
+			attributeArray.push([attr, attributes[attr]]);
 		}
 
 		// Add the required tokens
 		result.push({
 			type: StartTag,
 			tagName: tagName,
-			attributes: attributes,
+			attributes: attributeArray,
 			selfClosing: false
 		});
 		result.push({ type: Chars, chars: formatted });
@@ -169,6 +180,7 @@ function skipTagTokens(tagName, tokens, i, skippedTokens) {
 
 	while (i < tokens.length && stackCount > 0) {
 		var token = tokens[i];
+
 		if (token.type === StartTag && token.tagName.toUpperCase() === tagName) {
 			// Nested tag of the same type, "add to stack"
 			stackCount++;
@@ -176,6 +188,7 @@ function skipTagTokens(tagName, tokens, i, skippedTokens) {
 			// Closing tag
 			stackCount--;
 		}
+
 		skippedTokens.push(token);
 		i++;
 	}
@@ -196,9 +209,9 @@ function escapeAttr(attr) {
 function attrsToStrings(attrs) {
 	var attrStrs = [];
 	for (var i = 0; i < attrs.length; i++) {
-		var _attrs$i = attrs[i];
-		var name = _attrs$i[0];
-		var value = _attrs$i[1];
+		var _attrs$i = attrs[i],
+		    name = _attrs$i[0],
+		    value = _attrs$i[1];
 
 		attrStrs.push(name + '="' + escapeAttr(value) + '"');
 	}

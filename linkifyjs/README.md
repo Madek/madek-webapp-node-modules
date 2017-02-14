@@ -3,9 +3,10 @@
 [![npm version](https://badge.fury.io/js/linkifyjs.svg)](https://www.npmjs.com/package/linkifyjs)
 [![Dependency Status](https://gemnasium.com/SoapBox/linkifyjs.svg)](https://gemnasium.com/SoapBox/linkifyjs)
 [![Build Status](https://travis-ci.org/SoapBox/linkifyjs.svg)](https://travis-ci.org/SoapBox/linkifyjs)
+[![Sauce Test Status](https://saucelabs.com/buildstatus/nfrasser)](https://saucelabs.com/u/nfrasser)
 [![Coverage Status](https://coveralls.io/repos/SoapBox/linkifyjs/badge.svg?branch=master)](https://coveralls.io/r/SoapBox/linkifyjs?branch=master)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/nfrasser.svg)](https://saucelabs.com/u/nfrasser)
+[![Build Status](https://saucelabs.com/open_sauce/build_matrix/nfrasser.svg)](https://saucelabs.com/beta/builds/c63720f642964f77927b2fda198b4a94)
 
 Linkify is a small yet comprehensive JavaScript plugin for finding URLs in plain-text and converting them to HTML links. It works with all valid URLs and email addresses.
 
@@ -30,7 +31,7 @@ __Jump to__
 ## Features
 
 * **Accuracy**<br>Linkify uses a (close to) complete list of valid top-level domains to ensure that only valid URLs and email addresses are matched.
-* **Speed**<br>Each string is analyzied exactly once to detect every kind of linkable entity
+* **Speed**<br>Each string is analyzed exactly once to detect every kind of linkable entity
 * **Extensibility**<br>Linkify is designed to be fast and lightweight, but comes with a powerful plugin API that lets you detect even more information like #hashtags and @mentions.
 * **Small footprint**<br>Linkify and its jQuery interface clock in at approximately 15KB minified (5KB gzipped) - approximately 50% the size of Twitter Text
 * **Modern implementation**<br>Linkify is written in ECMAScript6 and compiles to ES5 for modern JavaScript runtimes.
@@ -60,7 +61,7 @@ bower install linkifyjs
 Add [linkify](https://github.com/nfrasser/linkify-shim/raw/master/linkify.min.js) and [linkify-jquery](https://github.com/nfrasser/linkify-shim/raw/master/linkify-jquery.min.js) to your HTML following jQuery:
 
 ```html
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="linkify.min.js"></script>
 <script src="linkify-jquery.min.js"></script>
 ```
@@ -102,7 +103,7 @@ Returns the following array
 See [all available options](http://soapbox.github.io/linkifyjs/docs/options.html)
 
 
-### Node.js/io.js/Browserify
+### Node.js/Browserify
 
 ```js
 var linkify = require('linkifyjs');
@@ -143,12 +144,11 @@ require(['linkify-element'], function (linkifyElement) {
 
   // Linkify the #sidebar element
   linkifyElement(document.getElementById('sidebar'), {
-    linkClass: 'my-link'
+    className: 'my-link'
   });
 
   // Linkify all paragraph tags
   document.getElementsByTagName('p').map(linkifyElement);
-
 });
 
 ```
@@ -158,16 +158,21 @@ Note that if you are using `linkify-jquery.amd.js`, a `jquery` module must be de
 ### Browser globals
 
 ```html
-<script src="jquery.js"></script>
+<script src="react.js"></script>
+<script src="react-dom.js"></script>
 <script src="linkify.js"></script>
-<script src="linkify-string.js"></script>
-<script src="linkify-jquery.js"></script>
+<script src="linkify-react.js"></script>
 ```
 
-```js
+```jsx
 linkify.test('dev@example.com'); // true
-var htmlStr = linkifyStr('Check out soapboxhq.com it is great!');
-$('p').linkify();
+
+ReactDOM.render(
+  <Linkify options={{ignoreTags: ['style']}}>
+    Check out soapboxhq.com it is great!
+  </Linkify>,
+  document.getElementById('#container');
+);
 ```
 
 ## Internet Explorer
@@ -198,6 +203,7 @@ Download the [**latest release**](https://github.com/SoapBox/linkifyjs/releases)
 
 **Interfaces** _(recommended - include at least one)_
 
+* **[react](http://soapbox.github.io/linkifyjs/docs/linkify-react.html)**<br> [`.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-react.min.js) · [`.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-react.js) · [`.amd.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-react.amd.min.js) · [`.amd.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-react.amd.js)
 * **[jquery](http://soapbox.github.io/linkifyjs/docs/linkify-jquery.html)**<br> [`.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-jquery.min.js) · [`.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-jquery.js) · [`.amd.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-jquery.amd.min.js) · [`.amd.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-jquery.amd.js)
 * **[html](http://soapbox.github.io/linkifyjs/docs/linkify-html.html)**<br> [`.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-html.min.js) · [`.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-html.js) · [`.amd.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-html.amd.min.js) · [`.amd.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-html.amd.js)
 * **[element](http://soapbox.github.io/linkifyjs/docs/linkify-element.html)** _(Included with linkify-jquery)_<br> [`.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-element.min.js) · [`.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-element.js) · [`.amd.min.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-element.amd.min.js) · [`.amd.js`](https://github.com/nfrasser/linkify-shim/raw/master/linkify-element.amd.js)

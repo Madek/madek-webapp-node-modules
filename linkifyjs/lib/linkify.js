@@ -1,7 +1,9 @@
 'use strict';
 
 exports.__esModule = true;
-exports.tokenize = exports.test = exports.scanner = exports.parser = exports.options = exports.find = undefined;
+exports.tokenize = exports.test = exports.scanner = exports.parser = exports.options = exports.inherits = exports.find = undefined;
+
+var _class = require('./linkify/utils/class');
 
 var _options = require('./linkify/utils/options');
 
@@ -37,15 +39,15 @@ var tokenize = function tokenize(str) {
 	Returns a list of linkable items in the given string.
 */
 var find = function find(str) {
-	var type = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-
-	var tokens = tokenize(str),
-	    filtered = [];
+	var tokens = tokenize(str);
+	var filtered = [];
 
 	for (var i = 0; i < tokens.length; i++) {
-		if (tokens[i].isLink && (!type || tokens[i].type === type)) {
-			filtered.push(tokens[i].toObject());
+		var token = tokens[i];
+		if (token.isLink && (!type || token.type === type)) {
+			filtered.push(token.toObject());
 		}
 	}
 
@@ -66,7 +68,7 @@ var find = function find(str) {
 	Will return `true` if str is a valid email.
 */
 var test = function test(str) {
-	var type = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
 	var tokens = tokenize(str);
 	return tokens.length === 1 && tokens[0].isLink && (!type || tokens[0].type === type);
@@ -75,6 +77,7 @@ var test = function test(str) {
 // Scanner and parser provide states and tokens for the lexicographic stage
 // (will be used to add additional link types)
 exports.find = find;
+exports.inherits = _class.inherits;
 exports.options = options;
 exports.parser = parser;
 exports.scanner = scanner;

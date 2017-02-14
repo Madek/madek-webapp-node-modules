@@ -23,7 +23,7 @@ EntityParser.prototype.parse = function (entity) {
   }
   matches = entity.match(NAMED);
   if (matches) {
-    return "&" + matches[1] + ";";
+    return this.named[matches[1]] || "&" + matches[1] + ";";
   }
 };
 

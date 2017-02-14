@@ -1,12 +1,16 @@
-"use strict";
+'use strict';
 
 exports.__esModule = true;
+exports.stateify = exports.TokenState = exports.CharacterState = undefined;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _class = require('../utils/class');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function createStateClass() {
+	return function (tClass) {
+		this.j = [];
+		this.T = tClass || null;
+	};
+}
 
 /**
 	A simple state machine that can emit token classes
@@ -27,21 +31,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	@class BaseState
 */
-
-var BaseState = function () {
+var BaseState = createStateClass();
+BaseState.prototype = {
+	defaultTransition: false,
 
 	/**
  	@method constructor
  	@param {Class} tClass Pass in the kind of token to emit if there are
  		no jumps after this state and the state is accepting.
  */
-
-	function BaseState(tClass) {
-		_classCallCheck(this, BaseState);
-
-		this.j = [];
-		this.T = tClass || null;
-	}
 
 	/**
  	On the given symbol(s), this machine should go to the given state
@@ -51,9 +49,7 @@ var BaseState = function () {
  		same as the current instance (i.e., don't pass in a different
  		subclass)
  */
-
-
-	BaseState.prototype.on = function on(symbol, state) {
+	on: function on(symbol, state) {
 		if (symbol instanceof Array) {
 			for (var i = 0; i < symbol.length; i++) {
 				this.j.push([symbol[i], state]);
@@ -62,7 +58,8 @@ var BaseState = function () {
 		}
 		this.j.push([symbol, state]);
 		return this;
-	};
+	},
+
 
 	/**
  	Given the next item, returns next state for that item
@@ -71,24 +68,22 @@ var BaseState = function () {
  		this particular machine.
  	@return {State} state Returns false if no jumps are available
  */
-
-
-	BaseState.prototype.next = function next(item) {
-
+	next: function next(item) {
 		for (var i = 0; i < this.j.length; i++) {
-
-			var jump = this.j[i],
-			    symbol = jump[0],
-			    // Next item to check for
-			state = jump[1]; // State to jump to if items match
+			var jump = this.j[i];
+			var symbol = jump[0]; // Next item to check for
+			var state = jump[1]; // State to jump to if items match
 
 			// compare item with symbol
-			if (this.test(item, symbol)) return state;
+			if (this.test(item, symbol)) {
+				return state;
+			}
 		}
 
 		// Nowhere left to jump!
-		return false;
-	};
+		return this.defaultTransition;
+	},
+
 
 	/**
  	Does this state accept?
@@ -96,11 +91,10 @@ var BaseState = function () {
  		@method accepts
  	@return {Boolean}
  */
-
-
-	BaseState.prototype.accepts = function accepts() {
+	accepts: function accepts() {
 		return !!this.T;
-	};
+	},
+
 
 	/**
  	Determine whether a given item "symbolizes" the symbol, where symbol is
@@ -111,11 +105,10 @@ var BaseState = function () {
  	@param {Mixed} symbol
  	@return {Boolean}
  */
-
-
-	BaseState.prototype.test = function test(item, symbol) {
+	test: function test(item, symbol) {
 		return item === symbol;
-	};
+	},
+
 
 	/**
  	Emit the token for this State (just return it in this case)
@@ -123,14 +116,10 @@ var BaseState = function () {
  	@method emit
  	@return {Class} T
  */
-
-
-	BaseState.prototype.emit = function emit() {
+	emit: function emit() {
 		return this.T;
-	};
-
-	return BaseState;
-}();
+	}
+};
 
 /**
 	State machine for string-based input
@@ -138,17 +127,7 @@ var BaseState = function () {
 	@class CharacterState
 	@extends BaseState
 */
-
-
-var CharacterState = function (_BaseState) {
-	_inherits(CharacterState, _BaseState);
-
-	function CharacterState() {
-		_classCallCheck(this, CharacterState);
-
-		return _possibleConstructorReturn(this, _BaseState.apply(this, arguments));
-	}
-
+var CharacterState = (0, _class.inherits)(BaseState, createStateClass(), {
 	/**
  	Does the given character match the given character or regular
  	expression?
@@ -157,13 +136,10 @@ var CharacterState = function (_BaseState) {
  	@param {String|RegExp} charOrRegExp
  	@return {Boolean}
  */
-
-	CharacterState.prototype.test = function test(character, charOrRegExp) {
+	test: function test(character, charOrRegExp) {
 		return character === charOrRegExp || charOrRegExp instanceof RegExp && charOrRegExp.test(character);
-	};
-
-	return CharacterState;
-}(BaseState);
+	}
+});
 
 /**
 	State machine for input in the form of TextTokens
@@ -171,16 +147,30 @@ var CharacterState = function (_BaseState) {
 	@class TokenState
 	@extends BaseState
 */
+var TokenState = (0, _class.inherits)(BaseState, createStateClass(), {
 
+	/**
+  * Similar to `on`, but returns the state the results in the transition from
+  * the given item
+  * @method jump
+  * @param {Mixed} item
+  * @param {Token} [token]
+  * @return state
+  */
+	jump: function jump(token) {
+		var tClass = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-var TokenState = function (_BaseState2) {
-	_inherits(TokenState, _BaseState2);
+		var state = this.next(new token('')); // dummy temp token
+		if (state === this.defaultTransition) {
+			// Make a new state!
+			state = new this.constructor(tClass);
+			this.on(token, state);
+		} else if (tClass) {
+			state.T = tClass;
+		}
+		return state;
+	},
 
-	function TokenState() {
-		_classCallCheck(this, TokenState);
-
-		return _possibleConstructorReturn(this, _BaseState2.apply(this, arguments));
-	}
 
 	/**
  	Is the given token an instance of the given token class?
@@ -189,13 +179,10 @@ var TokenState = function (_BaseState2) {
  	@param {Class} tokenClass
  	@return {Boolean}
  */
-
-	TokenState.prototype.test = function test(token, tokenClass) {
+	test: function test(token, tokenClass) {
 		return token instanceof tokenClass;
-	};
-
-	return TokenState;
-}(BaseState);
+	}
+});
 
 /**
 	Given a non-empty target string, generates states (if required) for each
@@ -217,10 +204,7 @@ var TokenState = function (_BaseState2) {
 		we don't have a full match
 	@return {Array} list of newly-created states
 */
-
-
 function stateify(str, start, endToken, defaultToken) {
-
 	var i = 0,
 	    len = str.length,
 	    state = start,
@@ -233,7 +217,9 @@ function stateify(str, start, endToken, defaultToken) {
 		i++;
 	}
 
-	if (i >= len) return []; // no new tokens were added
+	if (i >= len) {
+		return [];
+	} // no new tokens were added
 
 	while (i < len - 1) {
 		nextState = new CharacterState(defaultToken);

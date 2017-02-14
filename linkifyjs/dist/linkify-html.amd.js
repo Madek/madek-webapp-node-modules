@@ -1,9 +1,9 @@
 define("simple-html-tokenizer/entity-parser", ["module", "exports"], function (module, exports) {
   "use strict";
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
   function EntityParser(named) {
     this.named = named;
   }
@@ -31,14 +31,14 @@ define("simple-html-tokenizer/entity-parser", ["module", "exports"], function (m
   };
 
   exports['default'] = EntityParser;
-  module.exports = exports['default'];
+  module.exports = exports["default"];
 });
 define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils'], function (module, exports, _utils) {
   'use strict';
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
 
 
   function EventedTokenizer(delegate, entityParser) {
@@ -124,14 +124,27 @@ define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils
       var entity = this.input.slice(this.index, endIndex);
       var chars = this.entityParser.parse(entity);
       if (chars) {
-        this.index = endIndex + 1;
+        var count = entity.length;
+        // consume the entity chars
+        while (count) {
+          this.consume();
+          count--;
+        }
+        // consume the `;`
+        this.consume();
+
         return chars;
       }
     },
 
     markTagStart: function markTagStart() {
+      // these properties to be removed in next major bump
       this.tagLine = this.line;
       this.tagColumn = this.column;
+
+      if (this.delegate.tagOpen) {
+        this.delegate.tagOpen();
+      }
     },
 
     states: {
@@ -183,7 +196,7 @@ define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils
         var char = this.consume();
 
         if (char === "-" && this.input.charAt(this.index) === "-") {
-          this.index++;
+          this.consume();
           this.state = 'commentStart';
           this.delegate.beginComment();
         }
@@ -266,62 +279,76 @@ define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils
       },
 
       beforeAttributeName: function beforeAttributeName() {
-        var char = this.consume();
+        var char = this.peek();
 
         if ((0, _utils.isSpace)(char)) {
+          this.consume();
           return;
         } else if (char === "/") {
           this.state = 'selfClosingStartTag';
+          this.consume();
         } else if (char === ">") {
+          this.consume();
           this.delegate.finishTag();
           this.state = 'beforeData';
         } else {
           this.state = 'attributeName';
           this.delegate.beginAttribute();
+          this.consume();
           this.delegate.appendToAttributeName(char);
         }
       },
 
       attributeName: function attributeName() {
-        var char = this.consume();
+        var char = this.peek();
 
         if ((0, _utils.isSpace)(char)) {
           this.state = 'afterAttributeName';
+          this.consume();
         } else if (char === "/") {
           this.delegate.beginAttributeValue(false);
           this.delegate.finishAttributeValue();
+          this.consume();
           this.state = 'selfClosingStartTag';
         } else if (char === "=") {
           this.state = 'beforeAttributeValue';
+          this.consume();
         } else if (char === ">") {
           this.delegate.beginAttributeValue(false);
           this.delegate.finishAttributeValue();
+          this.consume();
           this.delegate.finishTag();
           this.state = 'beforeData';
         } else {
+          this.consume();
           this.delegate.appendToAttributeName(char);
         }
       },
 
       afterAttributeName: function afterAttributeName() {
-        var char = this.consume();
+        var char = this.peek();
 
         if ((0, _utils.isSpace)(char)) {
+          this.consume();
           return;
         } else if (char === "/") {
           this.delegate.beginAttributeValue(false);
           this.delegate.finishAttributeValue();
+          this.consume();
           this.state = 'selfClosingStartTag';
         } else if (char === "=") {
+          this.consume();
           this.state = 'beforeAttributeValue';
         } else if (char === ">") {
           this.delegate.beginAttributeValue(false);
           this.delegate.finishAttributeValue();
+          this.consume();
           this.delegate.finishTag();
           this.state = 'beforeData';
         } else {
           this.delegate.beginAttributeValue(false);
           this.delegate.finishAttributeValue();
+          this.consume();
           this.state = 'attributeName';
           this.delegate.beginAttribute();
           this.delegate.appendToAttributeName(char);
@@ -329,22 +356,28 @@ define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils
       },
 
       beforeAttributeValue: function beforeAttributeValue() {
-        var char = this.consume();
+        var char = this.peek();
 
-        if ((0, _utils.isSpace)(char)) {} else if (char === '"') {
+        if ((0, _utils.isSpace)(char)) {
+          this.consume();
+        } else if (char === '"') {
           this.state = 'attributeValueDoubleQuoted';
           this.delegate.beginAttributeValue(true);
+          this.consume();
         } else if (char === "'") {
           this.state = 'attributeValueSingleQuoted';
           this.delegate.beginAttributeValue(true);
+          this.consume();
         } else if (char === ">") {
           this.delegate.beginAttributeValue(false);
           this.delegate.finishAttributeValue();
+          this.consume();
           this.delegate.finishTag();
           this.state = 'beforeData';
         } else {
           this.state = 'attributeValueUnquoted';
           this.delegate.beginAttributeValue(false);
+          this.consume();
           this.delegate.appendToAttributeValue(char);
         }
       },
@@ -376,18 +409,22 @@ define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils
       },
 
       attributeValueUnquoted: function attributeValueUnquoted() {
-        var char = this.consume();
+        var char = this.peek();
 
         if ((0, _utils.isSpace)(char)) {
           this.delegate.finishAttributeValue();
+          this.consume();
           this.state = 'beforeAttributeName';
         } else if (char === "&") {
+          this.consume();
           this.delegate.appendToAttributeValue(this.consumeCharRef(">") || "&");
         } else if (char === ">") {
           this.delegate.finishAttributeValue();
+          this.consume();
           this.delegate.finishTag();
           this.state = 'beforeData';
         } else {
+          this.consume();
           this.delegate.appendToAttributeValue(char);
         }
       },
@@ -441,19 +478,19 @@ define('simple-html-tokenizer/evented-tokenizer', ['module', 'exports', './utils
 define("simple-html-tokenizer/html5-named-char-refs", ["module", "exports"], function (module, exports) {
   "use strict";
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
   var HTML5NamedCharRefs = {};
   exports['default'] = HTML5NamedCharRefs;
-  module.exports = exports['default'];
+  module.exports = exports["default"];
 });
 define('simple-html-tokenizer/index', ['exports', './html5-named-char-refs', './entity-parser', './evented-tokenizer', './tokenizer', './tokenize'], function (exports, _html5NamedCharRefs, _entityParser, _eventedTokenizer, _tokenizer, _tokenize) {
   'use strict';
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
   Object.defineProperty(exports, 'HTML5NamedCharRefs', {
     enumerable: true,
     get: function () {
@@ -494,9 +531,9 @@ define('simple-html-tokenizer/index', ['exports', './html5-named-char-refs', './
 define('simple-html-tokenizer/tokenize', ['module', 'exports', './tokenizer', './entity-parser', './html5-named-char-refs'], function (module, exports, _tokenizer, _entityParser, _html5NamedCharRefs) {
   'use strict';
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
   exports['default'] = tokenize;
 
   var _tokenizer2 = _interopRequireDefault(_tokenizer);
@@ -520,9 +557,9 @@ define('simple-html-tokenizer/tokenize', ['module', 'exports', './tokenizer', '.
 define('simple-html-tokenizer/tokenizer', ['module', 'exports', './evented-tokenizer'], function (module, exports, _eventedTokenizer) {
   'use strict';
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
 
   var _eventedTokenizer2 = _interopRequireDefault(_eventedTokenizer);
 
@@ -681,9 +718,9 @@ define('simple-html-tokenizer/tokenizer', ['module', 'exports', './evented-token
 define("simple-html-tokenizer/utils", ["exports"], function (exports) {
   "use strict";
 
-  try { Object.defineProperty(exports, "__esModule", {
+  try { try { Object.defineProperty(exports, "__esModule", {
     value: true
-  }); } catch (e) { exports['__esModule'] = true; }
+  }); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
   exports.isSpace = isSpace;
   exports.isAlpha = isAlpha;
   exports.preprocessInput = preprocessInput;
@@ -706,9 +743,9 @@ define("simple-html-tokenizer/utils", ["exports"], function (exports) {
 define('simple-html-tokenizer', ['module', 'exports', './simple-html-tokenizer/html5-named-char-refs', './simple-html-tokenizer/entity-parser', './simple-html-tokenizer/evented-tokenizer', './simple-html-tokenizer/tokenizer', './simple-html-tokenizer/tokenize'], function (module, exports, _html5NamedCharRefs, _entityParser, _eventedTokenizer, _tokenizer, _tokenize) {
 	'use strict';
 
-	try { Object.defineProperty(exports, "__esModule", {
+	try { try { Object.defineProperty(exports, "__esModule", {
 		value: true
-	}); } catch (e) { exports['__esModule'] = true; }
+	}); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
 
 	var _html5NamedCharRefs2 = _interopRequireDefault(_html5NamedCharRefs);
 
@@ -740,9 +777,9 @@ define('simple-html-tokenizer', ['module', 'exports', './simple-html-tokenizer/h
 define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linkify'], function (module, exports, _simpleHtmlTokenizer, _linkify) {
 	'use strict';
 
-	try { Object.defineProperty(exports, "__esModule", {
+	try { try { Object.defineProperty(exports, "__esModule", {
 		value: true
-	}); } catch (e) { exports['__esModule'] = true; }
+	}); } catch (e) { exports['__esModule'] = true; } } catch (e) { exports['__esModule'] = true; }
 	exports['default'] = linkifyHtml;
 
 	var _simpleHtmlTokenizer2 = _interopRequireDefault(_simpleHtmlTokenizer);
@@ -773,6 +810,9 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 	}
 
 	var options = linkify.options;
+	var Options = options.Options;
+
+
 	var StartTag = 'StartTag';
 	var EndTag = 'EndTag';
 	var Chars = 'Chars';
@@ -783,14 +823,14 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
  	parser.
  */
 	function linkifyHtml(str) {
-		var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+		var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 		var tokens = _simpleHtmlTokenizer2['default'].tokenize(str);
 		var linkifiedTokens = [];
 		var linkified = [];
 		var i;
 
-		opts = linkify.options.normalize(opts);
+		opts = new Options(opts);
 
 		// Linkify the tokens given by the parser
 		for (i = 0; i < tokens.length; i++) {
@@ -802,7 +842,9 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 				// Ignore all the contents of ignored tags
 				var tagName = token.tagName.toUpperCase();
 				var isIgnored = tagName === 'A' || options.contains(opts.ignoreTags, tagName);
-				if (!isIgnored) continue;
+				if (!isIgnored) {
+					continue;
+				}
 
 				var preskipLen = linkifiedTokens.length;
 				skipTagTokens(tagName, tokens, ++i, linkifiedTokens);
@@ -824,9 +866,9 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 			var _token = linkifiedTokens[i];
 			switch (_token.type) {
 				case StartTag:
-					var attrs = attrsToStrings(_token.attributes);
 					var link = '<' + _token.tagName;
-					if (attrs.length > 0) {
+					if (_token.attributes.length > 0) {
+						var attrs = attrsToStrings(_token.attributes);
 						link += ' ' + attrs.join(' ');
 					}
 					link += '>';
@@ -857,7 +899,6 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 
 		for (var i = 0; i < tokens.length; i++) {
 			var token = tokens[i];
-			var validated = token.isLink && linkify.options.resolve(opts.validate, token.toString(), token.type);
 
 			if (token.type === 'nl' && opts.nl2br) {
 				result.push({
@@ -867,35 +908,40 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 					selfClosing: true
 				});
 				continue;
-			} else if (!token.isLink || !validated) {
+			} else if (!token.isLink || !opts.check(token)) {
 				result.push({ type: Chars, chars: token.toString() });
 				continue;
 			}
 
-			var href = token.toHref(opts.defaultProtocol);
-			var formatted = linkify.options.resolve(opts.format, token.toString(), token.type);
-			var formattedHref = linkify.options.resolve(opts.formatHref, href, token.type);
-			var attributesHash = linkify.options.resolve(opts.attributes, href, token.type);
-			var tagName = linkify.options.resolve(opts.tagName, href, token.type);
-			var linkClass = linkify.options.resolve(opts.linkClass, href, token.type);
-			var target = linkify.options.resolve(opts.target, href, token.type);
+			var _opts$resolve = opts.resolve(token),
+			    href = _opts$resolve.href,
+			    formatted = _opts$resolve.formatted,
+			    formattedHref = _opts$resolve.formattedHref,
+			    tagName = _opts$resolve.tagName,
+			    className = _opts$resolve.className,
+			    target = _opts$resolve.target,
+			    attributes = _opts$resolve.attributes;
 
 			// Build up attributes
-			var attributes = [['href', formattedHref], ['class', linkClass]];
+			var attributeArray = [['href', formattedHref]];
 
-			if (target) {
-				attributes.push(['target', target]);
+			if (className) {
+				attributeArray.push(['class', className]);
 			}
 
-			for (var attr in attributesHash) {
-				attributes.push([attr, attributesHash[attr]]);
+			if (target) {
+				attributeArray.push(['target', target]);
+			}
+
+			for (var attr in attributes) {
+				attributeArray.push([attr, attributes[attr]]);
 			}
 
 			// Add the required tokens
 			result.push({
 				type: StartTag,
 				tagName: tagName,
-				attributes: attributes,
+				attributes: attributeArray,
 				selfClosing: false
 			});
 			result.push({ type: Chars, chars: formatted });
@@ -926,6 +972,7 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 
 		while (i < tokens.length && stackCount > 0) {
 			var token = tokens[i];
+
 			if (token.type === StartTag && token.tagName.toUpperCase() === tagName) {
 				// Nested tag of the same type, "add to stack"
 				stackCount++;
@@ -933,6 +980,7 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 				// Closing tag
 				stackCount--;
 			}
+
 			skippedTokens.push(token);
 			i++;
 		}
@@ -953,9 +1001,9 @@ define('linkify-html', ['module', 'exports', './simple-html-tokenizer', './linki
 	function attrsToStrings(attrs) {
 		var attrStrs = [];
 		for (var i = 0; i < attrs.length; i++) {
-			var _attrs$i = attrs[i];
-			var name = _attrs$i[0];
-			var value = _attrs$i[1];
+			var _attrs$i = attrs[i],
+			    name = _attrs$i[0],
+			    value = _attrs$i[1];
 
 			attrStrs.push(name + '="' + escapeAttr(value) + '"');
 		}
