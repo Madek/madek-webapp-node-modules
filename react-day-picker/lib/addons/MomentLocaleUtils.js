@@ -20,7 +20,7 @@ function formatDay(day) {
   var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en';
 
   return (0, _moment2.default)(day).locale(locale).format('ddd ll');
-} /* eslint-disable import/no-extraneous-dependencies */
+} /* eslint-disable import/no-extraneous-dependencies, no-underscore-dangle */
 
 function formatMonthTitle(date) {
   var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en';
@@ -31,13 +31,13 @@ function formatMonthTitle(date) {
 function formatWeekdayShort(day) {
   var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en';
 
-  return (0, _moment2.default)().locale(locale).weekday(day).format('dd');
+  return (0, _moment2.default)().locale(locale)._locale.weekdaysMin()[day];
 }
 
 function formatWeekdayLong(day) {
   var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en';
 
-  return (0, _moment2.default)().locale(locale).weekday(day).format('dddd');
+  return (0, _moment2.default)().locale(locale)._locale.weekdays()[day];
 }
 
 function getFirstDayOfWeek() {

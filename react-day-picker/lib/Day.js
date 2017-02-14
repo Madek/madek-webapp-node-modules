@@ -15,35 +15,31 @@ function handleEvent(handler, day, modifiers) {
   if (!handler) {
     return undefined;
   }
-  var dayState = {};
-  modifiers.forEach(function (modifier) {
-    dayState[modifier] = true;
-  });
   return function (e) {
     e.persist();
-    handler(e, day, dayState);
+    handler(e, day, modifiers);
   };
 } /* eslint-disable jsx-a11y/no-static-element-interactions, react/forbid-prop-types */
 
 function Day(_ref) {
-  var day = _ref.day;
-  var tabIndex = _ref.tabIndex;
-  var empty = _ref.empty;
-  var modifiers = _ref.modifiers;
-  var onMouseEnter = _ref.onMouseEnter;
-  var onMouseLeave = _ref.onMouseLeave;
-  var onClick = _ref.onClick;
-  var onKeyDown = _ref.onKeyDown;
-  var onTouchStart = _ref.onTouchStart;
-  var onTouchEnd = _ref.onTouchEnd;
-  var onFocus = _ref.onFocus;
-  var ariaLabel = _ref.ariaLabel;
-  var ariaDisabled = _ref.ariaDisabled;
-  var ariaSelected = _ref.ariaSelected;
-  var children = _ref.children;
+  var day = _ref.day,
+      tabIndex = _ref.tabIndex,
+      empty = _ref.empty,
+      modifiers = _ref.modifiers,
+      onMouseEnter = _ref.onMouseEnter,
+      onMouseLeave = _ref.onMouseLeave,
+      onClick = _ref.onClick,
+      onKeyDown = _ref.onKeyDown,
+      onTouchStart = _ref.onTouchStart,
+      onTouchEnd = _ref.onTouchEnd,
+      onFocus = _ref.onFocus,
+      ariaLabel = _ref.ariaLabel,
+      ariaDisabled = _ref.ariaDisabled,
+      ariaSelected = _ref.ariaSelected,
+      children = _ref.children;
 
   var className = 'DayPicker-Day';
-  className += modifiers.map(function (modifier) {
+  className += Object.keys(modifiers).map(function (modifier) {
     return ' ' + className + '--' + modifier;
   }).join('');
   if (empty) {
@@ -78,7 +74,7 @@ Day.propTypes = {
   ariaLabel: _react.PropTypes.string,
   ariaSelected: _react.PropTypes.bool,
   empty: _react.PropTypes.bool,
-  modifiers: _react.PropTypes.array,
+  modifiers: _react.PropTypes.object,
   onClick: _react.PropTypes.func,
   onKeyDown: _react.PropTypes.func,
   onMouseEnter: _react.PropTypes.func,
@@ -90,7 +86,7 @@ Day.propTypes = {
 };
 
 Day.defaultProps = {
-  modifiers: [],
+  modifiers: {},
   empty: false
 };
 //# sourceMappingURL=Day.js.map

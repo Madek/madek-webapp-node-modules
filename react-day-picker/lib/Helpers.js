@@ -11,6 +11,7 @@ exports.getCustomProps = getCustomProps;
 exports.getFirstDayOfMonth = getFirstDayOfMonth;
 exports.getDaysInMonth = getDaysInMonth;
 exports.getModifiersFromProps = getModifiersFromProps;
+exports.getFirstDayOfWeekFromProps = getFirstDayOfWeekFromProps;
 exports.getModifiersForDay = getModifiersForDay;
 exports.getMonthsDiff = getMonthsDiff;
 exports.getWeekArray = getWeekArray;
@@ -57,6 +58,22 @@ function getModifiersFromProps(props) {
     modifiers.disabled = props.disabledDays;
   }
   return modifiers;
+}
+
+function getFirstDayOfWeekFromProps(props) {
+  var firstDayOfWeek = props.firstDayOfWeek,
+      _props$locale = props.locale,
+      locale = _props$locale === undefined ? 'en' : _props$locale,
+      _props$localeUtils = props.localeUtils,
+      localeUtils = _props$localeUtils === undefined ? {} : _props$localeUtils;
+
+  if (!isNaN(firstDayOfWeek)) {
+    return firstDayOfWeek;
+  }
+  if (localeUtils.getFirstDayOfWeek) {
+    return localeUtils.getFirstDayOfWeek(locale);
+  }
+  return 0;
 }
 
 function getModifiersForDay(d) {

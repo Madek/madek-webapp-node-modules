@@ -16,20 +16,22 @@ var _PropTypes2 = _interopRequireDefault(_PropTypes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Caption(_ref) {
-  var date = _ref.date;
-  var locale = _ref.locale;
-  var localeUtils = _ref.localeUtils;
-  var onClick = _ref.onClick;
+  var date = _ref.date,
+      months = _ref.months,
+      locale = _ref.locale,
+      localeUtils = _ref.localeUtils,
+      onClick = _ref.onClick;
 
   return _react2.default.createElement(
     'div',
     { className: 'DayPicker-Caption', onClick: onClick, role: 'heading' },
-    localeUtils.formatMonthTitle(date, locale)
+    months ? months[date.getMonth()] + ' ' + date.getFullYear() : localeUtils.formatMonthTitle(date, locale)
   );
 }
 
 Caption.propTypes = {
   date: _react.PropTypes.instanceOf(Date),
+  months: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.string),
   locale: _react.PropTypes.string,
   localeUtils: _PropTypes2.default.localeUtils,
   onClick: _react.PropTypes.func

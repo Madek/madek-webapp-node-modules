@@ -22,22 +22,25 @@ var _Helpers = require('./Helpers');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Month(_ref) {
-  var month = _ref.month;
-  var locale = _ref.locale;
-  var localeUtils = _ref.localeUtils;
-  var captionElement = _ref.captionElement;
-  var onCaptionClick = _ref.onCaptionClick;
-  var children = _ref.children;
-  var firstDayOfWeek = _ref.firstDayOfWeek;
-  var className = _ref.className;
-  var wrapperClassName = _ref.wrapperClassName;
-  var weekClassName = _ref.weekClassName;
-  var weekdayComponent = _ref.weekdayComponent;
-  var weekdayElement = _ref.weekdayElement;
-  var fixedWeeks = _ref.fixedWeeks;
+  var month = _ref.month,
+      months = _ref.months,
+      weekdaysLong = _ref.weekdaysLong,
+      weekdaysShort = _ref.weekdaysShort,
+      locale = _ref.locale,
+      localeUtils = _ref.localeUtils,
+      captionElement = _ref.captionElement,
+      onCaptionClick = _ref.onCaptionClick,
+      children = _ref.children,
+      firstDayOfWeek = _ref.firstDayOfWeek,
+      className = _ref.className,
+      wrapperClassName = _ref.wrapperClassName,
+      weekClassName = _ref.weekClassName,
+      weekdayElement = _ref.weekdayElement,
+      fixedWeeks = _ref.fixedWeeks;
 
   var captionProps = {
     date: month,
+    months: months,
     localeUtils: localeUtils,
     locale: locale,
     onClick: onCaptionClick ? function (e) {
@@ -50,9 +53,11 @@ function Month(_ref) {
     { className: className },
     _react2.default.cloneElement(captionElement, captionProps),
     _react2.default.createElement(_Weekdays2.default, {
+      weekdaysShort: weekdaysShort,
+      weekdaysLong: weekdaysLong,
+      firstDayOfWeek: firstDayOfWeek,
       locale: locale,
       localeUtils: localeUtils,
-      weekdayComponent: weekdayComponent,
       weekdayElement: weekdayElement
     }),
     _react2.default.createElement(
@@ -73,8 +78,11 @@ function Month(_ref) {
 
 Month.propTypes = {
   month: _react.PropTypes.instanceOf(Date).isRequired,
+  months: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.string),
   captionElement: _react.PropTypes.node.isRequired,
   firstDayOfWeek: _react.PropTypes.number.isRequired,
+  weekdaysLong: _react.PropTypes.arrayOf(_react.PropTypes.string),
+  weekdaysShort: _react.PropTypes.arrayOf(_react.PropTypes.string),
   locale: _react.PropTypes.string.isRequired,
   localeUtils: _PropTypes2.default.localeUtils.isRequired,
   onCaptionClick: _react.PropTypes.func,
@@ -82,7 +90,6 @@ Month.propTypes = {
   className: _react.PropTypes.string,
   wrapperClassName: _react.PropTypes.string,
   weekClassName: _react.PropTypes.string,
-  weekdayComponent: _react.PropTypes.func,
   weekdayElement: _react.PropTypes.element,
   fixedWeeks: _react.PropTypes.bool
 };

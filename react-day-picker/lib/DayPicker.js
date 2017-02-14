@@ -12,8 +12,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactIsDeprecated = require('react-is-deprecated');
-
 var _Caption = require('./Caption');
 
 var _Caption2 = _interopRequireDefault(_Caption);
@@ -91,13 +89,6 @@ var DayPicker = function (_Component) {
   }
 
   _createClass(DayPicker, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      if (this.props.initialMonth !== nextProps.initialMonth) {
-        this.setState(this.getStateFromProps(nextProps));
-      }
-    }
-  }, {
     key: 'getDayNodes',
     value: function getDayNodes() {
       return this.dayPicker.querySelectorAll('.DayPicker-Day:not(.DayPicker-Day--outside)');
@@ -127,10 +118,10 @@ var DayPicker = function (_Component) {
   }, {
     key: 'allowMonth',
     value: function allowMonth(d) {
-      var _props = this.props;
-      var fromMonth = _props.fromMonth;
-      var toMonth = _props.toMonth;
-      var canChangeMonth = _props.canChangeMonth;
+      var _props = this.props,
+          fromMonth = _props.fromMonth,
+          toMonth = _props.toMonth,
+          canChangeMonth = _props.canChangeMonth;
 
       if (!canChangeMonth || fromMonth && Helpers.getMonthsDiff(fromMonth, d) < 0 || toMonth && Helpers.getMonthsDiff(toMonth, d) > 0) {
         return false;
@@ -368,14 +359,12 @@ var DayPicker = function (_Component) {
   }, {
     key: 'renderNavbar',
     value: function renderNavbar() {
-      var _props2 = this.props;
-      var locale = _props2.locale;
-      var localeUtils = _props2.localeUtils;
-      var canChangeMonth = _props2.canChangeMonth;
-      var navbarComponent = _props2.navbarComponent;
-      var navbarElement = _props2.navbarElement;
-
-      var attributes = _objectWithoutProperties(_props2, ['locale', 'localeUtils', 'canChangeMonth', 'navbarComponent', 'navbarElement']);
+      var _props2 = this.props,
+          locale = _props2.locale,
+          localeUtils = _props2.localeUtils,
+          canChangeMonth = _props2.canChangeMonth,
+          navbarElement = _props2.navbarElement,
+          attributes = _objectWithoutProperties(_props2, ['locale', 'localeUtils', 'canChangeMonth', 'navbarElement']);
 
       if (!canChangeMonth) return null;
       var props = {
@@ -390,10 +379,7 @@ var DayPicker = function (_Component) {
         locale: locale,
         localeUtils: localeUtils
       };
-      if (navbarElement) {
-        return _react2.default.cloneElement(navbarElement, props);
-      }
-      return _react2.default.createElement(navbarComponent, props);
+      return _react2.default.cloneElement(navbarElement, props);
     }
   }, {
     key: 'renderDayInMonth',
@@ -417,12 +403,17 @@ var DayPicker = function (_Component) {
         }
       }
       var key = '' + day.getFullYear() + day.getMonth() + day.getDate();
+      var modifiers = {};
+      dayModifiers.forEach(function (modifier) {
+        modifiers[modifier] = true;
+      });
+
       return _react2.default.createElement(
         _Day2.default,
         {
           key: '' + (isOutside ? 'outside-' : '') + key,
           day: day,
-          modifiers: dayModifiers,
+          modifiers: modifiers,
           empty: isOutside && !this.props.enableOutsideDays && !this.props.fixedWeeks,
 
           tabIndex: tabIndex,
@@ -439,14 +430,14 @@ var DayPicker = function (_Component) {
           onFocus: this.props.onDayFocus,
           onClick: this.props.onDayClick ? this.handleDayClick : undefined
         },
-        this.props.renderDay(day)
+        this.props.renderDay(day, modifiers)
       );
     }
   }, {
     key: 'renderMonths',
     value: function renderMonths() {
       var months = [];
-      var firstDayOfWeek = this.props.localeUtils.getFirstDayOfWeek(this.props.locale);
+      var firstDayOfWeek = Helpers.getFirstDayOfWeekFromProps(this.props);
 
       for (var i = 0; i < this.props.numberOfMonths; i += 1) {
         var month = DateUtils.addMonths(this.state.currentMonth, i);
@@ -456,6 +447,9 @@ var DayPicker = function (_Component) {
           {
             key: i,
             month: month,
+            months: this.props.months,
+            weekdaysShort: this.props.weekdaysShort,
+            weekdaysLong: this.props.weekdaysLong,
             locale: this.props.locale,
             localeUtils: this.props.localeUtils,
             firstDayOfWeek: firstDayOfWeek,
@@ -486,7 +480,7 @@ var DayPicker = function (_Component) {
       var _this7 = this;
 
       var customProps = Helpers.getCustomProps(this.props, DayPicker.propTypes);
-      var className = 'DayPicker DayPicker--' + this.props.locale;
+      var className = 'DayPicker';
 
       if (!this.props.onDayClick) {
         className = className + ' DayPicker--interactionDisabled';
@@ -503,6 +497,7 @@ var DayPicker = function (_Component) {
             _this7.dayPicker = el;
           },
           role: 'application',
+          lang: this.props.locale,
           tabIndex: this.props.canChangeMonth && this.props.tabIndex,
           onKeyDown: this.handleKeyDown
         }),
@@ -515,7 +510,7 @@ var DayPicker = function (_Component) {
   return DayPicker;
 }(_react.Component);
 
-DayPicker.VERSION = '2.5.0';
+DayPicker.VERSION = '4.0.0';
 DayPicker.propTypes = {
   initialMonth: _react.PropTypes.instanceOf(Date),
   numberOfMonths: _react.PropTypes.number,
@@ -535,6 +530,11 @@ DayPicker.propTypes = {
   fromMonth: _react.PropTypes.instanceOf(Date),
   toMonth: _react.PropTypes.instanceOf(Date),
 
+  firstDayOfWeek: _react.PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
+  months: _react.PropTypes.arrayOf(_react.PropTypes.string),
+  weekdaysLong: _react.PropTypes.arrayOf(_react.PropTypes.string),
+  weekdaysShort: _react.PropTypes.arrayOf(_react.PropTypes.string),
+
   onKeyDown: _react.PropTypes.func,
   onDayClick: _react.PropTypes.func,
   onDayKeyDown: _react.PropTypes.func,
@@ -547,11 +547,9 @@ DayPicker.propTypes = {
   onCaptionClick: _react.PropTypes.func,
 
   renderDay: _react.PropTypes.func,
-  weekdayComponent: (0, _reactIsDeprecated.deprecate)(_react.PropTypes.func, 'react-day-picker: the `weekdayComponent` prop is deprecated from v2.3. Please pass a React element to the `weekdayElement` prop instead.'), // eslint-disable-line max-len
-  weekdayElement: _react.PropTypes.element,
-  navbarComponent: (0, _reactIsDeprecated.deprecate)(_react.PropTypes.func, 'react-day-picker: the `navbarComponent` prop is deprecated from v2.3. Please pass a React element to the `navbarElement` prop instead.'), // eslint-disable-line max-len
-  navbarElement: _react.PropTypes.element,
 
+  weekdayElement: _react.PropTypes.element,
+  navbarElement: _react.PropTypes.element,
   captionElement: _react.PropTypes.element,
 
   dir: _react.PropTypes.string,

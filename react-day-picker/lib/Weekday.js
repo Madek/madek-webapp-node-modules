@@ -17,18 +17,33 @@ var _PropTypes2 = _interopRequireDefault(_PropTypes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Weekday(_ref) {
-  var weekday = _ref.weekday;
-  var className = _ref.className;
-  var localeUtils = _ref.localeUtils;
-  var locale = _ref.locale;
+  var weekday = _ref.weekday,
+      className = _ref.className,
+      weekdaysLong = _ref.weekdaysLong,
+      weekdaysShort = _ref.weekdaysShort,
+      localeUtils = _ref.localeUtils,
+      locale = _ref.locale;
+
+  var title = void 0;
+  if (weekdaysLong) {
+    title = weekdaysLong[weekday];
+  } else {
+    title = localeUtils.formatWeekdayLong(weekday, locale);
+  }
+  var content = void 0;
+  if (weekdaysShort) {
+    content = weekdaysShort[weekday];
+  } else {
+    content = localeUtils.formatWeekdayShort(weekday, locale);
+  }
 
   return _react2.default.createElement(
     'div',
     { className: className },
     _react2.default.createElement(
       'abbr',
-      { title: localeUtils.formatWeekdayLong(weekday, locale) },
-      localeUtils.formatWeekdayShort(weekday, locale)
+      { title: title },
+      content
     )
   );
 }
@@ -37,7 +52,10 @@ var WeekdayPropTypes = exports.WeekdayPropTypes = {
   weekday: _react.PropTypes.number,
   className: _react.PropTypes.string,
   locale: _react.PropTypes.string,
-  localeUtils: _PropTypes2.default.localeUtils
+  localeUtils: _PropTypes2.default.localeUtils,
+
+  weekdaysLong: _react.PropTypes.arrayOf(_react.PropTypes.string),
+  weekdaysShort: _react.PropTypes.arrayOf(_react.PropTypes.string)
 };
 
 Weekday.propTypes = WeekdayPropTypes;

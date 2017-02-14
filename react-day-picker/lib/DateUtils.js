@@ -103,8 +103,8 @@ function isDayBetween(d, d1, d2) {
  */
 function addDayToRange(day) {
   var range = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { from: null, to: null };
-  var from = range.from;
-  var to = range.to;
+  var from = range.from,
+      to = range.to;
 
   if (!from) {
     from = day;
@@ -135,8 +135,8 @@ function addDayToRange(day) {
  * @return {Boolean}
  */
 function isDayInRange(day, range) {
-  var from = range.from;
-  var to = range.to;
+  var from = range.from,
+      to = range.to;
 
   return from && isSameDay(day, from) || to && isSameDay(day, to) || from && to && isDayBetween(day, from, to);
 }

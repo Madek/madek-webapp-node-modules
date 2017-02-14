@@ -15,12 +15,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var buttonBaseClass = 'DayPicker-NavButton DayPicker-NavButton';
 
 function Navbar(_ref) {
-  var className = _ref.className;
-  var showPreviousButton = _ref.showPreviousButton;
-  var showNextButton = _ref.showNextButton;
-  var onPreviousClick = _ref.onPreviousClick;
-  var onNextClick = _ref.onNextClick;
-  var dir = _ref.dir;
+  var className = _ref.className,
+      showPreviousButton = _ref.showPreviousButton,
+      showNextButton = _ref.showNextButton,
+      onPreviousClick = _ref.onPreviousClick,
+      onNextClick = _ref.onNextClick,
+      dir = _ref.dir;
 
   var previousClickHandler = dir === 'rtl' ? onNextClick : onPreviousClick;
   var nextClickHandler = dir === 'rtl' ? onPreviousClick : onNextClick;

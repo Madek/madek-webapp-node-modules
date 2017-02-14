@@ -9,7 +9,7 @@ react-day-picker is a flexible date picker component for [React](https://faceboo
 
 * no external dependencies
 * select [days](http://react-day-picker.js.org/examples?selectable), [ranges](http://react-day-picker.js.org/examples?range), whatever using CSS modifiers
-* ready for i18n, with [moment.js](http://react-day-picker.js.org/examples?localized) or [any other library](http://react-day-picker.js.org/examples?localizedCustom)
+* ready for [localization](http://react-day-picker.js.org/examples?localized), even with [moment.js](http://react-day-picker.js.org/examples?localized)
 * customizable [style](https://github.com/gpbl/react-day-picker/blob/master/src/style.css)
 * navigable via keyboard, ARIA support
 
@@ -26,19 +26,24 @@ Check out the [examples](http://react-day-picker.js.org/examples) to see its fea
 
 ## Quick start
 
-**Install via npm**
+**Add the dependency to your project**
 
-```
+```bash
 npm install react-day-picker --save
+
+# or with yarn:
+yarn add react-day-picker
 ```
 
-**Install via Bower**
+**Using unpkg**
 
-```
-bower install react-day-picker --save
+Include the component without installing:
+
+```html
+<script src="https://unpkg.com/react-day-picker"></script>
 ```
 
-The bower package exposes a global `DayPicker` variable.
+See this [jsfiddle](https://jsfiddle.net/gpbl/gh072eqt/) as example.
 
 ### Example
 
