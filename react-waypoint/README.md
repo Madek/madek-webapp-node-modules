@@ -29,13 +29,19 @@ Inspired by [Waypoints][waypoints], except this little library grooves the
 npm install react-waypoint --save
 ```
 
+### yarn
+
+```bash
+yarn add react-waypoint
+```
+
 ## Usage
 
-```javascript
+```jsx
 var Waypoint = require('react-waypoint');
 ```
 
-```javascript
+```jsx
 <Waypoint
   onEnter={this._handleWaypointEnter}
   onLeave={this._handleWaypointLeave}
@@ -54,7 +60,7 @@ position. Sometimes it's useful to have a waypoint that fires `onEnter` every
 time it is updated as long as it stays visible (e.g. for infinite scroll). You
 can then use a `key` prop to control when a waypoint is reused vs. re-created.
 
-```javascript
+```jsx
 <Waypoint
   key={cursor}
   onEnter={this._loadMoreContent}
@@ -65,12 +71,22 @@ Alternatively, you can also use an `onPositionChange` event to just get
 notified when the waypoint's position (e.g. inside the viewport, above or
 below) has changed.
 
-```javascript
+```jsx
 <Waypoint
   onPositionChange={this._handlePositionChange}
 />
 ```
 
+Waypoints can take a child, allowing you to track when a section of content
+enters or leaves the viewport. For details, see [Children](#children), below.
+
+```jsx
+<Waypoint onEnter={this._handleEnter}>
+  <div>
+    Some content here
+  </div>
+</Waypoint>
+```
 
 ### Example: [JSFiddle Example][jsfiddle-example]
 
@@ -78,7 +94,7 @@ below) has changed.
 
 ## Prop types
 
-```javascript
+```jsx
   propTypes: {
 
     /**
@@ -95,6 +111,11 @@ below) has changed.
      * Function called when waypoint position changes
      */
     onPositionChange: PropTypes.func,
+
+    /**
+     * Whether to activate on horizontal scrolling instead of vertical
+     */
+    horizontal: PropTypes.bool,
 
     /**
      * `topOffset` can either be a number, in which case its a distance from the
@@ -140,13 +161,6 @@ below) has changed.
      * things down significantly, so it should only be used during development.
      */
     debug: PropTypes.bool,
-
-    /**
-     * The `throttleHandler` prop provides a function that throttle the internal
-     * scroll handler to increase performance.
-     * See the section on "Throttling" for details on how to use it.
-     */
-    throttleHandler: PropTypes.func,
   },
 ```
 
@@ -213,6 +227,15 @@ then the boundaries will be pushed inward, toward the center of the page. If
 you specify a negative value for an offset, then the boundary will be pushed
 outward from the center of the page.
 
+#### Horizontal Scrolling Offsets and Boundaries
+
+By default, waypoints listen to vertical scrolling. If you want to switch to
+horizontal scrolling instead, use the `horizontal` prop. For simplicity's sake,
+all other props and callbacks do not change. Instead, `topOffset` and
+`bottomOffset` (among other directional variables) will mean the offset from
+the left and the offset from the right, respectively, and work exactly as they
+did before, just calculated in the horizontal direction.
+
 #### Example Usage
 
 Positive values of the offset props are useful when you have an element that
@@ -234,6 +257,37 @@ mind that there are _two_ boundaries, so there are always _two_ positions when
 the `onLeave` and `onEnter` callback will be called. By using the arguments
 passed to the callbacks, you can determine whether the waypoint has crossed the
 top boundary or the bottom boundary.
+
+## Children
+
+If you don't pass a child into your Waypoint, then you can think of the
+waypoint as a line across the page. Whenever that line crosses a
+[boundary](#offsets-and-boundaries), then the `onEnter` or `onLeave` callbacks
+will be called.
+
+If you do pass a child, it must be a single DOM Element (eg; a `<div>`)
+and *not* a Component Element (eg; `<MyComponent />`).
+
+The `onEnter` callback will be called when *any* part of the child is visible
+in the viewport. The `onLeave` callback will be called when *all* of the child
+has exited the viewport.
+
+(Note that this is measured only on a single axis. What this means is that for a
+Waypoint within a vertically scrolling parent, it could be off of the screen
+horizontally yet still fire an onEnter event, because it is within the vertical
+boundaries).
+
+Deciding whether to pass a child or not will depend on your use case. One
+example of when passing a child is useful is for a scrollspy
+(like [Bootstrap's](https://bootstrapdocs.com/v3.3.6/docs/javascript/#scrollspy)).
+Imagine if you want to fire a waypoint when a particularly long piece of content
+is visible onscreen. When the page loads, it is conceivable that both the top
+and bottom of this piece of content could lie outside of the boundaries,
+because the content is taller than the viewport. If you didn't pass a child,
+and instead put the waypoint above or below the content, then you will not
+receive an `onEnter` callback (nor any other callback from this library).
+Instead, passing this long content as a child of the Waypoint would fire the `onEnter`
+callback when the page loads.
 
 ## Containing elements and `scrollableAncestor`
 
@@ -263,46 +317,8 @@ This might look something like:
 />
 ```
 
-## Throttling
-By default, waypoints will trigger on every scroll event. In most cases, this
-works just fine. But if you find yourself wanting to tweak the scrolling
-performance, the `throttleHandler` prop can come in handy. You pass in a
-function that returns a different (throttled) version of the function passed
-in. Here's an example using
-[lodash.throttle](https://www.npmjs.com/package/lodash.throttle):
-
-```jsx
-import throttle from 'lodash.throttle';
-
-<Waypoint throttleHandler={(scrollHandler) => throttle(scrollHandler, 100)} />
-```
-
-The argument passed in to the throttle handler function, `scrollHandler`, is
-waypoint's internal scroll handler. The `throttleHandler` is only invoked once
-during the lifetime of a waypoint (when the waypoint is mounted).
-
-To prevent errors coming from the fact that the scroll handler can be called
-after the waypoint is unmounted, it's a good idea to cancel the throttle
-function on unmount:
-
-```jsx
-import throttle from 'lodash.throttle';
-
-let throttledHandler;
-
-<Waypoint throttleHandler={(scrollHandler) => {
-    throttledHandler = throttle(scrollHandler, 100);
-    return throttledHandler;
-  }}
-  ref={function(component) {
-    if (!component) {
-      throttledHandler.cancel();
-    }
-  }}
-/>
-```
-
 ## Troubleshooting
+
 If your waypoint isn't working the way you expect it to, there are a few ways
 you can debug your setup.
 
@@ -323,9 +339,9 @@ but in some situations might present limitations.
 
 - We determine the scrollable-ness of a node by inspecting its computed
   overflow-y or overflow property and nothing else. This could mean that a
-  container with this style but that does not actually currently scroll will be
+  container with this style that does not actually currently scroll will be
   considered when performing visibility calculations.
-- We assume that waypoint is rendered within at most one scrollable container.
+- We assume that waypoints are rendered within at most one scrollable container.
   If you render a waypoint in multiple nested scrollable containers, the
   visibility calculations will likely not be accurate.
 - We also base the visibility calculations on the scroll position of the
@@ -333,17 +349,21 @@ but in some situations might present limitations.
   means that if your scrollable container has a height that is greater than the
   window, it might trigger `onEnter` unexpectedly.
 
+## In the wild
+
+[Organizations and projects using `react-waypoint`](INTHEWILD.md).
+
 ## Credits
 
 Credit to [trotzig][trotzig-github] and [lencioni][lencioni-github] for writing
-this component, and the [Brigade team][brigade-github] for open sourcing it.
+this component, and [Brigade][brigade-home] for open sourcing it.
 
 Thanks to the creator of the original Waypoints library,
 [imakewebthings][imakewebthings-github].
 
 [lencioni-github]: https://github.com/lencioni
 [trotzig-github]: https://github.com/trotzig
-[brigade-github]: https://github.com/brigade/
+[brigade-home]: https://www.brigade.com/
 [imakewebthings-github]: https://github.com/imakewebthings
 
 ## License
@@ -351,3 +371,13 @@ Thanks to the creator of the original Waypoints library,
 [MIT][mit-license]
 
 [mit-license]: ./LICENSE
+
+---
+
+_Make sure to check out other popular open-source tools from
+[the Brigade team][brigade-github]: [scss-lint], [overcommit], and [haml-lint]._
+
+[brigade-github]: https://github.com/brigade
+[scss-lint]: https://github.com/brigade/scss-lint
+[overcommit]: https://github.com/brigade/overcommit
+[haml-lint]: https://github.com/brigade/haml-lint

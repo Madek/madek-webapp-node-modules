@@ -1,14 +1,16 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _consolidatedEvents = require('consolidated-events');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28,14 +30,12 @@ var POSITIONS = {
 var defaultProps = {
   topOffset: '0px',
   bottomOffset: '0px',
+  horizontal: false,
   onEnter: function onEnter() {},
   onLeave: function onLeave() {},
   onPositionChange: function onPositionChange() {},
 
-  fireOnRapidScroll: true,
-  throttleHandler: function throttleHandler(handler) {
-    return handler;
-  }
+  fireOnRapidScroll: true
 };
 
 function debugLog() {
@@ -43,16 +43,138 @@ function debugLog() {
 }
 
 /**
+ * @param {object} bounds An object with bounds data for the waypoint and
+ *   scrollable parent
+ * @return {string} The current position of the waypoint in relation to the
+ *   visible portion of the scrollable parent. One of `POSITIONS.above`,
+ *   `POSITIONS.below`, or `POSITIONS.inside`.
+ */
+function getCurrentPosition(bounds) {
+  if (bounds.viewportBottom - bounds.viewportTop === 0) {
+    return POSITIONS.invisible;
+  }
+
+  // top is within the viewport
+  if (bounds.viewportTop <= bounds.waypointTop && bounds.waypointTop <= bounds.viewportBottom) {
+    return POSITIONS.inside;
+  }
+
+  // bottom is within the viewport
+  if (bounds.viewportTop <= bounds.waypointBottom && bounds.waypointBottom <= bounds.viewportBottom) {
+    return POSITIONS.inside;
+  }
+
+  // top is above the viewport and bottom is below the viewport
+  if (bounds.waypointTop <= bounds.viewportTop && bounds.viewportBottom <= bounds.waypointBottom) {
+    return POSITIONS.inside;
+  }
+
+  if (bounds.viewportBottom < bounds.waypointTop) {
+    return POSITIONS.below;
+  }
+
+  if (bounds.waypointTop < bounds.viewportTop) {
+    return POSITIONS.above;
+  }
+
+  return POSITIONS.invisible;
+}
+
+/**
+ * Attempts to parse the offset provided as a prop as a pixel value. If
+ * parsing fails, then `undefined` is returned. Three examples of values that
+ * will be successfully parsed are:
+ * `20`
+ * "20px"
+ * "20"
+ *
+ * @param {string|number} str A string of the form "{number}" or "{number}px",
+ *   or just a number.
+ * @return {number|undefined} The numeric version of `str`. Undefined if `str`
+ *   was neither a number nor string ending in "px".
+ */
+function parseOffsetAsPixels(str) {
+  if (!isNaN(parseFloat(str)) && isFinite(str)) {
+    return parseFloat(str);
+  } else if (str.slice(-2) === 'px') {
+    return parseFloat(str.slice(0, -2));
+  }
+}
+
+/**
+ * Attempts to parse the offset provided as a prop as a percentage. For
+ * instance, if the component has been provided with the string "20%" as
+ * a value of one of the offset props. If the value matches, then it returns
+ * a numeric version of the prop. For instance, "20%" would become `0.2`.
+ * If `str` isn't a percentage, then `undefined` will be returned.
+ *
+ * @param {string} str The value of an offset prop to be converted to a
+ *   number.
+ * @return {number|undefined} The numeric version of `str`. Undefined if `str`
+ *   was not a percentage.
+ */
+function parseOffsetAsPercentage(str) {
+  if (str.slice(-1) === '%') {
+    return parseFloat(str.slice(0, -1)) / 100;
+  }
+}
+
+/**
+ * @param {string|number} offset
+ * @param {number} contextHeight
+ * @return {number} A number representing `offset` converted into pixels.
+ */
+function computeOffsetPixels(offset, contextHeight) {
+  var pixelOffset = parseOffsetAsPixels(offset);
+
+  if (typeof pixelOffset === 'number') {
+    return pixelOffset;
+  }
+
+  var percentOffset = parseOffsetAsPercentage(offset);
+  if (typeof percentOffset === 'number') {
+    return percentOffset * contextHeight;
+  }
+}
+
+/**
+ * When an element's type is a string, it represents a DOM node with that tag name
+ * https://facebook.github.io/react/blog/2015/12/18/react-components-elements-and-instances.html#dom-elements
+ *
+ * @param {React.element} Component
+ * @return {bool} Whether the component is a DOM Element
+ */
+function isDOMElement(Component) {
+  return typeof Component.type === 'string';
+}
+
+/**
+ * Raise an error if "children" isn't a single DOM Element
+ *
+ * @param {React.element|null} children
+ * @return {undefined}
+ */
+function ensureChildrenIsSingleDOMElement(children) {
+  if (children) {
+    _react2.default.Children.only(children);
+
+    if (!isDOMElement(children)) {
+      throw new Error('You must wrap any Component Elements passed to Waypoint in a DOM Element (eg; a <div>).');
+    }
+  }
+}
+
+/**
  * Calls a function when you scroll to the element.
  */
 
-var Waypoint = (function (_React$Component) {
+var Waypoint = function (_React$Component) {
   _inherits(Waypoint, _React$Component);
 
   function Waypoint(props) {
     _classCallCheck(this, Waypoint);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Waypoint).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Waypoint.__proto__ || Object.getPrototypeOf(Waypoint)).call(this, props));
 
     _this.refElement = function (e) {
       return _this._ref = e;
@@ -63,25 +185,44 @@ var Waypoint = (function (_React$Component) {
   _createClass(Waypoint, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
+      ensureChildrenIsSingleDOMElement(this.props.children);
+
       if (this.props.scrollableParent) {
         // eslint-disable-line react/prop-types
-        throw new Error('The `scrollableParent` prop has changed name ' + 'to `scrollableAncestor`.');
+        throw new Error('The `scrollableParent` prop has changed name to `scrollableAncestor`.');
       }
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
+      var _this2 = this;
+
       if (!Waypoint.getWindow()) {
         return;
       }
-      this._handleScroll = this.props.throttleHandler(this._handleScroll.bind(this));
+
+      this._handleScroll = this._handleScroll.bind(this);
       this.scrollableAncestor = this._findScrollableAncestor();
+
       if (this.props.debug) {
         debugLog('scrollableAncestor', this.scrollableAncestor);
       }
-      this.scrollableAncestor.addEventListener('scroll', this._handleScroll);
-      window.addEventListener('resize', this._handleScroll);
-      this._handleScroll(null);
+
+      this.scrollEventListenerHandle = (0, _consolidatedEvents.addEventListener)(this.scrollableAncestor, 'scroll', this._handleScroll, { passive: true });
+
+      this.resizeEventListenerHandle = (0, _consolidatedEvents.addEventListener)(window, 'resize', this._handleScroll, { passive: true });
+
+      // this._ref may occasionally not be set at this time. To help ensure that
+      // this works smoothly, we want to delay the initial execution until the
+      // next tick.
+      this.initialTimeout = setTimeout(function () {
+        _this2._handleScroll(null);
+      }, 0);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      ensureChildrenIsSingleDOMElement(nextProps.children);
     }
   }, {
     key: 'componentDidUpdate',
@@ -100,14 +241,10 @@ var Waypoint = (function (_React$Component) {
         return;
       }
 
-      if (this.scrollableAncestor) {
-        // At the time of unmounting, the scrollable ancestor might no longer
-        // exist. Guarding against this prevents the following error:
-        //
-        //   Cannot read property 'removeEventListener' of undefined
-        this.scrollableAncestor.removeEventListener('scroll', this._handleScroll);
-      }
-      window.removeEventListener('resize', this._handleScroll);
+      (0, _consolidatedEvents.removeEventListener)(this.scrollEventListenerHandle);
+      (0, _consolidatedEvents.removeEventListener)(this.resizeEventListenerHandle);
+
+      clearTimeout(this.initialTimeout);
     }
 
     /**
@@ -142,9 +279,10 @@ var Waypoint = (function (_React$Component) {
         }
 
         var style = window.getComputedStyle(node);
-        var overflowY = style.getPropertyValue('overflow-y') || style.getPropertyValue('overflow');
+        var overflowDirec = this.props.horizontal ? style.getPropertyValue('overflow-x') : style.getPropertyValue('overflow-y');
+        var overflow = overflowDirec || style.getPropertyValue('overflow');
 
-        if (overflowY === 'auto' || overflowY === 'scroll') {
+        if (overflow === 'auto' || overflow === 'scroll') {
           return node;
         }
       }
@@ -167,9 +305,11 @@ var Waypoint = (function (_React$Component) {
         // There's a chance we end up here after the component has been unmounted.
         return;
       }
+
       var bounds = this._getBounds();
-      var currentPosition = this._currentPosition(bounds);
-      var previousPosition = this._previousPosition || null;
+      var currentPosition = getCurrentPosition(bounds);
+      var previousPosition = this._previousPosition;
+
       if (this.props.debug) {
         debugLog('currentPosition', currentPosition);
         debugLog('previousPosition', previousPosition);
@@ -188,6 +328,7 @@ var Waypoint = (function (_React$Component) {
         previousPosition: previousPosition,
         event: event,
         waypointTop: bounds.waypointTop,
+        waypointBottom: bounds.waypointBottom,
         viewportTop: bounds.viewportTop,
         viewportBottom: bounds.viewportBottom
       };
@@ -201,6 +342,7 @@ var Waypoint = (function (_React$Component) {
 
       var isRapidScrollDown = previousPosition === POSITIONS.below && currentPosition === POSITIONS.above;
       var isRapidScrollUp = previousPosition === POSITIONS.above && currentPosition === POSITIONS.below;
+
       if (this.props.fireOnRapidScroll && (isRapidScrollDown || isRapidScrollUp)) {
         // If the scroll event isn't fired often enough to occur while the
         // waypoint was visible, we trigger both callbacks anyway.
@@ -209,6 +351,7 @@ var Waypoint = (function (_React$Component) {
           previousPosition: previousPosition,
           event: event,
           waypointTop: bounds.waypointTop,
+          waypointBottom: bounds.waypointBottom,
           viewportTop: bounds.viewportTop,
           viewportBottom: bounds.viewportBottom
         });
@@ -217,91 +360,40 @@ var Waypoint = (function (_React$Component) {
           previousPosition: POSITIONS.inside,
           event: event,
           waypointTop: bounds.waypointTop,
+          waypointBottom: bounds.waypointBottom,
           viewportTop: bounds.viewportTop,
           viewportBottom: bounds.viewportBottom
         });
       }
     }
-
-    /**
-     * @param {string|number} offset
-     * @param {number} contextHeight
-     * @return {number} A number representing `offset` converted into pixels.
-     */
-
-  }, {
-    key: '_computeOffsetPixels',
-    value: function _computeOffsetPixels(offset, contextHeight) {
-      var pixelOffset = this._parseOffsetAsPixels(offset);
-      if (typeof pixelOffset === 'number') {
-        return pixelOffset;
-      }
-
-      var percentOffset = this._parseOffsetAsPercentage(offset);
-      if (typeof percentOffset === 'number') {
-        return percentOffset * contextHeight;
-      }
-    }
-
-    /**
-     * Attempts to parse the offset provided as a prop as a pixel value. If
-     * parsing fails, then `undefined` is returned. Three examples of values that
-     * will be successfully parsed are:
-     * `20`
-     * "20px"
-     * "20"
-     *
-     * @param {string|number} str A string of the form "{number}" or "{number}px",
-     *   or just a number.
-     * @return {number|undefined} The numeric version of `str`. Undefined if `str`
-     *   was neither a number nor string ending in "px".
-     */
-
-  }, {
-    key: '_parseOffsetAsPixels',
-    value: function _parseOffsetAsPixels(str) {
-      if (!isNaN(parseFloat(str)) && isFinite(str)) {
-        return parseFloat(str);
-      } else if (str.slice(-2) === 'px') {
-        return parseFloat(str.slice(0, -2));
-      }
-    }
-
-    /**
-     * Attempts to parse the offset provided as a prop as a percentage. For
-     * instance, if the component has been provided with the string "20%" as
-     * a value of one of the offset props. If the value matches, then it returns
-     * a numeric version of the prop. For instance, "20%" would become `0.2`.
-     * If `str` isn't a percentage, then `undefined` will be returned.
-     *
-     * @param {string} str The value of an offset prop to be converted to a
-     *   number.
-     * @return {number|undefined} The numeric version of `str`. Undefined if `str`
-     *   was not a percentage.
-     */
-
-  }, {
-    key: '_parseOffsetAsPercentage',
-    value: function _parseOffsetAsPercentage(str) {
-      if (str.slice(-1) === '%') {
-        return parseFloat(str.slice(0, -1)) / 100;
-      }
-    }
   }, {
     key: '_getBounds',
     value: function _getBounds() {
-      var waypointTop = this._ref.getBoundingClientRect().top;
-      var contextHeight = undefined;
-      var contextScrollTop = undefined;
+      var horizontal = this.props.horizontal;
+
+      var _ref$getBoundingClien = this._ref.getBoundingClientRect();
+
+      var left = _ref$getBoundingClien.left;
+      var top = _ref$getBoundingClien.top;
+      var right = _ref$getBoundingClien.right;
+      var bottom = _ref$getBoundingClien.bottom;
+
+      var waypointTop = horizontal ? left : top;
+      var waypointBottom = horizontal ? right : bottom;
+
+      var contextHeight = void 0;
+      var contextScrollTop = void 0;
       if (this.scrollableAncestor === window) {
-        contextHeight = window.innerHeight;
+        contextHeight = horizontal ? window.innerWidth : window.innerHeight;
         contextScrollTop = 0;
       } else {
-        contextHeight = this.scrollableAncestor.offsetHeight;
-        contextScrollTop = this.scrollableAncestor.getBoundingClientRect().top;
+        contextHeight = horizontal ? this.scrollableAncestor.offsetWidth : this.scrollableAncestor.offsetHeight;
+        contextScrollTop = horizontal ? this.scrollableAncestor.getBoundingClientRect().left : this.scrollableAncestor.getBoundingClientRect().top;
       }
+
       if (this.props.debug) {
         debugLog('waypoint top', waypointTop);
+        debugLog('waypoint bottom', waypointBottom);
         debugLog('scrollableAncestor height', contextHeight);
         debugLog('scrollableAncestor scrollTop', contextScrollTop);
       }
@@ -310,45 +402,16 @@ var Waypoint = (function (_React$Component) {
       var bottomOffset = _props.bottomOffset;
       var topOffset = _props.topOffset;
 
-      var topOffsetPx = this._computeOffsetPixels(topOffset, contextHeight);
-      var bottomOffsetPx = this._computeOffsetPixels(bottomOffset, contextHeight);
+      var topOffsetPx = computeOffsetPixels(topOffset, contextHeight);
+      var bottomOffsetPx = computeOffsetPixels(bottomOffset, contextHeight);
       var contextBottom = contextScrollTop + contextHeight;
 
       return {
         waypointTop: waypointTop,
+        waypointBottom: waypointBottom,
         viewportTop: contextScrollTop + topOffsetPx,
         viewportBottom: contextBottom - bottomOffsetPx
       };
-    }
-
-    /**
-     * @param {object} bounds An object with bounds data for the waypoint and
-     *   scrollable parent
-     * @return {string} The current position of the waypoint in relation to the
-     *   visible portion of the scrollable parent. One of `POSITIONS.above`,
-     *   `POSITIONS.below`, or `POSITIONS.inside`.
-     */
-
-  }, {
-    key: '_currentPosition',
-    value: function _currentPosition(bounds) {
-      if (bounds.viewportBottom - bounds.viewportTop === 0) {
-        return Waypoint.invisible;
-      }
-
-      if (bounds.viewportTop <= bounds.waypointTop && bounds.waypointTop <= bounds.viewportBottom) {
-        return Waypoint.inside;
-      }
-
-      if (bounds.viewportBottom < bounds.waypointTop) {
-        return Waypoint.below;
-      }
-
-      if (bounds.waypointTop < bounds.viewportTop) {
-        return Waypoint.above;
-      }
-
-      return Waypoint.invisible;
     }
 
     /**
@@ -358,25 +421,44 @@ var Waypoint = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      // We need an element that we can locate in the DOM to determine where it is
-      // rendered relative to the top of its context.
-      return _react2.default.createElement('span', { ref: this.refElement, style: { fontSize: 0 } });
+      var _this3 = this;
+
+      var children = this.props.children;
+
+
+      if (!children) {
+        // We need an element that we can locate in the DOM to determine where it is
+        // rendered relative to the top of its context.
+        return _react2.default.createElement('span', { ref: this.refElement, style: { fontSize: 0 } });
+      }
+
+      var ref = function ref(node) {
+        _this3.refElement(node);
+        if (children.ref) {
+          children.ref(node);
+        }
+      };
+
+      return _react2.default.cloneElement(children, { ref: ref });
     }
   }]);
 
   return Waypoint;
-})(_react2.default.Component);
+}(_react2.default.Component);
 
 exports.default = Waypoint;
 
+
 Waypoint.propTypes = {
+  children: _react.PropTypes.element,
   debug: _react.PropTypes.bool,
   onEnter: _react.PropTypes.func,
   onLeave: _react.PropTypes.func,
   onPositionChange: _react.PropTypes.func,
   fireOnRapidScroll: _react.PropTypes.bool,
   scrollableAncestor: _react.PropTypes.any,
-  throttleHandler: _react.PropTypes.func,
+  horizontal: _react.PropTypes.bool,
+
   // `topOffset` can either be a number, in which case its a distance from the
   // top of the container in pixels, or a string value. Valid string values are
   // of the form "20px", which is parsed as pixels, or "20%", which is parsed
@@ -385,9 +467,11 @@ Waypoint.propTypes = {
   // then the waypoint will be triggered when it has been scrolled 20px beyond
   // the top of the containing element.
   topOffset: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
+
   // `bottomOffset` is like `topOffset`, but for the bottom of the container.
   bottomOffset: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number])
 };
+
 Waypoint.above = POSITIONS.above;
 Waypoint.below = POSITIONS.below;
 Waypoint.inside = POSITIONS.inside;

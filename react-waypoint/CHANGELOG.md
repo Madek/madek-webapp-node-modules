@@ -1,5 +1,78 @@
 ## master (unreleased)
 
+## 5.1.0
+
+- Waypoint can now accept children.
+
+## 5.0.3
+
+- Clear initial timeout when unmounting component.
+
+## 5.0.2
+- Revert ES6 typescript definition.
+
+## 5.0.1
+- Fix typescript definition to support ES6 imports
+
+## 5.0.0
+
+- [Breaking] Remove `throttleHandler`
+- Add typescript definitions file
+
+## 4.1.0
+
+- Add `horizontal` prop. Use it to make the waypoint trigger on horizontal scrolling.
+
+## 4.0.4
+
+- Delay initial calling of handleScroll when mounting.
+
+## 4.0.3
+
+- Extract event listener code to consolidated-events package.
+
+## 4.0.2
+
+- Prevent event listeners from leaking.
+
+## 4.0.1
+
+- Fix error when a waypoint unmounts another waypoint as part of handling a
+  (scroll/resize) event.
+
+## 4.0.0
+
+- [Breaking] Use passive event listeners in browsers that support them. This
+  will break any Waypoint event handler that was calling
+  `event.preventDefault()`.
+- Initialize fewer event listeners.
+
+## 3.1.3
+
+- Avoid warnings from React about calling PropTypes directly (#119).
+
+## 3.1.2
+
+This version contains a fix for errors of the following kind:
+
+```
+Unable to get property 'getBoundingClientRect' of undefined or null reference
+```
+
+## 3.1.1
+
+- Fix passing props to super class, to make react-waypoint compatible with [preact](https://github.com/developit/preact) (thanks @kamotos!)
+
+## 3.1.0
+
+New properties have been added to the `onEnter`/`onLeave`/`onPositionChange`
+callbacks:
+
+- `waypointTop` - the waypoint's distance to the top of the viewport.
+- `viewportTop` - the distance from the scrollable ancestor to the viewport top.
+- `viewportBottom` - the distance from the bottom of the scrollable ancestor to
+  the viewport top.
+
 ## 3.0.0
 
 - Change `threshold` to `bottomOffset` and `topOffset`
