@@ -1,111 +1,116 @@
 {
   "_args": [
     [
-      "js-yaml@^3.5.1",
+      {
+        "raw": "js-yaml@^3.5.1",
+        "scope": null,
+        "escapedName": "js-yaml",
+        "name": "js-yaml",
+        "rawSpec": "^3.5.1",
+        "spec": ">=3.5.1 <4.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/eslint"
     ]
   ],
   "_from": "js-yaml@>=3.5.1 <4.0.0",
-  "_id": "js-yaml@3.5.3",
+  "_id": "js-yaml@3.8.1",
   "_inCache": true,
-  "_installable": true,
   "_location": "/js-yaml",
-  "_nodeVersion": "4.3.0",
+  "_nodeVersion": "6.9.4",
   "_npmOperationalInternal": {
-    "host": "packages-5-east.internal.npmjs.com",
-    "tmp": "tmp/js-yaml-3.5.3.tgz_1455175645225_0.033302413299679756"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/js-yaml-3.8.1.tgz_1486427973137_0.02093760436400771"
   },
   "_npmUser": {
-    "email": "vitaly@rcdesign.ru",
-    "name": "vitaly"
+    "name": "vitaly",
+    "email": "vitaly@rcdesign.ru"
   },
-  "_npmVersion": "2.14.12",
+  "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "name": "js-yaml",
     "raw": "js-yaml@^3.5.1",
-    "rawSpec": "^3.5.1",
     "scope": null,
+    "escapedName": "js-yaml",
+    "name": "js-yaml",
+    "rawSpec": "^3.5.1",
     "spec": ">=3.5.1 <4.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/eslint"
   ],
-  "_resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.5.3.tgz",
-  "_shasum": "e9ee6082b0657770e4346dfaf2a58c5992251f76",
+  "_resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.8.1.tgz",
+  "_shasum": "782ba50200be7b9e5a8537001b7804db3ad02628",
   "_shrinkwrap": null,
   "_spec": "js-yaml@^3.5.1",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/eslint",
   "author": {
-    "email": "dervus.grim@gmail.com",
-    "name": "Vladimir Zapparov"
+    "name": "Vladimir Zapparov",
+    "email": "dervus.grim@gmail.com"
   },
   "bin": {
     "js-yaml": "bin/js-yaml.js"
-  },
-  "browser": {
-    "buffer": false
   },
   "bugs": {
     "url": "https://github.com/nodeca/js-yaml/issues"
   },
   "contributors": [
     {
-      "email": "ixti@member.fsf.org",
       "name": "Aleksey V Zapparov",
+      "email": "ixti@member.fsf.org",
       "url": "http://www.ixti.net/"
     },
     {
-      "email": "vitaly@rcdesign.ru",
       "name": "Vitaly Puzrin",
+      "email": "vitaly@rcdesign.ru",
       "url": "https://github.com/puzrin"
     },
     {
-      "email": "martin.grenfell@gmail.com",
       "name": "Martin Grenfell",
+      "email": "martin.grenfell@gmail.com",
       "url": "http://got-ravings.blogspot.com"
     }
   ],
   "dependencies": {
-    "argparse": "^1.0.2",
-    "esprima": "^2.6.0"
+    "argparse": "^1.0.7",
+    "esprima": "^3.1.1"
   },
   "description": "YAML 1.2 parser and serializer",
   "devDependencies": {
     "ansi": "*",
     "benchmark": "*",
     "browserify": "^13.0.0",
-    "codemirror": "^5.10.0",
-    "eslint": "^2.0.0-rc.1",
+    "codemirror": "^5.13.4",
+    "eslint": "^3.10.0",
     "istanbul": "*",
     "mocha": "*",
     "uglify-js": "^2.6.1"
   },
   "directories": {},
   "dist": {
-    "shasum": "e9ee6082b0657770e4346dfaf2a58c5992251f76",
-    "tarball": "http://registry.npmjs.org/js-yaml/-/js-yaml-3.5.3.tgz"
+    "shasum": "782ba50200be7b9e5a8537001b7804db3ad02628",
+    "tarball": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.8.1.tgz"
   },
   "files": [
-    "bin/",
-    "dist/",
     "index.js",
-    "lib/"
+    "lib/",
+    "bin/",
+    "dist/"
   ],
-  "gitHead": "4a9e0a258586cff292cab63e0b76044fc1f4cb63",
+  "gitHead": "9c1894e2c4e2a14efaa0ba4afe71804bebfb77d6",
   "homepage": "https://github.com/nodeca/js-yaml",
   "keywords": [
+    "yaml",
     "parser",
-    "pyyaml",
     "serializer",
-    "yaml"
+    "pyyaml"
   ],
   "license": "MIT",
   "maintainers": [
     {
-      "email": "vitaly@rcdesign.ru",
-      "name": "vitaly"
+      "name": "vitaly",
+      "email": "vitaly@rcdesign.ru"
     }
   ],
   "name": "js-yaml",
@@ -118,5 +123,5 @@
   "scripts": {
     "test": "make test"
   },
-  "version": "3.5.3"
+  "version": "3.8.1"
 }

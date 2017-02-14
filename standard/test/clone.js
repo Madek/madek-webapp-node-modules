@@ -8,7 +8,7 @@
  * VERSION BUMP.)
  */
 
-var crossSpawnAsync = require('cross-spawn-async')
+var crossSpawn = require('cross-spawn')
 var fs = require('fs')
 var minimist = require('minimist')
 var mkdirp = require('mkdirp')
@@ -90,7 +90,7 @@ test('test github repos that use `standard`', function (t) {
         function gitClone (cb) {
           var args = [ 'clone', '--depth', 1, url, path.join(TMP, name) ]
           spawn(GIT, args, { stdio: 'ignore' }, function (err) {
-            if (err) err.message += ' (' + name + ')'
+            if (err) err.message += ' (git clone) (' + name + ')'
             cb(err)
           })
         }
@@ -98,7 +98,7 @@ test('test github repos that use `standard`', function (t) {
         function gitPull (cb) {
           var args = [ 'pull' ]
           spawn(GIT, args, { cwd: folder, stdio: 'ignore' }, function (err) {
-            if (err) err.message += ' (' + name + ')'
+            if (err) err.message += ' (git pull) (' + name + ')'
             cb(err)
           })
         }
@@ -122,7 +122,7 @@ test('test github repos that use `standard`', function (t) {
 function spawn (command, args, opts, cb) {
   if (!opts.stdio) opts.stdio = argv.quiet ? 'ignore' : 'inherit'
 
-  var child = crossSpawnAsync(command, args, opts)
+  var child = crossSpawn(command, args, opts)
   child.on('error', cb)
   child.on('close', function (code) {
     if (code !== 0) return cb(new Error('non-zero exit code: ' + code))

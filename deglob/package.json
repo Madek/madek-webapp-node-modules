@@ -1,63 +1,64 @@
 {
   "_args": [
     [
-      "deglob@^1.0.0",
+      {
+        "raw": "deglob@^2.0.0",
+        "scope": null,
+        "escapedName": "deglob",
+        "name": "deglob",
+        "rawSpec": "^2.0.0",
+        "spec": ">=2.0.0 <3.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/standard-engine"
     ]
   ],
-  "_from": "deglob@>=1.0.0 <2.0.0",
-  "_id": "deglob@1.1.0",
+  "_from": "deglob@>=2.0.0 <3.0.0",
+  "_id": "deglob@2.1.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/deglob",
-  "_nodeVersion": "4.2.6",
+  "_nodeVersion": "7.1.0",
   "_npmOperationalInternal": {
-    "host": "packages-5-east.internal.npmjs.com",
-    "tmp": "tmp/deglob-1.1.0.tgz_1454552361509_0.7241189705673605"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/deglob-2.1.0.tgz_1479857481674_0.09505835990421474"
   },
   "_npmUser": {
-    "email": "feross@feross.org",
-    "name": "feross"
+    "name": "feross",
+    "email": "feross@feross.org"
   },
-  "_npmVersion": "2.14.12",
-  "_phantomChildren": {
-    "inflight": "1.0.4",
-    "inherits": "2.0.1",
-    "minimatch": "2.0.10",
-    "path-is-absolute": "1.0.0",
-    "wrappy": "1.0.1"
-  },
+  "_npmVersion": "3.10.9",
+  "_phantomChildren": {},
   "_requested": {
-    "name": "deglob",
-    "raw": "deglob@^1.0.0",
-    "rawSpec": "^1.0.0",
+    "raw": "deglob@^2.0.0",
     "scope": null,
-    "spec": ">=1.0.0 <2.0.0",
+    "escapedName": "deglob",
+    "name": "deglob",
+    "rawSpec": "^2.0.0",
+    "spec": ">=2.0.0 <3.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/standard-engine"
   ],
-  "_resolved": "https://registry.npmjs.org/deglob/-/deglob-1.1.0.tgz",
-  "_shasum": "39b4c556493da086c53a05718ed4b7b70bd75e51",
+  "_resolved": "https://registry.npmjs.org/deglob/-/deglob-2.1.0.tgz",
+  "_shasum": "4d44abe16ef32c779b4972bd141a80325029a14a",
   "_shrinkwrap": null,
-  "_spec": "deglob@^1.0.0",
+  "_spec": "deglob@^2.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/standard-engine",
   "author": {
-    "email": "fletd01@yahoo.com",
-    "name": "Dan Flettre"
+    "name": "Dan Flettre",
+    "email": "fletd01@yahoo.com"
   },
   "bugs": {
     "url": "https://github.com/flet/deglob/issues"
   },
   "dependencies": {
-    "find-root": "^0.1.1",
-    "glob": "^6.0.4",
-    "ignore": "^2.2.15",
+    "find-root": "^1.0.0",
+    "glob": "^7.0.5",
+    "ignore": "^3.0.9",
     "pkg-config": "^1.1.0",
     "run-parallel": "^1.1.2",
-    "uniq": "^1.0.1",
-    "xtend": "^4.0.0"
+    "uniq": "^1.0.1"
   },
   "description": "Take a list of glob patterns and return an array of file locations, respecting `.gitignore` and allowing for ignore patterns via `package.json`.",
   "devDependencies": {
@@ -67,21 +68,21 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "39b4c556493da086c53a05718ed4b7b70bd75e51",
-    "tarball": "http://registry.npmjs.org/deglob/-/deglob-1.1.0.tgz"
+    "shasum": "4d44abe16ef32c779b4972bd141a80325029a14a",
+    "tarball": "https://registry.npmjs.org/deglob/-/deglob-2.1.0.tgz"
   },
-  "gitHead": "e7abbcbc2ee85c49262e3e69398dbb2024873ac8",
+  "gitHead": "a36361ddec5e661268746a41c98d7be636f6d9e7",
   "homepage": "https://github.com/flet/deglob",
   "keywords": [
     "cli",
     "command",
     "deglob",
-    "file",
     "files",
-    "gitignore",
     "glob",
+    "unglob",
+    "gitignore",
     "ignore",
-    "unglob"
+    "file"
   ],
   "license": "ISC",
   "main": "index.js",
@@ -125,5 +126,5 @@
   "scripts": {
     "test": "standard && tape test/*.js | tap-spec"
   },
-  "version": "1.1.0"
+  "version": "2.1.0"
 }

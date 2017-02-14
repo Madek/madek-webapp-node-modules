@@ -1,41 +1,49 @@
 {
   "_args": [
     [
-      "esrecurse@^4.0.0",
+      {
+        "raw": "esrecurse@^4.1.0",
+        "scope": null,
+        "escapedName": "esrecurse",
+        "name": "esrecurse",
+        "rawSpec": "^4.1.0",
+        "spec": ">=4.1.0 <5.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/escope"
     ]
   ],
-  "_from": "esrecurse@>=4.0.0 <5.0.0",
-  "_id": "esrecurse@4.0.0",
+  "_from": "esrecurse@>=4.1.0 <5.0.0",
+  "_id": "esrecurse@4.1.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/esrecurse",
-  "_nodeVersion": "4.1.1",
+  "_nodeVersion": "0.12.9",
   "_npmOperationalInternal": {
-    "host": "packages-5-east.internal.npmjs.com",
-    "tmp": "tmp/esrecurse-4.0.0.tgz_1454512903651_0.6128629888407886"
+    "host": "packages-13-west.internal.npmjs.com",
+    "tmp": "tmp/esrecurse-4.1.0.tgz_1457712782215_0.15950557170435786"
   },
   "_npmUser": {
-    "email": "utatane.tea@gmail.com",
-    "name": "constellation"
+    "name": "nzakas",
+    "email": "nicholas@nczconsulting.com"
   },
-  "_npmVersion": "2.14.4",
+  "_npmVersion": "2.14.9",
   "_phantomChildren": {},
   "_requested": {
-    "name": "esrecurse",
-    "raw": "esrecurse@^4.0.0",
-    "rawSpec": "^4.0.0",
+    "raw": "esrecurse@^4.1.0",
     "scope": null,
-    "spec": ">=4.0.0 <5.0.0",
+    "escapedName": "esrecurse",
+    "name": "esrecurse",
+    "rawSpec": "^4.1.0",
+    "spec": ">=4.1.0 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/escope"
   ],
-  "_resolved": "https://registry.npmjs.org/esrecurse/-/esrecurse-4.0.0.tgz",
-  "_shasum": "c7b50295f9af5ff9a0073d139eb011476128e9e6",
+  "_resolved": "https://registry.npmjs.org/esrecurse/-/esrecurse-4.1.0.tgz",
+  "_shasum": "4713b6536adf7f2ac4f327d559e7756bff648220",
   "_shrinkwrap": null,
-  "_spec": "esrecurse@^4.0.0",
+  "_spec": "esrecurse@^4.1.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/escope",
   "bugs": {
     "url": "https://github.com/estools/esrecurse/issues"
@@ -61,13 +69,13 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "c7b50295f9af5ff9a0073d139eb011476128e9e6",
-    "tarball": "http://registry.npmjs.org/esrecurse/-/esrecurse-4.0.0.tgz"
+    "shasum": "4713b6536adf7f2ac4f327d559e7756bff648220",
+    "tarball": "https://registry.npmjs.org/esrecurse/-/esrecurse-4.1.0.tgz"
   },
   "engines": {
     "node": ">=0.10.0"
   },
-  "gitHead": "fc4b0d9b1e9ce493761e97af9a1afb5afd489f87",
+  "gitHead": "63a34714834bd7ad2063054bd4abb24fb82ca667",
   "homepage": "https://github.com/estools/esrecurse",
   "license": "BSD-2-Clause",
   "main": "esrecurse.js",
@@ -79,6 +87,10 @@
     {
       "name": "michaelficarra",
       "email": "npm@michael.ficarra.me"
+    },
+    {
+      "name": "nzakas",
+      "email": "nicholas@nczconsulting.com"
     }
   ],
   "name": "esrecurse",
@@ -93,5 +105,5 @@
     "test": "gulp travis",
     "unit-test": "gulp test"
   },
-  "version": "4.0.0"
+  "version": "4.1.0"
 }

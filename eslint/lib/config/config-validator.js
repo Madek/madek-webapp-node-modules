@@ -1,8 +1,6 @@
 /**
  * @fileoverview Validates configs.
  * @author Brandon Mills
- * @copyright 2015 Brandon Mills
- * See LICENSE file in root directory for full license.
  */
 
 "use strict";
@@ -11,11 +9,12 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var rules = require("../rules"),
+const rules = require("../rules"),
     Environments = require("./environments"),
-    schemaValidator = require("is-my-json-valid");
+    schemaValidator = require("is-my-json-valid"),
+    util = require("util");
 
-var validators = {
+const validators = {
     rules: Object.create(null)
 };
 
@@ -26,26 +25,26 @@ var validators = {
 /**
  * Gets a complete options schema for a rule.
  * @param {string} id The rule's unique name.
- * @returns {object} JSON Schema for the rule's options.
+ * @returns {Object} JSON Schema for the rule's options.
  */
 function getRuleOptionsSchema(id) {
-    var rule = rules.get(id),
+    const rule = rules.get(id),
         schema = rule && rule.schema || rule && rule.meta && rule.meta.schema;
 
     // Given a tuple of schemas, insert warning level at the beginning
     if (Array.isArray(schema)) {
         if (schema.length) {
             return {
-                "type": "array",
-                "items": schema,
-                "minItems": 0,
-                "maxItems": schema.length
+                type: "array",
+                items: schema,
+                minItems: 0,
+                maxItems: schema.length
             };
         } else {
             return {
-                "type": "array",
-                "minItems": 0,
-                "maxItems": 0
+                type: "array",
+                minItems: 0,
+                maxItems: 0
             };
         }
     }
@@ -62,11 +61,10 @@ function getRuleOptionsSchema(id) {
  * @returns {void}
  */
 function validateRuleOptions(id, options, source) {
-    var validateRule = validators.rules[id],
-        message,
+    const schema = getRuleOptionsSchema(id);
+    let validateRule = validators.rules[id],
         severity,
         localOptions,
-        schema = getRuleOptionsSchema(id),
         validSeverity = true;
 
     if (!validateRule && schema) {
@@ -83,25 +81,31 @@ function validateRuleOptions(id, options, source) {
         localOptions = [];
     }
 
-    validSeverity = (severity === 0 || severity === 1 || severity === 2);
+    validSeverity = (
+        severity === 0 || severity === 1 || severity === 2 ||
+        (typeof severity === "string" && /^(?:off|warn|error)$/i.test(severity))
+    );
 
     if (validateRule) {
         validateRule(localOptions);
     }
 
     if ((validateRule && validateRule.errors) || !validSeverity) {
-        message = [
+        const message = [
             source, ":\n",
             "\tConfiguration for rule \"", id, "\" is invalid:\n"
         ];
 
         if (!validSeverity) {
             message.push(
-                "\tSeverity should be one of the following: 0 = off, 1 = warning, 2 = error (you passed \"", severity, "\").\n");
+                "\tSeverity should be one of the following: 0 = off, 1 = warn, 2 = error (you passed '",
+                util.inspect(severity).replace(/'/g, "\"").replace(/\n/g, ""),
+                "').\n"
+            );
         }
 
         if (validateRule && validateRule.errors) {
-            validateRule.errors.forEach(function(error) {
+            validateRule.errors.forEach(error => {
                 message.push(
                     "\tValue \"", error.value, "\" ", error.message, ".\n"
                 );
@@ -114,7 +118,7 @@ function validateRuleOptions(id, options, source) {
 
 /**
  * Validates an environment object
- * @param {object} environment The environment config object to validate.
+ * @param {Object} environment The environment config object to validate.
  * @param {string} source The location to report with any errors.
  * @returns {void}
  */
@@ -130,12 +134,13 @@ function validateEnvironment(environment, source) {
     }
 
     if (typeof environment === "object") {
-        Object.keys(environment).forEach(function(env) {
+        Object.keys(environment).forEach(env => {
             if (!Environments.get(env)) {
-                var message = [
+                const message = [
                     source, ":\n",
                     "\tEnvironment key \"", env, "\" is unknown\n"
                 ];
+
                 throw new Error(message.join(""));
             }
         });
@@ -146,14 +151,14 @@ function validateEnvironment(environment, source) {
 
 /**
  * Validates an entire config object.
- * @param {object} config The config object to validate.
+ * @param {Object} config The config object to validate.
  * @param {string} source The location to report with any errors.
  * @returns {void}
  */
 function validate(config, source) {
 
     if (typeof config.rules === "object") {
-        Object.keys(config.rules).forEach(function(id) {
+        Object.keys(config.rules).forEach(id => {
             validateRuleOptions(id, config.rules[id], source);
         });
     }
@@ -166,7 +171,7 @@ function validate(config, source) {
 //------------------------------------------------------------------------------
 
 module.exports = {
-    getRuleOptionsSchema: getRuleOptionsSchema,
-    validate: validate,
-    validateRuleOptions: validateRuleOptions
+    getRuleOptionsSchema,
+    validate,
+    validateRuleOptions
 };

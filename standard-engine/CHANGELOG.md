@@ -2,6 +2,73 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 - 2016-08-10
+
+- BREAKING: Remove formatter support (replaced by ESLint's --fix)
+- BREAKING: Drop Node 0.12 and 0.10 support (because of ESLint 3)
+- Add `{fix: true}` option to `lintFiles` and `lintText` API
+- Support auto-fixing source text from --stdin
+
+## 4.1.3 - 2016-08-07
+
+- Update deps, improve tests
+
+## 4.1.2 - 2016-07-26
+
+- Add "Try `standard --fix` message" when errors are present
+
+## 4.1.1 - 2016-07-13
+
+- Remove `--format` from help when there is only an error string
+
+## 4.1.0 - 2016-07-13
+
+- Add --fix option (uses eslint's --fix)
+- Drop Node 0.12 and 0.10 CI testing (because of ESLint 3)
+- Update deps
+
+## 4.0.5 - 2016-07-12
+
+- Update deps
+
+## 4.0.4 - 2016-05-25
+  * Fix install warning due to `cross-spawn-async`
+
+## 4.0.3 - 2016-05-25
+  * Add back node v0.10 support
+
+## 4.0.2 - 2016-05-16
+  * Fix truncated output on Node v6
+
+## 4.0.1 - 2016-04-28
+  * Do not use .eslintignore files
+
+## 4.0.0 - 2016-04-24
+  * Remove `--rules` option
+
+## 3.3.1 - 2016-02-23
+  * Update dependencies
+
+## 3.3.0 - 2016-02-18
+  * Support passing `cwd` option in Linter constructor
+
+## 3.2.4 - 2016-02-07
+  * Fix tests
+
+## 3.2.3 - 2016-02-07
+  * Fix tests
+
+## 3.2.2 - 2016-02-06
+  * Fix tests
+
+## 3.2.1 - 2016-02-05
+  * Fix tests
+
+## 3.2.0 - 2016-02-05
+  * Add `--plugin` option
+  * Add `--rules` option
+  * Add `--env` option
+
 ## 3.1.1 - 2016-02-03
   * Replace deprecated `win-spawn` dev dependency with `cross-spawn-async`.
 

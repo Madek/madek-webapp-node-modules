@@ -2,10 +2,10 @@ module.exports.cli = require('./bin/cmd')
 
 module.exports.linter = Linter
 
-var defaults = require('defaults')
 var deglob = require('deglob')
-var extend = require('xtend')
 var findRoot = require('find-root')
+var homeOrTmp = require('home-or-tmp')
+var path = require('path')
 var pkgConfig = require('pkg-config')
 
 var DEFAULT_PATTERNS = [
@@ -31,16 +31,16 @@ function Linter (opts) {
   self.cwd = opts.cwd
   if (!self.eslint) throw new Error('opts.eslint option is required')
 
-  self.eslintConfig = defaults(opts.eslintConfig, {
-    useEslintrc: false,
-    globals: [],
-    plugins: [],
+  self.eslintConfig = Object.assign({
+    cache: true,
+    cacheLocation: path.join(homeOrTmp, '.standard-cache/'),
     envs: [],
-    rules: {}
-  })
-  if (!self.eslintConfig) {
-    throw new Error('No eslintConfig passed.')
-  }
+    fix: false,
+    globals: [],
+    ignore: false,
+    plugins: [],
+    useEslintrc: false
+  }, opts.eslintConfig)
 }
 
 /**
@@ -48,10 +48,10 @@ function Linter (opts) {
  *
  * @param {string} text                   file text to lint
  * @param {Object=} opts                  options object
+ * @param {boolean=} opts.fix             automatically fix problems
  * @param {Array.<string>=} opts.globals  custom global variables to declare
  * @param {Array.<string>=} opts.plugins  custom eslint plugins
  * @param {Array.<string>=} opts.envs     custom eslint environment
- * @param {Object=} opts.rules            custom eslint rules
  * @param {string=} opts.parser           custom js parser (e.g. babel-eslint)
  * @param {function(Error, Object)} cb    callback
  */
@@ -62,7 +62,7 @@ Linter.prototype.lintText = function (text, opts, cb) {
 
   var result
   try {
-    result = new self.eslint.CLIEngine(opts.eslintConfig).executeOnText(text)
+    result = new self.eslint.CLIEngine(opts.eslintConfig).executeOnText(text, opts.filename)
   } catch (err) {
     return nextTick(cb, err)
   }
@@ -76,10 +76,10 @@ Linter.prototype.lintText = function (text, opts, cb) {
  * @param {Object=} opts                  options object
  * @param {Array.<string>=} opts.ignore   file globs to ignore (has sane defaults)
  * @param {string=} opts.cwd              current working directory (default: process.cwd())
+ * @param {boolean=} opts.fix             automatically fix problems
  * @param {Array.<string>=} opts.globals  custom global variables to declare
  * @param {Array.<string>=} opts.plugins  custom eslint plugins
  * @param {Array.<string>=} opts.envs     custom eslint environment
- * @param {Object=} opts.rules            custom eslint rules
  * @param {string=} opts.parser           custom js parser (e.g. babel-eslint)
  * @param {function(Error, Object)} cb    callback
  */
@@ -101,8 +101,6 @@ Linter.prototype.lintFiles = function (files, opts, cb) {
 
   deglob(files, deglobOpts, function (err, allFiles) {
     if (err) return cb(err)
-    // undocumented – do not use (used by bin/cmd.js)
-    if (opts._onFiles) opts._onFiles(allFiles)
 
     var result
     try {
@@ -110,6 +108,11 @@ Linter.prototype.lintFiles = function (files, opts, cb) {
     } catch (err) {
       return cb(err)
     }
+
+    if (opts.fix) {
+      self.eslint.CLIEngine.outputFixes(result)
+    }
+
     return cb(null, result)
   })
 }
@@ -118,18 +121,19 @@ Linter.prototype.parseOpts = function (opts) {
   var self = this
 
   if (!opts) opts = {}
-  opts = extend(opts)
-  opts.eslintConfig = extend(self.eslintConfig)
+  opts = Object.assign({}, opts)
+  opts.eslintConfig = Object.assign({}, self.eslintConfig)
 
   if (!opts.cwd) opts.cwd = self.cwd || process.cwd()
 
   if (!opts.ignore) opts.ignore = []
   opts.ignore = opts.ignore.concat(DEFAULT_IGNORE)
 
+  if (opts.fix != null) opts.eslintConfig.fix = opts.fix
+
   setGlobals(opts.globals || opts.global)
   setPlugins(opts.plugins || opts.plugin)
   setEnvs(opts.envs || opts.env)
-  setRules(opts.rules || opts.rule)
   setParser(opts.parser)
 
   var root
@@ -140,7 +144,6 @@ Linter.prototype.parseOpts = function (opts) {
     if (packageOpts) {
       setGlobals(packageOpts.globals || packageOpts.global)
       setPlugins(packageOpts.plugins || packageOpts.plugin)
-      setRules(packageOpts.rules || packageOpts.rule)
       setEnvs(packageOpts.envs || packageOpts.env)
       if (!opts.parser) setParser(packageOpts.parser)
     }
@@ -154,11 +157,6 @@ Linter.prototype.parseOpts = function (opts) {
   function setPlugins (plugins) {
     if (!plugins) return
     opts.eslintConfig.plugins = self.eslintConfig.plugins.concat(plugins)
-  }
-
-  function setRules (rules) {
-    if (!rules) return
-    opts.eslintConfig.rules = extend(opts.eslintConfig.rules, rules)
   }
 
   function setEnvs (envs) {

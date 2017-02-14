@@ -1,27 +1,39 @@
 {
   "_args": [
     [
-      "pkg-config@^1.0.1",
+      {
+        "raw": "pkg-config@^1.0.1",
+        "scope": null,
+        "escapedName": "pkg-config",
+        "name": "pkg-config",
+        "rawSpec": "^1.0.1",
+        "spec": ">=1.0.1 <2.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/standard-engine"
     ]
   ],
   "_from": "pkg-config@>=1.0.1 <2.0.0",
-  "_id": "pkg-config@1.1.0",
+  "_id": "pkg-config@1.1.1",
   "_inCache": true,
-  "_installable": true,
   "_location": "/pkg-config",
-  "_nodeVersion": "0.12.2",
-  "_npmUser": {
-    "email": "ahmad@ahmadnassri.com",
-    "name": "ahmadnassri"
+  "_nodeVersion": "5.7.0",
+  "_npmOperationalInternal": {
+    "host": "packages-13-west.internal.npmjs.com",
+    "tmp": "tmp/pkg-config-1.1.1.tgz_1458708128079_0.771446582628414"
   },
-  "_npmVersion": "3.0.0",
+  "_npmUser": {
+    "name": "ahmadnassri",
+    "email": "ahmad@ahmadnassri.com"
+  },
+  "_npmVersion": "3.7.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "pkg-config",
     "raw": "pkg-config@^1.0.1",
-    "rawSpec": "^1.0.1",
     "scope": null,
+    "escapedName": "pkg-config",
+    "name": "pkg-config",
+    "rawSpec": "^1.0.1",
     "spec": ">=1.0.1 <2.0.0",
     "type": "range"
   },
@@ -29,14 +41,14 @@
     "/deglob",
     "/standard-engine"
   ],
-  "_resolved": "https://registry.npmjs.org/pkg-config/-/pkg-config-1.1.0.tgz",
-  "_shasum": "1f9684b12c0fd5bcef3b2bd75265433b97b74c5d",
+  "_resolved": "https://registry.npmjs.org/pkg-config/-/pkg-config-1.1.1.tgz",
+  "_shasum": "557ef22d73da3c8837107766c52eadabde298fe4",
   "_shrinkwrap": null,
   "_spec": "pkg-config@^1.0.1",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/standard-engine",
   "author": {
-    "email": "ahmad@ahmadnassri.com",
     "name": "Ahmad Nassri",
+    "email": "ahmad@ahmadnassri.com",
     "url": "https://www.ahmadnassri.com/"
   },
   "bugs": {
@@ -44,22 +56,22 @@
   },
   "dependencies": {
     "debug-log": "^1.0.0",
-    "find-root": "^0.1.1",
-    "xtend": "^4.0.0"
+    "find-root": "^1.0.0",
+    "xtend": "^4.0.1"
   },
   "description": "parse the closest `package.json` and get package specific configurations",
   "devDependencies": {
-    "codeclimate-test-reporter": "0.1.0",
-    "echint": "^1.3.0",
-    "istanbul": "^0.3.17",
-    "mocha": "^2.2.5",
-    "should": "^7.0.1",
-    "standard": "^4.5.2"
+    "codeclimate-test-reporter": "0.3.1",
+    "echint": "^1.5.3",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
+    "should": "^8.2.2",
+    "standard": "^6.0.8"
   },
   "directories": {},
   "dist": {
-    "shasum": "1f9684b12c0fd5bcef3b2bd75265433b97b74c5d",
-    "tarball": "http://registry.npmjs.org/pkg-config/-/pkg-config-1.1.0.tgz"
+    "shasum": "557ef22d73da3c8837107766c52eadabde298fe4",
+    "tarball": "https://registry.npmjs.org/pkg-config/-/pkg-config-1.1.1.tgz"
   },
   "echint": {
     "ignore": [
@@ -72,7 +84,7 @@
   "files": [
     "index.js"
   ],
-  "gitHead": "e21c7f01463a0b0760675618d21e34f97c1b5e22",
+  "gitHead": "520f922a2ea4731be77603c306c2d50568dca2d3",
   "homepage": "https://github.com/ahmadnassri/pkg-config",
   "keywords": [
     "pkg-config"
@@ -98,5 +110,5 @@
     "pretest": "standard && echint",
     "test": "mocha"
   },
-  "version": "1.1.0"
+  "version": "1.1.1"
 }

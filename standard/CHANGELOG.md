@@ -3,6 +3,158 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 8.6.0 - 2016-11-22
+
+- Update ESLint from 3.8.x to 3.10.x.
+- 3 additional rules are now fixable with `standard --fix`!
+
+## 8.5.0 - 2016-10-25
+
+- Update ESLint from 3.7.x to 3.8.x.
+- 2 additional rules are now fixable with `standard --fix`!
+
+## 8.4.0 - 2016-10-10
+
+- Update ESLint from 3.6.x to 3.7.x.
+- 5 additional rules are now fixable with `standard --fix`!
+- Use more conservative semver ranges [#654](https://github.com/feross/standard/issues/654)
+
+## 8.3.0 - 2016-09-29
+
+The last release (`8.2.0`) added ES7 support. This release (`8.3.0`) adds ES8
+support ...just 3 days later!
+
+This release should eliminate the need to specify `babel-eslint` as a custom
+parser, since `standard` can now parse ES8 (i.e. ES2017) syntax out of the box.
+That means `async` and `await` will just work.
+
+- Support ES8 (i.e. ES2017) syntax.
+
+## 8.2.0 - 2016-09-26
+
+For many users, this release should eliminate the need to specify `babel-eslint` as
+a custom parser, since `standard` can now parse ES7 (i.e. ES2016) syntax out of the
+box.
+
+- Support ES7 (i.e. ES2016) syntax.
+- Update ESLint from 3.5.x to 3.6.x.
+- 4 additional rules are now fixable with `standard --fix`!
+
+## 8.1.0 - 2016-09-17
+
+- Update ESLint from 3.3.x to 3.5.x.
+- Around 10 additional rules are now fixable with `standard --fix`!
+
+## 8.0.0 - 2016-08-23
+
+This release contains a bunch of goodies, including new rules that catch potential
+programmer errors (i.e. bugs) and enforce additional code consistency.
+
+However, the best feature is surely the new `--fix` command line flag to
+automatically fix problems. If you ever used
+[`standard-format`](https://www.npmjs.com/package/standard-format)
+and ran into issues with the lack of ES2015+ support, you'll be happy about
+`--fix`.
+
+`standard --fix` is built into `standard` v8.0.0 for maximum convenience, it
+supports ES2015, and it's lightweight (no additional dependencies since it's part
+of ESLint which powers `standard`). Lots of problems are already fixable, and more
+are getting added with each ESLint release.
+
+`standard` also outputs a message ("Run `standard --fix` to automatically fix
+some problems.") when it detects problems that can be fixed automatically so you
+can save time!
+
+With `standard` v8.0.0, we are also dropping support for Node.js versions prior to
+v4. Node.js 0.10 and 0.12 are in maintenance mode and will be unsupported at the
+end of 2016. Node.js 4 is the current LTS version. If you are using an older
+version of Node.js, we recommend upgrading to at least Node.js 4 as soon as
+possible. If you are unable to upgrade to Node.js 4 or higher, then we recommend
+continuing to use `standard` v7.x until you are ready to upgrade Node.js.
+
+**Important:** We will not be updating the `standard` v7.x versions going forward.
+All bug fixes and enhancements will land in `standard` v8.x.
+
+Full changelog below. Cheers!
+
+### New features
+
+- Upgrade to ESLint v3 (http://eslint.org/docs/user-guide/migrating-to-3.0.0) [#565](https://github.com/feross/standard/pull/565)
+  - **BREAKING:** Drop support for node < 4 (this was a decision made by the ESLint team)
+- Expose ESLint's `--fix` command line flag [#540](https://github.com/feross/standard/issues/540) [standard-engine/#107](https://github.com/Flet/standard-engine/issues/107)
+  - Lightweight, no additional dependencies, fixes dozens of rules automatically
+
+### New rules
+
+*(Estimated % of affected standard users, based on test suite in parens)*
+
+- Enforce placing object properties on separate lines ([object-property-newline](http://eslint.org/docs/rules/object-property-newline)) [#524](https://github.com/feross/standard/issues/524) (2%)
+- Require block comments to be balanced ([spaced-comment "balanced"](http://eslint.org/docs/rules/spaced-comment)) [#572](https://github.com/feross/standard/issues/572) (2%)
+- Disallow constant expressions in conditions ([no-constant-condition](http://eslint.org/docs/rules/no-constant-condition)) [#563](https://github.com/feross/standard/issues/563) (1%)
+- Disallow renaming import, export, and destructured assignments to the same name ([no-useless-rename](http://eslint.org/docs/rules/no-useless-rename)) [#537](https://github.com/feross/standard/issues/537) (0%)
+- Disallow spacing between rest and spread operators and their expressions ([rest-spread-spacing](http://eslint.org/docs/rules/rest-spread-spacing)) [#567](https://github.com/feross/standard/issues/567) (0%)
+- Disallow the Unicode Byte Order Mark (BOM) ([unicode-bom](http://eslint.org/docs/rules/unicode-bom)) [#538](https://github.com/feross/standard/issues/538) (0%)
+- Disallow assignment to native objects/global variables ([no-global-assign](http://eslint.org/docs/rules/no-global-assign)) [#596](https://github.com/feross/standard/issues/596) (0%)
+- Disallow negating the left operand of relational operators ([no-unsafe-negation](http://eslint.org/docs/rules/no-unsafe-negation)) [#595](https://github.com/feross/standard/issues/595) (0%)
+- Disallow template literal placeholder syntax in regular strings ([no-template-curly-in-string](http://eslint.org/docs/rules/no-template-curly-in-string)) [#594](https://github.com/feross/standard/issues/594) (0%)
+- Disallow tabs in file ([no-tabs](http://eslint.org/docs/rules/no-tabs)) [#593](https://github.com/feross/standard/issues/593) (0%)
+
+### Changed rules
+
+- Relax rule: Allow template literal strings (backtick strings) to avoid escaping  [#421](https://github.com/feross/standard/issues/421)
+- Relax rule: Do not enforce spacing around * in generator functions (https://github.com/feross/standard/issues/564#issuecomment-234699126)
+  - This is a temporary workaround for `babel` users who use async generator functions.
+
+## 7.1.2 - 2016-06-03
+
+- Fix install errors for some users by updating eslint peer dependency
+
+## 7.1.1 - 2016-05-26
+
+- Add back full node 0.10, 0.12 support
+
+## 7.1.0 - 2016-05-16
+
+- Upgrade eslint to version ~2.10.2
+
+## 7.0.1 - 2016-05-04
+
+- Relax "no-duplicate-imports" rule to not include `export` so the following is allowed:
+
+```js
+import { foo } from 'bar'
+export * from 'bar'
+```
+
+## 7.0.0 - 2016-05-02
+
+### Changes
+
+- Upgrade eslint to version ~2.9.0
+- Remove "rules" configuration option [#367](https://github.com/feross/standard/issues/367) from `package.json` (Reasoning is [here](https://github.com/feross/standard/issues/399#issuecomment-180961891))
+
+### New rules
+
+*Estimated % of affected standard users, based on test suite*
+
+- Require camelCase ([camelcase](http://eslint.org/docs/rules/camelcase)) [4%]
+- Disallow unnecessary escape usage ([no-useless-escape](http://eslint.org/docs/rules/no-useless-escape)) [4% -- but, including many bugs]
+- Disallow duplicate imports ([no-duplicate-imports](http://eslint.org/docs/rules/no-duplicate-imports)) [0%]
+- Disallow unmodified conditions of loops ([no-unmodified-loop-condition](http://eslint.org/docs/2.0.0/rules/no-unmodified-loop-condition)) [0%]
+- Disallow whitespace before properties ([no-whitespace-before-property](http://eslint.org/docs/2.0.0/rules/no-whitespace-before-property)) [0%]
+- Disallow control flow statements in `finally` blocks ([no-unsafe-finally](http://eslint.org/docs/rules/no-unsafe-finally)) [0%]
+- Disallow unnecessary computed property keys on objects ([no-useless-computed-key](http://eslint.org/docs/rules/no-useless-computed-key)) [0%]
+- Validate spacing before closing bracket in JSX ([react/jsx-space-before-closing](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-space-before-closing.md)) [0%]
+
+### Removed rules
+
+- Require parens in arrow function arguments ([arrow-parens](http://eslint.org/docs/rules/arrow-parens))
+
+## 6.0.8 - 2016-03-07
+
+- Pin eslint to version ~2.2.0
+- Update eslint-plugin-react to version 4.0.0
+
 ## 6.0.7 - 2016-02-18
 
 - Revert: Use install location of standard as eslint `cwd` (fixes [#429](https://github.com/feross/standard/issues/429))

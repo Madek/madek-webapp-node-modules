@@ -1,33 +1,45 @@
-module.exports = function (context) {
-  var options = context.options[0] || {}
-  var allowThen = options.allowThen
+/**
+ * Rule: catch-or-return
+ * Ensures that promises either include a catch() handler
+ * or are returned (to be handled upstream)
+ */
 
-  return {
-    ExpressionStatement: function (node) {
-      // hello.then()
-      if (node.expression.type === 'CallExpression' &&
-        node.expression.callee.type === 'MemberExpression' &&
-        node.expression.callee.property.name === 'then'
-      ) {
-        // hello.then().then(a, b)
-        if (allowThen && node.expression.arguments.length === 2) {
+var isPromise = require('./lib/is-promise')
+
+module.exports = {
+  create: function (context) {
+    var options = context.options[0] || {}
+    var allowThen = options.allowThen
+    var terminationMethod = options.terminationMethod || 'catch'
+
+    if (typeof terminationMethod === 'string') {
+      terminationMethod = [terminationMethod]
+    }
+
+    return {
+      ExpressionStatement: function (node) {
+        if (!isPromise(node.expression)) {
           return
         }
-        context.report(node, 'Expected catch() or return')
-        return
-      }
 
-      // hello.then().then().catch()
-      if (node.expression.type === 'CallExpression' &&
-        node.expression.callee.type === 'MemberExpression' &&
-        node.expression.callee.object.type === 'CallExpression' &&
-        node.expression.callee.object.callee.type === 'MemberExpression' &&
-        node.expression.callee.object.callee.property.name === 'then'
-      ) {
-        var propName = node.expression.callee.property.name
-        if (propName !== 'catch') {
-          context.report(node, 'Expected catch() or return')
+        // somePromise.then(a, b)
+        if (allowThen &&
+          node.expression.type === 'CallExpression' &&
+          node.expression.callee.type === 'MemberExpression' &&
+          node.expression.callee.property.name === 'then' &&
+          node.expression.arguments.length === 2
+        ) {
+          return
         }
+
+        // somePromise.catch()
+        if (node.expression.type === 'CallExpression' &&
+          node.expression.callee.type === 'MemberExpression' &&
+          terminationMethod.indexOf(node.expression.callee.property.name) !== -1
+        ) {
+          return
+        }
+        context.report(node, 'Expected ' + terminationMethod + '() or return')
       }
     }
   }

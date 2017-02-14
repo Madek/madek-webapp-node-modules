@@ -1,45 +1,53 @@
 {
   "_args": [
     [
-      "eslint-config-standard-jsx@1.1.1",
+      {
+        "raw": "eslint-config-standard-jsx@3.2.0",
+        "scope": null,
+        "escapedName": "eslint-config-standard-jsx",
+        "name": "eslint-config-standard-jsx",
+        "rawSpec": "3.2.0",
+        "spec": "3.2.0",
+        "type": "version"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/standard"
     ]
   ],
-  "_from": "eslint-config-standard-jsx@1.1.1",
-  "_id": "eslint-config-standard-jsx@1.1.1",
+  "_from": "eslint-config-standard-jsx@3.2.0",
+  "_id": "eslint-config-standard-jsx@3.2.0",
   "_inCache": true,
-  "_installable": true,
   "_location": "/eslint-config-standard-jsx",
-  "_nodeVersion": "4.2.6",
+  "_nodeVersion": "6.7.0",
   "_npmOperationalInternal": {
-    "host": "packages-6-west.internal.npmjs.com",
-    "tmp": "tmp/eslint-config-standard-jsx-1.1.1.tgz_1454866369622_0.3932170164771378"
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/eslint-config-standard-jsx-3.2.0.tgz_1475173071396_0.701615690253675"
   },
   "_npmUser": {
-    "email": "feross@feross.org",
-    "name": "feross"
+    "name": "feross",
+    "email": "feross@feross.org"
   },
-  "_npmVersion": "2.14.12",
+  "_npmVersion": "3.10.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "eslint-config-standard-jsx",
-    "raw": "eslint-config-standard-jsx@1.1.1",
-    "rawSpec": "1.1.1",
+    "raw": "eslint-config-standard-jsx@3.2.0",
     "scope": null,
-    "spec": "1.1.1",
+    "escapedName": "eslint-config-standard-jsx",
+    "name": "eslint-config-standard-jsx",
+    "rawSpec": "3.2.0",
+    "spec": "3.2.0",
     "type": "version"
   },
   "_requiredBy": [
     "/standard"
   ],
-  "_resolved": "https://registry.npmjs.org/eslint-config-standard-jsx/-/eslint-config-standard-jsx-1.1.1.tgz",
-  "_shasum": "098aa70f5ea706f25baa7d9b73e713f5da1d92a4",
+  "_resolved": "https://registry.npmjs.org/eslint-config-standard-jsx/-/eslint-config-standard-jsx-3.2.0.tgz",
+  "_shasum": "c240e26ed919a11a42aa4de8059472b38268d620",
   "_shrinkwrap": null,
-  "_spec": "eslint-config-standard-jsx@1.1.1",
+  "_spec": "eslint-config-standard-jsx@3.2.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/standard",
   "author": {
-    "email": "feross@feross.org",
     "name": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
     "url": "http://feross.org/"
   },
   "bugs": {
@@ -48,16 +56,16 @@
   "dependencies": {},
   "description": "JavaScript Standard Style JSX support - ESLint Shareable Config",
   "devDependencies": {
-    "eslint": "^2.0.0-rc.0",
+    "eslint": "^3.0.1",
     "eslint-plugin-react": ">=2.7.1",
     "tape": "^4.0.0"
   },
   "directories": {},
   "dist": {
-    "shasum": "098aa70f5ea706f25baa7d9b73e713f5da1d92a4",
-    "tarball": "http://registry.npmjs.org/eslint-config-standard-jsx/-/eslint-config-standard-jsx-1.1.1.tgz"
+    "shasum": "c240e26ed919a11a42aa4de8059472b38268d620",
+    "tarball": "https://registry.npmjs.org/eslint-config-standard-jsx/-/eslint-config-standard-jsx-3.2.0.tgz"
   },
-  "gitHead": "e3ce2b04595540d3e74c934f6f9bae6ac9810ab9",
+  "gitHead": "33e6074fefbf3aa69b6edfa444c7ccc831e94491",
   "homepage": "https://github.com/feross/eslint-config-standard-jsx",
   "keywords": [
     "JavaScript Standard Style",
@@ -97,7 +105,7 @@
   "name": "eslint-config-standard-jsx",
   "optionalDependencies": {},
   "peerDependencies": {
-    "eslint": "^2.0.0-rc.0",
+    "eslint": ">=3.0.0",
     "eslint-plugin-react": ">=2.7.1"
   },
   "readme": "ERROR: No README data found!",
@@ -108,5 +116,5 @@
   "scripts": {
     "test": "tape test/*.js"
   },
-  "version": "1.1.1"
+  "version": "3.2.0"
 }
