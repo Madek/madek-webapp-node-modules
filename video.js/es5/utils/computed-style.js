@@ -23,6 +23,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
  *        The property name you want
  *
  * @see https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+ *
+ * @static
+ * @const
  */
 function computedStyle(el, prop) {
   if (!el || !prop) {

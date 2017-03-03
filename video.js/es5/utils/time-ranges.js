@@ -1,14 +1,11 @@
 'use strict';
 
 exports.__esModule = true;
-exports.createTimeRange = undefined;
 exports.createTimeRanges = createTimeRanges;
-
-var _log = require('./log.js');
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+/**
+ * @file time-ranges.js
+ * @module time-ranges
+ */
 
 /**
  * Returns the time for the specified index at the start or end
@@ -57,8 +54,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
  * @throws {Error} if the timeRanges provided are over the maxIndex
  */
 function rangeCheck(fnName, index, maxIndex) {
-  if (index < 0 || index > maxIndex) {
-    throw new Error('Failed to execute \'' + fnName + '\' on \'TimeRanges\': The index provided (' + index + ') is greater than or equal to the maximum bound (' + maxIndex + ').');
+  if (typeof index !== 'number' || index < 0 || index > maxIndex) {
+    throw new Error('Failed to execute \'' + fnName + '\' on \'TimeRanges\': The index provided (' + index + ') is non-numeric or out of bounds (0-' + maxIndex + ').');
   }
 }
 
@@ -84,15 +81,7 @@ function rangeCheck(fnName, index, maxIndex) {
  * @depricated rangeIndex must be set to a value, in the future this will throw an error.
  * @throws {Error} if rangeIndex is more than the length of ranges
  */
-/**
- * @file time-ranges.js
- * @module time-ranges
- */
 function getRange(fnName, valueIndex, ranges, rangeIndex) {
-  if (rangeIndex === undefined) {
-    _log2['default'].warn('DEPRECATED: Function \'' + fnName + '\' on \'TimeRanges\' called without an index argument.');
-    rangeIndex = 0;
-  }
   rangeCheck(fnName, rangeIndex, ranges.length - 1);
   return ranges[rangeIndex][valueIndex];
 }

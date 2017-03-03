@@ -14,6 +14,10 @@ var _toTitleCase = require('../utils/to-title-case.js');
 
 var _toTitleCase2 = _interopRequireDefault(_toTitleCase);
 
+var _mergeOptions = require('../utils/merge-options.js');
+
+var _mergeOptions2 = _interopRequireDefault(_mergeOptions);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49,10 +53,13 @@ var MediaLoader = function (_Component) {
   function MediaLoader(player, options, ready) {
     _classCallCheck(this, MediaLoader);
 
+    // MediaLoader has no element
+    var options_ = (0, _mergeOptions2['default'])({ createEl: false }, options);
+
     // If there are no sources when the player is initialized,
     // load the first supported playback technology.
 
-    var _this = _possibleConstructorReturn(this, _Component.call(this, player, options, ready));
+    var _this = _possibleConstructorReturn(this, _Component.call(this, player, options_, ready));
 
     if (!options.playerOptions.sources || options.playerOptions.sources.length === 0) {
       for (var i = 0, j = options.playerOptions.techOrder; i < j.length; i++) {

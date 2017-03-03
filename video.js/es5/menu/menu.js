@@ -55,6 +55,10 @@ var Menu = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, _Component.call(this, player, options));
 
+    if (options) {
+      _this.menuButton_ = options.menuButton;
+    }
+
     _this.focusedChild_ = -1;
 
     _this.on('keydown', _this.handleKeyPress);
@@ -73,8 +77,11 @@ var Menu = function (_Component) {
   Menu.prototype.addItem = function addItem(component) {
     this.addChild(component);
     component.on('click', Fn.bind(this, function (event) {
-      this.unlockShowing();
-      // TODO: Need to set keyboard focus back to the menuButton
+      // Unpress the associated MenuButton, and move focus back to it
+      if (this.menuButton_) {
+        this.menuButton_.unpressButton();
+        this.menuButton_.focus();
+      }
     }));
   };
 
@@ -100,7 +107,6 @@ var Menu = function (_Component) {
       className: 'vjs-menu'
     });
 
-    el.setAttribute('role', 'presentation');
     el.appendChild(this.contentEl_);
 
     // Prevent clicks from bubbling up. Needed for Menu Buttons,

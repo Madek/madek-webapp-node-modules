@@ -52,20 +52,13 @@ var DescriptionsButton = function (_TextTrackButton) {
 
     var _this = _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
 
-    _this.el_.setAttribute('aria-label', 'Descriptions Menu');
-
     var tracks = player.textTracks();
+    var changeHandler = Fn.bind(_this, _this.handleTracksChange);
 
-    if (tracks) {
-      (function () {
-        var changeHandler = Fn.bind(_this, _this.handleTracksChange);
-
-        tracks.addEventListener('change', changeHandler);
-        _this.on('dispose', function () {
-          tracks.removeEventListener('change', changeHandler);
-        });
-      })();
-    }
+    tracks.addEventListener('change', changeHandler);
+    _this.on('dispose', function () {
+      tracks.removeEventListener('change', changeHandler);
+    });
     return _this;
   }
 

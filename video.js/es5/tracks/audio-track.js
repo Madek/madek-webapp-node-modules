@@ -81,9 +81,11 @@ var AudioTrack = function (_Track) {
       }
     }
     /**
+     * @memberof AudioTrack
      * @member {boolean} enabled
      *         If this `AudioTrack` is enabled or not. When setting this will
      *         fire {@link AudioTrack#enabledchange} if the state of enabled is changed.
+     * @instance
      *
      * @fires VideoTrack#selectedchange
      */

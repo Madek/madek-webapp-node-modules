@@ -10,13 +10,7 @@ var _component = require('../../component.js');
 
 var _component2 = _interopRequireDefault(_component);
 
-var _fn = require('../../utils/fn.js');
-
-var Fn = _interopRequireWildcard(_fn);
-
 require('./volume-level.js');
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -54,8 +48,11 @@ var VolumeBar = function (_Slider) {
 
     var _this = _possibleConstructorReturn(this, _Slider.call(this, player, options));
 
+    _this.on('slideractive', _this.updateLastVolume_);
     _this.on(player, 'volumechange', _this.updateARIAAttributes);
-    player.ready(Fn.bind(_this, _this.updateARIAAttributes));
+    player.ready(function () {
+      return _this.updateARIAAttributes();
+    });
     return _this;
   }
 
@@ -71,7 +68,8 @@ var VolumeBar = function (_Slider) {
     return _Slider.prototype.createEl.call(this, 'div', {
       className: 'vjs-volume-bar vjs-slider-bar'
     }, {
-      'aria-label': 'volume level'
+      'aria-label': this.localize('Volume Level'),
+      'aria-live': 'polite'
     });
   };
 
@@ -147,11 +145,43 @@ var VolumeBar = function (_Slider) {
 
 
   VolumeBar.prototype.updateARIAAttributes = function updateARIAAttributes(event) {
-    // Current value of volume bar as a percentage
-    var volume = (this.player_.volume() * 100).toFixed(2);
+    var ariaValue = this.player_.muted() ? 0 : this.volumeAsPercentage_();
 
-    this.el_.setAttribute('aria-valuenow', volume);
-    this.el_.setAttribute('aria-valuetext', volume + '%');
+    this.el_.setAttribute('aria-valuenow', ariaValue);
+    this.el_.setAttribute('aria-valuetext', ariaValue + '%');
+  };
+
+  /**
+   * Returns the current value of the player volume as a percentage
+   *
+   * @private
+   */
+
+
+  VolumeBar.prototype.volumeAsPercentage_ = function volumeAsPercentage_() {
+    return Math.round(this.player_.volume() * 100);
+  };
+
+  /**
+   * When user starts dragging the VolumeBar, store the volume and listen for
+   * the end of the drag. When the drag ends, if the volume was set to zero,
+   * set lastVolume to the stored volume.
+   *
+   * @listens slideractive
+   * @private
+   */
+
+
+  VolumeBar.prototype.updateLastVolume_ = function updateLastVolume_() {
+    var _this2 = this;
+
+    var volumeBeforeDrag = this.player_.volume();
+
+    this.one('sliderinactive', function () {
+      if (_this2.player_.volume() === 0) {
+        _this2.player_.lastVolume_(volumeBeforeDrag);
+      }
+    });
   };
 
   return VolumeBar;

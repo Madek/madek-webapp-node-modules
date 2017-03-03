@@ -73,8 +73,10 @@ var TrackList = function (_EventTarget) {
     list.tracks_ = [];
 
     /**
+     * @memberof TrackList
      * @member {number} length
      *         The current number of `Track`s in the this Trackist.
+     * @instance
      */
     Object.defineProperty(list, 'length', {
       get: function get() {
@@ -83,7 +85,7 @@ var TrackList = function (_EventTarget) {
     });
 
     for (var i = 0; i < tracks.length; i++) {
-      list.addTrack_(tracks[i]);
+      list.addTrack(tracks[i]);
     }
 
     // must return the object, as for ie8 it will not be this
@@ -98,11 +100,10 @@ var TrackList = function (_EventTarget) {
    *        The audio, video, or text track to add to the list.
    *
    * @fires TrackList#addtrack
-   * @private
    */
 
 
-  TrackList.prototype.addTrack_ = function addTrack_(track) {
+  TrackList.prototype.addTrack = function addTrack(track) {
     var index = this.tracks_.length;
 
     if (!('' + index in this)) {
@@ -134,15 +135,14 @@ var TrackList = function (_EventTarget) {
   /**
    * Remove a {@link Track} from the `TrackList`
    *
-   * @param {Track} track
+   * @param {Track} rtrack
    *        The audio, video, or text track to remove from the list.
    *
    * @fires TrackList#removetrack
-   * @private
    */
 
 
-  TrackList.prototype.removeTrack_ = function removeTrack_(rtrack) {
+  TrackList.prototype.removeTrack = function removeTrack(rtrack) {
     var track = void 0;
 
     for (var i = 0, l = this.length; i < l; i++) {

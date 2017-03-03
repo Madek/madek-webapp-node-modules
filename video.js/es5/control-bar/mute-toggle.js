@@ -14,6 +14,10 @@ var _dom = require('../utils/dom.js');
 
 var Dom = _interopRequireWildcard(_dom);
 
+var _checkVolumeSupport = require('./volume-control/check-volume-support');
+
+var _checkVolumeSupport2 = _interopRequireDefault(_checkVolumeSupport);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -47,25 +51,12 @@ var MuteToggle = function (_Button) {
   function MuteToggle(player, options) {
     _classCallCheck(this, MuteToggle);
 
+    // hide this control if volume support is missing
     var _this = _possibleConstructorReturn(this, _Button.call(this, player, options));
 
-    _this.on(player, 'volumechange', _this.update);
+    (0, _checkVolumeSupport2['default'])(_this, player);
 
-    // hide mute toggle if the current tech doesn't support volume control
-    if (player.tech_ && player.tech_.featuresVolumeControl === false) {
-      _this.addClass('vjs-hidden');
-    }
-
-    _this.on(player, 'loadstart', function () {
-      // We need to update the button to account for a default muted state.
-      this.update();
-
-      if (player.tech_.featuresVolumeControl === false) {
-        this.addClass('vjs-hidden');
-      } else {
-        this.removeClass('vjs-hidden');
-      }
-    });
+    _this.on(player, ['loadstart', 'volumechange'], _this.update);
     return _this;
   }
 
@@ -95,21 +86,49 @@ var MuteToggle = function (_Button) {
 
 
   MuteToggle.prototype.handleClick = function handleClick(event) {
-    this.player_.muted(this.player_.muted() ? false : true);
+    var vol = this.player_.volume();
+    var lastVolume = this.player_.lastVolume_();
+
+    if (vol === 0) {
+      this.player_.volume(lastVolume);
+      this.player_.muted(false);
+    } else {
+      this.player_.muted(this.player_.muted() ? false : true);
+    }
   };
 
   /**
-   * Update the state of volume.
+   * Update the `MuteToggle` button based on the state of `volume` and `muted`
+   * on the player.
    *
    * @param {EventTarget~Event} [event]
-   *        The {@link Player#loadstart} event if this function was called through an
-   *        event.
+   *        The {@link Player#loadstart} event if this function was called
+   *        through an event.
    *
    * @listens Player#loadstart
+   * @listens Player#volumechange
    */
 
 
   MuteToggle.prototype.update = function update(event) {
+    this.updateIcon_();
+    this.updateControlText_();
+  };
+
+  /**
+   * Update the appearance of the `MuteToggle` icon.
+   *
+   * Possible states (given `level` variable below):
+   * - 0: crossed out
+   * - 1: zero bars of volume
+   * - 2: one bar of volume
+   * - 3: two bars of volume
+   *
+   * @private
+   */
+
+
+  MuteToggle.prototype.updateIcon_ = function updateIcon_() {
     var vol = this.player_.volume();
     var level = 3;
 
@@ -121,20 +140,29 @@ var MuteToggle = function (_Button) {
       level = 2;
     }
 
-    // Don't rewrite the button text if the actual text doesn't change.
-    // This causes unnecessary and confusing information for screen reader users.
-    // This check is needed because this function gets called every time the volume level is changed.
-    var toMute = this.player_.muted() ? 'Unmute' : 'Mute';
-
-    if (this.controlText() !== toMute) {
-      this.controlText(toMute);
-    }
-
     // TODO improve muted icon classes
     for (var i = 0; i < 4; i++) {
-      Dom.removeElClass(this.el_, 'vjs-vol-' + i);
+      Dom.removeClass(this.el_, 'vjs-vol-' + i);
     }
-    Dom.addElClass(this.el_, 'vjs-vol-' + level);
+    Dom.addClass(this.el_, 'vjs-vol-' + level);
+  };
+
+  /**
+   * If `muted` has changed on the player, update the control text
+   * (`title` attribute on `vjs-mute-control` element and content of
+   * `vjs-control-text` element).
+   *
+   * @private
+   */
+
+
+  MuteToggle.prototype.updateControlText_ = function updateControlText_() {
+    var soundOff = this.player_.muted() || this.player_.volume() === 0;
+    var text = soundOff ? 'Unmute' : 'Mute';
+
+    if (this.controlText() !== text) {
+      this.controlText(text);
+    }
   };
 
   return MuteToggle;

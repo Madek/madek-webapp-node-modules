@@ -54,10 +54,7 @@ var ChaptersButton = function (_TextTrackButton) {
   function ChaptersButton(player, options, ready) {
     _classCallCheck(this, ChaptersButton);
 
-    var _this = _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
-
-    _this.el_.setAttribute('aria-label', 'Chapters Menu');
-    return _this;
+    return _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
   }
 
   /**

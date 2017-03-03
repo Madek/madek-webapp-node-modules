@@ -127,18 +127,17 @@ var VideoTrackList = function (_TrackList) {
    *        The VideoTrack to add to the list
    *
    * @fires TrackList#addtrack
-   * @private
    */
 
 
-  VideoTrackList.prototype.addTrack_ = function addTrack_(track) {
+  VideoTrackList.prototype.addTrack = function addTrack(track) {
     var _this2 = this;
 
     if (track.selected) {
       disableOthers(this, track);
     }
 
-    _TrackList.prototype.addTrack_.call(this, track);
+    _TrackList.prototype.addTrack.call(this, track);
     // native tracks don't have this
     if (!track.addEventListener) {
       return;
@@ -157,34 +156,6 @@ var VideoTrackList = function (_TrackList) {
       _this2.changing_ = false;
       _this2.trigger('change');
     });
-  };
-
-  /**
-   * Add a {@link VideoTrack} to the `VideoTrackList`.
-   *
-   * @param {VideoTrack} track
-   *        The VideoTrack to add to the list
-   *
-   * @fires TrackList#addtrack
-   */
-
-
-  VideoTrackList.prototype.addTrack = function addTrack(track) {
-    this.addTrack_(track);
-  };
-
-  /**
-   * Remove a {@link VideoTrack} to the `VideoTrackList`.
-   *
-   * @param {VideoTrack} track
-   *        The VideoTrack to remove from the list.
-   *
-   * @fires TrackList#removetrack
-   */
-
-
-  VideoTrackList.prototype.removeTrack = function removeTrack(track) {
-    _TrackList.prototype.removeTrack_.call(this, track);
   };
 
   return VideoTrackList;

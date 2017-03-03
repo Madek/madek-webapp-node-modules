@@ -75,10 +75,6 @@ var TextTrackButton = function (_TrackButton) {
 
     var tracks = this.player_.textTracks();
 
-    if (!tracks) {
-      return items;
-    }
-
     for (var i = 0; i < tracks.length; i++) {
       var track = tracks[i];
 

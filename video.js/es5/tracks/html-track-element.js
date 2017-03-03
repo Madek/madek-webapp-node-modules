@@ -31,6 +31,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 /**
+ * @memberof HTMLTrackElement
  * @typedef {HTMLTrackElement~ReadyState}
  * @enum {number}
  */
@@ -112,8 +113,10 @@ var HTMLTrackElement = function (_EventTarget) {
     trackElement['default'] = track['default'];
 
     /**
+     * @memberof HTMLTrackElement
      * @member {HTMLTrackElement~ReadyState} readyState
      *         The current ready state of the track element.
+     * @instance
      */
     Object.defineProperty(trackElement, 'readyState', {
       get: function get() {
@@ -122,8 +125,11 @@ var HTMLTrackElement = function (_EventTarget) {
     });
 
     /**
+     * @memberof HTMLTrackElement
      * @member {TextTrack} track
      *         The underlying TextTrack object.
+     * @instance
+     *
      */
     Object.defineProperty(trackElement, 'track', {
       get: function get() {

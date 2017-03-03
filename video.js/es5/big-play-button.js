@@ -60,7 +60,25 @@ var BigPlayButton = function (_Button) {
 
 
   BigPlayButton.prototype.handleClick = function handleClick(event) {
-    this.player_.play();
+    var playPromise = this.player_.play();
+
+    var cb = this.player_.getChild('controlBar');
+    var playToggle = cb && cb.getChild('playToggle');
+
+    if (!playToggle) {
+      this.player_.focus();
+      return;
+    }
+
+    if (playPromise) {
+      playPromise.then(function () {
+        return playToggle.focus();
+      });
+    } else {
+      this.setTimeout(function () {
+        playToggle.focus();
+      }, 1);
+    }
   };
 
   return BigPlayButton;

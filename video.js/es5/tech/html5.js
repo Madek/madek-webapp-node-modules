@@ -10,10 +10,6 @@ var _tech = require('./tech.js');
 
 var _tech2 = _interopRequireDefault(_tech);
 
-var _component = require('../component');
-
-var _component2 = _interopRequireDefault(_component);
-
 var _dom = require('../utils/dom.js');
 
 var Dom = _interopRequireWildcard(_dom);
@@ -21,10 +17,6 @@ var Dom = _interopRequireWildcard(_dom);
 var _url = require('../utils/url.js');
 
 var Url = _interopRequireWildcard(_url);
-
-var _fn = require('../utils/fn.js');
-
-var Fn = _interopRequireWildcard(_fn);
 
 var _log = require('../utils/log.js');
 
@@ -55,6 +47,8 @@ var _mergeOptions2 = _interopRequireDefault(_mergeOptions);
 var _toTitleCase = require('../utils/to-title-case.js');
 
 var _toTitleCase2 = _interopRequireDefault(_toTitleCase);
+
+var _trackTypes = require('../tracks/track-types');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -127,7 +121,7 @@ var Html5 = function (_Tech) {
           } else {
             // store HTMLTrackElement and TextTrack to remote list
             _this.remoteTextTrackEls().addTrackElement_(node);
-            _this.remoteTextTracks().addTrack_(node.track);
+            _this.remoteTextTracks().addTrack(node.track);
             if (!crossoriginTracks && !_this.el_.hasAttribute('crossorigin') && Url.isCrossOrigin(node.src)) {
               crossoriginTracks = true;
             }
@@ -140,55 +134,9 @@ var Html5 = function (_Tech) {
       }
     }
 
-    // TODO: add text tracks into this list
-    var trackTypes = ['audio', 'video'];
-
-    // ProxyNative Video/Audio Track
-    trackTypes.forEach(function (type) {
-      var elTracks = _this.el()[type + 'Tracks'];
-      var techTracks = _this[type + 'Tracks']();
-      var capitalType = (0, _toTitleCase2['default'])(type);
-
-      if (!_this['featuresNative' + capitalType + 'Tracks'] || !elTracks || !elTracks.addEventListener) {
-        return;
-      }
-
-      _this['handle' + capitalType + 'TrackChange_'] = function (e) {
-        techTracks.trigger({
-          type: 'change',
-          target: techTracks,
-          currentTarget: techTracks,
-          srcElement: techTracks
-        });
-      };
-
-      _this['handle' + capitalType + 'TrackAdd_'] = function (e) {
-        return techTracks.addTrack(e.track);
-      };
-      _this['handle' + capitalType + 'TrackRemove_'] = function (e) {
-        return techTracks.removeTrack(e.track);
-      };
-
-      elTracks.addEventListener('change', _this['handle' + capitalType + 'TrackChange_']);
-      elTracks.addEventListener('addtrack', _this['handle' + capitalType + 'TrackAdd_']);
-      elTracks.addEventListener('removetrack', _this['handle' + capitalType + 'TrackRemove_']);
-      _this['removeOld' + capitalType + 'Tracks_'] = function (e) {
-        return _this.removeOldTracks_(techTracks, elTracks);
-      };
-
-      // Remove (native) tracks that are not used anymore
-      _this.on('loadstart', _this['removeOld' + capitalType + 'Tracks_']);
-    });
-
-    if (_this.featuresNativeTextTracks) {
-      if (crossoriginTracks) {
-        _log2['default'].warn((0, _tsml2['default'])(_templateObject));
-      }
-
-      _this.handleTextTrackChange_ = Fn.bind(_this, _this.handleTextTrackChange);
-      _this.handleTextTrackAdd_ = Fn.bind(_this, _this.handleTextTrackAdd);
-      _this.handleTextTrackRemove_ = Fn.bind(_this, _this.handleTextTrackRemove);
-      _this.proxyNativeTextTracks_();
+    _this.proxyNativeTracks_();
+    if (_this.featuresNativeTextTracks && crossoriginTracks) {
+      _log2['default'].warn((0, _tsml2['default'])(_templateObject));
     }
 
     // Determine if native controls should be used
@@ -213,28 +161,84 @@ var Html5 = function (_Tech) {
 
 
   Html5.prototype.dispose = function dispose() {
-    var _this2 = this;
-
-    // Un-ProxyNativeTracks
-    ['audio', 'video', 'text'].forEach(function (type) {
-      var capitalType = (0, _toTitleCase2['default'])(type);
-      var tl = _this2.el_[type + 'Tracks'];
-
-      if (tl && tl.removeEventListener) {
-        tl.removeEventListener('change', _this2['handle' + capitalType + 'TrackChange_']);
-        tl.removeEventListener('addtrack', _this2['handle' + capitalType + 'TrackAdd_']);
-        tl.removeEventListener('removetrack', _this2['handle' + capitalType + 'TrackRemove_']);
-      }
-
-      // Stop removing old text tracks
-      if (tl) {
-        _this2.off('loadstart', _this2['removeOld' + capitalType + 'Tracks_']);
-      }
-    });
-
     Html5.disposeMediaElement(this.el_);
     // tech will handle clearing of the emulated track list
     _Tech.prototype.dispose.call(this);
+  };
+
+  /**
+   * Proxy all native track list events to our track lists if the browser we are playing
+   * in supports that type of track list.
+   *
+   * @private
+   */
+
+
+  Html5.prototype.proxyNativeTracks_ = function proxyNativeTracks_() {
+    var _this2 = this;
+
+    _trackTypes.NORMAL.names.forEach(function (name) {
+      var props = _trackTypes.NORMAL[name];
+      var elTracks = _this2.el()[props.getterName];
+      var techTracks = _this2[props.getterName]();
+
+      if (!_this2['featuresNative' + props.capitalName + 'Tracks'] || !elTracks || !elTracks.addEventListener) {
+        return;
+      }
+      var listeners = {
+        change: function change(e) {
+          techTracks.trigger({
+            type: 'change',
+            target: techTracks,
+            currentTarget: techTracks,
+            srcElement: techTracks
+          });
+        },
+        addtrack: function addtrack(e) {
+          techTracks.addTrack(e.track);
+        },
+        removetrack: function removetrack(e) {
+          techTracks.removeTrack(e.track);
+        }
+      };
+      var removeOldTracks = function removeOldTracks() {
+        var removeTracks = [];
+
+        for (var i = 0; i < techTracks.length; i++) {
+          var found = false;
+
+          for (var j = 0; j < elTracks.length; j++) {
+            if (elTracks[j] === techTracks[i]) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            removeTracks.push(techTracks[i]);
+          }
+        }
+
+        while (removeTracks.length) {
+          techTracks.removeTrack(removeTracks.shift());
+        }
+      };
+
+      Object.keys(listeners).forEach(function (eventName) {
+        var listener = listeners[eventName];
+
+        elTracks.addEventListener(eventName, listener);
+        _this2.on('dispose', function (e) {
+          return elTracks.removeEventListener(eventName, listener);
+        });
+      });
+
+      // Remove (native) tracks that are not used anymore
+      _this2.on('loadstart', removeOldTracks);
+      _this2.on('dispose', function (e) {
+        return _this2.off('loadstart', removeOldTracks);
+      });
+    });
   };
 
   /**
@@ -267,14 +271,14 @@ var Html5 = function (_Tech) {
         el = _document2['default'].createElement('video');
 
         // determine if native controls should be used
-        var tagAttributes = this.options_.tag && Dom.getElAttributes(this.options_.tag);
+        var tagAttributes = this.options_.tag && Dom.getAttributes(this.options_.tag);
         var attributes = (0, _mergeOptions2['default'])({}, tagAttributes);
 
         if (!browser.TOUCH_ENABLED || this.options_.nativeControlsForTouch !== true) {
           delete attributes.controls;
         }
 
-        Dom.setElAttributes(el, (0, _obj.assign)(attributes, {
+        Dom.setAttributes(el, (0, _obj.assign)(attributes, {
           id: this.options_.techId,
           'class': 'vjs-tech'
         }));
@@ -293,7 +297,7 @@ var Html5 = function (_Tech) {
       if (typeof this.options_[attr] !== 'undefined') {
         overwriteAttrs[attr] = this.options_[attr];
       }
-      Dom.setElAttributes(el, overwriteAttrs);
+      Dom.setAttributes(el, overwriteAttrs);
     }
 
     return el;
@@ -400,158 +404,6 @@ var Html5 = function (_Tech) {
         this.trigger(type);
       }, this);
     });
-  };
-
-  /**
-   * Add event listeners to native text track events. This adds the native text tracks
-   * to our emulated {@link TextTrackList}.
-   */
-
-
-  Html5.prototype.proxyNativeTextTracks_ = function proxyNativeTextTracks_() {
-    var tt = this.el().textTracks;
-
-    if (tt) {
-      // Add tracks - if player is initialised after DOM loaded, textTracks
-      // will not trigger addtrack
-      for (var i = 0; i < tt.length; i++) {
-        this.textTracks().addTrack_(tt[i]);
-      }
-
-      if (tt.addEventListener) {
-        tt.addEventListener('change', this.handleTextTrackChange_);
-        tt.addEventListener('addtrack', this.handleTextTrackAdd_);
-        tt.addEventListener('removetrack', this.handleTextTrackRemove_);
-      }
-
-      // Remove (native) texttracks that are not used anymore
-      this.on('loadstart', this.removeOldTextTracks_);
-    }
-  };
-
-  /**
-   * Handle any {@link TextTrackList} `change` event.
-   *
-   * @param {EventTarget~Event} e
-   *        The `change` event that caused this to run.
-   *
-   * @listens TextTrackList#change
-   */
-
-
-  Html5.prototype.handleTextTrackChange = function handleTextTrackChange(e) {
-    var tt = this.textTracks();
-
-    this.textTracks().trigger({
-      type: 'change',
-      target: tt,
-      currentTarget: tt,
-      srcElement: tt
-    });
-  };
-
-  /**
-   * Handle any {@link TextTrackList} `addtrack` event.
-   *
-   * @param {EventTarget~Event} e
-   *        The `addtrack` event that caused this to run.
-   *
-   * @listens TextTrackList#addtrack
-   */
-
-
-  Html5.prototype.handleTextTrackAdd = function handleTextTrackAdd(e) {
-    this.textTracks().addTrack_(e.track);
-  };
-
-  /**
-   * Handle any {@link TextTrackList} `removetrack` event.
-   *
-   * @param {EventTarget~Event} e
-   *        The `removetrack` event that caused this to run.
-   *
-   * @listens TextTrackList#removetrack
-   */
-
-
-  Html5.prototype.handleTextTrackRemove = function handleTextTrackRemove(e) {
-    this.textTracks().removeTrack_(e.track);
-  };
-
-  /**
-   * This function removes any {@link AudioTrack}s, {@link VideoTrack}s, or
-   * {@link TextTrack}s that are not in the media elements TrackList.
-   *
-   * @param {TrackList} techTracks
-   *        HTML5 Tech's TrackList to search through
-   *
-   * @param {TrackList} elTracks
-   *        HTML5 media elements TrackList to search trough.
-   *
-   * @private
-   */
-
-
-  Html5.prototype.removeOldTracks_ = function removeOldTracks_(techTracks, elTracks) {
-    // This will loop over the techTracks and check if they are still used by the HTML5 media element
-    // If not, they will be removed from the emulated list
-    var removeTracks = [];
-
-    if (!elTracks) {
-      return;
-    }
-
-    for (var i = 0; i < techTracks.length; i++) {
-      var techTrack = techTracks[i];
-      var found = false;
-
-      for (var j = 0; j < elTracks.length; j++) {
-        if (elTracks[j] === techTrack) {
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        removeTracks.push(techTrack);
-      }
-    }
-
-    for (var _i = 0; _i < removeTracks.length; _i++) {
-      var track = removeTracks[_i];
-
-      techTracks.removeTrack_(track);
-    }
-  };
-
-  /**
-   * Remove {@link TextTrack}s that dont exist in the native track list from our
-   * emulated {@link TextTrackList}.
-   *
-   * @listens Tech#loadstart
-   */
-
-
-  Html5.prototype.removeOldTextTracks_ = function removeOldTextTracks_(e) {
-    var techTracks = this.textTracks();
-    var elTracks = this.el().textTracks;
-
-    this.removeOldTracks_(techTracks, elTracks);
-  };
-
-  /**
-   * Called by {@link Player#play} to play using the `Html5` `Tech`.
-   */
-
-
-  Html5.prototype.play = function play() {
-    var playPromise = this.el_.play();
-
-    // Catch/silence error when a pause interrupts a play request
-    // on browsers which return a promise
-    if (playPromise !== undefined && typeof playPromise.then === 'function') {
-      playPromise.then(null, function (e) {});
-    }
   };
 
   /**
@@ -963,6 +815,29 @@ Html5.isSupported = function () {
 };
 
 /**
+ * Check if the tech can support the given type
+ *
+ * @param {string} type
+ *        The mimetype to check
+ * @return {string} 'probably', 'maybe', or '' (empty string)
+ */
+Html5.canPlayType = function (type) {
+  return Html5.TEST_VID.canPlayType(type);
+};
+
+/**
+ * Check if the tech can support the given source
+ * @param {Object} srcObj
+ *        The source object
+ * @param {Object} options
+ *        The options passed to the tech
+ * @return {string} 'probably', 'maybe', or '' (empty string)
+ */
+Html5.canPlaySource = function (srcObj, options) {
+  return Html5.canPlayType(srcObj.type);
+};
+
+/**
  * Check if the volume can be changed in this browser/device.
  * Volume cannot be changed in a lot of mobile devices.
  * Specifically, it can't be changed from 1 on iOS.
@@ -1046,7 +921,7 @@ Html5.supportsNativeAudioTracks = function () {
  * @private
  * @type {Array}
  */
-Html5.Events = ['loadstart', 'suspend', 'abort', 'error', 'emptied', 'stalled', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'playing', 'waiting', 'seeking', 'seeked', 'ended', 'durationchange', 'timeupdate', 'progress', 'play', 'pause', 'ratechange', 'volumechange'];
+Html5.Events = ['loadstart', 'suspend', 'abort', 'error', 'emptied', 'stalled', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'playing', 'waiting', 'seeking', 'seeked', 'ended', 'durationchange', 'timeupdate', 'progress', 'play', 'pause', 'ratechange', 'resize', 'volumechange'];
 
 /**
  * Boolean indicating whether the `Tech` supports volume control.
@@ -1294,6 +1169,21 @@ Html5.resetMediaElement = function (el) {
 'muted',
 
 /**
+ * Get the value of `defaultMuted` from the media element. `defaultMuted` indicates
+ * that the volume for the media should be set to silent when the video first starts.
+ * This does not actually change the `volume` attribute. After playback has started `muted`
+ * will indicate the current status of the volume and `defaultMuted` will not.
+ *
+ * @method Html5.prototype.defaultMuted
+ * @return {boolean}
+ *         - True if the value of `volume` should be ignored and the audio set to silent.
+ *         - False if the value of `volume` should be used.
+ *
+ * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-defaultmuted}
+ */
+'defaultMuted',
+
+/**
  * Get the value of `poster` from the media element. `poster` indicates
  * that the url of an image file that can/will be shown when no media data is available.
  *
@@ -1428,7 +1318,7 @@ Html5.resetMediaElement = function (el) {
 /**
  * Get the value of `defaultMuted` from the media element. `defaultMuted` indicates
  * whether the media should start muted or not. Only changes the default state of the
- * media. `muted` and `defaultMuted` can have different values. `muted` indicates the
+ * media. `muted` and `defaultMuted` can have different values. {@link Html5#muted} indicates the
  * current state.
  *
  * @method Html5#defaultMuted
@@ -1455,6 +1345,24 @@ Html5.resetMediaElement = function (el) {
  * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-playbackrate}
  */
 'playbackRate',
+
+/**
+ * Get the value of `defaultPlaybackRate` from the media element. `defaultPlaybackRate` indicates
+ * the rate at which the media is currently playing back. This value will not indicate the current
+ * `playbackRate` after playback has started, use {@link Html5#playbackRate} for that.
+ *
+ * Examples:
+ *   - if defaultPlaybackRate is set to 2, media will play twice as fast.
+ *   - if defaultPlaybackRate is set to 0.5, media will play half as fast.
+ *
+ * @method Html5.prototype.defaultPlaybackRate
+ * @return {number}
+ *         The value of `defaultPlaybackRate` from the media element. A number indicating
+ *         the current playback speed of the media, where 1 is normal speed.
+ *
+ * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-playbackrate}
+ */
+'defaultPlaybackRate',
 
 /**
  * Get the value of `played` from the media element. `played` returns a `TimeRange`
@@ -1552,7 +1460,7 @@ Html5.resetMediaElement = function (el) {
 'volume',
 
 /**
- * Set the value of `muted` on the media element. `muted` indicates the current
+ * Set the value of `muted` on the media element. `muted` indicates that the current
  * audio level should be silent.
  *
  * @method Html5#setMuted
@@ -1563,6 +1471,19 @@ Html5.resetMediaElement = function (el) {
  * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-muted}
  */
 'muted',
+
+/**
+ * Set the value of `defaultMuted` on the media element. `defaultMuted` indicates that the current
+ * audio level should be silent, but will only effect the muted level on intial playback..
+ *
+ * @method Html5.prototype.setDefaultMuted
+ * @param {boolean} defaultMuted
+ *        - True if the audio should be set to silent
+ *        - False otherwise
+ *
+ * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-defaultmuted}
+ */
+'defaultMuted',
 
 /**
  * Set the value of `src` on the media element. `src` indicates the current
@@ -1650,7 +1571,25 @@ Html5.resetMediaElement = function (el) {
  *
  * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-playbackrate}
  */
-'playbackRate'].forEach(function (prop) {
+'playbackRate',
+
+/**
+ * Set the value of `defaultPlaybackRate` on the media element. `defaultPlaybackRate` indicates
+ * the rate at which the media should play back upon initial startup. Changing this value
+ * after a video has started will do nothing. Instead you should used {@link Html5#setPlaybackRate}.
+ *
+ * Example Values:
+ *   - if playbackRate is set to 2, media will play twice as fast.
+ *   - if playbackRate is set to 0.5, media will play half as fast.
+ *
+ * @method Html5.prototype.setDefaultPlaybackRate
+ * @return {number}
+ *         The value of `defaultPlaybackRate` from the media element. A number indicating
+ *         the current playback speed of the media, where 1 is normal speed.
+ *
+ * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-defaultplaybackrate}
+ */
+'defaultPlaybackRate'].forEach(function (prop) {
   Html5.prototype['set' + (0, _toTitleCase2['default'])(prop)] = function (v) {
     this.el_[prop] = v;
   };
@@ -1674,7 +1613,16 @@ Html5.resetMediaElement = function (el) {
  * @method Html5#load
  * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-load}
  */
-'load'].forEach(function (prop) {
+'load',
+
+/**
+ * A wrapper around the media elements `play` function. This will call the `HTML5`s
+ * media element `play` function.
+ *
+ * @method Html5#play
+ * @see [Spec]{@link https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-play}
+ */
+'play'].forEach(function (prop) {
   Html5.prototype[prop] = function () {
     return this.el_[prop]();
   };
@@ -1764,6 +1712,5 @@ Html5.nativeSourceHandler.dispose = function () {};
 // Register the native source handler
 Html5.registerSourceHandler(Html5.nativeSourceHandler);
 
-_component2['default'].registerComponent('Html5', Html5);
 _tech2['default'].registerTech('Html5', Html5);
 exports['default'] = Html5;

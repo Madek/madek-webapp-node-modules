@@ -7,9 +7,9 @@ exports.off = off;
 exports.trigger = trigger;
 exports.one = one;
 
-var _dom = require('./dom.js');
+var _domData = require('./dom-data');
 
-var Dom = _interopRequireWildcard(_dom);
+var DomData = _interopRequireWildcard(_domData);
 
 var _guid = require('./guid.js');
 
@@ -41,7 +41,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  *        Type of event to clean up
  */
 function _cleanUpEvents(elem, type) {
-  var data = Dom.getElData(elem);
+  var data = DomData.getData(elem);
 
   // Remove the events of a particular type if there are none left
   if (data.handlers[type].length === 0) {
@@ -66,7 +66,7 @@ function _cleanUpEvents(elem, type) {
 
   // Finally remove the element data if there is no data left
   if (Object.getOwnPropertyNames(data).length === 0) {
-    Dom.removeElData(elem);
+    DomData.removeData(elem);
   }
 }
 
@@ -242,7 +242,7 @@ function on(elem, type, fn) {
     return _handleMultipleEvents(on, elem, type, fn);
   }
 
-  var data = Dom.getElData(elem);
+  var data = DomData.getData(elem);
 
   // We need a place to store all our handler data
   if (!data.handlers) {
@@ -315,11 +315,11 @@ function on(elem, type, fn) {
  */
 function off(elem, type, fn) {
   // Don't want to add a cache object through getElData if not needed
-  if (!Dom.hasElData(elem)) {
+  if (!DomData.hasData(elem)) {
     return;
   }
 
-  var data = Dom.getElData(elem);
+  var data = DomData.getData(elem);
 
   // If no events exist, nothing to unbind
   if (!data.handlers) {
@@ -389,7 +389,7 @@ function trigger(elem, event, hash) {
   // Fetches element data and a reference to the parent (for bubbling).
   // Don't want to add a data object to cache for every parent,
   // so checking hasElData first.
-  var elemData = Dom.hasElData(elem) ? Dom.getElData(elem) : {};
+  var elemData = DomData.hasData(elem) ? DomData.getData(elem) : {};
   var parent = elem.parentNode || elem.ownerDocument;
   // type = event.type || event,
   // handler;
@@ -413,7 +413,7 @@ function trigger(elem, event, hash) {
 
     // If at the top of the DOM, triggers the default action unless disabled.
   } else if (!parent && !event.defaultPrevented) {
-    var targetData = Dom.getElData(event.target);
+    var targetData = DomData.getData(event.target);
 
     // Checks if the target has a default action for this event.
     if (event.target[event.type]) {

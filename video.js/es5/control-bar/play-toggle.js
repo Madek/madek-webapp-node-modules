@@ -45,6 +45,7 @@ var PlayToggle = function (_Button) {
 
     _this.on(player, 'play', _this.handlePlay);
     _this.on(player, 'pause', _this.handlePause);
+    _this.on(player, 'ended', _this.handleEnded);
     return _this;
   }
 
@@ -92,6 +93,7 @@ var PlayToggle = function (_Button) {
 
 
   PlayToggle.prototype.handlePlay = function handlePlay(event) {
+    this.removeClass('vjs-ended');
     this.removeClass('vjs-paused');
     this.addClass('vjs-playing');
     // change the button text to "Pause"
@@ -113,6 +115,19 @@ var PlayToggle = function (_Button) {
     this.addClass('vjs-paused');
     // change the button text to "Play"
     this.controlText('Play');
+  };
+
+  /**
+   * Add the vjs-ended class to the element so it can change appearance
+   *
+   */
+
+
+  PlayToggle.prototype.handleEnded = function handleEnded(event) {
+    this.removeClass('vjs-playing');
+    this.addClass('vjs-ended');
+    // change the button text to "Replay"
+    this.controlText('Replay');
   };
 
   return PlayToggle;

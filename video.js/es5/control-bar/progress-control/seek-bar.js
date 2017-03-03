@@ -10,6 +10,12 @@ var _component = require('../../component.js');
 
 var _component2 = _interopRequireDefault(_component);
 
+var _browser = require('../../utils/browser.js');
+
+var _dom = require('../../utils/dom.js');
+
+var Dom = _interopRequireWildcard(_dom);
+
 var _fn = require('../../utils/fn.js');
 
 var Fn = _interopRequireWildcard(_fn);
@@ -18,15 +24,11 @@ var _formatTime = require('../../utils/format-time.js');
 
 var _formatTime2 = _interopRequireDefault(_formatTime);
 
-var _computedStyle = require('../../utils/computed-style.js');
-
-var _computedStyle2 = _interopRequireDefault(_computedStyle);
-
 require('./load-progress-bar.js');
 
 require('./play-progress-bar.js');
 
-require('./tooltip-progress-bar.js');
+require('./mouse-time-display.js');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -41,11 +43,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
+// The number of seconds the `step*` functions move the timeline.
+var STEP_SECONDS = 5;
+
 /**
- * Seek Bar and holder for the progress bars
+ * Seek bar and container for the progress bars. Uses {@link PlayProgressBar}
+ * as its `bar`.
  *
  * @extends Slider
  */
+
 var SeekBar = function (_Slider) {
   _inherits(SeekBar, _Slider);
 
@@ -63,17 +70,8 @@ var SeekBar = function (_Slider) {
 
     var _this = _possibleConstructorReturn(this, _Slider.call(this, player, options));
 
-    _this.on(player, 'timeupdate', _this.updateProgress);
-    _this.on(player, 'ended', _this.updateProgress);
-    player.ready(Fn.bind(_this, _this.updateProgress));
-
-    if (options.playerOptions && options.playerOptions.controlBar && options.playerOptions.controlBar.progressControl && options.playerOptions.controlBar.progressControl.keepTooltipsInside) {
-      _this.keepTooltipsInside = options.playerOptions.controlBar.progressControl.keepTooltipsInside;
-    }
-
-    if (_this.keepTooltipsInside) {
-      _this.tooltipProgressBar = _this.addChild('TooltipProgressBar');
-    }
+    _this.update = Fn.throttle(Fn.bind(_this, _this.update), 50);
+    _this.on(player, ['timeupdate', 'ended'], _this.update);
     return _this;
   }
 
@@ -89,12 +87,12 @@ var SeekBar = function (_Slider) {
     return _Slider.prototype.createEl.call(this, 'div', {
       className: 'vjs-progress-holder'
     }, {
-      'aria-label': 'progress bar'
+      'aria-label': this.localize('Progress Bar')
     });
   };
 
   /**
-   * Update the seek bars tooltip and width.
+   * Update the seek bar's UI.
    *
    * @param {EventTarget~Event} [event]
    *        The `timeupdate` or `ended` event that caused this to run.
@@ -104,51 +102,39 @@ var SeekBar = function (_Slider) {
    */
 
 
-  SeekBar.prototype.updateProgress = function updateProgress(event) {
-    this.updateAriaAttributes(this.el_);
+  SeekBar.prototype.update = function update() {
+    var percent = _Slider.prototype.update.call(this);
+    var duration = this.player_.duration();
 
-    if (this.keepTooltipsInside) {
-      this.updateAriaAttributes(this.tooltipProgressBar.el_);
-      this.tooltipProgressBar.el_.style.width = this.bar.el_.style.width;
-
-      var playerWidth = parseFloat((0, _computedStyle2['default'])(this.player().el(), 'width'));
-      var tooltipWidth = parseFloat((0, _computedStyle2['default'])(this.tooltipProgressBar.tooltip, 'width'));
-      var tooltipStyle = this.tooltipProgressBar.el().style;
-
-      tooltipStyle.maxWidth = Math.floor(playerWidth - tooltipWidth / 2) + 'px';
-      tooltipStyle.minWidth = Math.ceil(tooltipWidth / 2) + 'px';
-      tooltipStyle.right = '-' + tooltipWidth / 2 + 'px';
-    }
-  };
-
-  /**
-   * Update ARIA accessibility attributes
-   *
-   * @param {Element} el
-   *        The element to update with aria accessibility attributes.
-   */
-
-
-  SeekBar.prototype.updateAriaAttributes = function updateAriaAttributes(el) {
     // Allows for smooth scrubbing, when player can't keep up.
     var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
 
     // machine readable value of progress bar (percentage complete)
-    el.setAttribute('aria-valuenow', (this.getPercent() * 100).toFixed(2));
+    this.el_.setAttribute('aria-valuenow', (percent * 100).toFixed(2));
+
     // human readable value of progress bar (time complete)
-    el.setAttribute('aria-valuetext', (0, _formatTime2['default'])(time, this.player_.duration()));
+    this.el_.setAttribute('aria-valuetext', this.localize('progress bar timing: currentTime={1} duration={2}', [(0, _formatTime2['default'])(time, duration), (0, _formatTime2['default'])(duration, duration)], '{1} of {2}'));
+
+    // Update the `PlayProgressBar`.
+    this.bar.update(Dom.getBoundingClientRect(this.el_), percent);
+
+    return percent;
   };
 
   /**
-   * Get percentage of video played
+   * Get the percentage of media played so far.
    *
    * @return {number}
-   *         The percentage played
+   *         The percentage of media played so far (0 to 1).
    */
 
 
   SeekBar.prototype.getPercent = function getPercent() {
-    var percent = this.player_.currentTime() / this.player_.duration();
+
+    // Allows for smooth scrubbing, when player can't keep up.
+    var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
+
+    var percent = time / this.player_.duration();
 
     return percent >= 1 ? 1 : percent;
   };
@@ -219,8 +205,7 @@ var SeekBar = function (_Slider) {
 
 
   SeekBar.prototype.stepForward = function stepForward() {
-    // more quickly fast forward for keyboard-only users
-    this.player_.currentTime(this.player_.currentTime() + 5);
+    this.player_.currentTime(this.player_.currentTime() + STEP_SECONDS);
   };
 
   /**
@@ -229,8 +214,49 @@ var SeekBar = function (_Slider) {
 
 
   SeekBar.prototype.stepBack = function stepBack() {
-    // more quickly rewind for keyboard-only users
-    this.player_.currentTime(this.player_.currentTime() - 5);
+    this.player_.currentTime(this.player_.currentTime() - STEP_SECONDS);
+  };
+
+  /**
+   * Toggles the playback state of the player
+   * This gets called when enter or space is used on the seekbar
+   *
+   * @param {EventTarget~Event} event
+   *        The `keydown` event that caused this function to be called
+   *
+   */
+
+
+  SeekBar.prototype.handleAction = function handleAction(event) {
+    if (this.player_.paused()) {
+      this.player_.play();
+    } else {
+      this.player_.pause();
+    }
+  };
+
+  /**
+   * Called when this SeekBar has focus and a key gets pressed down. By
+   * default it will call `this.handleAction` when the key is space or enter.
+   *
+   * @param {EventTarget~Event} event
+   *        The `keydown` event that caused this function to be called.
+   *
+   * @listens keydown
+   */
+
+
+  SeekBar.prototype.handleKeyPress = function handleKeyPress(event) {
+
+    // Support Space (32) or Enter (13) key operation to fire a click event
+    if (event.which === 32 || event.which === 13) {
+      event.preventDefault();
+      this.handleAction(event);
+    } else if (_Slider.prototype.handleKeyPress) {
+
+      // Pass keypress handling up for unsupported keys
+      _Slider.prototype.handleKeyPress.call(this, event);
+    }
   };
 
   return SeekBar;
@@ -245,9 +271,13 @@ var SeekBar = function (_Slider) {
 
 
 SeekBar.prototype.options_ = {
-  children: ['loadProgressBar', 'mouseTimeDisplay', 'playProgressBar'],
+  children: ['loadProgressBar', 'playProgressBar'],
   barName: 'playProgressBar'
 };
+
+if (!_browser.IE_VERSION || _browser.IE_VERSION > 8) {
+  SeekBar.prototype.options_.children.splice(1, 0, 'mouseTimeDisplay');
+}
 
 /**
  * Call the update event for this Slider when this event happens on the player.

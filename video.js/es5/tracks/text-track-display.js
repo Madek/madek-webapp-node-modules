@@ -74,6 +74,8 @@ function constructColor(color, opacity) {
  *
  * @param {string} rule
  *        The style rule that should be applied to the property.
+ *
+ * @private
  */
 function tryUpdateStyle(el, style, rule) {
   try {
@@ -137,28 +139,26 @@ var TextTrackDisplay = function (_Component) {
       var firstDesc = void 0;
       var firstCaptions = void 0;
 
-      if (trackList) {
-        for (var _i = 0; _i < trackList.length; _i++) {
-          var track = trackList[_i];
+      for (var _i = 0; _i < trackList.length; _i++) {
+        var track = trackList[_i];
 
-          if (track['default']) {
-            if (track.kind === 'descriptions' && !firstDesc) {
-              firstDesc = track;
-            } else if (track.kind in modes && !firstCaptions) {
-              firstCaptions = track;
-            }
+        if (track['default']) {
+          if (track.kind === 'descriptions' && !firstDesc) {
+            firstDesc = track;
+          } else if (track.kind in modes && !firstCaptions) {
+            firstCaptions = track;
           }
         }
+      }
 
-        // We want to show the first default track but captions and subtitles
-        // take precedence over descriptions.
-        // So, display the first default captions or subtitles track
-        // and otherwise the first default descriptions track.
-        if (firstCaptions) {
-          firstCaptions.mode = 'showing';
-        } else if (firstDesc) {
-          firstDesc.mode = 'showing';
-        }
+      // We want to show the first default track but captions and subtitles
+      // take precedence over descriptions.
+      // So, display the first default captions or subtitles track
+      // and otherwise the first default descriptions track.
+      if (firstCaptions) {
+        firstCaptions.mode = 'showing';
+      } else if (firstDesc) {
+        firstDesc.mode = 'showing';
       }
     }));
     return _this;
@@ -224,17 +224,12 @@ var TextTrackDisplay = function (_Component) {
 
     this.clearDisplay();
 
-    if (!tracks) {
-      return;
-    }
-
     // Track display prioritization model: if multiple tracks are 'showing',
     //  display the first 'subtitles' or 'captions' track which is 'showing',
     //  otherwise display the first 'descriptions' track which is 'showing'
 
     var descriptionsTrack = null;
     var captionsSubtitlesTrack = null;
-
     var i = tracks.length;
 
     while (i--) {

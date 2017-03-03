@@ -14,6 +14,14 @@ var _component = require('./component');
 
 var _component2 = _interopRequireDefault(_component);
 
+var _window = require('global/window');
+
+var _window2 = _interopRequireDefault(_window);
+
+var _document = require('global/document');
+
+var _document2 = _interopRequireDefault(_document);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -95,7 +103,7 @@ var ModalDialog = function (_Component) {
     });
 
     _this.descEl_ = Dom.createEl('p', {
-      className: MODAL_CLASS_NAME + '-description vjs-offscreen',
+      className: MODAL_CLASS_NAME + '-description vjs-control-text',
       id: _this.el().getAttribute('aria-describedby')
     });
 
@@ -163,7 +171,7 @@ var ModalDialog = function (_Component) {
 
 
   ModalDialog.prototype.label = function label() {
-    return this.options_.label || this.localize('Modal Window');
+    return this.localize(this.options_.label || 'Modal Window');
   };
 
   /**
@@ -191,9 +199,6 @@ var ModalDialog = function (_Component) {
    *
    * @fires ModalDialog#beforemodalopen
    * @fires ModalDialog#modalopen
-   *
-   * @return {ModalDialog}
-   *         Returns itself; method can be chained.
    */
 
 
@@ -202,11 +207,11 @@ var ModalDialog = function (_Component) {
       var player = this.player();
 
       /**
-       * Fired just before a `ModalDialog` is opened.
-       *
-       * @event ModalDialog#beforemodalopen
-       * @type {EventTarget~Event}
-       */
+        * Fired just before a `ModalDialog` is opened.
+        *
+        * @event ModalDialog#beforemodalopen
+        * @type {EventTarget~Event}
+        */
       this.trigger('beforemodalopen');
       this.opened_ = true;
 
@@ -230,18 +235,18 @@ var ModalDialog = function (_Component) {
 
       player.controls(false);
       this.show();
+      this.conditionalFocus_();
       this.el().setAttribute('aria-hidden', 'false');
 
       /**
-       * Fired just after a `ModalDialog` is opened.
-       *
-       * @event ModalDialog#modalopen
-       * @type {EventTarget~Event}
-       */
+        * Fired just after a `ModalDialog` is opened.
+        *
+        * @event ModalDialog#modalopen
+        * @type {EventTarget~Event}
+        */
       this.trigger('modalopen');
       this.hasBeenOpened_ = true;
     }
-    return this;
   };
 
   /**
@@ -268,50 +273,48 @@ var ModalDialog = function (_Component) {
    *
    * @fires ModalDialog#beforemodalclose
    * @fires ModalDialog#modalclose
-   *
-   * @return {ModalDialog}
-   *         Returns itself; method can be chained.
    */
 
 
   ModalDialog.prototype.close = function close() {
-    if (this.opened_) {
-      var player = this.player();
-
-      /**
-       * Fired just before a `ModalDialog` is closed.
-       *
-       * @event ModalDialog#beforemodalclose
-       * @type {EventTarget~Event}
-       */
-      this.trigger('beforemodalclose');
-      this.opened_ = false;
-
-      if (this.wasPlaying_) {
-        player.play();
-      }
-
-      if (this.closeable()) {
-        this.off(this.el_.ownerDocument, 'keydown', Fn.bind(this, this.handleKeyPress));
-      }
-
-      player.controls(true);
-      this.hide();
-      this.el().setAttribute('aria-hidden', 'true');
-
-      /**
-       * Fired just after a `ModalDialog` is closed.
-       *
-       * @event ModalDialog#modalclose
-       * @type {EventTarget~Event}
-       */
-      this.trigger('modalclose');
-
-      if (this.options_.temporary) {
-        this.dispose();
-      }
+    if (!this.opened_) {
+      return;
     }
-    return this;
+    var player = this.player();
+
+    /**
+      * Fired just before a `ModalDialog` is closed.
+      *
+      * @event ModalDialog#beforemodalclose
+      * @type {EventTarget~Event}
+      */
+    this.trigger('beforemodalclose');
+    this.opened_ = false;
+
+    if (this.wasPlaying_) {
+      player.play();
+    }
+
+    if (this.closeable()) {
+      this.off(this.el_.ownerDocument, 'keydown', Fn.bind(this, this.handleKeyPress));
+    }
+
+    player.controls(true);
+    this.hide();
+    this.el().setAttribute('aria-hidden', 'true');
+
+    /**
+      * Fired just after a `ModalDialog` is closed.
+      *
+      * @event ModalDialog#modalclose
+      * @type {EventTarget~Event}
+      */
+    this.trigger('modalclose');
+    this.conditionalBlur_();
+
+    if (this.options_.temporary) {
+      this.dispose();
+    }
   };
 
   /**
@@ -356,14 +359,11 @@ var ModalDialog = function (_Component) {
   /**
    * Fill the modal's content element with the modal's "content" option.
    * The content element will be emptied before this change takes place.
-   *
-   * @return {ModalDialog}
-   *         Returns itself; method can be chained.
    */
 
 
   ModalDialog.prototype.fill = function fill() {
-    return this.fillWith(this.content());
+    this.fillWith(this.content());
   };
 
   /**
@@ -373,11 +373,8 @@ var ModalDialog = function (_Component) {
    * @fires ModalDialog#beforemodalfill
    * @fires ModalDialog#modalfill
    *
-   * @param  {Mixed} [content]
-   *         The same rules apply to this as apply to the `content` option.
-   *
-   * @return {ModalDialog}
-   *         Returns itself; method can be chained.
+   * @param {Mixed} [content]
+   *        The same rules apply to this as apply to the `content` option.
    */
 
 
@@ -415,7 +412,12 @@ var ModalDialog = function (_Component) {
       parentEl.appendChild(contentEl);
     }
 
-    return this;
+    // make sure that the close button is last in the dialog DOM
+    var closeButton = this.getChild('closeButton');
+
+    if (closeButton) {
+      parentEl.appendChild(closeButton.el_);
+    }
   };
 
   /**
@@ -423,9 +425,6 @@ var ModalDialog = function (_Component) {
    *
    * @fires ModalDialog#beforemodalempty
    * @fires ModalDialog#modalempty
-   *
-   * @return {ModalDialog}
-   *         Returns itself; method can be chained.
    */
 
 
@@ -446,7 +445,6 @@ var ModalDialog = function (_Component) {
      * @type {EventTarget~Event}
      */
     this.trigger('modalempty');
-    return this;
   };
 
   /**
@@ -471,6 +469,96 @@ var ModalDialog = function (_Component) {
       this.content_ = value;
     }
     return this.content_;
+  };
+
+  /**
+   * conditionally focus the modal dialog if focus was previously on the player.
+   *
+   * @private
+   */
+
+
+  ModalDialog.prototype.conditionalFocus_ = function conditionalFocus_() {
+    var activeEl = _document2['default'].activeElement;
+    var playerEl = this.player_.el_;
+
+    this.previouslyActiveEl_ = null;
+
+    if (playerEl.contains(activeEl) || playerEl === activeEl) {
+      this.previouslyActiveEl_ = activeEl;
+
+      this.focus();
+
+      this.on(_document2['default'], 'keydown', this.handleKeyDown);
+    }
+  };
+
+  /**
+   * conditionally blur the element and refocus the last focused element
+   *
+   * @private
+   */
+
+
+  ModalDialog.prototype.conditionalBlur_ = function conditionalBlur_() {
+    if (this.previouslyActiveEl_) {
+      this.previouslyActiveEl_.focus();
+      this.previouslyActiveEl_ = null;
+    }
+
+    this.off(_document2['default'], 'keydown', this.handleKeyDown);
+  };
+
+  /**
+   * Keydown handler. Attached when modal is focused.
+   *
+   * @listens keydown
+   */
+
+
+  ModalDialog.prototype.handleKeyDown = function handleKeyDown(event) {
+    // exit early if it isn't a tab key
+    if (event.which !== 9) {
+      return;
+    }
+
+    var focusableEls = this.focusableEls_();
+    var activeEl = this.el_.querySelector(':focus');
+    var focusIndex = void 0;
+
+    for (var i = 0; i < focusableEls.length; i++) {
+      if (activeEl === focusableEls[i]) {
+        focusIndex = i;
+        break;
+      }
+    }
+
+    if (_document2['default'].activeElement === this.el_) {
+      focusIndex = 0;
+    }
+
+    if (event.shiftKey && focusIndex === 0) {
+      focusableEls[focusableEls.length - 1].focus();
+      event.preventDefault();
+    } else if (!event.shiftKey && focusIndex === focusableEls.length - 1) {
+      focusableEls[0].focus();
+      event.preventDefault();
+    }
+  };
+
+  /**
+   * get all focusable elements
+   *
+   * @private
+   */
+
+
+  ModalDialog.prototype.focusableEls_ = function focusableEls_() {
+    var allChildren = this.el_.querySelectorAll('*');
+
+    return Array.prototype.filter.call(allChildren, function (child) {
+      return (child instanceof _window2['default'].HTMLAnchorElement || child instanceof _window2['default'].HTMLAreaElement) && child.hasAttribute('href') || (child instanceof _window2['default'].HTMLInputElement || child instanceof _window2['default'].HTMLSelectElement || child instanceof _window2['default'].HTMLTextAreaElement || child instanceof _window2['default'].HTMLButtonElement) && !child.hasAttribute('disabled') || child instanceof _window2['default'].HTMLIFrameElement || child instanceof _window2['default'].HTMLObjectElement || child instanceof _window2['default'].HTMLEmbedElement || child.hasAttribute('tabindex') && child.getAttribute('tabindex') !== -1 || child.hasAttribute('contenteditable');
+    });
   };
 
   return ModalDialog;

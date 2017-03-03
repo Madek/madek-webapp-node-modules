@@ -44,10 +44,7 @@ var SubtitlesButton = function (_TextTrackButton) {
   function SubtitlesButton(player, options, ready) {
     _classCallCheck(this, SubtitlesButton);
 
-    var _this = _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
-
-    _this.el_.setAttribute('aria-label', 'Subtitles Menu');
-    return _this;
+    return _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
   }
 
   /**

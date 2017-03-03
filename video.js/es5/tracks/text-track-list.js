@@ -82,12 +82,11 @@ var TextTrackList = function (_TrackList) {
    *        The text track to add to the list.
    *
    * @fires TrackList#addtrack
-   * @private
    */
 
 
-  TextTrackList.prototype.addTrack_ = function addTrack_(track) {
-    _TrackList.prototype.addTrack_.call(this, track);
+  TextTrackList.prototype.addTrack = function addTrack(track) {
+    _TrackList.prototype.addTrack.call(this, track);
 
     /**
      * @listens TextTrack#modechange

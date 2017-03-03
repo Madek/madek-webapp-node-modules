@@ -4,14 +4,6 @@ exports.__esModule = true;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _log = require('./utils/log');
-
-var _log2 = _interopRequireDefault(_log);
-
-var _obj = require('./utils/obj');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 /**
  * @file extend.js
  * @module extend
@@ -54,6 +46,9 @@ var _inherits = function _inherits(subClass, superClass) {
  * Function for subclassing using the same inheritance that
  * videojs uses internally
  *
+ * @static
+ * @const
+ *
  * @param {Object} superClass
  *        The class to inherit from
  *
@@ -72,11 +67,7 @@ var extendFn = function extendFn(superClass) {
 
   var methods = {};
 
-  if ((0, _obj.isObject)(subClassMethods)) {
-    if (typeof subClassMethods.init === 'function') {
-      _log2['default'].warn('Constructor logic via init() is deprecated; please use constructor() instead.');
-      subClassMethods.constructor = subClassMethods.init;
-    }
+  if ((typeof subClassMethods === 'undefined' ? 'undefined' : _typeof(subClassMethods)) === 'object') {
     if (subClassMethods.constructor !== Object.prototype.constructor) {
       subClass = subClassMethods.constructor;
     }

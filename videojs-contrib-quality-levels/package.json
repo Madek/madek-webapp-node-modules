@@ -1,0 +1,229 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "videojs-contrib-quality-levels",
+        "scope": null,
+        "escapedName": "videojs-contrib-quality-levels",
+        "name": "videojs-contrib-quality-levels",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "videojs-contrib-quality-levels@latest",
+  "_id": "videojs-contrib-quality-levels@2.0.3",
+  "_inCache": true,
+  "_location": "/videojs-contrib-quality-levels",
+  "_nodeVersion": "4.7.3",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/videojs-contrib-quality-levels-2.0.3.tgz_1487702610178_0.15942913992330432"
+  },
+  "_npmUser": {
+    "name": "brandonocasey",
+    "email": "brandonocasey@gmail.com"
+  },
+  "_npmVersion": "2.15.11",
+  "_phantomChildren": {
+    "min-document": "2.19.0",
+    "process": "0.5.2"
+  },
+  "_requested": {
+    "raw": "videojs-contrib-quality-levels",
+    "scope": null,
+    "escapedName": "videojs-contrib-quality-levels",
+    "name": "videojs-contrib-quality-levels",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/videojs-contrib-quality-levels/-/videojs-contrib-quality-levels-2.0.3.tgz",
+  "_shasum": "31f59a022056e7b1f9e52c5508f506219bf0f120",
+  "_shrinkwrap": null,
+  "_spec": "videojs-contrib-quality-levels",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Brightcove, Inc."
+  },
+  "browserify": {
+    "transform": [
+      "browserify-versionify"
+    ]
+  },
+  "browserify-shim": {
+    "qunit": "global:QUnit",
+    "sinon": "global:sinon",
+    "video.js": "global:videojs"
+  },
+  "bugs": {
+    "url": "https://github.com/videojs/videojs-contrib-quality-levels/issues"
+  },
+  "config": {
+    "ghooks": {
+      "pre-push": "npm run lint"
+    }
+  },
+  "copyright": "Copyright Brightcove, Inc. <https://www.brightcove.com/>",
+  "dependencies": {
+    "browserify-versionify": "^1.0.6",
+    "global": "^4.3.1",
+    "video.js": "^5.10.1"
+  },
+  "description": "Exposes a list of quality levels available for the source.",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
+    "babel-plugin-transform-es3-property-literals": "^6.8.0",
+    "babel-plugin-transform-object-assign": "^6.8.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babelify": "^7.3.0",
+    "bannerize": "^1.0.2",
+    "bluebird": "^3.2.2",
+    "browserify": "^12.0.2",
+    "browserify-shim": "^3.8.12",
+    "budo": "^8.0.4",
+    "bundle-collapser": "^1.2.1",
+    "chg": "^0.3.2",
+    "doctoc": "^0.15.0",
+    "ghooks": "^1.3.2",
+    "glob": "^6.0.3",
+    "jsdoc": "^3.4.0",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-detect-browsers": "^2.0.2",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-ie-launcher": "^0.2.0",
+    "karma-qunit": "^0.1.9",
+    "karma-safari-launcher": "^0.1.1",
+    "lodash": "^4.11.2",
+    "mkdirp": "^0.5.1",
+    "npm-run-all": "^1.5.1",
+    "qunitjs": "^1.21.0",
+    "rimraf": "^2.5.1",
+    "semver": "^5.3.0",
+    "sinon": "~1.14.0",
+    "uglify-js": "^2.6.1",
+    "videojs-contrib-hls": "^4.1.0",
+    "videojs-standard": "^4.0.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "31f59a022056e7b1f9e52c5508f506219bf0f120",
+    "tarball": "https://registry.npmjs.org/videojs-contrib-quality-levels/-/videojs-contrib-quality-levels-2.0.3.tgz"
+  },
+  "files": [
+    "CONTRIBUTING.md",
+    "bower.json",
+    "dist/",
+    "docs/",
+    "es5/",
+    "index.html",
+    "scripts/",
+    "src/",
+    "test/"
+  ],
+  "generator-videojs-plugin": {
+    "version": "2.2.0"
+  },
+  "gitHead": "75ba71683dfa74812c60b70fddde46738f063fc2",
+  "homepage": "https://github.com/videojs/videojs-contrib-quality-levels#readme",
+  "jsnext:main": "src/plugin.js",
+  "keywords": [
+    "videojs",
+    "videojs-plugin"
+  ],
+  "license": "Apache-2.0",
+  "main": "es5/plugin.js",
+  "maintainers": [
+    {
+      "name": "brandonocasey",
+      "email": "brandonocasey@gmail.com"
+    },
+    {
+      "name": "dmlap",
+      "email": "dlapalomento@gmail.com"
+    },
+    {
+      "name": "forbesjo",
+      "email": "joseph.a.forbes@gmail.com"
+    },
+    {
+      "name": "gesinger",
+      "email": "gesinger@gmail.com"
+    },
+    {
+      "name": "gkatsev",
+      "email": "me@gkatsev.com"
+    },
+    {
+      "name": "imbcmdth",
+      "email": "jon.carlos.rivera@gmail.com"
+    },
+    {
+      "name": "misteroneill",
+      "email": "pgoneill@gmail.com"
+    },
+    {
+      "name": "mjneil",
+      "email": "mneilweb@gmail.com"
+    }
+  ],
+  "name": "videojs-contrib-quality-levels",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/videojs/videojs-contrib-quality-levels.git"
+  },
+  "scripts": {
+    "build": "npm-run-all -p build:*",
+    "build:js": "npm-run-all build:js:babel build:js:browserify build:js:bannerize build:js:collapse build:js:uglify",
+    "build:js:babel": "babel src -d es5",
+    "build:js:bannerize": "bannerize dist/videojs-contrib-quality-levels.js --banner=scripts/banner.ejs",
+    "build:js:browserify": "browserify . -g browserify-shim -s videojs-contrib-quality-levels -o dist/videojs-contrib-quality-levels.js",
+    "build:js:collapse": "bundle-collapser dist/videojs-contrib-quality-levels.js -o dist/videojs-contrib-quality-levels.min.js",
+    "build:js:uglify": "uglifyjs dist/videojs-contrib-quality-levels.min.js --support-ie8 --comments --mangle --compress -o dist/videojs-contrib-quality-levels.min.js",
+    "build:test": "babel-node scripts/build-test.js",
+    "change": "chg add",
+    "clean": "rimraf dist test/dist es5 && mkdirp dist test/dist es5",
+    "docs": "npm-run-all docs:*",
+    "docs:api": "jsdoc src -r -c jsdoc.json -d docs/api",
+    "docs:toc": "doctoc README.md",
+    "lint": "vjsstandard",
+    "postversion": "babel-node scripts/postversion.js",
+    "prebuild": "npm run clean",
+    "prepublish": "npm run build",
+    "pretest": "npm-run-all lint build",
+    "preversion": "npm test",
+    "start": "babel-node scripts/server.js",
+    "test": "karma start test/karma.conf.js",
+    "test:chrome": "npm run pretest && karma start test/karma.conf.js --browsers Chrome",
+    "test:firefox": "npm run pretest && karma start test/karma.conf.js --browsers Firefox",
+    "test:ie": "npm run pretest && karma start test/karma.conf.js --browsers IE",
+    "test:safari": "npm run pretest && karma start test/karma.conf.js --browsers Safari",
+    "version": "babel-node scripts/version.js"
+  },
+  "style": "dist/videojs-contrib-quality-levels.css",
+  "version": "2.0.3",
+  "videojs-plugin": {
+    "style": "dist/videojs-contrib-quality-levels.css",
+    "script": "dist/videojs-contrib-quality-levels.min.js"
+  },
+  "vjsstandard": {
+    "ignore": [
+      "dist",
+      "docs",
+      "es5",
+      "scripts",
+      "test/dist",
+      "test/karma.conf.js"
+    ]
+  }
+}

@@ -6,9 +6,17 @@ var _window = require('global/window');
 
 var _window2 = _interopRequireDefault(_window);
 
+var _document = require('global/document');
+
+var _document2 = _interopRequireDefault(_document);
+
 var _component = require('../component');
 
 var _component2 = _interopRequireDefault(_component);
+
+var _modalDialog = require('../modal-dialog');
+
+var _modalDialog2 = _interopRequireDefault(_modalDialog);
 
 var _dom = require('../utils/dom');
 
@@ -214,11 +222,11 @@ function setSelectedOption(el, value, parser) {
 /**
  * Manipulate Text Tracks settings.
  *
- * @extends Component
+ * @extends ModalDialog
  */
 
-var TextTrackSettings = function (_Component) {
-  _inherits(TextTrackSettings, _Component);
+var TextTrackSettings = function (_ModalDialog) {
+  _inherits(TextTrackSettings, _ModalDialog);
 
   /**
    * Creates an instance of this class.
@@ -232,12 +240,25 @@ var TextTrackSettings = function (_Component) {
   function TextTrackSettings(player, options) {
     _classCallCheck(this, TextTrackSettings);
 
-    var _this = _possibleConstructorReturn(this, _Component.call(this, player, options));
+    options.temporary = false;
 
-    _this.setDefaults();
-    _this.hide();
+    var _this = _possibleConstructorReturn(this, _ModalDialog.call(this, player, options));
+
+    _this.contentEl().className += '  vjs-caption-settings';
 
     _this.updateDisplay = Fn.bind(_this, _this.updateDisplay);
+
+    // fill the modal and pretend we have opened it
+    _this.fill();
+    _this.hasBeenOpened_ = _this.hasBeenFilled_ = true;
+
+    _this.endDialog = (0, _dom.createEl)('p', {
+      className: 'vjs-control-text',
+      textContent: _this.localize('End of dialog window.')
+    });
+    _this.el().appendChild(_this.endDialog);
+
+    _this.setDefaults();
 
     // Grab `persistTextTrackSettings` from the player options if not passed in child options
     if (options.persistTextTrackSettings === undefined) {
@@ -246,7 +267,7 @@ var TextTrackSettings = function (_Component) {
 
     _this.on(_this.$('.vjs-done-button'), 'click', function () {
       _this.saveSettings();
-      _this.hide();
+      _this.close();
     });
 
     _this.on(_this.$('.vjs-default-button'), 'click', function () {
@@ -279,18 +300,26 @@ var TextTrackSettings = function (_Component) {
   TextTrackSettings.prototype.createElSelect_ = function createElSelect_(key) {
     var _this2 = this;
 
+    var legendId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
     var config = selectConfigs[key];
     var id = config.id.replace('%s', this.id_);
 
     return [(0, _dom.createEl)('label', {
+      id: id,
       className: 'vjs-label',
-      textContent: config.label
-    }, {
-      'for': id
-    }), (0, _dom.createEl)('select', { id: id }, undefined, config.options.map(function (o) {
+      textContent: this.localize(config.label)
+    }, {}), (0, _dom.createEl)('select', {}, {
+      'aria-labelledby': legendId + ' ' + id
+    }, config.options.map(function (o) {
+      var optionId = id + '-' + o[1];
+
       return (0, _dom.createEl)('option', {
+        id: optionId,
         textContent: _this2.localize(o[1]),
         value: o[0]
+      }, {
+        'aria-labelledby': legendId + ' ' + id + ' ' + optionId
       });
     }))];
   };
@@ -307,14 +336,15 @@ var TextTrackSettings = function (_Component) {
 
   TextTrackSettings.prototype.createElFgColor_ = function createElFgColor_() {
     var legend = (0, _dom.createEl)('legend', {
+      id: 'captions-text-legend-' + this.id_,
       textContent: this.localize('Text')
     });
 
-    var select = this.createElSelect_('color');
+    var select = this.createElSelect_('color', legend.id);
 
     var opacity = (0, _dom.createEl)('span', {
       className: 'vjs-text-opacity vjs-opacity'
-    }, undefined, this.createElSelect_('textOpacity'));
+    }, undefined, this.createElSelect_('textOpacity', legend.id));
 
     return (0, _dom.createEl)('fieldset', {
       className: 'vjs-fg-color vjs-tracksetting'
@@ -333,14 +363,15 @@ var TextTrackSettings = function (_Component) {
 
   TextTrackSettings.prototype.createElBgColor_ = function createElBgColor_() {
     var legend = (0, _dom.createEl)('legend', {
+      id: 'captions-background-' + this.id_,
       textContent: this.localize('Background')
     });
 
-    var select = this.createElSelect_('backgroundColor');
+    var select = this.createElSelect_('backgroundColor', legend.id);
 
     var opacity = (0, _dom.createEl)('span', {
       className: 'vjs-bg-opacity vjs-opacity'
-    }, undefined, this.createElSelect_('backgroundOpacity'));
+    }, undefined, this.createElSelect_('backgroundOpacity', legend.id));
 
     return (0, _dom.createEl)('fieldset', {
       className: 'vjs-bg-color vjs-tracksetting'
@@ -359,14 +390,15 @@ var TextTrackSettings = function (_Component) {
 
   TextTrackSettings.prototype.createElWinColor_ = function createElWinColor_() {
     var legend = (0, _dom.createEl)('legend', {
+      id: 'captions-window-' + this.id_,
       textContent: this.localize('Window')
     });
 
-    var select = this.createElSelect_('windowColor');
+    var select = this.createElSelect_('windowColor', legend.id);
 
     var opacity = (0, _dom.createEl)('span', {
       className: 'vjs-window-opacity vjs-opacity'
-    }, undefined, this.createElSelect_('windowOpacity'));
+    }, undefined, this.createElSelect_('windowOpacity', legend.id));
 
     return (0, _dom.createEl)('fieldset', {
       className: 'vjs-window-color vjs-tracksetting'
@@ -428,14 +460,16 @@ var TextTrackSettings = function (_Component) {
 
 
   TextTrackSettings.prototype.createElControls_ = function createElControls_() {
+    var defaultsDescription = this.localize('restore all settings to the default values');
     var defaultsButton = (0, _dom.createEl)('button', {
       className: 'vjs-default-button',
-      textContent: this.localize('Defaults')
+      title: defaultsDescription,
+      innerHTML: this.localize('Reset') + '<span class=\'vjs-control-text\'> ' + defaultsDescription + '</span>'
     });
 
     var doneButton = (0, _dom.createEl)('button', {
       className: 'vjs-done-button',
-      textContent: 'Done'
+      textContent: this.localize('Done')
     });
 
     return (0, _dom.createEl)('div', {
@@ -452,37 +486,27 @@ var TextTrackSettings = function (_Component) {
 
 
   TextTrackSettings.prototype.createEl = function createEl() {
+    return _ModalDialog.prototype.createEl.call(this);
+  };
+
+  TextTrackSettings.prototype.content = function content() {
     var settings = (0, _dom.createEl)('div', {
       className: 'vjs-tracksettings'
     }, undefined, [this.createElColors_(), this.createElFont_(), this.createElControls_()]);
 
-    var heading = (0, _dom.createEl)('div', {
-      className: 'vjs-control-text',
-      id: 'TTsettingsDialogLabel-' + this.id_,
-      textContent: 'Caption Settings Dialog'
-    }, {
-      'aria-level': '1',
-      'role': 'heading'
-    });
+    return settings;
+  };
 
-    var description = (0, _dom.createEl)('div', {
-      className: 'vjs-control-text',
-      id: 'TTsettingsDialogDescription-' + this.id_,
-      textContent: 'Beginning of dialog window. Escape will cancel and close the window.'
-    });
+  TextTrackSettings.prototype.label = function label() {
+    return this.localize('Caption Settings Dialog');
+  };
 
-    var doc = (0, _dom.createEl)('div', undefined, {
-      role: 'document'
-    }, [heading, description, settings]);
+  TextTrackSettings.prototype.description = function description() {
+    return this.localize('Beginning of dialog window. Escape will cancel and close the window.');
+  };
 
-    return (0, _dom.createEl)('div', {
-      className: 'vjs-caption-settings vjs-modal-overlay',
-      tabIndex: -1
-    }, {
-      'role': 'dialog',
-      'aria-labelledby': heading.id,
-      'aria-describedby': description.id
-    }, doc);
+  TextTrackSettings.prototype.buildCSSClass = function buildCSSClass() {
+    return _ModalDialog.prototype.buildCSSClass.call(this) + ' vjs-text-track-settings';
   };
 
   /**
@@ -524,7 +548,7 @@ var TextTrackSettings = function (_Component) {
   };
 
   /**
-   * Sets all <select> elements to their default values.
+   * Sets all `<select>` elements to their default values.
    */
 
 
@@ -593,8 +617,27 @@ var TextTrackSettings = function (_Component) {
     }
   };
 
+  /**
+   * conditionally blur the element and refocus the captions button
+   *
+   * @private
+   */
+
+
+  TextTrackSettings.prototype.conditionalBlur_ = function conditionalBlur_() {
+    this.previouslyActiveEl_ = null;
+    this.off(_document2['default'], 'keydown', this.handleKeyDown);
+
+    var cb = this.player_.controlBar;
+    var ccBtn = cb && cb.captionsButton;
+
+    if (ccBtn) {
+      ccBtn.focus();
+    }
+  };
+
   return TextTrackSettings;
-}(_component2['default']);
+}(_modalDialog2['default']);
 
 _component2['default'].registerComponent('TextTrackSettings', TextTrackSettings);
 

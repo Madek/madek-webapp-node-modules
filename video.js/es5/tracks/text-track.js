@@ -251,9 +251,11 @@ var TextTrack = function (_Track) {
     }
 
     /**
+     * @memberof TextTrack
      * @member {boolean} default
      *         If this track was set to be on or off by default. Cannot be changed after
      *         creation.
+     * @instance
      *
      * @readonly
      */
@@ -265,9 +267,11 @@ var TextTrack = function (_Track) {
     });
 
     /**
+     * @memberof TextTrack
      * @member {string} mode
      *         Set the mode of this TextTrack to a valid {@link TextTrack~Mode}. Will
      *         not be set if setting to an invalid mode.
+     * @instance
      *
      * @fires TextTrack#modechange
      */
@@ -297,8 +301,10 @@ var TextTrack = function (_Track) {
     });
 
     /**
+     * @memberof TextTrack
      * @member {TextTrackCueList} cues
      *         The text track cue list for this TextTrack.
+     * @instance
      */
     Object.defineProperty(tt, 'cues', {
       get: function get() {
@@ -312,8 +318,10 @@ var TextTrack = function (_Track) {
     });
 
     /**
+     * @memberof TextTrack
      * @member {TextTrackCueList} activeCues
      *         The list text track cues that are currently active for this TextTrack.
+     * @instance
      */
     Object.defineProperty(tt, 'activeCues', {
       get: function get() {
@@ -380,11 +388,9 @@ var TextTrack = function (_Track) {
   TextTrack.prototype.addCue = function addCue(cue) {
     var tracks = this.tech_.textTracks();
 
-    if (tracks) {
-      for (var i = 0; i < tracks.length; i++) {
-        if (tracks[i] !== this) {
-          tracks[i].removeCue(cue);
-        }
+    for (var i = 0; i < tracks.length; i++) {
+      if (tracks[i] !== this) {
+        tracks[i].removeCue(cue);
       }
     }
 

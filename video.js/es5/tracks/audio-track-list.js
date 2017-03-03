@@ -111,19 +111,18 @@ var AudioTrackList = function (_TrackList) {
    * @param {AudioTrack} track
    *        The AudioTrack to add to the list
    *
-   * @fires Track#addtrack
-   * @private
+   * @fires TrackList#addtrack
    */
 
 
-  AudioTrackList.prototype.addTrack_ = function addTrack_(track) {
+  AudioTrackList.prototype.addTrack = function addTrack(track) {
     var _this2 = this;
 
     if (track.enabled) {
       disableOthers(this, track);
     }
 
-    _TrackList.prototype.addTrack_.call(this, track);
+    _TrackList.prototype.addTrack.call(this, track);
     // native tracks don't have this
     if (!track.addEventListener) {
       return;
@@ -145,34 +144,6 @@ var AudioTrackList = function (_TrackList) {
       _this2.changing_ = false;
       _this2.trigger('change');
     });
-  };
-
-  /**
-   * Add an {@link AudioTrack} to the `AudioTrackList`.
-   *
-   * @param {AudioTrack} track
-   *        The AudioTrack to add to the list
-   *
-   * @fires Track#addtrack
-   */
-
-
-  AudioTrackList.prototype.addTrack = function addTrack(track) {
-    this.addTrack_(track);
-  };
-
-  /**
-   * Remove an {@link AudioTrack} from the `AudioTrackList`.
-   *
-   * @param {AudioTrack} track
-   *        The AudioTrack to remove from the list
-   *
-   * @fires Track#removetrack
-   */
-
-
-  AudioTrackList.prototype.removeTrack = function removeTrack(track) {
-    _TrackList.prototype.removeTrack_.call(this, track);
   };
 
   return AudioTrackList;

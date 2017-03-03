@@ -6,15 +6,13 @@ var _component = require('../../component.js');
 
 var _component2 = _interopRequireDefault(_component);
 
-var _fn = require('../../utils/fn.js');
-
-var Fn = _interopRequireWildcard(_fn);
+var _browser = require('../../utils/browser.js');
 
 var _formatTime = require('../../utils/format-time.js');
 
 var _formatTime2 = _interopRequireDefault(_formatTime);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+require('./time-tooltip');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -28,49 +26,26 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * Shows play progress
+ * Used by {@link SeekBar} to display media playback progress as part of the
+ * {@link ProgressControl}.
  *
  * @extends Component
  */
 var PlayProgressBar = function (_Component) {
   _inherits(PlayProgressBar, _Component);
 
-  /**
-   * Creates an instance of this class.
-   *
-   * @param {Player} player
-   *        The `Player` that this class should be attached to.
-   *
-   * @param {Object} [options]
-   *        The key/value store of player options.
-   */
-  function PlayProgressBar(player, options) {
+  function PlayProgressBar() {
     _classCallCheck(this, PlayProgressBar);
 
-    var _this = _possibleConstructorReturn(this, _Component.call(this, player, options));
-
-    _this.updateDataAttr();
-    _this.on(player, 'timeupdate', _this.updateDataAttr);
-    player.ready(Fn.bind(_this, _this.updateDataAttr));
-
-    if (options.playerOptions && options.playerOptions.controlBar && options.playerOptions.controlBar.progressControl && options.playerOptions.controlBar.progressControl.keepTooltipsInside) {
-      _this.keepTooltipsInside = options.playerOptions.controlBar.progressControl.keepTooltipsInside;
-    }
-
-    if (_this.keepTooltipsInside) {
-      _this.addClass('vjs-keep-tooltips-inside');
-    }
-    return _this;
+    return _possibleConstructorReturn(this, _Component.apply(this, arguments));
   }
 
   /**
-   * Create the `Component`'s DOM element
+   * Create the the DOM element for this class.
    *
    * @return {Element}
    *         The element that was created.
    */
-
-
   PlayProgressBar.prototype.createEl = function createEl() {
     return _Component.prototype.createEl.call(this, 'div', {
       className: 'vjs-play-progress vjs-slider-bar',
@@ -79,23 +54,53 @@ var PlayProgressBar = function (_Component) {
   };
 
   /**
-   * Update the data-current-time attribute on the `PlayProgressBar`.
+   * Enqueues updates to its own DOM as well as the DOM of its
+   * {@link TimeTooltip} child.
    *
-   * @param {EventTarget~Event} [event]
-   *        The `timeupdate` event that caused this to run.
+   * @param {Object} seekBarRect
+   *        The `ClientRect` for the {@link SeekBar} element.
    *
-   * @listens Player#timeupdate
+   * @param {number} seekBarPoint
+   *        A number from 0 to 1, representing a horizontal reference point
+   *        from the left edge of the {@link SeekBar}
    */
 
 
-  PlayProgressBar.prototype.updateDataAttr = function updateDataAttr(event) {
-    var time = this.player_.scrubbing() ? this.player_.getCache().currentTime : this.player_.currentTime();
+  PlayProgressBar.prototype.update = function update(seekBarRect, seekBarPoint) {
+    var _this2 = this;
 
-    this.el_.setAttribute('data-current-time', (0, _formatTime2['default'])(time, this.player_.duration()));
+    // If there is an existing rAF ID, cancel it so we don't over-queue.
+    if (this.rafId_) {
+      this.cancelAnimationFrame(this.rafId_);
+    }
+
+    this.rafId_ = this.requestAnimationFrame(function () {
+      var time = _this2.player_.scrubbing() ? _this2.player_.getCache().currentTime : _this2.player_.currentTime();
+
+      var content = (0, _formatTime2['default'])(time, _this2.player_.duration());
+
+      _this2.getChild('timeTooltip').update(seekBarRect, seekBarPoint, content);
+    });
   };
 
   return PlayProgressBar;
 }(_component2['default']);
+
+/**
+ * Default options for {@link PlayProgressBar}.
+ *
+ * @type {Object}
+ * @private
+ */
+
+
+PlayProgressBar.prototype.options_ = {
+  children: []
+};
+
+if (!_browser.IE_VERSION || _browser.IE_VERSION > 8) {
+  PlayProgressBar.prototype.options_.children.push('timeTooltip');
+}
 
 _component2['default'].registerComponent('PlayProgressBar', PlayProgressBar);
 exports['default'] = PlayProgressBar;

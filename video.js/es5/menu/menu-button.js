@@ -2,9 +2,9 @@
 
 exports.__esModule = true;
 
-var _clickableComponent = require('../clickable-component.js');
+var _button = require('../button.js');
 
-var _clickableComponent2 = _interopRequireDefault(_clickableComponent);
+var _button2 = _interopRequireDefault(_button);
 
 var _component = require('../component.js');
 
@@ -22,9 +22,17 @@ var _fn = require('../utils/fn.js');
 
 var Fn = _interopRequireWildcard(_fn);
 
+var _events = require('../utils/events.js');
+
+var Events = _interopRequireWildcard(_events);
+
 var _toTitleCase = require('../utils/to-title-case.js');
 
 var _toTitleCase2 = _interopRequireDefault(_toTitleCase);
+
+var _document = require('global/document');
+
+var _document2 = _interopRequireDefault(_document);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -42,10 +50,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * A `MenuButton` class for any popup {@link Menu}.
  *
- * @extends ClickableComponent
+ * @extends Component
  */
-var MenuButton = function (_ClickableComponent) {
-  _inherits(MenuButton, _ClickableComponent);
+var MenuButton = function (_Component) {
+  _inherits(MenuButton, _Component);
 
   /**
    * Creates an instance of this class.
@@ -61,14 +69,29 @@ var MenuButton = function (_ClickableComponent) {
 
     _classCallCheck(this, MenuButton);
 
-    var _this = _possibleConstructorReturn(this, _ClickableComponent.call(this, player, options));
+    var _this = _possibleConstructorReturn(this, _Component.call(this, player, options));
+
+    _this.menuButton_ = new _button2['default'](player, options);
+
+    _this.menuButton_.controlText(_this.controlText_);
+    _this.menuButton_.el_.setAttribute('aria-haspopup', 'true');
+
+    // Add buildCSSClass values to the button, not the wrapper
+    var buttonClass = _button2['default'].prototype.buildCSSClass();
+
+    _this.menuButton_.el_.className = _this.buildCSSClass() + ' ' + buttonClass;
+
+    _this.addChild(_this.menuButton_);
 
     _this.update();
 
     _this.enabled_ = true;
 
-    _this.el_.setAttribute('aria-haspopup', 'true');
-    _this.el_.setAttribute('role', 'menuitem');
+    _this.on(_this.menuButton_, 'tap', _this.handleClick);
+    _this.on(_this.menuButton_, 'click', _this.handleClick);
+    _this.on(_this.menuButton_, 'focus', _this.handleFocus);
+    _this.on(_this.menuButton_, 'blur', _this.handleBlur);
+
     _this.on('keydown', _this.handleSubmenuKeyPress);
     return _this;
   }
@@ -95,7 +118,7 @@ var MenuButton = function (_ClickableComponent) {
      * @private
      */
     this.buttonPressed_ = false;
-    this.el_.setAttribute('aria-expanded', 'false');
+    this.menuButton_.el_.setAttribute('aria-expanded', 'false');
 
     if (this.items && this.items.length === 0) {
       this.hide();
@@ -113,7 +136,7 @@ var MenuButton = function (_ClickableComponent) {
 
 
   MenuButton.prototype.createMenu = function createMenu() {
-    var menu = new _menu2['default'](this.player_);
+    var menu = new _menu2['default'](this.player_, { menuButton: this });
 
     // Add a title list item to the top
     if (this.options_.title) {
@@ -124,7 +147,7 @@ var MenuButton = function (_ClickableComponent) {
       });
 
       menu.children_.unshift(title);
-      Dom.insertElFirst(title, menu.contentEl());
+      Dom.prependTo(title, menu.contentEl());
     }
 
     this.items = this.createItems();
@@ -157,9 +180,33 @@ var MenuButton = function (_ClickableComponent) {
 
 
   MenuButton.prototype.createEl = function createEl() {
-    return _ClickableComponent.prototype.createEl.call(this, 'div', {
-      className: this.buildCSSClass()
-    });
+    return _Component.prototype.createEl.call(this, 'div', {
+      className: this.buildWrapperCSSClass()
+    }, {});
+  };
+
+  /**
+   * Allow sub components to stack CSS class names for the wrapper element
+   *
+   * @return {string}
+   *         The constructed wrapper DOM `className`
+   */
+
+
+  MenuButton.prototype.buildWrapperCSSClass = function buildWrapperCSSClass() {
+    var menuButtonClass = 'vjs-menu-button';
+
+    // If the inline option is passed, we want to use different styles altogether.
+    if (this.options_.inline === true) {
+      menuButtonClass += '-inline';
+    } else {
+      menuButtonClass += '-popup';
+    }
+
+    // TODO: Fix the CSS so that this isn't necessary
+    var buttonClass = _button2['default'].prototype.buildCSSClass();
+
+    return 'vjs-menu-button ' + menuButtonClass + ' ' + buttonClass + ' ' + _Component.prototype.buildCSSClass.call(this);
   };
 
   /**
@@ -180,7 +227,29 @@ var MenuButton = function (_ClickableComponent) {
       menuButtonClass += '-popup';
     }
 
-    return 'vjs-menu-button ' + menuButtonClass + ' ' + _ClickableComponent.prototype.buildCSSClass.call(this);
+    return 'vjs-menu-button ' + menuButtonClass + ' ' + _Component.prototype.buildCSSClass.call(this);
+  };
+
+  /**
+   * Get or set the localized control text that will be used for accessibility.
+   *
+   * > NOTE: This will come from the internal `menuButton_` element.
+   *
+   * @param {string} [text]
+   *        Control text for element.
+   *
+   * @param {Element} [el=this.menuButton_.el()]
+   *        Element to set the title on.
+   *
+   * @return {string}
+   *         - The control text when getting
+   */
+
+
+  MenuButton.prototype.controlText = function controlText(text) {
+    var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.menuButton_.el();
+
+    return this.menuButton_.controlText(text, el);
   };
 
   /**
@@ -213,6 +282,55 @@ var MenuButton = function (_ClickableComponent) {
   };
 
   /**
+   * Set the focus to the actual button, not to this element
+   */
+
+
+  MenuButton.prototype.focus = function focus() {
+    this.menuButton_.focus();
+  };
+
+  /**
+   * Remove the focus from the actual button, not this element
+   */
+
+
+  MenuButton.prototype.blur = function blur() {
+    this.menuButton_.blur();
+  };
+
+  /**
+   * This gets called when a `MenuButton` gains focus via a `focus` event.
+   * Turns on listening for `keydown` events. When they happen it
+   * calls `this.handleKeyPress`.
+   *
+   * @param {EventTarget~Event} event
+   *        The `focus` event that caused this function to be called.
+   *
+   * @listens focus
+   */
+
+
+  MenuButton.prototype.handleFocus = function handleFocus() {
+    Events.on(_document2['default'], 'keydown', Fn.bind(this, this.handleKeyPress));
+  };
+
+  /**
+   * Called when a `MenuButton` loses focus. Turns off the listener for
+   * `keydown` events. Which Stops `this.handleKeyPress` from getting called.
+   *
+   * @param {EventTarget~Event} event
+   *        The `blur` event that caused this function to be called.
+   *
+   * @listens blur
+   */
+
+
+  MenuButton.prototype.handleBlur = function handleBlur() {
+    Events.off(_document2['default'], 'keydown', Fn.bind(this, this.handleKeyPress));
+  };
+
+  /**
    * Handle tab, escape, down arrow, and up arrow keys for `MenuButton`. See
    * {@link ClickableComponent#handleKeyPress} for instances where this is called.
    *
@@ -233,6 +351,8 @@ var MenuButton = function (_ClickableComponent) {
       // Don't preventDefault for Tab key - we still want to lose focus
       if (event.which !== 9) {
         event.preventDefault();
+        // Set focus back to the menu button's button
+        this.menuButton_.el_.focus();
       }
       // Up (38) key or Down (40) key press the 'button'
     } else if (event.which === 38 || event.which === 40) {
@@ -240,8 +360,6 @@ var MenuButton = function (_ClickableComponent) {
         this.pressButton();
         event.preventDefault();
       }
-    } else {
-      _ClickableComponent.prototype.handleKeyPress.call(this, event);
     }
   };
 
@@ -266,6 +384,8 @@ var MenuButton = function (_ClickableComponent) {
       // Don't preventDefault for Tab key - we still want to lose focus
       if (event.which !== 9) {
         event.preventDefault();
+        // Set focus back to the menu button's button
+        this.menuButton_.el_.focus();
       }
     }
   };
@@ -279,7 +399,7 @@ var MenuButton = function (_ClickableComponent) {
     if (this.enabled_) {
       this.buttonPressed_ = true;
       this.menu.lockShowing();
-      this.el_.setAttribute('aria-expanded', 'true');
+      this.menuButton_.el_.setAttribute('aria-expanded', 'true');
       // set the focus into the submenu
       this.menu.focus();
     }
@@ -294,47 +414,38 @@ var MenuButton = function (_ClickableComponent) {
     if (this.enabled_) {
       this.buttonPressed_ = false;
       this.menu.unlockShowing();
-      this.el_.setAttribute('aria-expanded', 'false');
-      // Set focus back to this menu button
-      this.el_.focus();
+      this.menuButton_.el_.setAttribute('aria-expanded', 'false');
     }
   };
 
   /**
    * Disable the `MenuButton`. Don't allow it to be clicked.
-   *
-   * @return {MenuButton}
-   *         Returns itself; method can be chained.
    */
 
 
   MenuButton.prototype.disable = function disable() {
-    // Unpress, but don't force focus on this button
-    this.buttonPressed_ = false;
-    this.menu.unlockShowing();
-    this.el_.setAttribute('aria-expanded', 'false');
+    this.unpressButton();
 
     this.enabled_ = false;
+    this.addClass('vjs-disabled');
 
-    return _ClickableComponent.prototype.disable.call(this);
+    this.menuButton_.disable();
   };
 
   /**
    * Enable the `MenuButton`. Allow it to be clicked.
-   *
-   * @return {MenuButton}
-   *         Returns itself; method can be chained.
    */
 
 
   MenuButton.prototype.enable = function enable() {
     this.enabled_ = true;
+    this.removeClass('vjs-disabled');
 
-    return _ClickableComponent.prototype.enable.call(this);
+    this.menuButton_.enable();
   };
 
   return MenuButton;
-}(_clickableComponent2['default']);
+}(_component2['default']);
 
 _component2['default'].registerComponent('MenuButton', MenuButton);
 exports['default'] = MenuButton;

@@ -47,12 +47,9 @@ var AudioTrackButton = function (_TrackButton) {
 
     _classCallCheck(this, AudioTrackButton);
 
-    options.tracks = player.audioTracks && player.audioTracks();
+    options.tracks = player.audioTracks();
 
-    var _this = _possibleConstructorReturn(this, _TrackButton.call(this, player, options));
-
-    _this.el_.setAttribute('aria-label', 'Audio Menu');
-    return _this;
+    return _possibleConstructorReturn(this, _TrackButton.call(this, player, options));
   }
 
   /**
@@ -81,11 +78,7 @@ var AudioTrackButton = function (_TrackButton) {
   AudioTrackButton.prototype.createItems = function createItems() {
     var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-    var tracks = this.player_.audioTracks && this.player_.audioTracks();
-
-    if (!tracks) {
-      return items;
-    }
+    var tracks = this.player_.audioTracks();
 
     for (var i = 0; i < tracks.length; i++) {
       var track = tracks[i];

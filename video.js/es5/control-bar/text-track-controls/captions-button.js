@@ -48,10 +48,7 @@ var CaptionsButton = function (_TextTrackButton) {
   function CaptionsButton(player, options, ready) {
     _classCallCheck(this, CaptionsButton);
 
-    var _this = _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
-
-    _this.el_.setAttribute('aria-label', 'Captions Menu');
-    return _this;
+    return _possibleConstructorReturn(this, _TextTrackButton.call(this, player, options, ready));
   }
 
   /**

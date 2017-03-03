@@ -58,16 +58,12 @@ var AudioTrackMenuItem = function (_MenuItem) {
 
     _this.track = track;
 
-    if (tracks) {
-      (function () {
-        var changeHandler = Fn.bind(_this, _this.handleTracksChange);
+    var changeHandler = Fn.bind(_this, _this.handleTracksChange);
 
-        tracks.addEventListener('change', changeHandler);
-        _this.on('dispose', function () {
-          tracks.removeEventListener('change', changeHandler);
-        });
-      })();
-    }
+    tracks.addEventListener('change', changeHandler);
+    _this.on('dispose', function () {
+      tracks.removeEventListener('change', changeHandler);
+    });
     return _this;
   }
 
@@ -88,10 +84,6 @@ var AudioTrackMenuItem = function (_MenuItem) {
     var tracks = this.player_.audioTracks();
 
     _MenuItem.prototype.handleClick.call(this, event);
-
-    if (!tracks) {
-      return;
-    }
 
     for (var i = 0; i < tracks.length; i++) {
       var track = tracks[i];

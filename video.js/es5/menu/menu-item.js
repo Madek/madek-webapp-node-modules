@@ -78,9 +78,12 @@ var MenuItem = function (_ClickableComponent) {
 
 
   MenuItem.prototype.createEl = function createEl(type, props, attrs) {
+    // The control is textual, not just an icon
+    this.nonIconControl = true;
+
     return _ClickableComponent.prototype.createEl.call(this, 'li', (0, _obj.assign)({
       className: 'vjs-menu-item',
-      innerHTML: this.localize(this.options_.label),
+      innerHTML: '<span class="vjs-menu-item-text">' + this.localize(this.options_.label) + '</span>',
       tabIndex: -1
     }, props), attrs);
   };

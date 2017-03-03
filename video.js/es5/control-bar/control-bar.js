@@ -22,11 +22,7 @@ require('./progress-control/progress-control.js');
 
 require('./fullscreen-toggle.js');
 
-require('./volume-control/volume-control.js');
-
-require('./volume-menu-button.js');
-
-require('./mute-toggle.js');
+require('./volume-panel.js');
 
 require('./text-track-controls/chapters-button.js');
 
@@ -81,7 +77,8 @@ var ControlBar = function (_Component) {
       className: 'vjs-control-bar',
       dir: 'ltr'
     }, {
-      // The control bar is a group, so it can contain menuitems
+      // The control bar is a group, but we don't aria-label it to avoid
+      //  over-announcing by JAWS
       role: 'group'
     });
   };
@@ -98,7 +95,7 @@ var ControlBar = function (_Component) {
 
 
 ControlBar.prototype.options_ = {
-  children: ['playToggle', 'volumeMenuButton', 'currentTimeDisplay', 'timeDivider', 'durationDisplay', 'progressControl', 'liveDisplay', 'remainingTimeDisplay', 'customControlSpacer', 'playbackRateMenuButton', 'chaptersButton', 'descriptionsButton', 'subtitlesButton', 'captionsButton', 'audioTrackButton', 'fullscreenToggle']
+  children: ['playToggle', 'volumePanel', 'currentTimeDisplay', 'timeDivider', 'durationDisplay', 'progressControl', 'liveDisplay', 'remainingTimeDisplay', 'customControlSpacer', 'playbackRateMenuButton', 'chaptersButton', 'descriptionsButton', 'subtitlesButton', 'captionsButton', 'audioTrackButton', 'fullscreenToggle']
 };
 
 _component2['default'].registerComponent('ControlBar', ControlBar);

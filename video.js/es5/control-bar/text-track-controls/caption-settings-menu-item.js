@@ -74,8 +74,7 @@ var CaptionSettingsMenuItem = function (_TextTrackMenuItem) {
 
 
   CaptionSettingsMenuItem.prototype.handleClick = function handleClick(event) {
-    this.player().getChild('textTrackSettings').show();
-    this.player().getChild('textTrackSettings').el_.focus();
+    this.player().getChild('textTrackSettings').open();
   };
 
   return CaptionSettingsMenuItem;

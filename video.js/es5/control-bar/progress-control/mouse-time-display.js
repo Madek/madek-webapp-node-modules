@@ -6,10 +6,6 @@ var _component = require('../../component.js');
 
 var _component2 = _interopRequireDefault(_component);
 
-var _dom = require('../../utils/dom.js');
-
-var Dom = _interopRequireWildcard(_dom);
-
 var _fn = require('../../utils/fn.js');
 
 var Fn = _interopRequireWildcard(_fn);
@@ -18,9 +14,7 @@ var _formatTime = require('../../utils/format-time.js');
 
 var _formatTime2 = _interopRequireDefault(_formatTime);
 
-var _computedStyle = require('../../utils/computed-style.js');
-
-var _computedStyle2 = _interopRequireDefault(_computedStyle);
+require('./time-tooltip');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -36,8 +30,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 /**
- * The Mouse Time Display component shows the time you will seek to
- * when hovering over the progress bar
+ * The {@link MouseTimeDisplay} component tracks mouse movement over the
+ * {@link ProgressControl}. It displays an indicator and a {@link TimeTooltip}
+ * indicating the time which is represented by a given point in the
+ * {@link ProgressControl}.
  *
  * @extends Component
  */
@@ -48,7 +44,7 @@ var MouseTimeDisplay = function (_Component) {
    * Creates an instance of this class.
    *
    * @param {Player} player
-   *        The `Player` that this class should be attached to.
+   *        The {@link Player} that this class should be attached to.
    *
    * @param {Object} [options]
    *        The key/value store of player options.
@@ -58,26 +54,12 @@ var MouseTimeDisplay = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, _Component.call(this, player, options));
 
-    if (options.playerOptions && options.playerOptions.controlBar && options.playerOptions.controlBar.progressControl && options.playerOptions.controlBar.progressControl.keepTooltipsInside) {
-      _this.keepTooltipsInside = options.playerOptions.controlBar.progressControl.keepTooltipsInside;
-    }
-
-    if (_this.keepTooltipsInside) {
-      _this.tooltip = Dom.createEl('div', { className: 'vjs-time-tooltip' });
-      _this.el().appendChild(_this.tooltip);
-      _this.addClass('vjs-keep-tooltips-inside');
-    }
-
-    _this.update(0, 0);
-
-    player.on('ready', function () {
-      _this.on(player.controlBar.progressControl.el(), 'mousemove', Fn.throttle(Fn.bind(_this, _this.handleMouseMove), 25));
-    });
+    _this.update = Fn.throttle(Fn.bind(_this, _this.update), 25);
     return _this;
   }
 
   /**
-   * Create the `Component`'s DOM element
+   * Create the DOM element for this class.
    *
    * @return {Element}
    *         The element that was created.
@@ -91,104 +73,49 @@ var MouseTimeDisplay = function (_Component) {
   };
 
   /**
-   * Handle the mouse move event on the `MouseTimeDisplay`.
+   * Enqueues updates to its own DOM as well as the DOM of its
+   * {@link TimeTooltip} child.
    *
-   * @param {EventTarget~Event} event
-   *        The `mousemove` event that caused this to event to run.
+   * @param {Object} seekBarRect
+   *        The `ClientRect` for the {@link SeekBar} element.
    *
-   * @listen mousemove
+   * @param {number} seekBarPoint
+   *        A number from 0 to 1, representing a horizontal reference point
+   *        from the left edge of the {@link SeekBar}
    */
 
 
-  MouseTimeDisplay.prototype.handleMouseMove = function handleMouseMove(event) {
-    var duration = this.player_.duration();
-    var newTime = this.calculateDistance(event) * duration;
-    var position = event.pageX - Dom.findElPosition(this.el().parentNode).left;
+  MouseTimeDisplay.prototype.update = function update(seekBarRect, seekBarPoint) {
+    var _this2 = this;
 
-    this.update(newTime, position);
-  };
-
-  /**
-   * Update the time and posistion of the `MouseTimeDisplay`.
-   *
-   * @param {number} newTime
-   *        Time to change the `MouseTimeDisplay` to.
-   *
-   * @param {nubmer} position
-   *        Postion from the left of the in pixels.
-   */
-
-
-  MouseTimeDisplay.prototype.update = function update(newTime, position) {
-    var time = (0, _formatTime2['default'])(newTime, this.player_.duration());
-
-    this.el().style.left = position + 'px';
-    this.el().setAttribute('data-current-time', time);
-
-    if (this.keepTooltipsInside) {
-      var clampedPosition = this.clampPosition_(position);
-      var difference = position - clampedPosition + 1;
-      var tooltipWidth = parseFloat((0, _computedStyle2['default'])(this.tooltip, 'width'));
-      var tooltipWidthHalf = tooltipWidth / 2;
-
-      this.tooltip.innerHTML = time;
-      this.tooltip.style.right = '-' + (tooltipWidthHalf - difference) + 'px';
-    }
-  };
-
-  /**
-   * Get the mouse pointers x coordinate in pixels.
-   *
-   * @param {EventTarget~Event} [event]
-   *        The `mousemove` event that was passed to this function by
-   *        {@link MouseTimeDisplay#handleMouseMove}
-   *
-   * @return {number}
-   *         THe x position in pixels of the mouse pointer.
-   */
-
-
-  MouseTimeDisplay.prototype.calculateDistance = function calculateDistance(event) {
-    return Dom.getPointerPosition(this.el().parentNode, event).x;
-  };
-
-  /**
-   * This takes in a horizontal position for the bar and returns a clamped position.
-   * Clamped position means that it will keep the position greater than half the width
-   * of the tooltip and smaller than the player width minus half the width o the tooltip.
-   * It will only clamp the position if `keepTooltipsInside` option is set.
-   *
-   * @param {number} position
-   *        The position the bar wants to be
-   *
-   * @return {number}
-   *         The (potentially) new clamped position.
-   *
-   * @private
-   */
-
-
-  MouseTimeDisplay.prototype.clampPosition_ = function clampPosition_(position) {
-    if (!this.keepTooltipsInside) {
-      return position;
+    // If there is an existing rAF ID, cancel it so we don't over-queue.
+    if (this.rafId_) {
+      this.cancelAnimationFrame(this.rafId_);
     }
 
-    var playerWidth = parseFloat((0, _computedStyle2['default'])(this.player().el(), 'width'));
-    var tooltipWidth = parseFloat((0, _computedStyle2['default'])(this.tooltip, 'width'));
-    var tooltipWidthHalf = tooltipWidth / 2;
-    var actualPosition = position;
+    this.rafId_ = this.requestAnimationFrame(function () {
+      var duration = _this2.player_.duration();
+      var content = (0, _formatTime2['default'])(seekBarPoint * duration, duration);
 
-    if (position < tooltipWidthHalf) {
-      actualPosition = Math.ceil(tooltipWidthHalf);
-    } else if (position > playerWidth - tooltipWidthHalf) {
-      actualPosition = Math.floor(playerWidth - tooltipWidthHalf);
-    }
-
-    return actualPosition;
+      _this2.el_.style.left = seekBarRect.width * seekBarPoint + 'px';
+      _this2.getChild('timeTooltip').update(seekBarRect, seekBarPoint, content);
+    });
   };
 
   return MouseTimeDisplay;
 }(_component2['default']);
+
+/**
+ * Default options for `MouseTimeDisplay`
+ *
+ * @type {Object}
+ * @private
+ */
+
+
+MouseTimeDisplay.prototype.options_ = {
+  children: ['timeTooltip']
+};
 
 _component2['default'].registerComponent('MouseTimeDisplay', MouseTimeDisplay);
 exports['default'] = MouseTimeDisplay;
