@@ -30,7 +30,6 @@ test("[func] Returns http error responses like npm's request (cross-domain)", fu
     if (!window.XDomainRequest) {
         xhr({
             uri: "http://www.mocky.io/v2/55a02d63265126221a94f025",
-            useXDR: true
         }, function(err, resp, body) {
             assert.ifError(err, "no err")
             assert.equal(resp.statusCode, 404)
@@ -42,10 +41,48 @@ test("[func] Returns http error responses like npm's request (cross-domain)", fu
     }
 })
 
+test("[func] Request to domain with not allowed cross-domain", function(assert) {
+    xhr({
+        uri: "http://www.mocky.io/v2/57bb70c21000002f175850bd",
+    }, function(err, resp, body) {
+        assert.ok(err instanceof Error, "should return error")
+        assert.equal(resp.statusCode, 0)
+        assert.equal(typeof resp.rawRequest, "object")
+        assert.end()
+    })
+})
+
+test("[func] Returns a falsy body for 204 responses", function(assert) {
+    xhr({
+        uri: "/mock/no-content"
+    }, function(err, resp, body) {
+        assert.notOk(body, "body should be falsey")
+        assert.equal(resp.statusCode, 204)
+        assert.end()
+    })
+})
+
+test("[func] Calls the callback at most once even if error is thrown issue #127", function(assert) {
+    //double call happened in chrome
+    var count = 0;
+    setTimeout(function() {
+        assert.ok(count <= 1, "expected at most one call")
+        assert.end()
+    }, 100)
+    try {
+        xhr({
+            uri: "instanterror://foo"
+        }, function(err, resp, body) {
+            count++;
+            throw Error("dummy error")
+        })
+    } catch (e) {}
+})
+
 test("[func] Times out to an error ", function(assert) {
     xhr({
         timeout: 1,
-        uri: "/tests-bundle.js?should-take-a-bit-to-parse=1&" + (new Array(300)).join("cachebreaker=" + Math.random().toFixed(5) + "&")
+        uri: "/mock/timeout"
     }, function(err, resp, body) {
         assert.ok(err instanceof Error, "should return error")
         assert.equal(err.message, "XMLHttpRequest timeout")
@@ -140,15 +177,12 @@ test("[func] xhr[method] get, put, post, patch", function(assert) {
 
     forEach(methods, function(method) {
         xhr[method]({
-            uri: "http://httpbin.org/" + method,
-            useXDR: true
+            uri: "/mock/200ok"
         }, function(err, resp, body) {
             i++
             assert.ifError(err, "no err")
             assert.equal(resp.statusCode, 200)
             assert.equal(resp.method, method.toUpperCase())
-            assert.notEqual(resp.body.length, 0)
-
             if (i === methods.length) assert.end()
         })
     })
@@ -165,6 +199,45 @@ test("xhr[method] get, put, post, patch with url shorthands", function(assert) {
     })
 })
 
+test("[func] sends options.body as json body when options.json === true", function(assert) {
+    xhr.post("/mock/echo", {
+        json: true,
+        body: {
+            foo: "bar"
+        }
+    }, function(err, resp, body) {
+        assert.equal(resp.rawRequest.headers["Content-Type"], "application/json")
+        assert.deepEqual(body, {
+            foo: "bar"
+        })
+        assert.end()
+    })
+})
+
+test("[func] doesn't freak out when json option is false", function(assert) {
+    xhr.post("/mock/echo", {
+        json: false,
+        body: "{\"a\":1}"
+    }, function(err, resp, body) {
+        assert.notEqual(resp.rawRequest.headers["Content-Type"], "application/json")
+        assert.equal(body, "{\"a\":1}")
+        assert.end()
+    })
+})
+
+test("[func] sends options.json as body when it's not a boolean", function(assert) {
+    xhr.post("/mock/echo", {
+        json: {
+            foo: "bar"
+        }
+    }, function(err, resp, body) {
+        assert.equal(resp.rawRequest.headers["Content-Type"], "application/json")
+        assert.deepEqual(body, {
+            foo: "bar"
+        })
+        assert.end()
+    })
+})
 
 test("xhr[method] get, put, post, patch with url shorthands and options", function(assert) {
     var i = 0
@@ -185,7 +258,7 @@ test("xhr[method] get, put, post, patch with url shorthands and options", functi
 if (!window.XDomainRequest) {
     test("[func] xhr.head", function(assert) {
         xhr.head({
-            uri: "https://httpbin.org/get",
+            uri: "/mock/200ok",
         }, function(err, resp, body) {
             assert.ifError(err, "no err")
             assert.equal(resp.statusCode, 200)
@@ -196,7 +269,7 @@ if (!window.XDomainRequest) {
     })
 
     test("xhr.head url shorthand", function(assert) {
-        xhr.head("https://httpbin.org/get", function(err, resp, body) {
+        xhr.head("/mock/200ok", function(err, resp, body) {
             assert.equal(resp.method, "HEAD")
             assert.end()
         })
@@ -204,18 +277,17 @@ if (!window.XDomainRequest) {
 
     test("[func] xhr.del", function(assert) {
         xhr.del({
-            uri: "https://httpbin.org/delete"
+            uri: "/mock/200ok"
         }, function(err, resp, body) {
             assert.ifError(err, "no err")
             assert.equal(resp.statusCode, 200)
             assert.equal(resp.method, "DELETE")
-            assert.notEqual(resp.body.length, 0)
             assert.end()
         })
     })
 
     test("xhr.del url shorthand", function(assert) {
-        xhr.del("https://httpbin.org/delete", function(err, resp, body) {
+        xhr.del("/mock/200ok", function(err, resp, body) {
             assert.equal(resp.method, "DELETE")
             assert.end()
         })

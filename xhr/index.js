@@ -1,6 +1,5 @@
 "use strict";
 var window = require("global/window")
-var once = require("once")
 var isFunction = require("is-function")
 var parseHeaders = require("parse-headers")
 var xtend = require("xtend")
@@ -52,11 +51,17 @@ function createXHR(uri, options, callback) {
 }
 
 function _createXHR(options) {
-    var callback = options.callback
-    if(typeof callback === "undefined"){
+    if(typeof options.callback === "undefined"){
         throw new Error("callback argument missing")
     }
-    callback = once(callback)
+
+    var called = false
+    var callback = function cbOnce(err, response, body){
+        if(!called){
+            called = true
+            options.callback(err, response, body)
+        }
+    }
 
     function readystatechange() {
         if (xhr.readyState === 4) {
@@ -70,8 +75,8 @@ function _createXHR(options) {
 
         if (xhr.response) {
             body = xhr.response
-        } else if (xhr.responseType === "text" || !xhr.responseType) {
-            body = xhr.responseText || xhr.responseXML
+        } else {
+            body = xhr.responseText || getXml(xhr)
         }
 
         if (isJson) {
@@ -83,22 +88,13 @@ function _createXHR(options) {
         return body
     }
 
-    var failureResponse = {
-                body: undefined,
-                headers: {},
-                statusCode: 0,
-                method: method,
-                url: uri,
-                rawRequest: xhr
-            }
-
     function errorFunc(evt) {
         clearTimeout(timeoutTimer)
         if(!(evt instanceof Error)){
             evt = new Error("" + (evt || "Unknown XMLHttpRequest Error") )
         }
         evt.statusCode = 0
-        callback(evt, failureResponse)
+        return callback(evt, failureResponse)
     }
 
     // will load the data & process the response in a special response object
@@ -130,8 +126,7 @@ function _createXHR(options) {
         } else {
             err = new Error("Internal XMLHttpRequest Error")
         }
-        callback(err, response, response.body)
-
+        return callback(err, response, response.body)
     }
 
     var xhr = options.xhr || null
@@ -148,18 +143,26 @@ function _createXHR(options) {
     var aborted
     var uri = xhr.url = options.uri || options.url
     var method = xhr.method = options.method || "GET"
-    var body = options.body || options.data || null
+    var body = options.body || options.data
     var headers = xhr.headers = options.headers || {}
     var sync = !!options.sync
     var isJson = false
     var timeoutTimer
+    var failureResponse = {
+        body: undefined,
+        headers: {},
+        statusCode: 0,
+        method: method,
+        url: uri,
+        rawRequest: xhr
+    }
 
-    if ("json" in options) {
+    if ("json" in options && options.json !== false) {
         isJson = true
         headers["accept"] || headers["Accept"] || (headers["Accept"] = "application/json") //Don't override existing accept header declared by user
         if (method !== "GET" && method !== "HEAD") {
             headers["content-type"] || headers["Content-Type"] || (headers["Content-Type"] = "application/json") //Don't override existing accept header declared by user
-            body = JSON.stringify(options.json)
+            body = JSON.stringify(options.json === true ? body : options.json)
         }
     }
 
@@ -169,6 +172,9 @@ function _createXHR(options) {
     // IE9 must have onprogress be set to a unique function.
     xhr.onprogress = function () {
         // IE must die
+    }
+    xhr.onabort = function(){
+        aborted = true;
     }
     xhr.ontimeout = errorFunc
     xhr.open(method, uri, !sync, options.username, options.password)
@@ -181,7 +187,8 @@ function _createXHR(options) {
     // both npm's request and jquery 1.x use this kind of timeout, so this is being consistent
     if (!sync && options.timeout > 0 ) {
         timeoutTimer = setTimeout(function(){
-            aborted=true//IE9 may still call readystatechange
+            if (aborted) return
+            aborted = true//IE9 may still call readystatechange
             xhr.abort("timeout")
             var e = new Error("XMLHttpRequest timeout")
             e.code = "ETIMEDOUT"
@@ -209,11 +216,26 @@ function _createXHR(options) {
         options.beforeSend(xhr)
     }
 
-    xhr.send(body)
+    // Microsoft Edge browser sends "undefined" when send is called with undefined value.
+    // XMLHttpRequest spec says to pass null as body to indicate no body
+    // See https://github.com/naugtur/xhr/issues/100.
+    xhr.send(body || null)
 
     return xhr
 
 
+}
+
+function getXml(xhr) {
+    if (xhr.responseType === "document") {
+        return xhr.responseXML
+    }
+    var firefoxBugTakenEffect = xhr.status === 204 && xhr.responseXML && xhr.responseXML.documentElement.nodeName === "parsererror"
+    if (xhr.responseType === "" && !firefoxBugTakenEffect) {
+        return xhr.responseXML
+    }
+
+    return null
 }
 
 function noop() {}
