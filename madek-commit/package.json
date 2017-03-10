@@ -1,0 +1,56 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "./dev/commit",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "./dev/commit",
+        "spec": "/Users/ma/CODE/Madek/webapp/dev/commit",
+        "type": "directory"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "dev/commit",
+  "_id": "madek-commit@1.0.0",
+  "_inCache": true,
+  "_location": "/madek-commit",
+  "_phantomChildren": {
+    "conventional-commit-types": "2.1.0",
+    "longest": "1.0.1",
+    "pad-right": "0.2.2",
+    "right-pad": "1.0.1",
+    "word-wrap": "1.2.1"
+  },
+  "_requested": {
+    "raw": "./dev/commit",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "./dev/commit",
+    "spec": "/Users/ma/CODE/Madek/webapp/dev/commit",
+    "type": "directory"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:dev/commit",
+  "_shasum": "3ef8771b2832e03e43801c68a0bebeb02c74a03e",
+  "_shrinkwrap": null,
+  "_spec": "./dev/commit",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "bin": {
+    "madek-commit": "./madek-commit.js"
+  },
+  "dependencies": {
+    "commitizen": "^2.7.6",
+    "cz-conventional-changelog": "^1.1.5"
+  },
+  "devDependencies": {},
+  "name": "madek-commit",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "version": "1.0.0"
+}

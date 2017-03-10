@@ -1,0 +1,105 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "videojs-wavesurfer",
+        "scope": null,
+        "escapedName": "videojs-wavesurfer",
+        "name": "videojs-wavesurfer",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "videojs-wavesurfer@latest",
+  "_id": "videojs-wavesurfer@1.3.1",
+  "_inCache": true,
+  "_location": "/videojs-wavesurfer",
+  "_nodeVersion": "4.2.3",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/videojs-wavesurfer-1.3.1.tgz_1488071129079_0.29560753609985113"
+  },
+  "_npmUser": {
+    "name": "collab",
+    "email": "info@collab.nl"
+  },
+  "_npmVersion": "2.14.7",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "videojs-wavesurfer",
+    "scope": null,
+    "escapedName": "videojs-wavesurfer",
+    "name": "videojs-wavesurfer",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/videojs-wavesurfer/-/videojs-wavesurfer-1.3.1.tgz",
+  "_shasum": "ec0402d51e8258a6788cb4c1509c3afe7ed69735",
+  "_shrinkwrap": null,
+  "_spec": "videojs-wavesurfer",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Collab"
+  },
+  "bugs": {
+    "url": "https://github.com/collab-project/videojs-wavesurfer/issues"
+  },
+  "dependencies": {
+    "video.js": ">=5.0.0",
+    "wavesurfer.js": ">=1.2.0"
+  },
+  "description": "video.js plugin that adds a navigable waveform for audio and video files.",
+  "devDependencies": {
+    "grunt": ">=0.4.5",
+    "grunt-contrib-concat": ">=0.4.0",
+    "grunt-contrib-jshint": ">=0.10.0",
+    "grunt-contrib-uglify": ">=0.5.0",
+    "grunt-contrib-watch": ">=0.6.1",
+    "grunt-jscs": "^3.0.1"
+  },
+  "directories": {
+    "examples": "examples"
+  },
+  "dist": {
+    "shasum": "ec0402d51e8258a6788cb4c1509c3afe7ed69735",
+    "tarball": "https://registry.npmjs.org/videojs-wavesurfer/-/videojs-wavesurfer-1.3.1.tgz"
+  },
+  "gitHead": "17b3856602c1c83bd7ac15992be6e4db8e46206f",
+  "homepage": "https://github.com/collab-project/videojs-wavesurfer",
+  "keywords": [
+    "waveform",
+    "audio",
+    "video",
+    "wavesurfer",
+    "videojs",
+    "videojs-plugin",
+    "player"
+  ],
+  "license": "MIT",
+  "main": "src/js/videojs.wavesurfer.js",
+  "maintainers": [
+    {
+      "name": "collab",
+      "email": "info@collab.nl"
+    }
+  ],
+  "name": "videojs-wavesurfer",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/collab-project/videojs-wavesurfer.git"
+  },
+  "scripts": {
+    "test": "echo No tests yet!"
+  },
+  "version": "1.3.1"
+}
