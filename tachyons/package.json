@@ -1,0 +1,127 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "tachyons@^4.6.2",
+        "scope": null,
+        "escapedName": "tachyons",
+        "name": "tachyons",
+        "rawSpec": "^4.6.2",
+        "spec": ">=4.6.2 <5.0.0",
+        "type": "range"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "tachyons@>=4.6.2 <5.0.0",
+  "_id": "tachyons@4.6.2",
+  "_inCache": true,
+  "_location": "/tachyons",
+  "_nodeVersion": "7.4.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/tachyons-4.6.2.tgz_1485275458555_0.9246918931603432"
+  },
+  "_npmUser": {
+    "name": "johno",
+    "email": "johnotander@gmail.com"
+  },
+  "_npmVersion": "4.0.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "tachyons@^4.6.2",
+    "scope": null,
+    "escapedName": "tachyons",
+    "name": "tachyons",
+    "rawSpec": "^4.6.2",
+    "spec": ">=4.6.2 <5.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/tachyons/-/tachyons-4.6.2.tgz",
+  "_shasum": "cf006fd516763e735b33565fc21b8b3616a012c8",
+  "_shrinkwrap": null,
+  "_spec": "tachyons@^4.6.2",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "mrmrs"
+  },
+  "bugs": {
+    "url": "https://github.com/tachyons-css/tachyons/issues"
+  },
+  "contributors": [
+    {
+      "name": "adam morse",
+      "email": "hi@mrmrs.cc"
+    },
+    {
+      "name": "john otander",
+      "url": "http://johnotander.com"
+    }
+  ],
+  "dependencies": {},
+  "description": "Functional CSS for humans",
+  "devDependencies": {
+    "copy-files": "^0.1.0",
+    "immutable-css-cli": "^1.1.1",
+    "normalize.css": "^4.2.0",
+    "tachyons-cli": "^1.0.10",
+    "tachyons-modules": "^1.1.8",
+    "watch": "^1.0.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "cf006fd516763e735b33565fc21b8b3616a012c8",
+    "tarball": "https://registry.npmjs.org/tachyons/-/tachyons-4.6.2.tgz"
+  },
+  "files": [
+    "css",
+    "src"
+  ],
+  "gitHead": "9a9fe345431cf4f69720c6f81e66078197cd594e",
+  "homepage": "https://github.com/tachyons-css/tachyons#readme",
+  "keywords": [
+    "css",
+    "oocss",
+    "postcss",
+    "functional css",
+    "design",
+    "responsive",
+    "performance"
+  ],
+  "license": "MIT",
+  "main": "css/tachyons.css",
+  "maintainers": [
+    {
+      "name": "donnieberg",
+      "email": "deeoverflow@gmail.com"
+    },
+    {
+      "name": "johno",
+      "email": "johnotander@gmail.com"
+    },
+    {
+      "name": "mrmrs",
+      "email": "hi@mrmrs.cc"
+    }
+  ],
+  "name": "tachyons",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tachyons-css/tachyons.git"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run build:minify",
+    "build:css": "tachyons src/tachyons.css > css/tachyons.css",
+    "build:minify": "tachyons src/tachyons.css -m > css/tachyons.min.css",
+    "build:watch": "watch 'npm run build' ./src/",
+    "mutations": "immutable-css src/tachyons.css --strict",
+    "start": "npm run build:watch"
+  },
+  "style": "css/tachyons.min.css",
+  "version": "4.6.2"
+}
