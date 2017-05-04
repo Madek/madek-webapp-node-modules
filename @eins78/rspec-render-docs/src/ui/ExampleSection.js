@@ -34,7 +34,7 @@ const ExampleSection = ({title, example, config}) => {
     <CodeBlock l='ruby'>{sourceBlock}</CodeBlock>
 
     <div className='hook-debug' style={{display: 'none'}}>
-      <pre><code>{source}</code></pre>
+      <CodeBlock l='ruby'>{source}</CodeBlock>
       <CodeBlock l='json'>{JSON.stringify(example, 0, 2)}</CodeBlock>
     </div>
 

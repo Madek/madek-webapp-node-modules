@@ -2,26 +2,25 @@
   "_args": [
     [
       {
-        "raw": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+        "raw": "@eins78/rspec-render-docs@^1.0.0-alpha.4",
         "scope": "@eins78",
         "escapedName": "@eins78%2frspec-render-docs",
         "name": "@eins78/rspec-render-docs",
-        "rawSpec": "1.0.0-alpha.3",
-        "spec": "1.0.0-alpha.3",
-        "type": "version"
+        "rawSpec": "^1.0.0-alpha.4",
+        "spec": ">=1.0.0-alpha.4 <2.0.0",
+        "type": "range"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "@eins78/rspec-render-docs@1.0.0-alpha.3",
-  "_id": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+  "_from": "@eins78/rspec-render-docs@>=1.0.0-alpha.4 <2.0.0",
+  "_id": "@eins78/rspec-render-docs@1.0.0-alpha.4",
   "_inCache": true,
-  "_installable": true,
   "_location": "/@eins78/rspec-render-docs",
   "_nodeVersion": "6.7.0",
   "_npmOperationalInternal": {
     "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/rspec-render-docs-1.0.0-alpha.3.tgz_1475693117688_0.4404398980550468"
+    "tmp": "tmp/rspec-render-docs-1.0.0-alpha.4.tgz_1475739579365_0.5154954574536532"
   },
   "_npmUser": {
     "name": "eins78",
@@ -30,22 +29,21 @@
   "_npmVersion": "3.10.7",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+    "raw": "@eins78/rspec-render-docs@^1.0.0-alpha.4",
     "scope": "@eins78",
     "escapedName": "@eins78%2frspec-render-docs",
     "name": "@eins78/rspec-render-docs",
-    "rawSpec": "1.0.0-alpha.3",
-    "spec": "1.0.0-alpha.3",
-    "type": "version"
+    "rawSpec": "^1.0.0-alpha.4",
+    "spec": ">=1.0.0-alpha.4 <2.0.0",
+    "type": "range"
   },
   "_requiredBy": [
-    "#DEV:/",
-    "#USER"
+    "#DEV:/"
   ],
-  "_resolved": "https://registry.npmjs.org/@eins78/rspec-render-docs/-/rspec-render-docs-1.0.0-alpha.3.tgz",
-  "_shasum": "e8a511baebdb7a87a259779ad5fc07192629ca0a",
+  "_resolved": "https://registry.npmjs.org/@eins78/rspec-render-docs/-/rspec-render-docs-1.0.0-alpha.4.tgz",
+  "_shasum": "43c0d861937caeb3021e2395c0cf957e2fd731af",
   "_shrinkwrap": null,
-  "_spec": "@eins78/rspec-render-docs@1.0.0-alpha.3",
+  "_spec": "@eins78/rspec-render-docs@^1.0.0-alpha.4",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Max F. Albrecht",
@@ -74,21 +72,21 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-markdown": "^2.4.2",
-    "react-syntax-highlighter": "^2.7.0",
-    "standard": "^8.2.0",
+    "react-syntax-highlighter": "^2.9.0",
+    "standard": "^8.3.0",
     "uglify": "^0.1.5"
   },
   "directories": {},
   "dist": {
-    "shasum": "e8a511baebdb7a87a259779ad5fc07192629ca0a",
-    "tarball": "https://registry.npmjs.org/@eins78/rspec-render-docs/-/rspec-render-docs-1.0.0-alpha.3.tgz"
+    "shasum": "43c0d861937caeb3021e2395c0cf957e2fd731af",
+    "tarball": "https://registry.npmjs.org/@eins78/rspec-render-docs/-/rspec-render-docs-1.0.0-alpha.4.tgz"
   },
   "files": [
     "bin",
     "rspec",
     "src"
   ],
-  "gitHead": "91a39d751613abbf0c211f5eecf747c0b4116b5d",
+  "gitHead": "cdb6e49f627fa6a69b35b3efa4db30781c67bdfb",
   "homepage": "https://github.com/eins78/rspec-render-docs#readme",
   "jsnext:main": "src/rspec-render-docs.js",
   "keywords": [
@@ -116,5 +114,5 @@
     "rspec-docs": "babel-node ./rspec-render-docs.js",
     "test": "npm run -s lint"
   },
-  "version": "1.0.0-alpha.3"
+  "version": "1.0.0-alpha.4"
 }
