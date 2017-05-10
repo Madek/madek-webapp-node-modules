@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
 import TransitionEvents from './utils/TransitionEvents';
@@ -13,12 +14,12 @@ import TransitionEvents from './utils/TransitionEvents';
 // not wait until transition end to trigger continuing animations.
 
 var propTypes = {
-  direction: React.PropTypes.oneOf(['prev', 'next']),
-  onAnimateOutEnd: React.PropTypes.func,
-  active: React.PropTypes.bool,
-  animateIn: React.PropTypes.bool,
-  animateOut: React.PropTypes.bool,
-  index: React.PropTypes.number
+  direction: PropTypes.oneOf(['prev', 'next']),
+  onAnimateOutEnd: PropTypes.func,
+  active: PropTypes.bool,
+  animateIn: PropTypes.bool,
+  animateOut: PropTypes.bool,
+  index: PropTypes.number
 };
 
 var defaultProps = {

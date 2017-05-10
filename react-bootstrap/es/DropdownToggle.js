@@ -4,6 +4,7 @@ import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from './Button';
 import SafeAnchor from './SafeAnchor';
@@ -11,10 +12,10 @@ import SafeAnchor from './SafeAnchor';
 import { bsClass as setBsClass } from './utils/bootstrapUtils';
 
 var propTypes = {
-  noCaret: React.PropTypes.bool,
-  open: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  useAnchor: React.PropTypes.bool
+  noCaret: PropTypes.bool,
+  open: PropTypes.bool,
+  title: PropTypes.string,
+  useAnchor: PropTypes.bool
 };
 
 var defaultProps = {

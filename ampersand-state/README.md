@@ -1,5 +1,9 @@
 # ampersand-state
 
+Lead Maintainer: [Philip Roberts](https://github.com/latentflip)
+
+[![Coverage Status](https://coveralls.io/repos/AmpersandJS/ampersand-state/badge.svg?branch=master&service=github)](https://coveralls.io/github/AmpersandJS/ampersand-state?branch=master)
+
 <!-- starthide -->
 Part of the [Ampersand.js toolkit](http://ampersandjs.com) for building clientside applications.
 <!-- endhide -->
@@ -68,7 +72,7 @@ If you have defined an `initialize` function for your subclass of State, it will
 
 ```javascript
 var me = new Person({
-    firstName: 'Phil'
+    firstName: 'Phil',
     lastName: 'Roberts'
 });
 
@@ -213,12 +217,15 @@ Check if the state is currently valid. It does this by calling the state's `vali
 
 ### dataTypes  `AmpersandState.extend({ datatypes: myCustomTypes })`
 
-ampersand-state defines several built-in datatypes:  `string`, `number`, `boolean`, `array`, `object`, `date`, `state`, or `any`.  Of these, `object`, `array` and `any` allow for a lot of extra flexibility.  However sometimes it may be useful to define your own custom datatypes.  Then you can use these types in the `props` below with all their features (like `required`, `default`, etc).
+ampersand-state defines several built-in datatypes:  `string`, `number`, `boolean`, `array`, `object`, `date`, `state`, or `any`.  Of these, `object`, `array` and `any` allow for a lot of extra flexibility.  However sometimes it may be useful to define your own custom datatypes. Then you can use these types in the `props` below with all their features (like `required`, `default`, etc).
+
+Setting `type` is required and `typeError` will be thrown if it's missing or has not been choosen either from default types or your custom ones.
 
 To define a type, you generally will provide an object with 4 member functions (though only 2 are usually necessary)  `get`, `set`, `default`, and `compare`.
 
 * `set : function(newVal){};  returns {type : type, val : newVal};`:  Called on every set. Should return an object with two members: `val` and `type`.  If the `type` value does not equal the name of the dataType you defined, a `TypeError` should be thrown.
 * `compare : function(currentVal, newVal, attributeName){}; returns boolean`:  Called on every `set`. Should return `true` if `oldVal` and `newVal` are equal.  Non-equal values will eventually trigger `change` events, unless the state's `set` (not the dataTypes's!) is called with the option `{silent : true}`.
+* `onChange : function (value, previousValue, attributeName){};`: Called after the value changes. Useful for automatically setting up or tearing down listeners on properties.
 * `get : function(val){} returns val;`:  Overrides the default getter of this type.  Useful if you want to make defensive copies.  For example, the `date` dataType returns a clone of the internally saved `date` to keep the internal state consistent.
 * `default : function(){} returns val;`:  Returns the default value for this type.
 
@@ -305,6 +312,7 @@ Properties can be defined in three different ways:
 * If `setOnce` is `true`, then you'll be able to set property only once.
     * If the property has a `default`, and you don't set the value initially, the property will be permanently set to the default value.
     * If the property doesn't have a `default`, and you don't set the value initially, it can be set later, but only once.
+* If `test` function is passed, then a negative validation test will be executed every time this property is about to be set. If the validation passes, the function must return `false` to tell **State** to go ahead and set the value. Otherwise, it should return a `string` with the error message describing the validation failure. In this case **State** will throw a `TypeError` with `"Property '<property>' failed validation with error: <errorMessage>"`.
 
 Trying to set a property to an invalid type will throw an error.
 
@@ -319,7 +327,16 @@ var Person = AmpersandState.extend({
         type: {
             type: 'string',
             values: ['regular-hero', 'super-hero', 'mega-hero']
-        }
+        },
+        numberOfChildren: {
+            type: 'number',
+            test: function(value){
+                if (value < 0) {
+                    return "Must be a positive number";
+                }
+                return false;
+            }
+        },
     }
 });
 ```
@@ -368,13 +385,23 @@ var Person = AmpersandState.extend({
 
 ### derived `AmpersandState.extend({ derived: { derivedProperties }})`
 
-Derived properties (also known as computed properties) are properties of the state object that depend on other properties (from `props`, `session`,  or even `derived`) to determine their value. Best demonstrated with an example:
+Derived properties (also known as computed properties) are properties of the state object that depend on other properties (from `props`, `session`,  or even `derived` or the same from state props or children) to determine their value. Best demonstrated with an example:
 
 ```javascript
+var Address = AmpersandState.extend({
+  props: {
+    'street': 'string',
+    'city': 'string',
+    'region': 'string',
+    'postcode': 'string'
+  }
+});
+
 var Person = AmpersandState.extend({
     props: {
         firstName: 'string',
-        lastName: 'string'
+        lastName: 'string',
+        address: 'state'
     },
     derived: {
         fullName: {
@@ -382,16 +409,43 @@ var Person = AmpersandState.extend({
             fn: function () {
                 return this.firstName + ' ' + this.lastName;
             }
+        },
+        mailingAddress: {
+            deps: ['address.street', 'address.city', 'address.region', 'address.postcode'],
+            fn: function () {
+                var self = this;
+                return ['street','city','region','postcode'].map(function (prop) {
+                    var val = self.address[prop];
+                    if (!val) return val;
+                    return (prop === 'street' || prop === 'city') ? val + ',' : val;
+                }).filter(function (val) {
+                    return !!val;
+                }).join(' ');
+            }
         }
     }
 });
 
-var person = new Person({ firstName: 'Phil', lastName: 'Roberts' });
+var person = new Person({
+    firstName: 'Phil',
+    lastName: 'Roberts',
+    address: new Address({
+        street: '123 Main St',
+        city: 'Anyplace',
+        region: 'BC',
+        postcode: 'V6A 2S5'
+    })
+});
 console.log(person.fullName) //=> "Phil Roberts"
+console.log(person.mailingAddress) //=> "123 Main St, Anyplace, BC V6A 2S5"
 
 person.firstName = 'Bob';
+person.address.street = '321 St. Charles Pl'
 console.log(person.fullName) //=> "Bob Roberts"
+console.log(person.mailingAddress) //=> "321 St. Charles Pl, Anyplace, BC V6A 2S5"
 ```
+
+See working example at [RequireBin](http://requirebin.com/?gist=c496f0d33f32527fe1ca)
 
 Each derived property is defined as an object with the following properties:
 
@@ -487,7 +541,7 @@ var WidgetCollection = Collection.extend({
     model: Widget
 });
 
-var Person = AmpersandState.extend({
+var Person = State.extend({
     props: {
         name: 'string'
     },
@@ -570,6 +624,8 @@ Possible options (when using `state.set()`):
 * `silent` {Boolean} - prevents triggering of any change events as a result of the set operation.
 * `unset` {Boolean} - `unset` the attributes keyed in the attributes object instead of setting them.
 
+_Note: when passing an object as the `attributes` argument, only that object's own enumerable properties (i.e. those that can be accessed with `Object.keys(object)`) are read and set. This behaviour is new as of v5.0.0, as prior version relied on `for...in` to access an object's properties, both owned by that object and those inherited through the prototypal chain._
+
 ### unset `state.unset(attribute|attributes[], [options])`
 
 Clear the named attribute or an array of named attributes from the state object. Fires a `"change"` event and a `"change:attributeName"` event unless `silent` is passed as an option.
@@ -596,7 +652,10 @@ person.clear()
 
 ### toggle `state.toggle('a')`
 
-Shortcut to toggle boolean properties, or cycle through “ENUM” type properties with a `values` array in their definition. Fires `"change"` events, as you would expect from `set()`.
+Shortcut to toggle boolean properties, or cycle through array of specified property's `values` (see `values` option section and example below).
+When you reach the last available value from given array, `toggle` will go back to the beginning and use first one.
+
+Fires `"change"` events, as you would expect from `set()`.
 
 ```javascript
 var Person = AmpersandState.extend({
@@ -705,3 +764,7 @@ me.getAttributes({
 
 MIT
 <!-- endhide -->
+
+## changelog
+
+- 5.0.2 - use lodash/xzy pkg requires (@samhashemi)

@@ -2,48 +2,48 @@
   "_args": [
     [
       {
-        "raw": "eslint-plugin-promise@~3.4.0",
+        "raw": "eslint-plugin-promise@~3.5.0",
         "scope": null,
         "escapedName": "eslint-plugin-promise",
         "name": "eslint-plugin-promise",
-        "rawSpec": "~3.4.0",
-        "spec": ">=3.4.0 <3.5.0",
+        "rawSpec": "~3.5.0",
+        "spec": ">=3.5.0 <3.6.0",
         "type": "range"
       },
       "/Users/ma/CODE/Madek/webapp/node_modules/standard"
     ]
   ],
-  "_from": "eslint-plugin-promise@>=3.4.0 <3.5.0",
-  "_id": "eslint-plugin-promise@3.4.1",
+  "_from": "eslint-plugin-promise@>=3.5.0 <3.6.0",
+  "_id": "eslint-plugin-promise@3.5.0",
   "_inCache": true,
   "_location": "/eslint-plugin-promise",
-  "_nodeVersion": "4.6.0",
+  "_nodeVersion": "4.3.2",
   "_npmOperationalInternal": {
-    "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/eslint-plugin-promise-3.4.1.tgz_1486419444044_0.7531657656654716"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/eslint-plugin-promise-3.5.0.tgz_1488325487376_0.6478514401242137"
   },
   "_npmUser": {
     "name": "xjamundx",
     "email": "jamund@gmail.com"
   },
-  "_npmVersion": "2.15.9",
+  "_npmVersion": "3.10.8",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "eslint-plugin-promise@~3.4.0",
+    "raw": "eslint-plugin-promise@~3.5.0",
     "scope": null,
     "escapedName": "eslint-plugin-promise",
     "name": "eslint-plugin-promise",
-    "rawSpec": "~3.4.0",
-    "spec": ">=3.4.0 <3.5.0",
+    "rawSpec": "~3.5.0",
+    "spec": ">=3.5.0 <3.6.0",
     "type": "range"
   },
   "_requiredBy": [
     "/standard"
   ],
-  "_resolved": "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-3.4.1.tgz",
-  "_shasum": "6911a9010bf84e17d82e19e0ab0f80ab3ad6db4c",
+  "_resolved": "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-3.5.0.tgz",
+  "_shasum": "78fbb6ffe047201627569e85a6c5373af2a68fca",
   "_shrinkwrap": null,
-  "_spec": "eslint-plugin-promise@~3.4.0",
+  "_spec": "eslint-plugin-promise@~3.5.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/standard",
   "author": {
     "name": "jden",
@@ -61,13 +61,13 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "6911a9010bf84e17d82e19e0ab0f80ab3ad6db4c",
-    "tarball": "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-3.4.1.tgz"
+    "shasum": "78fbb6ffe047201627569e85a6c5373af2a68fca",
+    "tarball": "https://registry.npmjs.org/eslint-plugin-promise/-/eslint-plugin-promise-3.5.0.tgz"
   },
   "engines": {
     "node": ">=4"
   },
-  "gitHead": "78b7639a6eedbe33c0111d30ec47096e33e027a3",
+  "gitHead": "cf01cd13145a450e568885e8c5182fff501a4700",
   "homepage": "https://github.com/xjamundx/eslint-plugin-promise#readme",
   "keywords": [
     "eslint",
@@ -94,5 +94,5 @@
     "pretest": "standard",
     "test": "mocha test"
   },
-  "version": "3.4.1"
+  "version": "3.5.0"
 }

@@ -33,6 +33,25 @@ It is highly recommended to run CPU-intensive tasks in a [Web Worker](http://dev
 
 If you can't, for any reason, use Web Workers, include the `rusha.js` file in a `<script>` tag and follow the instructions on _Using the Rusha Object_.
 
+## Usage
+
+### Normal usage
+
+```js
+var rusha = new Rusha();
+var hexHash = rusha.digest('I am Rusha'); 
+```
+
+### Incremental usage
+
+```js
+var rusha = new Rusha();
+rusha.resetState();
+rusha.append('I am');
+rusha.append(' Rusha');
+var hexHash = rusha.end();
+```
+
 ## Using the Rusha Object
 
 Your instantiate a new Rusha object by doing `var r = new Rusha(optionalSizeHint)`. When created, it provides the following methods:
@@ -42,6 +61,13 @@ Your instantiate a new Rusha object by doing `var r = new Rusha(optionalSizeHint
 - `Rusha#digestFromBuffer(b)`: Create a hex digest from a `Buffer` or `Array`. Both are expected to only contain elements < 256.
 - `Rusha#digestFromArrayBuffer(a)`: Create a hex digest from an `ArrayBuffer` object.
 - `Rusha#rawDigest(d)`: Behaves just like #digest(d), except that it returns the digest as an Int32Array of size 5.
+- `Rusha#resetState()`: Resets the internal state of the computation.
+- `Rusha#append(d)`: Appends a binary `String`, `Buffer`, `Array`, `ArrayBuffer` or `Blob`.
+- `Rusha#setState(state)`: Sets the internal computation state. See: getState().
+- `Rusha#getState()`: Returns an object representing the internal computation state. You can pass this state to setState(). This feature is useful to resume an incremental sha.
+- `Rusha#end()`: Finishes the computation of the sha, returning a hex digest.
+- `Rusha#rawEnd()`: Behaves just like #end(), except that it returns the digest as an Int32Array of size 5.
+
 
 ## Using the Rusha Worker
 
@@ -58,10 +84,10 @@ You can send your instance of the web worker messages in the format `{id: jobid,
 
 Tested were my Rusha implementation, the sha1.js implementation by [P. A. Johnston](http://pajhome.org.uk/crypt/md5/sha1.html), Tim Caswell's [Cifre](http://github.com/openpeer/cifre) and the Node.JS native implementation.
 
-If you want to check the performance for yourself in your own browser, I compiled a [JSPerf Page](http://jsperf.com/rusha/2).
+If you want to check the performance for yourself in your own browser, I compiled a [JSPerf Page](http://jsperf.com/rusha/13).
 
 A normalized estimation based on the best results for each implementation, smaller is better:
-![rough performance graph](http://awesam.de/rusha/bench/unscientific01.png)
+![rough performance graph](http://srijs.github.io/rusha/bench/unscientific01.png)
 
 Results per Implementation and Platform:
 ![performance chart](https://docs.google.com/spreadsheet/oimg?key=0Ag9CYh5kHpegdDB1ZG16WU1xVFgxdjRuQUVwQXRnWVE&oid=1&zx=pcatr2aits9)

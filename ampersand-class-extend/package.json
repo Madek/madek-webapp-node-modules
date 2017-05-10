@@ -1,118 +1,121 @@
 {
   "_args": [
     [
-      "ampersand-class-extend@^1.0.0",
+      {
+        "raw": "ampersand-class-extend@^2.0.0",
+        "scope": null,
+        "escapedName": "ampersand-class-extend",
+        "name": "ampersand-class-extend",
+        "rawSpec": "^2.0.0",
+        "spec": ">=2.0.0 <3.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-collection"
     ]
   ],
-  "_from": "ampersand-class-extend@>=1.0.0 <2.0.0",
-  "_id": "ampersand-class-extend@1.0.2",
+  "_from": "ampersand-class-extend@>=2.0.0 <3.0.0",
+  "_id": "ampersand-class-extend@2.0.0",
   "_inCache": true,
   "_location": "/ampersand-class-extend",
-  "_nodeVersion": "0.10.35",
-  "_npmUser": {
-    "email": "luke@lukekarrys.com",
-    "name": "lukekarrys"
+  "_nodeVersion": "5.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/ampersand-class-extend-2.0.0.tgz_1464206568813_0.864593637175858"
   },
-  "_npmVersion": "2.7.4",
+  "_npmUser": {
+    "name": "lukekarrys",
+    "email": "luke@lukekarrys.com"
+  },
+  "_npmVersion": "3.8.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "ampersand-class-extend",
-    "raw": "ampersand-class-extend@^1.0.0",
-    "rawSpec": "^1.0.0",
+    "raw": "ampersand-class-extend@^2.0.0",
     "scope": null,
-    "spec": ">=1.0.0 <2.0.0",
+    "escapedName": "ampersand-class-extend",
+    "name": "ampersand-class-extend",
+    "rawSpec": "^2.0.0",
+    "spec": ">=2.0.0 <3.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/ampersand-collection"
   ],
-  "_resolved": "https://registry.npmjs.org/ampersand-class-extend/-/ampersand-class-extend-1.0.2.tgz",
-  "_shasum": "8e3ab125d09bf7be943b50e98cce46ff517cbe91",
+  "_resolved": "https://registry.npmjs.org/ampersand-class-extend/-/ampersand-class-extend-2.0.0.tgz",
+  "_shasum": "52895ffa59217634a6188fd184b1048f5d808aff",
   "_shrinkwrap": null,
-  "_spec": "ampersand-class-extend@^1.0.0",
+  "_spec": "ampersand-class-extend@^2.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-collection",
   "author": {
-    "email": "henrik@andyet.net",
-    "name": "Henrik Joreteg"
+    "name": "Henrik Joreteg",
+    "email": "henrik@andyet.net"
   },
   "bugs": {
     "url": "https://github.com/ampersandjs/ampersand-class-extend/issues"
   },
   "dependencies": {
-    "lodash.assign": "^3.0.0"
+    "lodash": "^4.11.1"
   },
   "description": "JS class extension tool for enabling easily extending prototype with multiple objects.",
   "devDependencies": {
-    "browserify": "^5.11.0",
-    "phantomjs": "^1.9.7-15",
-    "run-browser": "^1.3.1",
-    "tap-spec": "^0.2.1",
-    "tape": "~2.12.3",
-    "tape-run": "^0.3.0"
+    "phantomjs": "^2.1.7",
+    "tape": "^4.4.0",
+    "zuul": "^3.9.0"
   },
   "directories": {},
   "dist": {
-    "shasum": "8e3ab125d09bf7be943b50e98cce46ff517cbe91",
-    "tarball": "http://registry.npmjs.org/ampersand-class-extend/-/ampersand-class-extend-1.0.2.tgz"
+    "shasum": "52895ffa59217634a6188fd184b1048f5d808aff",
+    "tarball": "https://registry.npmjs.org/ampersand-class-extend/-/ampersand-class-extend-2.0.0.tgz"
   },
   "files": [
-    "NOTICE.md",
-    "ampersand-class-extend.js"
+    "ampersand-class-extend.js",
+    "NOTICE.md"
   ],
-  "gitHead": "1a39e03fd1ee6227a3170ee438f76b887c2d1645",
+  "gitHead": "7c58b7fa6243c2fd02f23400f129b7bff7f09f97",
   "homepage": "https://github.com/ampersandjs/ampersand-class-extend",
-  "installable": true,
   "keywords": [
     "ampersand",
-    "class",
-    "inheritance"
+    "inheritance",
+    "class"
   ],
   "license": "MIT",
   "main": "ampersand-class-extend.js",
   "maintainers": [
     {
+      "name": "fyockm",
+      "email": "fyockm@gmail.com"
+    },
+    {
+      "name": "gar",
+      "email": "gar+npm@danger.computer"
+    },
+    {
       "name": "henrikjoreteg",
-      "email": "henrik@andyet.net"
+      "email": "henrik@joreteg.com"
     },
     {
       "name": "latentflip",
       "email": "phil@latentflip.com"
     },
     {
-      "name": "gar",
-      "email": "gar@comrade.us"
-    },
-    {
       "name": "lukekarrys",
       "email": "luke@lukekarrys.com"
+    },
+    {
+      "name": "pgilad",
+      "email": "giladp007@gmail.com"
     }
   ],
   "name": "ampersand-class-extend",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ampersandjs/ampersand-class-extend"
+    "url": "git://github.com/ampersandjs/ampersand-class-extend.git"
   },
   "scripts": {
-    "start": "run-browser test/main.js",
-    "test": "browserify test/main.js | tape-run | tap-spec"
+    "start": "zuul --local -- test/main.js",
+    "test": "zuul --phantom -- test/main.js",
+    "test-ci": "zuul -- test/main.js"
   },
-  "testling": {
-    "browsers": [
-      "android-browser/4.2..latest",
-      "chrome/22..latest",
-      "chrome/canary",
-      "firefox/17..latest",
-      "firefox/nightly",
-      "ie/9..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "opera/12..latest",
-      "opera/next",
-      "safari/5.1..latest"
-    ],
-    "files": "test/*.js"
-  },
-  "version": "1.0.2"
+  "version": "2.0.0"
 }

@@ -2,6 +2,23 @@
 
 Function*(al)* utilities.
 
+## after(fn, n):Function
+
+This creates a function that will only call `fn` if it was called `n` or more times.
+
+
+```js
+function onLoaded() {
+    console.log('all images loaded');
+}
+
+var imagePaths = ['1.jpg', '2.jpg', '3.jpg'];
+var callback = after(onLoaded, imagePaths.length);
+
+forEach(imagePaths, function(path) {
+    asyncLoad(path, callback);
+});
+```
 
 ## awaitDelay(fn, delay):Function
 
@@ -19,7 +36,7 @@ the images take 1500 milliseconds to load, it will trigger `onLoaded`
 immediately.
 
 ```js
-var callback = after(onLoaded, 1000);
+var callback = awaitDelay(onLoaded, 1000);
 loadImages(callback);
 function onLoaded(){
     console.log('loaded');
@@ -273,6 +290,20 @@ times(5, function(i) {
 // output: 01234
 ```
 
+## wrap(fn, wrapper):Function
+
+Wraps the first `fn` inside of the `wrapper` function, passing it as the first argument. This allows the `wrapper` to execute code before and after the `fn` runs, adjust the arguments, and execute it conditionally.
+
+```js
+var hello = function(name) { return "hello: " + name; };
+hello = wrap(hello, function(func) {
+  return "before, " + func("moe") + ", after";
+});
+hello();
+// output: 'before, hello: moe, after'
+```
+
+See: [`partial()`](#partial)
 -------------------------------------------------------------------------------
 
 For more usage examples check specs inside `/tests` folder. Unit tests are the

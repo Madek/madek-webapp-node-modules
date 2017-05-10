@@ -34,15 +34,23 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 var _StyleConfig = require('./utils/StyleConfig');
 
+var _CloseButton = require('./CloseButton');
+
+var _CloseButton2 = _interopRequireDefault(_CloseButton);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  onDismiss: _react2['default'].PropTypes.func,
-  closeLabel: _react2['default'].PropTypes.string
+  onDismiss: _propTypes2['default'].func,
+  closeLabel: _propTypes2['default'].string
 };
 
 var defaultProps = {
@@ -56,36 +64,6 @@ var Alert = function (_React$Component) {
     (0, _classCallCheck3['default'])(this, Alert);
     return (0, _possibleConstructorReturn3['default'])(this, _React$Component.apply(this, arguments));
   }
-
-  Alert.prototype.renderDismissButton = function renderDismissButton(onDismiss) {
-    return _react2['default'].createElement(
-      'button',
-      {
-        type: 'button',
-        className: 'close',
-        onClick: onDismiss,
-        'aria-hidden': 'true',
-        tabIndex: '-1'
-      },
-      _react2['default'].createElement(
-        'span',
-        null,
-        '\xD7'
-      )
-    );
-  };
-
-  Alert.prototype.renderSrOnlyDismissButton = function renderSrOnlyDismissButton(onDismiss, closeLabel) {
-    return _react2['default'].createElement(
-      'button',
-      {
-        type: 'button',
-        className: 'close sr-only',
-        onClick: onDismiss
-      },
-      closeLabel
-    );
-  };
 
   Alert.prototype.render = function render() {
     var _extends2;
@@ -110,9 +88,11 @@ var Alert = function (_React$Component) {
         role: 'alert',
         className: (0, _classnames2['default'])(className, classes)
       }),
-      dismissable && this.renderDismissButton(onDismiss),
-      children,
-      dismissable && this.renderSrOnlyDismissButton(onDismiss, closeLabel)
+      dismissable && _react2['default'].createElement(_CloseButton2['default'], {
+        onClick: onDismiss,
+        label: closeLabel
+      }),
+      children
     );
   };
 

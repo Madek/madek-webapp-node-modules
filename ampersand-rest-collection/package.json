@@ -1,40 +1,53 @@
 {
   "_args": [
     [
-      "ampersand-rest-collection@5.0.0",
+      {
+        "raw": "ampersand-rest-collection@6.0.0",
+        "scope": null,
+        "escapedName": "ampersand-rest-collection",
+        "name": "ampersand-rest-collection",
+        "rawSpec": "6.0.0",
+        "spec": "6.0.0",
+        "type": "version"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "ampersand-rest-collection@5.0.0",
-  "_id": "ampersand-rest-collection@5.0.0",
+  "_from": "ampersand-rest-collection@6.0.0",
+  "_id": "ampersand-rest-collection@6.0.0",
   "_inCache": true,
   "_location": "/ampersand-rest-collection",
-  "_nodeVersion": "0.10.40",
-  "_npmUser": {
-    "email": "luke@lukekarrys.com",
-    "name": "lukekarrys"
+  "_nodeVersion": "5.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/ampersand-rest-collection-6.0.0.tgz_1464220593164_0.8445373519789428"
   },
-  "_npmVersion": "2.13.1",
+  "_npmUser": {
+    "name": "lukekarrys",
+    "email": "luke@lukekarrys.com"
+  },
+  "_npmVersion": "3.8.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "ampersand-rest-collection",
-    "raw": "ampersand-rest-collection@5.0.0",
-    "rawSpec": "5.0.0",
+    "raw": "ampersand-rest-collection@6.0.0",
     "scope": null,
-    "spec": "5.0.0",
+    "escapedName": "ampersand-rest-collection",
+    "name": "ampersand-rest-collection",
+    "rawSpec": "6.0.0",
+    "spec": "6.0.0",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/ampersand-rest-collection/-/ampersand-rest-collection-5.0.0.tgz",
-  "_shasum": "1b264e70c5eddb16e8accb771f0c208bb7347a8b",
+  "_resolved": "https://registry.npmjs.org/ampersand-rest-collection/-/ampersand-rest-collection-6.0.0.tgz",
+  "_shasum": "a051267979b2cf7606a38383d9ee96d121a628f3",
   "_shrinkwrap": null,
-  "_spec": "ampersand-rest-collection@5.0.0",
+  "_spec": "ampersand-rest-collection@6.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "henrik@andyet.net",
-    "name": "Henrik Joreteg"
+    "name": "Henrik Joreteg",
+    "email": "henrik@andyet.net"
   },
   "browserify": {
     "transform": [
@@ -45,89 +58,80 @@
     "url": "https://github.com/ampersandjs/ampersand-rest-collection/issues"
   },
   "dependencies": {
-    "ampersand-collection": "^1.4.5",
-    "ampersand-collection-lodash-mixin": "^2.0.0",
-    "ampersand-collection-rest-mixin": "^5.0.0",
+    "ampersand-collection": "^2.0.0",
+    "ampersand-collection-lodash-mixin": "^4.0.0",
+    "ampersand-collection-rest-mixin": "^6.0.0",
     "ampersand-version": "^1.0.2"
   },
   "description": "ampersand-collection with REST and Lodash mixins.",
   "devDependencies": {
-    "browserify": "^11.0.1",
-    "phantomjs": "^1.9.16",
+    "jshint": "^2.9.1",
+    "phantomjs": "^2.1.7",
     "precommit-hook": "^3.0.0",
-    "run-browser": "^2.0.2",
-    "tap-spec": "^4.0.2",
     "tape": "^4.0.3",
-    "tape-run": "^1.0.0"
+    "zuul": "^3.9.0"
   },
   "directories": {},
   "dist": {
-    "shasum": "1b264e70c5eddb16e8accb771f0c208bb7347a8b",
-    "tarball": "http://registry.npmjs.org/ampersand-rest-collection/-/ampersand-rest-collection-5.0.0.tgz"
+    "shasum": "a051267979b2cf7606a38383d9ee96d121a628f3",
+    "tarball": "https://registry.npmjs.org/ampersand-rest-collection/-/ampersand-rest-collection-6.0.0.tgz"
   },
   "files": [
     "ampersand-rest-collection.js"
   ],
-  "gitHead": "3c227dbcab5632d5a6238559eb253635683fec08",
+  "gitHead": "3cc622342e11ac3cc88c18f7715bd1eb8b9d9e82",
   "homepage": "https://github.com/ampersandjs/ampersand-rest-collection",
-  "installable": true,
   "keywords": [
     "collection",
-    "models",
-    "rest"
+    "rest",
+    "models"
   ],
   "license": "MIT",
   "main": "ampersand-rest-collection.js",
   "maintainers": [
     {
+      "name": "fyockm",
+      "email": "fyockm@gmail.com"
+    },
+    {
+      "name": "gar",
+      "email": "gar+npm@danger.computer"
+    },
+    {
       "name": "henrikjoreteg",
-      "email": "henrik@andyet.net"
+      "email": "henrik@joreteg.com"
     },
     {
       "name": "latentflip",
       "email": "phil@latentflip.com"
     },
     {
-      "name": "gar",
-      "email": "gar@comrade.us"
-    },
-    {
       "name": "lukekarrys",
       "email": "luke@lukekarrys.com"
+    },
+    {
+      "name": "pgilad",
+      "email": "giladp007@gmail.com"
     }
   ],
   "name": "ampersand-rest-collection",
   "optionalDependencies": {},
   "pre-commit": [
     "lint",
-    "test",
-    "validate"
+    "validate",
+    "test"
   ],
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/ampersandjs/ampersand-rest-collection.git"
   },
   "scripts": {
     "lint": "jshint .",
-    "start": "run-browser test/*",
-    "test": "browserify test/* | tape-run | tap-spec",
+    "start": "zuul --local -- test/main.js",
+    "test": "zuul --phantom -- test/main.js",
+    "test-ci": "zuul -- test/main.js",
     "validate": "npm ls"
   },
-  "testling": {
-    "browsers": [
-      "android-browser/4.2..latest",
-      "chrome/22..latest",
-      "chrome/canary",
-      "firefox/17..latest",
-      "firefox/nightly",
-      "ie/8..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "opera/12..latest",
-      "opera/next",
-      "safari/5.1..latest"
-    ],
-    "files": "test/*.js"
-  },
-  "version": "5.0.0"
+  "version": "6.0.0"
 }

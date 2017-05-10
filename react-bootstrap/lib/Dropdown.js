@@ -42,6 +42,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -99,14 +103,14 @@ var propTypes = {
   /**
    * The menu will open above the dropdown button, instead of below it.
    */
-  dropup: _react2['default'].PropTypes.bool,
+  dropup: _propTypes2['default'].bool,
 
   /**
    * An html id attribute, necessary for assistive technologies, such as screen readers.
    * @type {string|number}
    * @required
    */
-  id: (0, _isRequiredForA11y2['default'])(_react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.number])),
+  id: (0, _isRequiredForA11y2['default'])(_propTypes2['default'].oneOfType([_propTypes2['default'].string, _propTypes2['default'].number])),
 
   componentClass: _elementType2['default'],
 
@@ -119,35 +123,30 @@ var propTypes = {
   /**
    * Whether or not component is disabled.
    */
-  disabled: _react2['default'].PropTypes.bool,
+  disabled: _propTypes2['default'].bool,
 
   /**
    * Align the menu to the right side of the Dropdown toggle
    */
-  pullRight: _react2['default'].PropTypes.bool,
+  pullRight: _propTypes2['default'].bool,
 
   /**
    * Whether or not the Dropdown is visible.
    *
    * @controllable onToggle
    */
-  open: _react2['default'].PropTypes.bool,
-
-  /**
-   * A callback fired when the Dropdown closes.
-   */
-  onClose: _react2['default'].PropTypes.func,
+  open: _propTypes2['default'].bool,
 
   /**
    * A callback fired when the Dropdown wishes to change visibility. Called with the requested
-   * `open` value.
+   * `open` value, the DOM event, and the source that fired it: `'click'`,`'keydown'`,`'rootClose'`, or `'select'`.
    *
    * ```js
-   * function(Boolean isOpen) {}
+   * function(Boolean isOpen, Object event, { String source }) {}
    * ```
    * @controllable open
    */
-  onToggle: _react2['default'].PropTypes.func,
+  onToggle: _propTypes2['default'].func,
 
   /**
    * A callback fired when a menu item is selected.
@@ -156,27 +155,27 @@ var propTypes = {
    * (eventKey: any, event: Object) => any
    * ```
    */
-  onSelect: _react2['default'].PropTypes.func,
+  onSelect: _propTypes2['default'].func,
 
   /**
    * If `'menuitem'`, causes the dropdown to behave like a menu item rather than
    * a menu button.
    */
-  role: _react2['default'].PropTypes.string,
+  role: _propTypes2['default'].string,
 
   /**
    * Which event when fired outside the component will cause it to be closed
    */
-  rootCloseEvent: _react2['default'].PropTypes.oneOf(['click', 'mousedown']),
+  rootCloseEvent: _propTypes2['default'].oneOf(['click', 'mousedown']),
 
   /**
    * @private
    */
-  onMouseEnter: _react2['default'].PropTypes.func,
+  onMouseEnter: _propTypes2['default'].func,
   /**
    * @private
    */
-  onMouseLeave: _react2['default'].PropTypes.func
+  onMouseLeave: _propTypes2['default'].func
 };
 
 var defaultProps = {
@@ -229,12 +228,12 @@ var Dropdown = function (_React$Component) {
     }
   };
 
-  Dropdown.prototype.handleClick = function handleClick() {
+  Dropdown.prototype.handleClick = function handleClick(event) {
     if (this.props.disabled) {
       return;
     }
 
-    this.toggleOpen('click');
+    this.toggleOpen(event, { source: 'click' });
   };
 
   Dropdown.prototype.handleKeyDown = function handleKeyDown(event) {
@@ -245,7 +244,7 @@ var Dropdown = function (_React$Component) {
     switch (event.keyCode) {
       case _keycode2['default'].codes.down:
         if (!this.props.open) {
-          this.toggleOpen('keydown');
+          this.toggleOpen(event, { source: 'keydown' });
         } else if (this.menu.focusNext) {
           this.menu.focusNext();
         }
@@ -253,30 +252,30 @@ var Dropdown = function (_React$Component) {
         break;
       case _keycode2['default'].codes.esc:
       case _keycode2['default'].codes.tab:
-        this.handleClose(event);
+        this.handleClose(event, { source: 'keydown' });
         break;
       default:
     }
   };
 
-  Dropdown.prototype.toggleOpen = function toggleOpen(eventType) {
+  Dropdown.prototype.toggleOpen = function toggleOpen(event, eventDetails) {
     var open = !this.props.open;
 
     if (open) {
-      this.lastOpenEventType = eventType;
+      this.lastOpenEventType = eventDetails.source;
     }
 
     if (this.props.onToggle) {
-      this.props.onToggle(open);
+      this.props.onToggle(open, event, eventDetails);
     }
   };
 
-  Dropdown.prototype.handleClose = function handleClose() {
+  Dropdown.prototype.handleClose = function handleClose(event, eventDetails) {
     if (!this.props.open) {
       return;
     }
 
-    this.toggleOpen(null);
+    this.toggleOpen(event, eventDetails);
   };
 
   Dropdown.prototype.focusNextOnOpen = function focusNextOnOpen() {
@@ -324,10 +323,9 @@ var Dropdown = function (_React$Component) {
     var _this3 = this;
 
     var id = _ref.id,
-        onClose = _ref.onClose,
         onSelect = _ref.onSelect,
         rootCloseEvent = _ref.rootCloseEvent,
-        props = (0, _objectWithoutProperties3['default'])(_ref, ['id', 'onClose', 'onSelect', 'rootCloseEvent']);
+        props = (0, _objectWithoutProperties3['default'])(_ref, ['id', 'onSelect', 'rootCloseEvent']);
 
     var ref = function ref(c) {
       _this3.menu = c;
@@ -343,8 +341,10 @@ var Dropdown = function (_React$Component) {
       ref: ref,
       labelledBy: id,
       bsClass: (0, _bootstrapUtils.prefix)(props, 'menu'),
-      onClose: (0, _createChainedFunction2['default'])(child.props.onClose, onClose, this.handleClose),
-      onSelect: (0, _createChainedFunction2['default'])(child.props.onSelect, onSelect, this.handleClose),
+      onClose: (0, _createChainedFunction2['default'])(child.props.onClose, this.handleClose),
+      onSelect: (0, _createChainedFunction2['default'])(child.props.onSelect, onSelect, function (key, event) {
+        return _this3.handleClose(event, { source: 'select' });
+      }),
       rootCloseEvent: rootCloseEvent
     }));
   };
@@ -360,14 +360,13 @@ var Dropdown = function (_React$Component) {
         disabled = _props.disabled,
         pullRight = _props.pullRight,
         open = _props.open,
-        onClose = _props.onClose,
         onSelect = _props.onSelect,
         role = _props.role,
         bsClass = _props.bsClass,
         className = _props.className,
         rootCloseEvent = _props.rootCloseEvent,
         children = _props.children,
-        props = (0, _objectWithoutProperties3['default'])(_props, ['componentClass', 'id', 'dropup', 'disabled', 'pullRight', 'open', 'onClose', 'onSelect', 'role', 'bsClass', 'className', 'rootCloseEvent', 'children']);
+        props = (0, _objectWithoutProperties3['default'])(_props, ['componentClass', 'id', 'dropup', 'disabled', 'pullRight', 'open', 'onSelect', 'role', 'bsClass', 'className', 'rootCloseEvent', 'children']);
 
 
     delete props.onToggle;
@@ -395,7 +394,7 @@ var Dropdown = function (_React$Component) {
             });
           case MENU_ROLE:
             return _this4.renderMenu(child, {
-              id: id, open: open, pullRight: pullRight, bsClass: bsClass, onClose: onClose, onSelect: onSelect, rootCloseEvent: rootCloseEvent
+              id: id, open: open, pullRight: pullRight, bsClass: bsClass, onSelect: onSelect, rootCloseEvent: rootCloseEvent
             });
           default:
             return child;

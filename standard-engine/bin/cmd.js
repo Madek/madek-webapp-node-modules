@@ -52,8 +52,10 @@ Usage:
     If FILES is omitted, then all JavaScript source files (*.js, *.jsx) in the current
     working directory are checked, recursively.
 
-    Certain paths (node_modules/, .git/, coverage/, *.min.js, bundle.js, vendor/) are
-    automatically ignored.
+    Certain paths (node_modules/, coverage/, vendor/, *.min.js, bundle.js, and
+    files/folders that begin with '.' like .git/) are automatically ignored.
+
+    Paths in a project's root .gitignore file are also automatically ignored.
 
 Flags:
         --fix       Automatically fix problems
@@ -143,7 +145,6 @@ Flags (advanced):
     })
 
     process.exitCode = result.errorCount ? 1 : 0
-    return
   }
 
   function onError (err) {
@@ -154,7 +155,6 @@ Flags (advanced):
       opts.cmd, opts.bugs
     )
     process.exitCode = 1
-    return
   }
 
   /**

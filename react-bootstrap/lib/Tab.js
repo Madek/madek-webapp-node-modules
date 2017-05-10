@@ -22,6 +22,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _TabContainer = require('./TabContainer');
 
 var _TabContainer2 = _interopRequireDefault(_TabContainer);
@@ -38,14 +42,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var propTypes = (0, _extends3['default'])({}, _TabPane2['default'].propTypes, {
 
-  disabled: _react2['default'].PropTypes.bool,
+  disabled: _propTypes2['default'].bool,
 
-  title: _react2['default'].PropTypes.node,
+  title: _propTypes2['default'].node,
 
   /**
    * tabClassName is used as className for the associated NavItem
    */
-  tabClassName: _react2['default'].PropTypes.string
+  tabClassName: _propTypes2['default'].string
 });
 
 var Tab = function (_React$Component) {

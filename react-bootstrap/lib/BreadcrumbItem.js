@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _SafeAnchor = require('./SafeAnchor');
 
 var _SafeAnchor2 = _interopRequireDefault(_SafeAnchor);
@@ -40,19 +44,19 @@ var propTypes = {
   /**
    * If set to true, renders `span` instead of `a`
    */
-  active: _react2['default'].PropTypes.bool,
+  active: _propTypes2['default'].bool,
   /**
    * `href` attribute for the inner `a` element
    */
-  href: _react2['default'].PropTypes.string,
+  href: _propTypes2['default'].string,
   /**
    * `title` attribute for the inner `a` element
    */
-  title: _react2['default'].PropTypes.node,
+  title: _propTypes2['default'].node,
   /**
    * `target` attribute for the inner `a` element
    */
-  target: _react2['default'].PropTypes.string
+  target: _propTypes2['default'].string
 };
 
 var defaultProps = {

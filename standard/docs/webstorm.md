@@ -1,4 +1,15 @@
-# [WebStorm/PhpStorm][webstorm-1] configuration for Standard Style
+# [WebStorm][webstorm-1] configuration for Standard Style
+
+## Native support for `standard`
+
+WebStorm [recently announced native support](https://blog.jetbrains.com/webstorm/2017/01/webstorm-2017-1-eap-171-2272/)
+for `standard` directly in the IDE!
+
+This applies to all JetBrains products, including PhpStorm, IntelliJ, RubyMine, etc.
+
+If you still prefer to configure `standard` manually, use the following guide.
+
+## Configure `standard` support manually
 
 1. Close your IDE.
 2. [Figure out where your configuration lives][webstorm-2] (_IDE Settings_ section)
@@ -10,15 +21,10 @@
       <JSCodeStyleSettings>
         <option name="USE_SEMICOLON_AFTER_STATEMENT" value="false" />
         <option name="USE_DOUBLE_QUOTES" value="false" />
-        <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
         <option name="SPACES_WITHIN_IMPORTS" value="true" />
       </JSCodeStyleSettings>
-      <XML>
-        <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
-      </XML>
       <codeStyleSettings language="JavaScript">
         <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
-        <option name="SPACE_WITHIN_BRACKETS" value="true" />
         <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
         <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
         <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
@@ -48,15 +54,12 @@
 
 6. Start up the IDE and open a _Settings_/_Preferences_ screen (choose between project and default settings accordingly to your preference)
 7. Under `Editor > Code Style > JavaScript` change `Scheme` to `Standard`
-8. Under `Editor > Inspections > JavaScript > Code style issues` untick `Unterminated statement`
-9. Under `Languages & Frameworks > JavaScript > Code Quality Tools > ESLint` just select `Enable`. If you didn't install `ESLint` before and you don't have it in your dependencies - that's all. If you do - be sure to use `ESLint package` of the same version as current version of `standard` is using. Or just remove your old one - you probably won't need it anymore
+8. Under `Editor > Code Style > HTML` just select `Other`, in `Spaces` setting, check `In empty tag`
+9. Under `Editor > Inspections > JavaScript > Code style issues` untick `Unterminated statement`
+10. Under `Languages & Frameworks > JavaScript > Code Quality Tools > ESLint` just select `Enable`. If you didn't install `ESLint` before and you don't have it in your dependencies - that's all. If you do - be sure to use `ESLint package` of the same version as current version of `standard` is using. Or just remove your old one - you probably won't need it anymore
 
 ---
-
-If you're a Webstorm or PhpStorm user, [vote for `standard` to be one of the default styles][webstorm-3]
-built into the app.
 
 [npm-article]: https://docs.npmjs.com/getting-started/fixing-npm-permissions
 [webstorm-1]: https://www.jetbrains.com/webstorm/
 [webstorm-2]: https://www.jetbrains.com/help/phpstorm/2016.1/directories-used-by-phpstorm-to-store-settings-caches-plugins-and-logs.html?origin=old_help#d66583e60
-[webstorm-3]: https://youtrack.jetbrains.com/issue/WEB-17331

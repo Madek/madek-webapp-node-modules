@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
 import { bsClass, getClassSet, splitBsProps } from './utils/bootstrapUtils';
@@ -21,7 +22,7 @@ var propTypes = {
    *
    * adds class `visible-xs-block`
    */
-  visibleXsBlock: React.PropTypes.bool,
+  visibleXsBlock: PropTypes.bool,
   /**
    * Apply clearfix
    *
@@ -29,7 +30,7 @@ var propTypes = {
    *
    * adds class `visible-sm-block`
    */
-  visibleSmBlock: React.PropTypes.bool,
+  visibleSmBlock: PropTypes.bool,
   /**
    * Apply clearfix
    *
@@ -37,7 +38,7 @@ var propTypes = {
    *
    * adds class `visible-md-block`
    */
-  visibleMdBlock: React.PropTypes.bool,
+  visibleMdBlock: PropTypes.bool,
   /**
    * Apply clearfix
    *
@@ -45,7 +46,7 @@ var propTypes = {
    *
    * adds class `visible-lg-block`
    */
-  visibleLgBlock: React.PropTypes.bool
+  visibleLgBlock: PropTypes.bool
 };
 
 var defaultProps = {

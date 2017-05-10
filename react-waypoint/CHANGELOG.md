@@ -1,5 +1,41 @@
 ## master (unreleased)
 
+## 7.0.1
+
+- Improve startup time by consolidating `setTimeout`s and deferring work until
+  the initial timeout happens.
+
+## 7.0.0
+
+- Move `prop-types` to a regular dependency
+- Assume `window` as scrollable ancestor when `<body>` has `overflow: auto|scroll`
+- Restrict lower bound of React to v0.14.9
+
+## 6.0.0
+
+- Add `prop-types` as a peer dependency to remove deprecation warnings when
+  running on React 15.5
+
+## 5.3.1
+
+- Remove the `prop-types` peer dependency. This was an accidental breaking
+  change that will instead be released as 6.0.0.
+
+## 5.3.0
+
+- Remove deprecation warnings when running on React 15.5
+- Add React 14 to Travis test suite.
+
+## 5.2.1
+
+- [Fix] Avoid unnecessary clearTimeout when unmounting.
+
+## 5.2.0
+
+- [New] scrollableAncestor prop can now accept "window" as a string. This should
+  help with server rendering.
+- Debug code is now minified out in production build.
+
 ## 5.1.0
 
 - Waypoint can now accept children.

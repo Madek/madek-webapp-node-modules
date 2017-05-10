@@ -30,11 +30,19 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 var _createChainedFunction = require('./utils/createChainedFunction');
 
 var _createChainedFunction2 = _interopRequireDefault(_createChainedFunction);
+
+var _CloseButton = require('./CloseButton');
+
+var _CloseButton2 = _interopRequireDefault(_CloseButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -42,33 +50,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var propTypes = {
   /**
-   * The 'aria-label' attribute provides an accessible label for the close
+   * Provides an accessible label for the close
    * button. It is used for Assistive Technology when the label text is not
    * readable.
    */
-  'aria-label': _react2['default'].PropTypes.string,
+  closeLabel: _propTypes2['default'].string,
 
   /**
    * Specify whether the Component should contain a close button
    */
-  closeButton: _react2['default'].PropTypes.bool,
+  closeButton: _propTypes2['default'].bool,
 
   /**
    * A Callback fired when the close button is clicked. If used directly inside
    * a Modal component, the onHide will automatically be propagated up to the
    * parent Modal `onHide`.
    */
-  onHide: _react2['default'].PropTypes.func
+  onHide: _propTypes2['default'].func
 };
 
 var defaultProps = {
-  'aria-label': 'Close',
+  closeLabel: 'Close',
   closeButton: false
 };
 
 var contextTypes = {
-  $bs_modal: _react2['default'].PropTypes.shape({
-    onHide: _react2['default'].PropTypes.func
+  $bs_modal: _propTypes2['default'].shape({
+    onHide: _propTypes2['default'].func
   })
 };
 
@@ -82,12 +90,12 @@ var ModalHeader = function (_React$Component) {
 
   ModalHeader.prototype.render = function render() {
     var _props = this.props,
-        label = _props['aria-label'],
+        closeLabel = _props.closeLabel,
         closeButton = _props.closeButton,
         onHide = _props.onHide,
         className = _props.className,
         children = _props.children,
-        props = (0, _objectWithoutProperties3['default'])(_props, ['aria-label', 'closeButton', 'onHide', 'className', 'children']);
+        props = (0, _objectWithoutProperties3['default'])(_props, ['closeLabel', 'closeButton', 'onHide', 'className', 'children']);
 
 
     var modal = this.context.$bs_modal;
@@ -103,20 +111,10 @@ var ModalHeader = function (_React$Component) {
       (0, _extends3['default'])({}, elementProps, {
         className: (0, _classnames2['default'])(className, classes)
       }),
-      closeButton && _react2['default'].createElement(
-        'button',
-        {
-          type: 'button',
-          className: 'close',
-          'aria-label': label,
-          onClick: (0, _createChainedFunction2['default'])(modal.onHide, onHide)
-        },
-        _react2['default'].createElement(
-          'span',
-          { 'aria-hidden': 'true' },
-          '\xD7'
-        )
-      ),
+      closeButton && _react2['default'].createElement(_CloseButton2['default'], {
+        label: closeLabel,
+        onClick: (0, _createChainedFunction2['default'])(modal && modal.onHide, onHide)
+      }),
       children
     );
   };

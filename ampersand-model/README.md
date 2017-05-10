@@ -81,7 +81,7 @@ Available options:
 
 ### save `model.save([attributes], [options])`
 
-Save a model to your database (or alternative persistence layer) by delegating to to [ampersand-sync](https://github.com/ampersandjs/ampersand-sync). Returns a [xhr](https://github.com/Raynos/xhr) object if validation is successful and false otherwise. The attributes hash (as in [set](http://ampersandjs.com/docs#ampersand-state-set)) should contain the attributes you'd like to change — keys that aren't mentioned won't be altered — but, a *complete representation* of the resource will be sent to the server. As with `set`, you may pass individual keys and values instead of a hash. If the model has a validate method, and validation fails, the model will not be saved. If the model `isNew`, the save will be a "create" (HTTP POST).  If the model already exists on the server, the save will be an "update" (HTTP PUT).
+Save a model to your database (or alternative persistence layer) by delegating to [ampersand-sync](https://github.com/ampersandjs/ampersand-sync). Returns a [xhr](https://github.com/Raynos/xhr) object if validation is successful and false otherwise. The attributes hash (as in [set](http://ampersandjs.com/docs#ampersand-state-set)) should contain the attributes you'd like to change — keys that aren't mentioned won't be altered — but, a *complete representation* of the resource will be sent to the server. As with `set`, you may pass individual keys and values instead of a hash. If the model has a validate method, and validation fails, the model will not be saved. If the model `isNew`, the save will be a "create" (HTTP POST).  If the model already exists on the server, the save will be an "update" (HTTP PUT).
 
 If you only want the changed attributes to be sent to the server, call `model.save(attrs, {patch: true})`. You'll get an HTTP PATCH request to the server with just the passed-in attributes.
 
@@ -113,7 +113,7 @@ me.fetch();
 
 ### destroy `model.destroy([options])`
 
-Destroys the model on the server by delegating a HTTP `DELETE` request to ampersand-sync. Returns the xhr object, or `false` if the model [isNew](#ampersand-model-isnew). Accepts `success` and `error` callbacks in the options hash, which are both passed `(model, response, options)` as arguments.
+Destroys the model on the server by delegating a HTTP `DELETE` request to ampersand-sync. Returns the xhr object, or `false` if the model [isNew](#ampersand-state-isnew). Accepts `success` and `error` callbacks in the options hash, which are both passed `(model, response, options)` as arguments.
 
 Triggers:
 

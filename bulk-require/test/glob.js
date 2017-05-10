@@ -45,3 +45,11 @@ test('brace expansion', function (t) {
         xyz: { boop: 'boop!' }
     });
 });
+
+test('no auto-index when opts.index = false', function (t) {
+    t.plan(3);
+    var res = bulk(__dirname + '/glob/data/cats', [ '**/*.js' ], {index: false});
+    t.deepEqual(res.meow, { x: 555});
+    t.equal(typeof res.index, 'function');
+    t.notEqual(res, res.index);
+})

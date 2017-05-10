@@ -3,10 +3,11 @@ module.exports.cli = require('./bin/cmd')
 module.exports.linter = Linter
 
 var deglob = require('deglob')
-var findRoot = require('find-root')
-var homeOrTmp = require('home-or-tmp')
+var os = require('os')
 var path = require('path')
-var pkgConfig = require('pkg-config')
+var pkgConf = require('pkg-conf')
+
+var HOME_OR_TMP = os.homedir() || os.tmpdir()
 
 var DEFAULT_PATTERNS = [
   '**/*.js',
@@ -22,18 +23,18 @@ var DEFAULT_IGNORE = [
 ]
 
 function Linter (opts) {
-  var self = this
-  if (!(self instanceof Linter)) return new Linter(opts)
+  if (!(this instanceof Linter)) return new Linter(opts)
   if (!opts) opts = {}
 
-  self.cmd = opts.cmd || 'standard'
-  self.eslint = opts.eslint
-  self.cwd = opts.cwd
-  if (!self.eslint) throw new Error('opts.eslint option is required')
+  this.cmd = opts.cmd || 'standard'
+  this.eslint = opts.eslint
+  this.cwd = opts.cwd
+  if (!this.eslint) throw new Error('opts.eslint option is required')
+  this.customParseOpts = opts.parseOpts
 
-  self.eslintConfig = Object.assign({
+  this.eslintConfig = Object.assign({
     cache: true,
-    cacheLocation: path.join(homeOrTmp, '.standard-cache/'),
+    cacheLocation: path.join(HOME_OR_TMP, '.standard-cache/'),
     envs: [],
     fix: false,
     globals: [],
@@ -53,20 +54,22 @@ function Linter (opts) {
  * @param {Array.<string>=} opts.plugins  custom eslint plugins
  * @param {Array.<string>=} opts.envs     custom eslint environment
  * @param {string=} opts.parser           custom js parser (e.g. babel-eslint)
- * @param {function(Error, Object)} cb    callback
+ * @param {string=} opts.filename         path of the file containing the text being linted
  */
-Linter.prototype.lintText = function (text, opts, cb) {
-  var self = this
-  if (typeof opts === 'function') return self.lintText(text, null, opts)
-  opts = self.parseOpts(opts)
+Linter.prototype.lintTextSync = function (text, opts) {
+  opts = this.parseOpts(opts)
+  return new this.eslint.CLIEngine(opts.eslintConfig).executeOnText(text, opts.filename)
+}
 
+Linter.prototype.lintText = function (text, opts, cb) {
+  if (typeof opts === 'function') return this.lintText(text, null, opts)
   var result
   try {
-    result = new self.eslint.CLIEngine(opts.eslintConfig).executeOnText(text, opts.filename)
+    result = this.lintTextSync(text, opts)
   } catch (err) {
-    return nextTick(cb, err)
+    return process.nextTick(cb, err)
   }
-  return nextTick(cb, null, result)
+  process.nextTick(cb, null, result)
 }
 
 /**
@@ -95,8 +98,7 @@ Linter.prototype.lintFiles = function (files, opts, cb) {
     ignore: opts.ignore,
     cwd: opts.cwd,
     useGitIgnore: true,
-    usePackageJson: true,
-    configKey: self.cmd
+    usePackageJson: false
   }
 
   deglob(files, deglobOpts, function (err, allFiles) {
@@ -123,43 +125,48 @@ Linter.prototype.parseOpts = function (opts) {
   if (!opts) opts = {}
   opts = Object.assign({}, opts)
   opts.eslintConfig = Object.assign({}, self.eslintConfig)
+  opts.eslintConfig.fix = !!opts.fix
 
   if (!opts.cwd) opts.cwd = self.cwd || process.cwd()
+  var packageOpts = pkgConf.sync(self.cmd, { cwd: opts.cwd })
 
   if (!opts.ignore) opts.ignore = []
-  opts.ignore = opts.ignore.concat(DEFAULT_IGNORE)
+  addIgnore(packageOpts.ignore)
+  addIgnore(DEFAULT_IGNORE)
 
-  if (opts.fix != null) opts.eslintConfig.fix = opts.fix
+  addGlobals(packageOpts.globals || packageOpts.global)
+  addGlobals(opts.globals || opts.global)
 
-  setGlobals(opts.globals || opts.global)
-  setPlugins(opts.plugins || opts.plugin)
-  setEnvs(opts.envs || opts.env)
-  setParser(opts.parser)
+  addPlugins(packageOpts.plugins || packageOpts.plugin)
+  addPlugins(opts.plugins || opts.plugin)
 
-  var root
-  try { root = findRoot(opts.cwd) } catch (e) {}
-  if (root) {
-    var packageOpts = pkgConfig(self.cmd, { root: false, cwd: opts.cwd })
+  addEnvs(packageOpts.envs || packageOpts.env)
+  addEnvs(opts.envs || opts.env)
 
-    if (packageOpts) {
-      setGlobals(packageOpts.globals || packageOpts.global)
-      setPlugins(packageOpts.plugins || packageOpts.plugin)
-      setEnvs(packageOpts.envs || packageOpts.env)
-      if (!opts.parser) setParser(packageOpts.parser)
-    }
+  setParser(packageOpts.parser || opts.parser)
+
+  if (self.customParseOpts) {
+    var filepath = pkgConf.filepath(packageOpts)
+    var rootDir = filepath ? path.dirname(filepath) : opts.cwd
+    opts = self.customParseOpts(opts, packageOpts, rootDir)
   }
 
-  function setGlobals (globals) {
+  function addIgnore (ignore) {
+    if (!ignore) return
+    opts.ignore = opts.ignore.concat(ignore)
+  }
+
+  function addGlobals (globals) {
     if (!globals) return
     opts.eslintConfig.globals = self.eslintConfig.globals.concat(globals)
   }
 
-  function setPlugins (plugins) {
+  function addPlugins (plugins) {
     if (!plugins) return
     opts.eslintConfig.plugins = self.eslintConfig.plugins.concat(plugins)
   }
 
-  function setEnvs (envs) {
+  function addEnvs (envs) {
     if (!envs) return
     if (!Array.isArray(envs) && typeof envs !== 'string') {
       // envs can be an object in `package.json`
@@ -174,10 +181,4 @@ Linter.prototype.parseOpts = function (opts) {
   }
 
   return opts
-}
-
-function nextTick (cb, err, val) {
-  process.nextTick(function () {
-    cb(err, val)
-  })
 }

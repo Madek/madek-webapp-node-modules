@@ -146,6 +146,9 @@ enters or leaves the viewport. For details, see [Children](#children), below.
      * the container. For example, when your target is in a div
      * that has overflow auto but you are detecting onEnter based
      * on the window.
+     *
+     * This should typically be a reference to a DOM node, but it will also work
+     * to pass it the string "window" if you are using server rendering.
      */
     scrollableAncestor: PropTypes.any,
 
@@ -227,6 +230,13 @@ then the boundaries will be pushed inward, toward the center of the page. If
 you specify a negative value for an offset, then the boundary will be pushed
 outward from the center of the page.
 
+Here is an illustration of offsets and boundaries. The black box is the
+[`scrollableAncestor`](#containing-elements-and-scrollableancestor). The pink
+lines represent the location of the boundaries. The offsets that determine
+the boundaries are in light pink.
+
+![](https://cloud.githubusercontent.com/assets/2322305/16939123/5be12454-4d33-11e6-86b6-ad431da93bf2.png)
+
 #### Horizontal Scrolling Offsets and Boundaries
 
 By default, waypoints listen to vertical scrolling. If you want to switch to
@@ -296,8 +306,12 @@ first scrollable ancestor of the Waypoint.
 
 If that algorithm doesn't work for your use case, then you might find the
 `scrollableAncestor` prop useful. It allows you to specify what the scrollable
-ancestor is. Pass a node as that prop, and the Waypoint will use the scroll
-position of *that* node, rather than its first scrollable ancestor.
+ancestor is. Pass a reference to a DOM node as that prop, and the Waypoint will
+use the scroll position of *that* node, rather than its first scrollable
+ancestor.
+
+This can also be the string "window", which can be useful if you are using
+server rendering.
 
 #### Example Usage
 
@@ -375,9 +389,8 @@ Thanks to the creator of the original Waypoints library,
 ---
 
 _Make sure to check out other popular open-source tools from
-[the Brigade team][brigade-github]: [scss-lint], [overcommit], and [haml-lint]._
+[the Brigade team][brigade-github]: [overcommit] and [haml-lint].
 
 [brigade-github]: https://github.com/brigade
-[scss-lint]: https://github.com/brigade/scss-lint
 [overcommit]: https://github.com/brigade/overcommit
 [haml-lint]: https://github.com/brigade/haml-lint

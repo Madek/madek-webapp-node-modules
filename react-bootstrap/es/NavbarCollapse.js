@@ -3,7 +3,8 @@ import _objectWithoutProperties from 'babel-runtime/helpers/objectWithoutPropert
 import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import Collapse from './Collapse';
 import { prefix } from './utils/bootstrapUtils';

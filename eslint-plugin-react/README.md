@@ -10,13 +10,13 @@ React specific linting rules for ESLint
 Install [ESLint](https://www.github.com/eslint/eslint) either locally or globally.
 
 ```sh
-$ npm install eslint
+$ npm install eslint --save-dev
 ```
 
 If you installed `ESLint` globally, you have to install React plugin globally too. Otherwise, install it locally.
 
 ```sh
-$ npm install eslint-plugin-react
+$ npm install eslint-plugin-react --save-dev
 ```
 
 # Configuration
@@ -33,7 +33,7 @@ Add `plugins` section and specify ESLint-plugin-React as a plugin.
 
 You can also specify some settings that will be shared across all the plugin rules.
 
-```js
+```json5
 {
   "settings": {
     "react": {
@@ -82,7 +82,10 @@ Finally, enable all of the rules that you would like to use.  Use [our preset](#
 
 * [react/display-name](docs/rules/display-name.md): Prevent missing `displayName` in a React component definition
 * [react/forbid-component-props](docs/rules/forbid-component-props.md): Forbid certain props on Components
+* [react/forbid-elements](docs/rules/forbid-elements.md): Forbid certain elements
 * [react/forbid-prop-types](docs/rules/forbid-prop-types.md): Forbid certain propTypes
+* [react/forbid-foreign-prop-types](docs/rules/forbid-foreign-prop-types.md): Forbid foreign propTypes
+* [react/no-array-index-key](docs/rules/no-array-index-key.md): Prevent using Array index in `key` props
 * [react/no-children-prop](docs/rules/no-children-prop.md): Prevent passing children as props
 * [react/no-danger](docs/rules/no-danger.md): Prevent usage of dangerous JSX properties
 * [react/no-danger-with-children](docs/rules/no-danger-with-children.md): Prevent problem with children and props.dangerouslySetInnerHTML
@@ -103,12 +106,14 @@ Finally, enable all of the rules that you would like to use.  Use [our preset](#
 * [react/prefer-stateless-function](docs/rules/prefer-stateless-function.md): Enforce stateless React Components to be written as a pure function
 * [react/prop-types](docs/rules/prop-types.md): Prevent missing props validation in a React component definition
 * [react/react-in-jsx-scope](docs/rules/react-in-jsx-scope.md): Prevent missing `React` when using JSX
+* [react/require-default-props](docs/rules/require-default-props.md): Enforce a defaultProps definition for every prop that is not a required prop
 * [react/require-optimization](docs/rules/require-optimization.md): Enforce React components to have a shouldComponentUpdate method
 * [react/require-render-return](docs/rules/require-render-return.md): Enforce ES5 or ES6 class for returning value in render function
 * [react/self-closing-comp](docs/rules/self-closing-comp.md): Prevent extra closing tags for components without children (fixable)
 * [react/sort-comp](docs/rules/sort-comp.md): Enforce component methods order
 * [react/sort-prop-types](docs/rules/sort-prop-types.md): Enforce propTypes declarations alphabetical sorting
 * [react/style-prop-object](docs/rules/style-prop-object.md): Enforce style prop value being an object
+* [react/void-dom-elements-no-children](docs/rules/void-dom-elements-no-children.md): Prevent void DOM elements (e.g. `<img />`, `<br />`) from receiving children
 
 ## JSX-specific rules
 
@@ -119,7 +124,7 @@ Finally, enable all of the rules that you would like to use.  Use [our preset](#
 * [react/jsx-filename-extension](docs/rules/jsx-filename-extension.md): Restrict file extensions that may contain JSX
 * [react/jsx-first-prop-new-line](docs/rules/jsx-first-prop-new-line.md): Enforce position of the first prop in JSX (fixable)
 * [react/jsx-handler-names](docs/rules/jsx-handler-names.md): Enforce event handler naming conventions in JSX
-* [react/jsx-indent](docs/rules/jsx-indent.md): Validate JSX indentation
+* [react/jsx-indent](docs/rules/jsx-indent.md): Validate JSX indentation (fixable)
 * [react/jsx-indent-props](docs/rules/jsx-indent-props.md): Validate props indentation in JSX (fixable)
 * [react/jsx-key](docs/rules/jsx-key.md): Validate JSX has key prop when in array or iterator
 * [react/jsx-max-props-per-line](docs/rules/jsx-max-props-per-line.md): Limit maximum of props on a single line in JSX
@@ -150,7 +155,7 @@ This plugin exports a `recommended` configuration that enforce React good practi
 
 To enable this configuration use the `extends` property in your `.eslintrc` config file:
 
-```js
+```json
 {
   "extends": ["eslint:recommended", "plugin:react/recommended"]
 }
@@ -180,7 +185,7 @@ The rules enabled in this configuration are:
 This plugin also exports an `all` configuration that includes every available rule.
 This pairs well with the `eslint:all` rule.
 
-```js
+```json
 {
   "plugins": [
     "react"

@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Media = require('./Media');
 
 var _Media2 = _interopRequireDefault(_Media);
@@ -42,7 +46,7 @@ var propTypes = {
   /**
    * Align the media to the top, middle, or bottom of the media object.
    */
-  align: _react2['default'].PropTypes.oneOf(['top', 'middle', 'bottom'])
+  align: _propTypes2['default'].oneOf(['top', 'middle', 'bottom'])
 };
 
 var MediaRight = function (_React$Component) {

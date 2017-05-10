@@ -1,36 +1,33 @@
+'use strict';
 /*$AMPERSAND_VERSION*/
-var uniqueId = require('lodash.uniqueid');
-var assign = require('lodash.assign');
-var omit = require('lodash.omit');
-var escape = require('lodash.escape');
-var forEach = require('lodash.foreach');
-var includes = require('lodash.includes');
-var isString = require('lodash.isstring');
-var isObject = require('lodash.isobject');
-var isArray = require('lodash.isarray');
-var isDate = require('lodash.isdate');
-var isUndefined = require('lodash.isundefined');
-var isFunction = require('lodash.isfunction');
-var isNull = require('lodash.isnull');
-var isEmpty = require('lodash.isempty');
-var isEqual = require('lodash.isequal');
-var clone = require('lodash.clone');
-var has = require('lodash.has');
-var result = require('lodash.result');
-var keys = require('lodash.keys');
-var bind = require('lodash.bind');
-var defaults = require('lodash.defaults');
-var union = require('lodash.union');
+var uniqueId = require('lodash/uniqueId');
+var assign = require('lodash/assign');
+var cloneObj = function(obj) { return assign({}, obj); };
+var omit = require('lodash/omit');
+var escape = require('lodash/escape');
+var forOwn = require('lodash/forOwn');
+var includes = require('lodash/includes');
+var isString = require('lodash/isString');
+var isObject = require('lodash/isObject');
+var isDate = require('lodash/isDate');
+var isFunction = require('lodash/isFunction');
+var _isEqual = require('lodash/isEqual'); // to avoid shadowing
+var has = require('lodash/has');
+var result = require('lodash/result');
+var bind = require('lodash/bind'); // because phantomjs doesn't have Function#bind
+var union = require('lodash/union');
 var Events = require('ampersand-events');
 var KeyTree = require('key-tree-store');
 var arrayNext = require('array-next');
 var changeRE = /^change:/;
+var noop = function () {};
 
 function Base(attrs, options) {
     options || (options = {});
     this.cid || (this.cid = uniqueId('state'));
     this._events = {};
     this._values = {};
+    this._eventBubblingHandlerCache = {};
     this._definition = Object.create(this._definition);
     if (options.parse) attrs = this.parse(attrs, options);
     this.parent = options.parent;
@@ -106,12 +103,12 @@ assign(Base.prototype, Events, {
     serialize: function (options) {
         var attrOpts = assign({props: true}, options);
         var res = this.getAttributes(attrOpts, true);
-        forEach(this._children, function (value, key) {
+        forOwn(this._children, bind(function (value, key) {
             res[key] = this[key].serialize();
-        }, this);
-        forEach(this._collections, function (value, key) {
+        }, this));
+        forOwn(this._collections, bind(function (value, key) {
             res[key] = this[key].serialize();
-        }, this);
+        }, this));
         return res;
     },
 
@@ -121,8 +118,8 @@ assign(Base.prototype, Events, {
     set: function (key, value, options) {
         var self = this;
         var extraProperties = this.extraProperties;
-        var changing, changes, newType, newVal, def, cast, err, attr,
-            attrs, dataType, silent, unset, currentVal, initial, hasChanged, isEqual;
+        var wasChanging, changeEvents, newType, newVal, def, cast, err, attr,
+            attrs, dataType, silent, unset, currentVal, initial, hasChanged, isEqual, onChange;
 
         // Handle both `"key", value` and `{key: value}` -style arguments.
         if (isObject(key) || key === null) {
@@ -142,18 +139,22 @@ assign(Base.prototype, Events, {
         silent = options.silent;
         initial = options.initial;
 
-        changes = [];
-        changing = this._changing;
+        // Initialize change tracking.
+        wasChanging = this._changing;
         this._changing = true;
+        changeEvents = [];
 
         // if not already changing, store previous
-        if (!changing) {
+        if (initial) {
+            this._previousAttributes = {};
+        } else if (!wasChanging) {
             this._previousAttributes = this.attributes;
             this._changed = {};
         }
 
         // For each `set` attribute...
-        for (attr in attrs) {
+        for (var i = 0, keys = Object.keys(attrs), len = keys.length; i < len; i++) {
+            attr = keys[i];
             newVal = attrs[attr];
             newType = typeof newVal;
             currentVal = this._values[attr];
@@ -162,6 +163,10 @@ assign(Base.prototype, Events, {
             if (!def) {
                 // if this is a child model or collection
                 if (this._children[attr] || this._collections[attr]) {
+                    if (!isObject(newVal)) {
+                        newVal = {};
+                    }
+
                     this[attr].set(newVal, options);
                     continue;
                 } else if (extraProperties === 'ignore') {
@@ -176,6 +181,7 @@ assign(Base.prototype, Events, {
             }
 
             isEqual = this._getCompareForType(def.type);
+            onChange = this._getOnChangeForType(def.type);
             dataType = this._dataTypes[def.type];
 
             // check type if we have one
@@ -196,62 +202,78 @@ assign(Base.prototype, Events, {
             // If we are required but undefined, throw error.
             // If we are null and are not allowing null, throw error
             // If we have a defined type and the new type doesn't match, and we are not null, throw error.
+            // If we require specific value and new one is not one of them, throw error (unless it has default value or we're unsetting it with undefined).
 
-            if (isUndefined(newVal) && def.required) {
+            if (newVal === undefined && def.required) {
                 throw new TypeError('Required property \'' + attr + '\' must be of type ' + def.type + '. Tried to set ' + newVal);
             }
-            if (isNull(newVal) && def.required && !def.allowNull) {
+            if (newVal === null && def.required && !def.allowNull) {
                 throw new TypeError('Property \'' + attr + '\' must be of type ' + def.type + ' (cannot be null). Tried to set ' + newVal);
             }
-            if ((def.type && def.type !== 'any' && def.type !== newType) && !isNull(newVal) && !isUndefined(newVal)) {
+            if ((def.type && def.type !== 'any' && def.type !== newType) && newVal !== null && newVal !== undefined) {
                 throw new TypeError('Property \'' + attr + '\' must be of type ' + def.type + '. Tried to set ' + newVal);
             }
             if (def.values && !includes(def.values, newVal)) {
-                throw new TypeError('Property \'' + attr + '\' must be one of values: ' + def.values.join(', ') + '. Tried to set ' + newVal);
+                var defaultValue = result(def, 'default');
+                if (unset && defaultValue !== undefined) {
+                    newVal = defaultValue;
+                } else if (!unset || (unset && newVal !== undefined)) {
+                    throw new TypeError('Property \'' + attr + '\' must be one of values: ' + def.values.join(', ') + '. Tried to set ' + newVal);
+                }
             }
 
-            hasChanged = !isEqual(currentVal, newVal, attr);
+            // We know this has 'changed' if it's the initial set, so skip a potentially expensive isEqual check.
+            hasChanged = initial || !isEqual(currentVal, newVal, attr);
 
             // enforce `setOnce` for properties if set
-            if (def.setOnce && currentVal !== undefined && hasChanged && !initial) {
+            if (def.setOnce && currentVal !== undefined && hasChanged) {
                 throw new TypeError('Property \'' + attr + '\' can only be set once.');
             }
 
-            // keep track of changed attributes
-            // and push to changes array
+            // set/unset attributes.
+            // If this is not the initial set, keep track of changed attributes
+            // and push to changeEvents array so we can fire events.
             if (hasChanged) {
-                changes.push({prev: currentVal, val: newVal, key: attr});
-                self._changed[attr] = newVal;
+
+                // This fires no matter what, even on initial set.
+                onChange(newVal, currentVal, attr);
+
+                // If this is a change (not an initial set), mark the change.
+                // Note it's impossible to unset on the initial set (it will already be unset),
+                // so we only include that logic here.
+                if (!initial) {
+                    this._changed[attr] = newVal;
+                    this._previousAttributes[attr] = currentVal;
+                    if (unset) {
+                        // FIXME delete is very slow. Can we get away with setting to undefined?
+                        delete this._values[attr];
+                    }
+                    if (!silent) {
+                        changeEvents.push({prev: currentVal, val: newVal, key: attr});
+                    }
+                }
+                if (!unset) {
+                    this._values[attr] = newVal;
+                }
             } else {
-                delete self._changed[attr];
+                // Not changed
+                // FIXME delete is very slow. Can we get away with setting to undefined?
+                delete this._changed[attr];
             }
         }
 
-        // actually update our values
-        forEach(changes, function (change) {
-            self._previousAttributes[change.key] = change.prev;
-            if (unset) {
-                delete self._values[change.key];
-            } else {
-                self._values[change.key] = change.val;
-            }
+        // Fire events. This array is not populated if we are told to be silent.
+        if (changeEvents.length) this._pending = true;
+        changeEvents.forEach(function (change) {
+            self.trigger('change:' + change.key, self, change.val, options);
         });
-
-        if (!silent && changes.length) self._pending = true;
-        if (!silent) {
-            forEach(changes, function (change) {
-                self.trigger('change:' + change.key, self, change.val, options);
-            });
-        }
 
         // You might be wondering why there's a `while` loop here. Changes can
         // be recursively nested within `"change"` events.
-        if (changing) return this;
-        if (!silent) {
-            while (this._pending) {
-                this._pending = false;
-                this.trigger('change', this, options);
-            }
+        if (wasChanging) return this;
+        while (this._pending) {
+            this._pending = false;
+            this.trigger('change', this, options);
         }
         this._pending = false;
         this._changing = false;
@@ -282,13 +304,18 @@ assign(Base.prototype, Events, {
     // Get all of the attributes of the model at the time of the previous
     // `"change"` event.
     previousAttributes: function () {
-        return clone(this._previousAttributes);
+        return cloneObj(this._previousAttributes);
     },
 
     // Determine if the model has changed since the last `"change"` event.
     // If you specify an attribute name, determine if that attribute has changed.
     hasChanged: function (attr) {
-        if (attr == null) return !isEmpty(this._changed);
+        if (attr == null) return !!Object.keys(this._changed).length;
+        if (has(this._derived, attr)) {
+            return this._derived[attr].depList.some(function (dep) {
+                return this.hasChanged(dep);
+            }, this);
+        }
         return has(this._changed, attr);
     },
 
@@ -299,7 +326,7 @@ assign(Base.prototype, Events, {
     // You can also pass an attributes object to diff against the model,
     // determining if there *would be* a change.
     changedAttributes: function (diff) {
-        if (!diff) return this.hasChanged() ? clone(this._changed) : false;
+        if (!diff) return this.hasChanged() ? cloneObj(this._changed) : false;
         var val, changed = false;
         var old = this._changing ? this._previousAttributes : this.attributes;
         var def, isEqual;
@@ -318,22 +345,24 @@ assign(Base.prototype, Events, {
     },
 
     unset: function (attrs, options) {
+        var self = this;
         attrs = Array.isArray(attrs) ? attrs : [attrs];
-        forEach(attrs, function (key) {
-            var def = this._definition[key];
+        attrs.forEach(function (key) {
+            var def = self._definition[key];
+            if (!def) return;
             var val;
             if (def.required) {
                 val = result(def, 'default');
-                return this.set(key, val, options);
+                return self.set(key, val, options);
             } else {
-                return this.set(key, val, assign({}, options, {unset: true}));
+                return self.set(key, val, assign({}, options, {unset: true}));
             }
-        }, this);
+        });
     },
 
     clear: function (options) {
         var self = this;
-        forEach(keys(this.attributes), function (key) {
+        Object.keys(this.attributes).forEach(function (key) {
             self.unset(key, options);
         });
         return this;
@@ -354,7 +383,13 @@ assign(Base.prototype, Events, {
     _getCompareForType: function (type) {
         var dataType = this._dataTypes[type];
         if (dataType && dataType.compare) return bind(dataType.compare, this);
-        return isEqual;
+        return _isEqual; // if no compare function is defined, use _.isEqual
+    },
+
+    _getOnChangeForType : function(type){
+        var dataType = this._dataTypes[type];
+        if (dataType && dataType.onChange) return bind(dataType.onChange, this);
+        return noop;
     },
 
     // Run validation against the next complete set of model attributes,
@@ -375,28 +410,29 @@ assign(Base.prototype, Events, {
     // just makes friendlier errors when trying to define a new model
     // only used when setting up original property definitions
     _ensureValidType: function (type) {
-        return includes(['string', 'number', 'boolean', 'array', 'object', 'date', 'any'].concat(keys(this._dataTypes)), type) ? type : undefined;
+        return includes(['string', 'number', 'boolean', 'array', 'object', 'date', 'state', 'any']
+            .concat(Object.keys(this._dataTypes)), type) ? type : undefined;
     },
 
     getAttributes: function (options, raw) {
-        options || (options = {});
-        defaults(options, {
+        options = assign({
             session: false,
             props: false,
             derived: false
-        });
+        }, options || {});
         var res = {};
-        var val, item, def;
-        for (item in this._definition) {
+        var val, def;
+        for (var item in this._definition) {
             def = this._definition[item];
             if ((options.session && def.session) || (options.props && !def.session)) {
-                val = (raw) ? this._values[item] : this[item];
+                val = raw ? this._values[item] : this[item];
+                if (raw && val && isFunction(val.serialize)) val = val.serialize();
                 if (typeof val === 'undefined') val = result(def, 'default');
                 if (typeof val !== 'undefined') res[item] = val;
             }
         }
         if (options.derived) {
-            for (item in this._derived) res[item] = this[item];
+            for (var derivedItem in this._derived) res[derivedItem] = this[derivedItem];
         }
         return res;
     },
@@ -404,7 +440,7 @@ assign(Base.prototype, Events, {
     _initDerived: function () {
         var self = this;
 
-        forEach(this._derived, function (value, name) {
+        forOwn(this._derived, function (value, name) {
             var def = self._derived[name];
             def.deps = def.depList;
 
@@ -462,20 +498,23 @@ assign(Base.prototype, Events, {
         if (!this._children) return;
         for (child in this._children) {
             this._safeSet(child, new this._children[child]({}, {parent: this}));
-            this.listenTo(this[child], 'all', this._getEventBubblingHandler(child));
+            this.listenTo(this[child], 'all', this._getCachedEventBubblingHandler(child));
         }
     },
 
     // Returns a bound handler for doing event bubbling while
     // adding a name to the change string.
-    _getEventBubblingHandler: function (propertyName) {
-        return bind(function (name, model, newValue) {
-            if (changeRE.test(name)) {
-                this.trigger('change:' + propertyName + '.' + name.split(':')[1], model, newValue);
-            } else if (name === 'change') {
-                this.trigger('change', this);
-            }
-        }, this);
+    _getCachedEventBubblingHandler: function (propertyName) {
+        if (!this._eventBubblingHandlerCache[propertyName]) {
+            this._eventBubblingHandlerCache[propertyName] = bind(function (name, model, newValue) {
+                if (changeRE.test(name)) {
+                    this.trigger('change:' + propertyName + '.' + name.split(':')[1], model, newValue);
+                } else if (name === 'change') {
+                    this.trigger('change', this);
+                }
+            }, this);
+        }
+        return this._eventBubblingHandlerCache[propertyName];
     },
 
     // Check that all required attributes are present
@@ -532,9 +571,8 @@ function createPropertyDefinition(object, name, desc, isSession) {
         type = object._ensureValidType(desc);
         if (type) def.type = type;
     } else {
-
         //Transform array of ['type', required, default] to object form
-        if (isArray(desc)) {
+        if (Array.isArray(desc)) {
             descArray = desc;
             desc = {
                 type: descArray[0],
@@ -556,11 +594,17 @@ function createPropertyDefinition(object, name, desc, isSession) {
 
         def.allowNull = desc.allowNull ? desc.allowNull : false;
         if (desc.setOnce) def.setOnce = true;
-        if (def.required && isUndefined(def['default']) && !def.setOnce) def['default'] = object._getDefaultForType(type);
+        if (def.required && def['default'] === undefined && !def.setOnce) def['default'] = object._getDefaultForType(type);
         def.test = desc.test;
         def.values = desc.values;
     }
     if (isSession) def.session = true;
+
+    if (!type) {
+        type = isString(desc) ? desc : desc.type;
+        // TODO: start throwing a TypeError in future major versions instead of warning
+        console.warn('Invalid data type of `' + type + '` for `' + name + '` property. Use one of the default types or define your own');
+    }
 
     // define a getter/setter on the prototype
     // but they get/set on the instance
@@ -580,9 +624,15 @@ function createPropertyDefinition(object, name, desc, isSession) {
                 }
                 return value;
             }
-            value = result(def, 'default');
-            this._values[name] = value;
-            return value;
+            var defaultValue = result(def, 'default');
+            this._values[name] = defaultValue;
+            // If we've set a defaultValue, fire a change handler effectively marking
+            // its change from undefined to the default value.
+            if (typeof defaultValue !== 'undefined') {
+                var onChange = this._getOnChangeForType(def.type);
+                onChange(defaultValue, value, name);
+            }
+            return defaultValue;
         }
     });
 
@@ -598,7 +648,7 @@ function createDerivedProperty(modelProto, name, definition) {
     };
 
     // add to our shared dependency list
-    forEach(def.depList, function (dep) {
+    def.depList.forEach(function (dep) {
         modelProto._deps[dep] = union(modelProto._deps[dep] || [], [name]);
     });
 
@@ -608,7 +658,7 @@ function createDerivedProperty(modelProto, name, definition) {
             return this._getDerivedProperty(name);
         },
         set: function () {
-            throw new TypeError('"' + name + '" is a derived property, it can\'t be set directly.');
+            throw new TypeError("`" + name + "` is a derived property, it can't be set directly.");
         }
     });
 }
@@ -625,16 +675,16 @@ var dataTypes = {
             if (newVal == null) {
                 newType = typeof null;
             } else if (!isDate(newVal)) {
-                try {
-                    var dateVal = new Date(newVal).valueOf();
-                    if (isNaN(dateVal)) {
-                        // If the newVal cant be parsed, then try parseInt first
-                        dateVal = new Date(parseInt(newVal, 10)).valueOf();
-                        if (isNaN(dateVal)) throw TypeError;
-                    }
-                    newVal = dateVal;
-                    newType = 'date';
-                } catch (e) {
+                var err = null;
+                var dateVal = new Date(newVal).valueOf();
+                if (isNaN(dateVal)) {
+                    // If the newVal cant be parsed, then try parseInt first
+                    dateVal = new Date(parseInt(newVal, 10)).valueOf();
+                    if (isNaN(dateVal)) err = true;
+                }
+                newVal = dateVal;
+                newType = 'date';
+                if (err) {
                     newType = typeof newVal;
                 }
             } else {
@@ -659,7 +709,7 @@ var dataTypes = {
         set: function (newVal) {
             return {
                 val: newVal,
-                type: isArray(newVal) ? 'array' : typeof newVal
+                type: Array.isArray(newVal) ? 'array' : typeof newVal
             };
         },
         'default': function () {
@@ -672,7 +722,7 @@ var dataTypes = {
             // we have to have a way of supporting "missing" objects.
             // Null is an object, but setting a value to undefined
             // should work too, IMO. We just override it, in that case.
-            if (newType !== 'object' && isUndefined(newVal)) {
+            if (newType !== 'object' && newVal === undefined) {
                 newVal = null;
                 newType = 'object';
             }
@@ -702,22 +752,20 @@ var dataTypes = {
                 };
             }
         },
-        compare: function (currentVal, newVal, attributeName) {
-            var isSame = currentVal === newVal;
+        compare: function (currentVal, newVal) {
+            return currentVal === newVal;
+        },
 
+        onChange : function(newVal, previousVal, attributeName){
             // if this has changed we want to also handle
             // event propagation
-            if (!isSame) {
-                if (currentVal) {
-                    this.stopListening(currentVal);
-                }
-
-                if (newVal != null) {
-                    this.listenTo(newVal, 'all', this._getEventBubblingHandler(attributeName));
-                }
+            if (previousVal) {
+                this.stopListening(previousVal, 'all', this._getCachedEventBubblingHandler(attributeName));
             }
 
-            return isSame;
+            if (newVal != null) {
+                this.listenTo(newVal, 'all', this._getCachedEventBubblingHandler(attributeName));
+            }
         }
     }
 };
@@ -725,9 +773,9 @@ var dataTypes = {
 // the extend method used to extend prototypes, maintain inheritance chains for instanceof
 // and allow for additions to the model definitions.
 function extend(protoProps) {
+    /*jshint validthis:true*/
     var parent = this;
     var child;
-    var args = [].slice.call(arguments);
 
     // The constructor function for the new subclass is either defined by you
     // (the "constructor" property in your `extend` definition), or defaulted
@@ -762,39 +810,40 @@ function extend(protoProps) {
         var omitFromExtend = [
             'dataTypes', 'props', 'session', 'derived', 'collections', 'children'
         ];
-        args.forEach(function processArg(def) {
+        for(var i = 0; i < arguments.length; i++) {
+            var def = arguments[i];
             if (def.dataTypes) {
-                forEach(def.dataTypes, function (def, name) {
+                forOwn(def.dataTypes, function (def, name) {
                     child.prototype._dataTypes[name] = def;
                 });
             }
             if (def.props) {
-                forEach(def.props, function (def, name) {
+                forOwn(def.props, function (def, name) {
                     createPropertyDefinition(child.prototype, name, def);
                 });
             }
             if (def.session) {
-                forEach(def.session, function (def, name) {
+                forOwn(def.session, function (def, name) {
                     createPropertyDefinition(child.prototype, name, def, true);
                 });
             }
             if (def.derived) {
-                forEach(def.derived, function (def, name) {
+                forOwn(def.derived, function (def, name) {
                     createDerivedProperty(child.prototype, name, def);
                 });
             }
             if (def.collections) {
-                forEach(def.collections, function (constructor, name) {
+                forOwn(def.collections, function (constructor, name) {
                     child.prototype._collections[name] = constructor;
                 });
             }
             if (def.children) {
-                forEach(def.children, function (constructor, name) {
+                forOwn(def.children, function (constructor, name) {
                     child.prototype._children[name] = constructor;
                 });
             }
             assign(child.prototype, omit(def, omitFromExtend));
-        });
+        }
     }
 
     // Set a convenience property in case the parent's prototype is needed

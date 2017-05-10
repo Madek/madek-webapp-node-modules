@@ -26,6 +26,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Button = require('./Button');
 
 var _Button2 = _interopRequireDefault(_Button);
@@ -47,24 +51,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 var propTypes = (0, _extends3['default'])({}, _Dropdown2['default'].propTypes, {
 
   // Toggle props.
-  bsStyle: _react2['default'].PropTypes.string,
-  bsSize: _react2['default'].PropTypes.string,
-  href: _react2['default'].PropTypes.string,
-  onClick: _react2['default'].PropTypes.func,
+  bsStyle: _propTypes2['default'].string,
+  bsSize: _propTypes2['default'].string,
+  href: _propTypes2['default'].string,
+  onClick: _propTypes2['default'].func,
   /**
    * The content of the split button.
    */
-  title: _react2['default'].PropTypes.node.isRequired,
+  title: _propTypes2['default'].node.isRequired,
   /**
    * Accessible label for the toggle; the value of `title` if not specified.
    */
-  toggleLabel: _react2['default'].PropTypes.string,
+  toggleLabel: _propTypes2['default'].string,
 
   // Override generated docs from <Dropdown>.
   /**
    * @private
    */
-  children: _react2['default'].PropTypes.node
+  children: _propTypes2['default'].node
 });
 
 var SplitButton = function (_React$Component) {

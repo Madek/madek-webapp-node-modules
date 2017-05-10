@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -54,7 +58,7 @@ var propTypes = {
    *
    * adds class `visible-xs-block`
    */
-  visibleXsBlock: _react2['default'].PropTypes.bool,
+  visibleXsBlock: _propTypes2['default'].bool,
   /**
    * Apply clearfix
    *
@@ -62,7 +66,7 @@ var propTypes = {
    *
    * adds class `visible-sm-block`
    */
-  visibleSmBlock: _react2['default'].PropTypes.bool,
+  visibleSmBlock: _propTypes2['default'].bool,
   /**
    * Apply clearfix
    *
@@ -70,7 +74,7 @@ var propTypes = {
    *
    * adds class `visible-md-block`
    */
-  visibleMdBlock: _react2['default'].PropTypes.bool,
+  visibleMdBlock: _propTypes2['default'].bool,
   /**
    * Apply clearfix
    *
@@ -78,7 +82,7 @@ var propTypes = {
    *
    * adds class `visible-lg-block`
    */
-  visibleLgBlock: _react2['default'].PropTypes.bool
+  visibleLgBlock: _propTypes2['default'].bool
 };
 
 var defaultProps = {

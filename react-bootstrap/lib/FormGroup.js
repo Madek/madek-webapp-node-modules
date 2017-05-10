@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 var _StyleConfig = require('./utils/StyleConfig');
@@ -44,12 +48,12 @@ var propTypes = {
   /**
    * Sets `id` on `<FormControl>` and `htmlFor` on `<FormGroup.Label>`.
    */
-  controlId: _react2['default'].PropTypes.string,
-  validationState: _react2['default'].PropTypes.oneOf(['success', 'warning', 'error', null])
+  controlId: _propTypes2['default'].string,
+  validationState: _propTypes2['default'].oneOf(['success', 'warning', 'error', null])
 };
 
 var childContextTypes = {
-  $bs_formGroup: _react2['default'].PropTypes.object.isRequired
+  $bs_formGroup: _propTypes2['default'].object.isRequired
 };
 
 var FormGroup = function (_React$Component) {

@@ -2,108 +2,121 @@
   "_args": [
     [
       {
-        "raw": "react-day-picker@4.0.0",
+        "raw": "react-day-picker@5.5.1",
         "scope": null,
         "escapedName": "react-day-picker",
         "name": "react-day-picker",
-        "rawSpec": "4.0.0",
-        "spec": "4.0.0",
+        "rawSpec": "5.5.1",
+        "spec": "5.5.1",
         "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-day-picker@4.0.0",
-  "_id": "react-day-picker@4.0.0",
+  "_from": "react-day-picker@5.5.1",
+  "_id": "react-day-picker@5.5.1",
   "_inCache": true,
   "_location": "/react-day-picker",
-  "_nodeVersion": "5.12.0",
+  "_nodeVersion": "6.10.2",
   "_npmOperationalInternal": {
-    "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/react-day-picker-4.0.0.tgz_1486769351930_0.3948004194535315"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/react-day-picker-5.5.1.tgz_1494435988931_0.09967840183526278"
   },
   "_npmUser": {
     "name": "gpbl",
     "email": "io@gpbl.org"
   },
-  "_npmVersion": "4.1.2",
+  "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "react-day-picker@4.0.0",
+    "raw": "react-day-picker@5.5.1",
     "scope": null,
     "escapedName": "react-day-picker",
     "name": "react-day-picker",
-    "rawSpec": "4.0.0",
-    "spec": "4.0.0",
+    "rawSpec": "5.5.1",
+    "spec": "5.5.1",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-day-picker/-/react-day-picker-4.0.0.tgz",
-  "_shasum": "80fca341b77739efee168ff8ef8b8208650b04c0",
+  "_resolved": "https://registry.npmjs.org/react-day-picker/-/react-day-picker-5.5.1.tgz",
+  "_shasum": "23e4ac99b8f361165050b2d12589aa05f24eabf1",
   "_shrinkwrap": null,
-  "_spec": "react-day-picker@4.0.0",
+  "_spec": "react-day-picker@5.5.1",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Giampaolo Bellavite",
     "email": "io@gpbl.org"
   },
-  "browser": "./dist/DayPicker.js",
   "bugs": {
     "url": "https://github.com/gpbl/react-day-picker/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "prop-types": "^15.5.8"
+  },
   "description": "Flexible date picker component for React",
   "devDependencies": {
-    "autoprefixer": "^6.7.2",
-    "babel-cli": "^6.22.2",
-    "babel-core": "^6.22.1",
-    "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.2.10",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-react": "^6.22.0",
-    "babel-preset-stage-1": "^6.22.0",
+    "@types/react": "^15.0.23",
+    "autoprefixer": "7.0.0",
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-loader": "7.0.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-1": "6.24.1",
     "chai": "3.5.0",
-    "chai-enzyme": "^0.6.1",
+    "chai-enzyme": "0.6.1",
     "cheerio": "0.22.0",
-    "coveralls": "^2.11.16",
-    "enzyme": "^2.7.1",
-    "eslint": "^3.15.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.9.0",
+    "codeclimate-test-reporter": "^0.4.1",
+    "coveralls": "2.13.1",
+    "dtslint": "^0.1.2",
+    "enzyme": "2.8.2",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "14.1.0",
+    "eslint-config-prettier": "2.0.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "4.0.0",
+    "eslint-plugin-react": "7.0.0",
     "gitbook-cli": "2.3.0",
+    "husky": "0.13.3",
     "istanbul": "1.1.0-alpha.1",
-    "jsdom": "9.0.0",
-    "mocha": "^3.2.0",
-    "moment": "^2.17.1",
-    "postcss-cli": "2.6.0",
-    "react": "^15.4.2",
-    "react-addons-test-utils": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-hot-loader": "^3.0.0-beta.6",
-    "rimraf": "2.5.4",
-    "sinon": "^1.17.7",
-    "sinon-chai": "2.8.0",
-    "webpack": "^2.2.1"
+    "jsdom": "10.1.0",
+    "lint-staged": "3.4.1",
+    "mocha": "3.3.0",
+    "mocha-circleci-reporter": "^0.0.2",
+    "mocha-junit-reporter": "^1.13.0",
+    "moment": "2.18.1",
+    "postcss-cli": "4.0.0",
+    "prettier": "1.3.1",
+    "react": "15.5.4",
+    "react-addons-test-utils": "15.5.1",
+    "react-dom": "15.5.4",
+    "react-hot-loader": "3.0.0-beta.6",
+    "react-test-renderer": "15.5.4",
+    "rimraf": "2.6.1",
+    "sinon": "2.2.0",
+    "sinon-chai": "2.10.0",
+    "typescript": "^2.2.2",
+    "webpack": "2.5.1"
   },
   "directories": {
     "doc": "docs"
   },
   "dist": {
-    "shasum": "80fca341b77739efee168ff8ef8b8208650b04c0",
-    "tarball": "https://registry.npmjs.org/react-day-picker/-/react-day-picker-4.0.0.tgz"
+    "shasum": "23e4ac99b8f361165050b2d12589aa05f24eabf1",
+    "tarball": "https://registry.npmjs.org/react-day-picker/-/react-day-picker-5.5.1.tgz"
   },
   "files": [
     "DayPicker.js",
-    "dist",
+    "DayPickerInput.js",
     "lib",
     "moment.js",
-    "utils.js"
+    "utils.js",
+    "types/index.d.ts"
   ],
-  "gitHead": "a7f53f337188287950747c32fe3dfa65955d9493",
+  "gitHead": "49eda9c6029d287f01894d12610047954f892580",
   "homepage": "https://react-day-picker.js.org",
   "keywords": [
     "react",
@@ -118,6 +131,12 @@
     "momentjs"
   ],
   "license": "MIT",
+  "lint-staged": {
+    "*.js": [
+      "npm run prettify",
+      "git add"
+    ]
+  },
   "main": "DayPicker.js",
   "maintainers": [
     {
@@ -130,30 +149,40 @@
   "peerDependencies": {
     "react": "~0.13.x || ~0.14.x || ^15.0.0"
   },
+  "precommit": "lint-staged",
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gpbl/react-day-picker.git"
   },
   "scripts": {
-    "build": "babel ./src -d ./lib --source-maps && postcss --use autoprefixer src/style.css -d lib/",
-    "check": "npm run lint && npm run test",
-    "clean": "rimraf lib coverage dist",
-    "cover": "babel-node ./node_modules/istanbul/lib/cli cover -- _mocha --recursive --reporter spec",
-    "dist": "webpack -p",
+    "build": "npm run build:node && npm run build:production && npm run build:development",
+    "build:css": "postcss src/style.css --use autoprefixer -d lib/ --no-map",
+    "build:development": "NODE_ENV=development webpack",
+    "build:node": "babel ./src -d ./lib/src --source-maps && npm run build:css",
+    "build:production": "NODE_ENV=production webpack -p",
+    "check": "npm run lint && npm run dtslint && npm run test",
+    "clean": "rimraf coverage lib",
+    "codeclimate": "codeclimate-test-reporter < ./coverage/lcov.info",
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover -- _mocha --recursive",
+    "coveralls": "coveralls < ./coverage/lcov.info",
     "docs:build": "npm run docs:prepare && gitbook build",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
     "docs:publish": "npm run docs:clean && npm run docs:build && npm run examples:build && rimraf _book/examples && mv examples/built _book/examples && cd _book && ECHO react-day-picker.js.org > CNAME && git init && git commit --allow-empty -m 'Update docs and examples' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'Update docs and examples' && git push git@github.com:gpbl/react-day-picker gh-pages --force",
     "docs:serve": "gitbook serve",
+    "dtslint": "dtslint types",
     "examples:build": "npm run examples:clean && cd examples && npm run build && cd ..",
     "examples:clean": "rimraf examples/built",
     "lint": "eslint src test",
-    "prerelease": "npm run check && npm run dist && npm run build && cp src/style.css dist",
-    "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive --reporter spec",
+    "precommit": "lint-staged",
+    "prerelease": "npm run check && npm run build",
+    "prettify": "prettier --write --single-quote --trailing-comma=\"es5\" \"{src,test,examples/src}/**/*.js\"",
+    "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive",
     "test:files": "mocha --compilers js:babel-core/register --require ./test/setup.js --reporter spec --bail --watch",
     "test:watch": "npm test -- --watch"
   },
   "style": "lib/style.css",
-  "version": "4.0.0"
+  "types": "./types/index.d.ts",
+  "version": "5.5.1"
 }

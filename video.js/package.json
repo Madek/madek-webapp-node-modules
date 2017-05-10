@@ -2,25 +2,25 @@
   "_args": [
     [
       {
-        "raw": "video.js@^5.16.0",
+        "raw": "video.js@5.19.2",
         "scope": null,
         "escapedName": "video.js",
         "name": "video.js",
-        "rawSpec": "^5.16.0",
-        "spec": ">=5.16.0 <6.0.0",
-        "type": "range"
+        "rawSpec": "5.19.2",
+        "spec": "5.19.2",
+        "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "video.js@>=5.16.0 <6.0.0",
-  "_id": "video.js@5.16.0",
+  "_from": "video.js@5.19.2",
+  "_id": "video.js@5.19.2",
   "_inCache": true,
   "_location": "/video.js",
   "_nodeVersion": "4.4.3",
   "_npmOperationalInternal": {
     "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/video.js-5.16.0.tgz_1484250927960_0.4700086014345288"
+    "tmp": "tmp/video.js-5.19.2.tgz_1492117839050_0.11199025134555995"
   },
   "_npmUser": {
     "name": "gkatsev",
@@ -28,27 +28,28 @@
   },
   "_npmVersion": "2.15.6",
   "_phantomChildren": {
-    "global": "4.3.0",
     "is-function": "1.0.1",
+    "min-document": "2.19.0",
     "parse-headers": "2.0.1",
+    "process": "0.5.2",
     "xtend": "4.0.1"
   },
   "_requested": {
-    "raw": "video.js@^5.16.0",
+    "raw": "video.js@5.19.2",
     "scope": null,
     "escapedName": "video.js",
     "name": "video.js",
-    "rawSpec": "^5.16.0",
-    "spec": ">=5.16.0 <6.0.0",
-    "type": "range"
+    "rawSpec": "5.19.2",
+    "spec": "5.19.2",
+    "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/video.js/-/video.js-5.16.0.tgz",
-  "_shasum": "f5e871d4e32852ec99979285e45dcb3e2251d1b5",
+  "_resolved": "https://registry.npmjs.org/video.js/-/video.js-5.19.2.tgz",
+  "_shasum": "849d6b1e5fc2cb23ea7b17cd79b25800f61d87e5",
   "_shrinkwrap": null,
-  "_spec": "video.js@^5.16.0",
+  "_spec": "video.js@5.19.2",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Steve Heffernan"
@@ -69,8 +70,8 @@
     "tsml": "1.0.1",
     "videojs-font": "2.0.0",
     "videojs-ie8": "1.1.2",
-    "videojs-swf": "5.1.0",
-    "videojs-vtt.js": "0.12.1",
+    "videojs-swf": "5.3.0",
+    "videojs-vtt.js": "0.12.3",
     "xhr": "2.2.2"
   },
   "description": "An HTML5 and Flash video player with a common API and skin for both.",
@@ -152,10 +153,10 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "f5e871d4e32852ec99979285e45dcb3e2251d1b5",
-    "tarball": "https://registry.npmjs.org/video.js/-/video.js-5.16.0.tgz"
+    "shasum": "849d6b1e5fc2cb23ea7b17cd79b25800f61d87e5",
+    "tarball": "https://registry.npmjs.org/video.js/-/video.js-5.19.2.tgz"
   },
-  "gitHead": "aa0fe379faff142bc0fa5728c747652a30448527",
+  "gitHead": "d2d8f8f45f2051fb3a07130e09596a666eac00c2",
   "homepage": "http://videojs.com",
   "keywords": [
     "flash",
@@ -168,20 +169,8 @@
   "main": "./es5/video.js",
   "maintainers": [
     {
-      "name": "dmlap",
-      "email": "dlapalomento@gmail.com"
-    },
-    {
       "name": "gkatsev",
       "email": "me@gkatsev.com"
-    },
-    {
-      "name": "heff",
-      "email": "npm@heff.me"
-    },
-    {
-      "name": "mmcclure",
-      "email": "mmcclure@brightcove.com"
     }
   ],
   "name": "video.js",
@@ -207,7 +196,7 @@
     "test": "grunt test"
   },
   "style": "./dist/video-js.css",
-  "version": "5.16.0",
+  "version": "5.19.2",
   "vjsstandard": {
     "ignore": [
       "**/Gruntfile.js",

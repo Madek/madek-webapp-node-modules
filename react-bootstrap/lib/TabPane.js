@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -54,77 +58,83 @@ var propTypes = {
   /**
    * Uniquely identify the `<TabPane>` among its siblings.
    */
-  eventKey: _react.PropTypes.any,
+  eventKey: _propTypes2['default'].any,
 
   /**
    * Use animation when showing or hiding `<TabPane>`s. Use `false` to disable,
    * `true` to enable the default `<Fade>` animation or any `<Transition>`
    * component.
    */
-  animation: _react.PropTypes.oneOfType([_react.PropTypes.bool, _elementType2['default']]),
+  animation: _propTypes2['default'].oneOfType([_propTypes2['default'].bool, _elementType2['default']]),
 
   /** @private **/
-  id: _react.PropTypes.string,
+  id: _propTypes2['default'].string,
 
   /** @private **/
-  'aria-labelledby': _react.PropTypes.string,
+  'aria-labelledby': _propTypes2['default'].string,
 
   /**
    * If not explicitly specified and rendered in the context of a
    * `<TabContent>`, the `bsClass` of the `<TabContent>` suffixed by `-pane`.
    * If otherwise not explicitly specified, `tab-pane`.
    */
-  bsClass: _react2['default'].PropTypes.string,
+  bsClass: _propTypes2['default'].string,
 
   /**
    * Transition onEnter callback when animation is not `false`
    */
-  onEnter: _react.PropTypes.func,
+  onEnter: _propTypes2['default'].func,
 
   /**
    * Transition onEntering callback when animation is not `false`
    */
-  onEntering: _react.PropTypes.func,
+  onEntering: _propTypes2['default'].func,
 
   /**
    * Transition onEntered callback when animation is not `false`
    */
-  onEntered: _react.PropTypes.func,
+  onEntered: _propTypes2['default'].func,
 
   /**
    * Transition onExit callback when animation is not `false`
    */
-  onExit: _react.PropTypes.func,
+  onExit: _propTypes2['default'].func,
 
   /**
    * Transition onExiting callback when animation is not `false`
    */
-  onExiting: _react.PropTypes.func,
+  onExiting: _propTypes2['default'].func,
 
   /**
    * Transition onExited callback when animation is not `false`
    */
-  onExited: _react.PropTypes.func,
+  onExited: _propTypes2['default'].func,
+
+  /**
+   * Wait until the first "enter" transition to mount the tab (add it to the DOM)
+   */
+  mountOnEnter: _propTypes2['default'].bool,
 
   /**
    * Unmount the tab (remove it from the DOM) when it is no longer visible
    */
-  unmountOnExit: _react.PropTypes.bool
+  unmountOnExit: _propTypes2['default'].bool
 };
 
 var contextTypes = {
-  $bs_tabContainer: _react.PropTypes.shape({
-    getId: _react.PropTypes.func,
-    unmountOnExit: _react.PropTypes.bool
+  $bs_tabContainer: _propTypes2['default'].shape({
+    getTabId: _propTypes2['default'].func,
+    getPaneId: _propTypes2['default'].func
   }),
-  $bs_tabContent: _react.PropTypes.shape({
-    bsClass: _react.PropTypes.string,
-    animation: _react.PropTypes.oneOfType([_react.PropTypes.bool, _elementType2['default']]),
-    activeKey: _react.PropTypes.any,
-    unmountOnExit: _react.PropTypes.bool,
-    onPaneEnter: _react.PropTypes.func.isRequired,
-    onPaneExited: _react.PropTypes.func.isRequired,
-    exiting: _react.PropTypes.bool.isRequired
+  $bs_tabContent: _propTypes2['default'].shape({
+    bsClass: _propTypes2['default'].string,
+    animation: _propTypes2['default'].oneOfType([_propTypes2['default'].bool, _elementType2['default']]),
+    activeKey: _propTypes2['default'].any,
+    mountOnEnter: _propTypes2['default'].bool,
+    unmountOnExit: _propTypes2['default'].bool,
+    onPaneEnter: _propTypes2['default'].func.isRequired,
+    onPaneExited: _propTypes2['default'].func.isRequired,
+    exiting: _propTypes2['default'].bool.isRequired
   })
 };
 
@@ -133,7 +143,7 @@ var contextTypes = {
  * conflict with the top level one.
  */
 var childContextTypes = {
-  $bs_tabContainer: _react.PropTypes.oneOf([null])
+  $bs_tabContainer: _propTypes2['default'].oneOf([null])
 };
 
 var TabPane = function (_React$Component) {
@@ -232,8 +242,9 @@ var TabPane = function (_React$Component) {
         onExit = _props.onExit,
         onExiting = _props.onExiting,
         onExited = _props.onExited,
+        propsMountOnEnter = _props.mountOnEnter,
         propsUnmountOnExit = _props.unmountOnExit,
-        props = (0, _objectWithoutProperties3['default'])(_props, ['eventKey', 'className', 'onEnter', 'onEntering', 'onEntered', 'onExit', 'onExiting', 'onExited', 'unmountOnExit']);
+        props = (0, _objectWithoutProperties3['default'])(_props, ['eventKey', 'className', 'onEnter', 'onEntering', 'onEntered', 'onExit', 'onExiting', 'onExited', 'mountOnEnter', 'unmountOnExit']);
     var _context = this.context,
         tabContent = _context.$bs_tabContent,
         tabContainer = _context.$bs_tabContainer;
@@ -245,6 +256,7 @@ var TabPane = function (_React$Component) {
     var active = this.isActive();
     var animation = this.getAnimation();
 
+    var mountOnEnter = propsMountOnEnter != null ? propsMountOnEnter : tabContent && tabContent.mountOnEnter;
     var unmountOnExit = propsUnmountOnExit != null ? propsUnmountOnExit : tabContent && tabContent.unmountOnExit;
 
     if (!active && !animation && unmountOnExit) {
@@ -287,6 +299,7 @@ var TabPane = function (_React$Component) {
           onExit: onExit,
           onExiting: onExiting,
           onExited: (0, _createChainedFunction2['default'])(this.handleExited, onExited),
+          mountOnEnter: mountOnEnter,
           unmountOnExit: unmountOnExit
         },
         pane

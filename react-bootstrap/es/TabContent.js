@@ -4,7 +4,8 @@ import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
 import { bsClass as setBsClass, prefix, splitBsPropsAndOmit } from './utils/bootstrapUtils';
@@ -20,6 +21,11 @@ var propTypes = {
   animation: PropTypes.oneOfType([PropTypes.bool, elementType]),
 
   /**
+   * Wait until the first "enter" transition to mount tabs (add them to the DOM)
+   */
+  mountOnEnter: PropTypes.bool,
+
+  /**
    * Unmount tabs (remove it from the DOM) when they are no longer visible
    */
   unmountOnExit: PropTypes.bool
@@ -28,6 +34,7 @@ var propTypes = {
 var defaultProps = {
   componentClass: 'div',
   animation: true,
+  mountOnEnter: false,
   unmountOnExit: false
 };
 
@@ -42,6 +49,7 @@ var childContextTypes = {
     bsClass: PropTypes.string,
     animation: PropTypes.oneOfType([PropTypes.bool, elementType]),
     activeKey: PropTypes.any,
+    mountOnEnter: PropTypes.bool,
     unmountOnExit: PropTypes.bool,
     onPaneEnter: PropTypes.func.isRequired,
     onPaneExited: PropTypes.func.isRequired,
@@ -74,6 +82,7 @@ var TabContent = function (_React$Component) {
     var _props = this.props,
         bsClass = _props.bsClass,
         animation = _props.animation,
+        mountOnEnter = _props.mountOnEnter,
         unmountOnExit = _props.unmountOnExit;
 
 
@@ -88,6 +97,7 @@ var TabContent = function (_React$Component) {
         bsClass: bsClass,
         animation: animation,
         activeKey: activeKey,
+        mountOnEnter: mountOnEnter,
         unmountOnExit: unmountOnExit,
         onPaneEnter: this.handlePaneEnter,
         onPaneExited: this.handlePaneExited,
@@ -155,7 +165,7 @@ var TabContent = function (_React$Component) {
         className = _props2.className,
         props = _objectWithoutProperties(_props2, ['componentClass', 'className']);
 
-    var _splitBsPropsAndOmit = splitBsPropsAndOmit(props, ['animation', 'unmountOnExit']),
+    var _splitBsPropsAndOmit = splitBsPropsAndOmit(props, ['animation', 'mountOnEnter', 'unmountOnExit']),
         bsProps = _splitBsPropsAndOmit[0],
         elementProps = _splitBsPropsAndOmit[1];
 

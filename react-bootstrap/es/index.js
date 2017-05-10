@@ -94,6 +94,8 @@ import _Pager from './Pager';
 export { _Pager as Pager };
 import _Pagination from './Pagination';
 export { _Pagination as Pagination };
+import _PaginationButton from './PaginationButton';
+export { _PaginationButton as PaginationButton };
 import _Panel from './Panel';
 export { _Panel as Panel };
 import _PanelGroup from './PanelGroup';

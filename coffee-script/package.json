@@ -2,25 +2,25 @@
   "_args": [
     [
       {
-        "raw": "coffee-script@latest",
+        "raw": "coffee-script@1.12.5",
         "scope": null,
         "escapedName": "coffee-script",
         "name": "coffee-script",
-        "rawSpec": "latest",
-        "spec": "latest",
-        "type": "tag"
+        "rawSpec": "1.12.5",
+        "spec": "1.12.5",
+        "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "coffee-script@latest",
-  "_id": "coffee-script@1.12.3",
+  "_from": "coffee-script@1.12.5",
+  "_id": "coffee-script@1.12.5",
   "_inCache": true,
   "_location": "/coffee-script",
   "_nodeVersion": "7.2.0",
   "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/coffee-script-1.12.3.tgz_1485280440951_0.6911955787800252"
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/coffee-script-1.12.5.tgz_1491844538802_0.5896224051248282"
   },
   "_npmUser": {
     "name": "lydell",
@@ -29,23 +29,22 @@
   "_npmVersion": "3.10.9",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "coffee-script@latest",
+    "raw": "coffee-script@1.12.5",
     "scope": null,
     "escapedName": "coffee-script",
     "name": "coffee-script",
-    "rawSpec": "latest",
-    "spec": "latest",
-    "type": "tag"
+    "rawSpec": "1.12.5",
+    "spec": "1.12.5",
+    "type": "version"
   },
   "_requiredBy": [
-    "#USER",
     "/",
     "/coffee-react"
   ],
-  "_resolved": "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.3.tgz",
-  "_shasum": "de5f4b1b934a4e9f915c57acd7ad323f68f715db",
+  "_resolved": "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.5.tgz",
+  "_shasum": "809f4585419112bbfe46a073ad7543af18c27346",
   "_shrinkwrap": null,
-  "_spec": "coffee-script@latest",
+  "_spec": "coffee-script@1.12.5",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Jeremy Ashkenas"
@@ -61,18 +60,18 @@
   "description": "Unfancy JavaScript",
   "devDependencies": {
     "docco": "~0.7.0",
-    "google-closure-compiler-js": "^20161201.0.1",
-    "highlight.js": "~9.9.0",
+    "google-closure-compiler-js": "^20170218.0.0",
+    "highlight.js": "~9.10.0",
     "jison": ">=0.4.17",
-    "marked": "^0.3.6",
+    "markdown-it": "^8.3.1",
     "underscore": "~1.8.3"
   },
   "directories": {
     "lib": "./lib/coffee-script"
   },
   "dist": {
-    "shasum": "de5f4b1b934a4e9f915c57acd7ad323f68f715db",
-    "tarball": "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.3.tgz"
+    "shasum": "809f4585419112bbfe46a073ad7543af18c27346",
+    "tarball": "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.5.tgz"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -83,7 +82,7 @@
     "register.js",
     "repl.js"
   ],
-  "gitHead": "635e207f3f512dd5e88b3f31862b1a0f1f050c95",
+  "gitHead": "72cf485dceb6a88abb3b83493032734409c3591a",
   "homepage": "http://coffeescript.org",
   "keywords": [
     "javascript",
@@ -119,5 +118,5 @@
     "test": "node ./bin/cake test",
     "test-harmony": "node --harmony ./bin/cake test"
   },
-  "version": "1.12.3"
+  "version": "1.12.5"
 }

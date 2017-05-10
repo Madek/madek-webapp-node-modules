@@ -5,20 +5,21 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import all from 'react-prop-types/lib/all';
 
 import Button from './Button';
 import { bsClass, getClassSet, prefix, splitBsProps } from './utils/bootstrapUtils';
 
 var propTypes = {
-  vertical: React.PropTypes.bool,
-  justified: React.PropTypes.bool,
+  vertical: PropTypes.bool,
+  justified: PropTypes.bool,
 
   /**
    * Display block buttons; only useful when used with the "vertical" prop.
    * @type {bool}
    */
-  block: all(React.PropTypes.bool, function (_ref) {
+  block: all(PropTypes.bool, function (_ref) {
     var block = _ref.block,
         vertical = _ref.vertical;
     return block && !vertical ? new Error('`block` requires `vertical` to be set to have any effect') : null;

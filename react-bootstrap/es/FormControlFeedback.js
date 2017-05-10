@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Glyphicon from './Glyphicon';
 import { bsClass, getClassSet, splitBsProps } from './utils/bootstrapUtils';
@@ -14,7 +15,7 @@ var defaultProps = {
 };
 
 var contextTypes = {
-  $bs_formGroup: React.PropTypes.object
+  $bs_formGroup: PropTypes.object
 };
 
 var FormControlFeedback = function (_React$Component) {

@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _SafeAnchor = require('./SafeAnchor');
 
 var _SafeAnchor2 = _interopRequireDefault(_SafeAnchor);
@@ -41,13 +45,13 @@ var _createChainedFunction2 = _interopRequireDefault(_createChainedFunction);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  active: _react2['default'].PropTypes.bool,
-  disabled: _react2['default'].PropTypes.bool,
-  role: _react2['default'].PropTypes.string,
-  href: _react2['default'].PropTypes.string,
-  onClick: _react2['default'].PropTypes.func,
-  onSelect: _react2['default'].PropTypes.func,
-  eventKey: _react2['default'].PropTypes.any
+  active: _propTypes2['default'].bool,
+  disabled: _propTypes2['default'].bool,
+  role: _propTypes2['default'].string,
+  href: _propTypes2['default'].string,
+  onClick: _propTypes2['default'].func,
+  onSelect: _propTypes2['default'].func,
+  eventKey: _propTypes2['default'].any
 };
 
 var defaultProps = {

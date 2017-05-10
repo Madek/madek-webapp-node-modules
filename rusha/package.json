@@ -1,36 +1,49 @@
 {
   "_args": [
     [
-      "rusha@0.8.3",
+      {
+        "raw": "rusha@0.8.6",
+        "scope": null,
+        "escapedName": "rusha",
+        "name": "rusha",
+        "rawSpec": "0.8.6",
+        "spec": "0.8.6",
+        "type": "version"
+      },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "rusha@0.8.3",
-  "_id": "rusha@0.8.3",
+  "_from": "rusha@0.8.6",
+  "_id": "rusha@0.8.6",
   "_inCache": true,
   "_location": "/rusha",
-  "_nodeVersion": "0.10.33",
-  "_npmUser": {
-    "email": "recv@awesam.de",
-    "name": "srijs"
+  "_nodeVersion": "7.1.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/rusha-0.8.6.tgz_1493938322575_0.18007903289981186"
   },
-  "_npmVersion": "2.1.12",
+  "_npmUser": {
+    "name": "srijs",
+    "email": "srijs@airpost.net"
+  },
+  "_npmVersion": "3.10.9",
   "_phantomChildren": {},
   "_requested": {
-    "name": "rusha",
-    "raw": "rusha@0.8.3",
-    "rawSpec": "0.8.3",
+    "raw": "rusha@0.8.6",
     "scope": null,
-    "spec": "0.8.3",
+    "escapedName": "rusha",
+    "name": "rusha",
+    "rawSpec": "0.8.6",
+    "spec": "0.8.6",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/rusha/-/rusha-0.8.3.tgz",
-  "_shasum": "63cafec9e626ae09565ab0c4ab2cbc1f2f69b71f",
+  "_resolved": "https://registry.npmjs.org/rusha/-/rusha-0.8.6.tgz",
+  "_shasum": "b264ddaa4d49a1d67300061858ba9358c4adca14",
   "_shrinkwrap": null,
-  "_spec": "rusha@0.8.3",
+  "_spec": "rusha@0.8.6",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Sam Rijs"
@@ -52,22 +65,22 @@
     "grunt-mocha-test": "~0.11.0",
     "grunt-saucelabs": "^8.3.2",
     "grunt-sweet.js": "~0.1.5",
-    "microtime": "^1.0.1",
+    "microtime": "^2.1.1",
+    "mocha": "^3.0.2",
     "sweet.js": "~0.7.1"
   },
   "directories": {},
   "dist": {
-    "shasum": "63cafec9e626ae09565ab0c4ab2cbc1f2f69b71f",
-    "tarball": "http://registry.npmjs.org/rusha/-/rusha-0.8.3.tgz"
+    "shasum": "b264ddaa4d49a1d67300061858ba9358c4adca14",
+    "tarball": "https://registry.npmjs.org/rusha/-/rusha-0.8.6.tgz"
   },
-  "gitHead": "59c4f65bf6682b6c2fd2b002d33f4fc057a8f98c",
-  "homepage": "https://github.com/srijs/rusha",
-  "installable": true,
+  "gitHead": "b16b7dc70558f8a11318b9683725df8dc2825ec4",
+  "homepage": "https://github.com/srijs/rusha#readme",
   "keywords": [
+    "sha1",
     "binary",
     "crypto",
-    "hash",
-    "sha1"
+    "hash"
   ],
   "license": "MIT",
   "main": "rusha.js",
@@ -79,9 +92,10 @@
   ],
   "name": "rusha",
   "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "https://github.com/srijs/rusha"
+    "url": "git+https://github.com/srijs/rusha.git"
   },
   "scripts": {
     "build": "grunt build",
@@ -89,15 +103,15 @@
     "test-saucelabs": "grunt test-saucelabs"
   },
   "testling": {
+    "files": "test/test.js",
+    "harness": "mocha-tdd",
     "browsers": [
+      "ie/6..latest",
       "chrome/22..latest",
       "firefox/16..latest",
-      "ie/6..latest",
-      "opera/11.0..latest",
-      "safari/latest"
-    ],
-    "files": "test/test.js",
-    "harness": "mocha-tdd"
+      "safari/latest",
+      "opera/11.0..latest"
+    ]
   },
-  "version": "0.8.3"
+  "version": "0.8.6"
 }

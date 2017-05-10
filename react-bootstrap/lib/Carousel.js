@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _CarouselCaption = require('./CarouselCaption');
 
 var _CarouselCaption2 = _interopRequireDefault(_CarouselCaption);
@@ -59,12 +63,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 // TODO: Use uncontrollable.
 
 var propTypes = {
-  slide: _react2['default'].PropTypes.bool,
-  indicators: _react2['default'].PropTypes.bool,
-  interval: _react2['default'].PropTypes.number,
-  controls: _react2['default'].PropTypes.bool,
-  pauseOnHover: _react2['default'].PropTypes.bool,
-  wrap: _react2['default'].PropTypes.bool,
+  slide: _propTypes2['default'].bool,
+  indicators: _propTypes2['default'].bool,
+  interval: _propTypes2['default'].number,
+  controls: _propTypes2['default'].bool,
+  pauseOnHover: _propTypes2['default'].bool,
+  wrap: _propTypes2['default'].bool,
   /**
    * Callback fired when the active item changes.
    *
@@ -76,25 +80,25 @@ var propTypes = {
    * be a persisted event object with `direction` set to the direction of the
    * transition.
    */
-  onSelect: _react2['default'].PropTypes.func,
-  onSlideEnd: _react2['default'].PropTypes.func,
-  activeIndex: _react2['default'].PropTypes.number,
-  defaultActiveIndex: _react2['default'].PropTypes.number,
-  direction: _react2['default'].PropTypes.oneOf(['prev', 'next']),
-  prevIcon: _react2['default'].PropTypes.node,
+  onSelect: _propTypes2['default'].func,
+  onSlideEnd: _propTypes2['default'].func,
+  activeIndex: _propTypes2['default'].number,
+  defaultActiveIndex: _propTypes2['default'].number,
+  direction: _propTypes2['default'].oneOf(['prev', 'next']),
+  prevIcon: _propTypes2['default'].node,
   /**
    * Label shown to screen readers only, can be used to show the previous element
    * in the carousel.
    * Set to null to deactivate.
    */
-  prevLabel: _react2['default'].PropTypes.string,
-  nextIcon: _react2['default'].PropTypes.node,
+  prevLabel: _propTypes2['default'].string,
+  nextIcon: _propTypes2['default'].node,
   /**
    * Label shown to screen readers only, can be used to show the next element
    * in the carousel.
    * Set to null to deactivate.
    */
-  nextLabel: _react2['default'].PropTypes.string
+  nextLabel: _propTypes2['default'].string
 };
 
 var defaultProps = {
@@ -235,7 +239,7 @@ var Carousel = function (_React$Component) {
       return;
     }
 
-    var previousActiveIndex = this.getActiveIndex();
+    var previousActiveIndex = this.props.slide ? this.getActiveIndex() : null;
     direction = direction || this.getDirection(previousActiveIndex, index);
 
     var onSelect = this.props.onSelect;

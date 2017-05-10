@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -50,7 +54,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-`
    */
-  xs: _react2['default'].PropTypes.number,
+  xs: _propTypes2['default'].number,
   /**
    * The number of columns you wish to span
    *
@@ -58,7 +62,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-`
    */
-  sm: _react2['default'].PropTypes.number,
+  sm: _propTypes2['default'].number,
   /**
    * The number of columns you wish to span
    *
@@ -66,7 +70,7 @@ var propTypes = {
    *
    * class-prefix `col-md-`
    */
-  md: _react2['default'].PropTypes.number,
+  md: _propTypes2['default'].number,
   /**
    * The number of columns you wish to span
    *
@@ -74,7 +78,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-`
    */
-  lg: _react2['default'].PropTypes.number,
+  lg: _propTypes2['default'].number,
   /**
    * Hide column
    *
@@ -82,7 +86,7 @@ var propTypes = {
    *
    * adds class `hidden-xs`
    */
-  xsHidden: _react2['default'].PropTypes.bool,
+  xsHidden: _propTypes2['default'].bool,
   /**
    * Hide column
    *
@@ -90,7 +94,7 @@ var propTypes = {
    *
    * adds class `hidden-sm`
    */
-  smHidden: _react2['default'].PropTypes.bool,
+  smHidden: _propTypes2['default'].bool,
   /**
    * Hide column
    *
@@ -98,7 +102,7 @@ var propTypes = {
    *
    * adds class `hidden-md`
    */
-  mdHidden: _react2['default'].PropTypes.bool,
+  mdHidden: _propTypes2['default'].bool,
   /**
    * Hide column
    *
@@ -106,7 +110,7 @@ var propTypes = {
    *
    * adds class `hidden-lg`
    */
-  lgHidden: _react2['default'].PropTypes.bool,
+  lgHidden: _propTypes2['default'].bool,
   /**
    * Move columns to the right
    *
@@ -114,7 +118,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-offset-`
    */
-  xsOffset: _react2['default'].PropTypes.number,
+  xsOffset: _propTypes2['default'].number,
   /**
    * Move columns to the right
    *
@@ -122,7 +126,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-offset-`
    */
-  smOffset: _react2['default'].PropTypes.number,
+  smOffset: _propTypes2['default'].number,
   /**
    * Move columns to the right
    *
@@ -130,7 +134,7 @@ var propTypes = {
    *
    * class-prefix `col-md-offset-`
    */
-  mdOffset: _react2['default'].PropTypes.number,
+  mdOffset: _propTypes2['default'].number,
   /**
    * Move columns to the right
    *
@@ -138,7 +142,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-offset-`
    */
-  lgOffset: _react2['default'].PropTypes.number,
+  lgOffset: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the right
    *
@@ -146,7 +150,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-push-`
    */
-  xsPush: _react2['default'].PropTypes.number,
+  xsPush: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the right
    *
@@ -154,7 +158,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-push-`
    */
-  smPush: _react2['default'].PropTypes.number,
+  smPush: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the right
    *
@@ -162,7 +166,7 @@ var propTypes = {
    *
    * class-prefix `col-md-push-`
    */
-  mdPush: _react2['default'].PropTypes.number,
+  mdPush: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the right
    *
@@ -170,7 +174,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-push-`
    */
-  lgPush: _react2['default'].PropTypes.number,
+  lgPush: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the left
    *
@@ -178,7 +182,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-pull-`
    */
-  xsPull: _react2['default'].PropTypes.number,
+  xsPull: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the left
    *
@@ -186,7 +190,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-pull-`
    */
-  smPull: _react2['default'].PropTypes.number,
+  smPull: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the left
    *
@@ -194,7 +198,7 @@ var propTypes = {
    *
    * class-prefix `col-md-pull-`
    */
-  mdPull: _react2['default'].PropTypes.number,
+  mdPull: _propTypes2['default'].number,
   /**
    * Change the order of grid columns to the left
    *
@@ -202,7 +206,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-pull-`
    */
-  lgPull: _react2['default'].PropTypes.number
+  lgPull: _propTypes2['default'].number
 };
 
 var defaultProps = {

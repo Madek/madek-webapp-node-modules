@@ -4,6 +4,7 @@ import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
 import React from 'react';
+import PropTypes from 'prop-types';
 import requiredForA11y from 'react-prop-types/lib/isRequiredForA11y';
 import uncontrollable from 'uncontrollable';
 
@@ -22,16 +23,16 @@ var propTypes = {
    *
    * @controllable onSelect
    */
-  activeKey: React.PropTypes.any,
+  activeKey: PropTypes.any,
 
   /**
    * Navigation style
    */
-  bsStyle: React.PropTypes.oneOf(['tabs', 'pills']),
+  bsStyle: PropTypes.oneOf(['tabs', 'pills']),
 
-  animation: React.PropTypes.bool,
+  animation: PropTypes.bool,
 
-  id: requiredForA11y(React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])),
+  id: requiredForA11y(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
 
   /**
    * Callback fired when a Tab is selected.
@@ -45,17 +46,23 @@ var propTypes = {
    *
    * @controllable activeKey
    */
-  onSelect: React.PropTypes.func,
+  onSelect: PropTypes.func,
+
+  /**
+   * Wait until the first "enter" transition to mount tabs (add them to the DOM)
+   */
+  mountOnEnter: PropTypes.bool,
 
   /**
    * Unmount tabs (remove it from the DOM) when it is no longer visible
    */
-  unmountOnExit: React.PropTypes.bool
+  unmountOnExit: PropTypes.bool
 };
 
 var defaultProps = {
   bsStyle: 'tabs',
   animation: true,
+  mountOnEnter: false,
   unmountOnExit: false
 };
 
@@ -106,6 +113,7 @@ var Tabs = function (_React$Component) {
         id = _props.id,
         onSelect = _props.onSelect,
         animation = _props.animation,
+        mountOnEnter = _props.mountOnEnter,
         unmountOnExit = _props.unmountOnExit,
         bsClass = _props.bsClass,
         className = _props.className,
@@ -113,7 +121,7 @@ var Tabs = function (_React$Component) {
         children = _props.children,
         _props$activeKey = _props.activeKey,
         activeKey = _props$activeKey === undefined ? getDefaultActiveKey(children) : _props$activeKey,
-        props = _objectWithoutProperties(_props, ['id', 'onSelect', 'animation', 'unmountOnExit', 'bsClass', 'className', 'style', 'children', 'activeKey']);
+        props = _objectWithoutProperties(_props, ['id', 'onSelect', 'animation', 'mountOnEnter', 'unmountOnExit', 'bsClass', 'className', 'style', 'children', 'activeKey']);
 
     return React.createElement(
       TabContainer,
@@ -139,6 +147,7 @@ var Tabs = function (_React$Component) {
           {
             bsClass: bsClass,
             animation: animation,
+            mountOnEnter: mountOnEnter,
             unmountOnExit: unmountOnExit
           },
           children

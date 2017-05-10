@@ -5,6 +5,7 @@ import _inherits from 'babel-runtime/helpers/inherits';
 import _extends from 'babel-runtime/helpers/extends';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Dropdown from './Dropdown';
 import splitComponentProps from './utils/splitComponentProps';
@@ -13,15 +14,15 @@ import ValidComponentChildren from './utils/ValidComponentChildren';
 var propTypes = _extends({}, Dropdown.propTypes, {
 
   // Toggle props.
-  title: React.PropTypes.node.isRequired,
-  noCaret: React.PropTypes.bool,
-  active: React.PropTypes.bool,
+  title: PropTypes.node.isRequired,
+  noCaret: PropTypes.bool,
+  active: PropTypes.bool,
 
   // Override generated docs from <Dropdown>.
   /**
    * @private
    */
-  children: React.PropTypes.node
+  children: PropTypes.node
 });
 
 var NavDropdown = function (_React$Component) {

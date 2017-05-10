@@ -1,41 +1,54 @@
 {
   "_args": [
     [
-      "ampersand-sync@^4.0.2",
+      {
+        "raw": "ampersand-sync@^5.0.0",
+        "scope": null,
+        "escapedName": "ampersand-sync",
+        "name": "ampersand-sync",
+        "rawSpec": "^5.0.0",
+        "spec": ">=5.0.0 <6.0.0",
+        "type": "range"
+      },
       "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-model"
     ]
   ],
-  "_from": "ampersand-sync@>=4.0.2 <5.0.0",
-  "_id": "ampersand-sync@4.0.2",
+  "_from": "ampersand-sync@>=5.0.0 <6.0.0",
+  "_id": "ampersand-sync@5.0.0",
   "_inCache": true,
   "_location": "/ampersand-sync",
-  "_nodeVersion": "0.10.40",
-  "_npmUser": {
-    "email": "luke@lukekarrys.com",
-    "name": "lukekarrys"
+  "_nodeVersion": "5.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/ampersand-sync-5.0.0.tgz_1464205891775_0.035909744212403893"
   },
-  "_npmVersion": "2.13.1",
+  "_npmUser": {
+    "name": "lukekarrys",
+    "email": "luke@lukekarrys.com"
+  },
+  "_npmVersion": "3.8.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "ampersand-sync",
-    "raw": "ampersand-sync@^4.0.2",
-    "rawSpec": "^4.0.2",
+    "raw": "ampersand-sync@^5.0.0",
     "scope": null,
-    "spec": ">=4.0.2 <5.0.0",
+    "escapedName": "ampersand-sync",
+    "name": "ampersand-sync",
+    "rawSpec": "^5.0.0",
+    "spec": ">=5.0.0 <6.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/ampersand-collection-rest-mixin",
     "/ampersand-model"
   ],
-  "_resolved": "https://registry.npmjs.org/ampersand-sync/-/ampersand-sync-4.0.2.tgz",
-  "_shasum": "1c995fafcb9975a0e60179648f61e532b5b597e1",
+  "_resolved": "https://registry.npmjs.org/ampersand-sync/-/ampersand-sync-5.0.0.tgz",
+  "_shasum": "9db4ee313f289f98522279a9a66d6cae2c7777b1",
   "_shrinkwrap": null,
-  "_spec": "ampersand-sync@^4.0.2",
+  "_spec": "ampersand-sync@^5.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/ampersand-model",
   "author": {
-    "email": "henrik@andyet.net",
-    "name": "Henrik Joreteg"
+    "name": "Henrik Joreteg",
+    "email": "henrik@andyet.net"
   },
   "browser": "ampersand-sync-browser.js",
   "browserify": {
@@ -48,58 +61,59 @@
   },
   "dependencies": {
     "ampersand-version": "^1.0.0",
-    "lodash.assign": "^3.0.0",
-    "lodash.defaults": "^3.1.0",
-    "lodash.includes": "^3.1.0",
-    "lodash.result": "^3.0.0",
+    "lodash": "^4.11.1",
     "media-type": "0.3.0",
-    "qs": "^4.0.0",
+    "qs": "^6.1.0",
     "request": "^2.55.0",
-    "xhr": "^2.0.4"
+    "xhr": "^2.0.5"
   },
   "description": "Provides sync behavior for updating data from ampersand models and collections to the server.",
   "devDependencies": {
-    "ampersand-model": "^5.0.3",
-    "ampersand-rest-collection": "^4.0.0",
+    "ampersand-model": "^7.0.0",
+    "ampersand-rest-collection": "^5.0.0",
     "concat-stream": "^1.4.8",
     "jshint": "^2.5.3",
+    "phantomjs": "^2.1.7",
     "precommit-hook": "^3.0.0",
-    "run-browser": "^2.0.2",
-    "tap-spec": "^4.0.2",
-    "tape": "^4.0.0"
+    "sinon": "^1.17.2",
+    "tape": "^4.0.0",
+    "zuul": "^3.9.0"
   },
   "directories": {},
   "dist": {
-    "shasum": "1c995fafcb9975a0e60179648f61e532b5b597e1",
-    "tarball": "http://registry.npmjs.org/ampersand-sync/-/ampersand-sync-4.0.2.tgz"
+    "shasum": "9db4ee313f289f98522279a9a66d6cae2c7777b1",
+    "tarball": "https://registry.npmjs.org/ampersand-sync/-/ampersand-sync-5.0.0.tgz"
   },
   "files": [
     "ampersand-sync*",
     "core.js"
   ],
-  "gitHead": "97aee97aa1246880005a55ba0ca40457dc8bcdac",
+  "gitHead": "a69075ac4ddba9cbef6520328aad3fc92c2d0d46",
   "homepage": "https://github.com/ampersandjs/ampersand-sync",
-  "installable": true,
   "keywords": [
-    "ampersand",
     "backbone",
+    "sync",
     "rest",
-    "sync"
+    "ampersand"
   ],
   "license": "MIT",
   "main": "ampersand-sync.js",
   "maintainers": [
     {
-      "name": "henrikjoreteg",
-      "email": "henrik@andyet.net"
-    },
-    {
-      "name": "latentflip",
-      "email": "phil@latentflip.com"
+      "name": "fyockm",
+      "email": "fyockm@gmail.com"
     },
     {
       "name": "gar",
       "email": "gar+npm@danger.computer"
+    },
+    {
+      "name": "henrikjoreteg",
+      "email": "henrik@joreteg.com"
+    },
+    {
+      "name": "latentflip",
+      "email": "phil@latentflip.com"
     },
     {
       "name": "lukekarrys",
@@ -108,40 +122,30 @@
     {
       "name": "naugtur",
       "email": "naugtur@gmail.com"
+    },
+    {
+      "name": "pgilad",
+      "email": "giladp007@gmail.com"
     }
   ],
   "name": "ampersand-sync",
   "optionalDependencies": {},
   "pre-commit": [
     "lint",
-    "test",
-    "validate"
+    "validate",
+    "test"
   ],
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ampersandjs/ampersand-sync.git"
   },
   "scripts": {
     "lint": "jshint .",
-    "start": "run-browser test/index.js",
-    "test": "run-browser test/index.js -b | tap-spec && node test/index.js",
+    "start": "zuul --local -- test/index.js",
+    "test": "zuul --phantom -- test/index.js",
+    "test-ci": "zuul -- test/index.js",
     "validate": "npm ls"
   },
-  "testling": {
-    "browsers": [
-      "android-browser/4.2..latest",
-      "chrome/22..latest",
-      "chrome/canary",
-      "firefox/17..latest",
-      "firefox/nightly",
-      "ie/8..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "opera/12..latest",
-      "opera/next",
-      "safari/5.1..latest"
-    ],
-    "files": "test/*.js"
-  },
-  "version": "4.0.2"
+  "version": "5.0.0"
 }

@@ -298,7 +298,7 @@ setup.autoSetupTimeout(1, videojs);
  *
  * @type {string}
  */
-videojs.VERSION = '5.16.0';
+videojs.VERSION = '5.19.2';
 
 /**
  * The global options object. These are the settings that take effect

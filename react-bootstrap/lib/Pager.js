@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _PagerItem = require('./PagerItem');
 
 var _PagerItem2 = _interopRequireDefault(_PagerItem);
@@ -47,7 +51,7 @@ var _ValidComponentChildren2 = _interopRequireDefault(_ValidComponentChildren);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  onSelect: _react2['default'].PropTypes.func
+  onSelect: _propTypes2['default'].func
 };
 
 var Pager = function (_React$Component) {

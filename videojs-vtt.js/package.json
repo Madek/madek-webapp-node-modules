@@ -2,51 +2,55 @@
   "_args": [
     [
       {
-        "raw": "videojs-vtt.js@0.12.1",
+        "raw": "videojs-vtt.js@0.12.3",
         "scope": null,
         "escapedName": "videojs-vtt.js",
         "name": "videojs-vtt.js",
-        "rawSpec": "0.12.1",
-        "spec": "0.12.1",
+        "rawSpec": "0.12.3",
+        "spec": "0.12.3",
         "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp/node_modules/video.js"
     ]
   ],
-  "_from": "videojs-vtt.js@0.12.1",
-  "_id": "videojs-vtt.js@0.12.1",
+  "_from": "videojs-vtt.js@0.12.3",
+  "_id": "videojs-vtt.js@0.12.3",
   "_inCache": true,
   "_location": "/videojs-vtt.js",
-  "_nodeVersion": "0.10.39",
+  "_nodeVersion": "4.4.3",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/videojs-vtt.js-0.12.3.tgz_1490198545178_0.8099364163354039"
+  },
   "_npmUser": {
     "name": "gkatsev",
     "email": "me@gkatsev.com"
   },
-  "_npmVersion": "2.13.4",
+  "_npmVersion": "2.15.6",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "videojs-vtt.js@0.12.1",
+    "raw": "videojs-vtt.js@0.12.3",
     "scope": null,
     "escapedName": "videojs-vtt.js",
     "name": "videojs-vtt.js",
-    "rawSpec": "0.12.1",
-    "spec": "0.12.1",
+    "rawSpec": "0.12.3",
+    "spec": "0.12.3",
     "type": "version"
   },
   "_requiredBy": [
     "/video.js"
   ],
-  "_resolved": "https://registry.npmjs.org/videojs-vtt.js/-/videojs-vtt.js-0.12.1.tgz",
-  "_shasum": "e313896ca8e838c1b2e16df8775c56981ae19f3a",
+  "_resolved": "https://registry.npmjs.org/videojs-vtt.js/-/videojs-vtt.js-0.12.3.tgz",
+  "_shasum": "5ec6606844544790a795e8e396e3f2ab3649a2d6",
   "_shrinkwrap": null,
-  "_spec": "videojs-vtt.js@0.12.1",
+  "_spec": "videojs-vtt.js@0.12.3",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/video.js",
   "author": {
     "name": "Andreas Gal",
     "email": "gal@mozilla.com"
   },
   "bugs": {
-    "url": "https://github.com/mozilla/vtt.js/issues"
+    "url": "https://github.com/gkatsev/vtt.js/issues"
   },
   "contributors": [
     {
@@ -149,8 +153,8 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "e313896ca8e838c1b2e16df8775c56981ae19f3a",
-    "tarball": "https://registry.npmjs.org/videojs-vtt.js/-/videojs-vtt.js-0.12.1.tgz"
+    "shasum": "5ec6606844544790a795e8e396e3f2ab3649a2d6",
+    "tarball": "https://registry.npmjs.org/videojs-vtt.js/-/videojs-vtt.js-0.12.3.tgz"
   },
   "files": [
     "dist/",
@@ -162,8 +166,8 @@
     "lib/vttregion.js",
     "lib/vttregion-extended.js"
   ],
-  "gitHead": "8ea664e257ec7b5c092f58ac989e3134ff536a7a",
-  "homepage": "https://github.com/mozilla/vtt.js",
+  "gitHead": "bbcad98cb55811d2413b3f8aa46b1cb58741fa36",
+  "homepage": "https://github.com/gkatsev/vtt.js",
   "keywords": [
     "vtt",
     "webvtt",
@@ -174,9 +178,9 @@
   ],
   "license": {
     "type": "Apache-2.0",
-    "url": "https://github.com/mozilla/vtt.js/blob/master/LICENSE"
+    "url": "https://github.com/gkatsev/vtt.js/blob/master/LICENSE"
   },
-  "main": "lib/index.js",
+  "main": "lib/browser-index.js",
   "maintainers": [
     {
       "name": "gkatsev",
@@ -188,10 +192,10 @@
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mozilla/vtt.js.git"
+    "url": "git+https://github.com/gkatsev/vtt.js.git"
   },
   "scripts": {
     "test": "grunt"
   },
-  "version": "0.12.1"
+  "version": "0.12.3"
 }

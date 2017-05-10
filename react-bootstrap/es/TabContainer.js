@@ -2,7 +2,8 @@ import _objectWithoutProperties from 'babel-runtime/helpers/objectWithoutPropert
 import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import uncontrollable from 'uncontrollable';
 
 var TAB = 'tab';
@@ -63,7 +64,7 @@ var propTypes = {
 };
 
 var childContextTypes = {
-  $bs_tabContainer: React.PropTypes.shape({
+  $bs_tabContainer: PropTypes.shape({
     activeKey: PropTypes.any,
     onSelect: PropTypes.func.isRequired,
     getTabId: PropTypes.func.isRequired,

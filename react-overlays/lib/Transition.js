@@ -9,25 +9,29 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _classnames = require('classnames');
 
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _properties = require('dom-helpers/transition/properties');
-
-var _properties2 = _interopRequireDefault(_properties);
+var _classnames2 = _interopRequireDefault(_classnames);
 
 var _on = require('dom-helpers/events/on');
 
 var _on2 = _interopRequireDefault(_on);
 
-var _classnames = require('classnames');
+var _properties = require('dom-helpers/transition/properties');
 
-var _classnames2 = _interopRequireDefault(_classnames);
+var _properties2 = _interopRequireDefault(_properties);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53,7 +57,7 @@ var EXITING = exports.EXITING = 4;
  * but is specifically optimized for transitioning a single child "in" or "out".
  *
  * You don't even need to use class based css transitions if you don't want to (but it is easiest).
- * The extensive set of lifecyle callbacks means you have control over
+ * The extensive set of lifecycle callbacks means you have control over
  * the transitioning now at each step of the way.
  */
 
@@ -65,13 +69,108 @@ var Transition = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Transition.__proto__ || Object.getPrototypeOf(Transition)).call(this, props, context));
 
+    _this.updateStatus = function () {
+      if (_this.nextStatus !== null) {
+        (function () {
+          // nextStatus will always be ENTERING or EXITING.
+          _this.cancelNextCallback();
+          var node = _reactDom2.default.findDOMNode(_this);
+
+          if (_this.nextStatus === ENTERING) {
+            _this.props.onEnter(node);
+
+            _this.safeSetState({ status: ENTERING }, function () {
+              _this.props.onEntering(node);
+
+              _this.onTransitionEnd(node, function () {
+                _this.safeSetState({ status: ENTERED }, function () {
+                  _this.props.onEntered(node);
+                });
+              });
+            });
+          } else {
+            _this.props.onExit(node);
+
+            _this.safeSetState({ status: EXITING }, function () {
+              _this.props.onExiting(node);
+
+              _this.onTransitionEnd(node, function () {
+                _this.safeSetState({ status: EXITED }, function () {
+                  _this.props.onExited(node);
+                });
+              });
+            });
+          }
+
+          _this.nextStatus = null;
+        })();
+      } else if (_this.props.unmountOnExit && _this.state.status === EXITED) {
+        _this.setState({ status: UNMOUNTED });
+      }
+    };
+
+    _this.cancelNextCallback = function () {
+      if (_this.nextCallback !== null) {
+        _this.nextCallback.cancel();
+        _this.nextCallback = null;
+      }
+    };
+
+    _this.safeSetState = function (nextState, callback) {
+      // This shouldn't be necessary, but there are weird race conditions with
+      // setState callbacks and unmounting in testing, so always make sure that
+      // we can cancel any pending setState callbacks after we unmount.
+      _this.setState(nextState, _this.setNextCallback(callback));
+    };
+
+    _this.setNextCallback = function (callback) {
+      var active = true;
+
+      _this.nextCallback = function (event) {
+        if (active) {
+          active = false;
+          _this.nextCallback = null;
+
+          callback(event);
+        }
+      };
+
+      _this.nextCallback.cancel = function () {
+        active = false;
+      };
+
+      return _this.nextCallback;
+    };
+
+    _this.onTransitionEnd = function (node, handler) {
+      _this.setNextCallback(handler);
+
+      if (node) {
+        (0, _on2.default)(node, transitionEndEvent, _this.nextCallback);
+        setTimeout(_this.nextCallback, _this.props.timeout);
+      } else {
+        setTimeout(_this.nextCallback, 0);
+      }
+    };
+
     var initialStatus = void 0;
+    _this.nextStatus = null;
+
     if (props.in) {
-      // Start enter transition in componentDidMount.
-      initialStatus = props.transitionAppear ? EXITED : ENTERED;
+      if (props.transitionAppear) {
+        initialStatus = EXITED;
+        _this.nextStatus = ENTERING;
+      } else {
+        initialStatus = ENTERED;
+      }
     } else {
-      initialStatus = props.unmountOnExit ? UNMOUNTED : EXITED;
+      if (props.unmountOnExit || props.mountOnEnter) {
+        initialStatus = UNMOUNTED;
+      } else {
+        initialStatus = EXITED;
+      }
     }
+
     _this.state = { status: initialStatus };
 
     _this.nextCallback = null;
@@ -81,154 +180,36 @@ var Transition = function (_React$Component) {
   _createClass(Transition, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (this.props.transitionAppear && this.props.in) {
-        this.performEnter(this.props);
-      }
+      this.updateStatus();
     }
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.in && this.props.unmountOnExit) {
-        if (this.state.status === UNMOUNTED) {
-          // Start enter transition in componentDidUpdate.
+      var status = this.state.status;
+
+
+      if (nextProps.in) {
+        if (status === UNMOUNTED) {
           this.setState({ status: EXITED });
         }
+        if (status !== ENTERING && status !== ENTERED) {
+          this.nextStatus = ENTERING;
+        }
       } else {
-        this._needsUpdate = true;
+        if (status === ENTERING || status === ENTERED) {
+          this.nextStatus = EXITING;
+        }
       }
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      var status = this.state.status;
-
-      if (this.props.unmountOnExit && status === EXITED) {
-        // EXITED is always a transitional state to either ENTERING or UNMOUNTED
-        // when using unmountOnExit.
-        if (this.props.in) {
-          this.performEnter(this.props);
-        } else {
-          this.setState({ status: UNMOUNTED });
-        }
-
-        return;
-      }
-
-      // guard ensures we are only responding to prop changes
-      if (this._needsUpdate) {
-        this._needsUpdate = false;
-
-        if (this.props.in) {
-          if (status === EXITING) {
-            this.performEnter(this.props);
-          } else if (status === EXITED) {
-            this.performEnter(this.props);
-          }
-          // Otherwise we're already entering or entered.
-        } else {
-          if (status === ENTERING || status === ENTERED) {
-            this.performExit(this.props);
-          }
-          // Otherwise we're already exited or exiting.
-        }
-      }
+      this.updateStatus();
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       this.cancelNextCallback();
-    }
-  }, {
-    key: 'performEnter',
-    value: function performEnter(props) {
-      var _this2 = this;
-
-      this.cancelNextCallback();
-      var node = _reactDom2.default.findDOMNode(this);
-
-      // Not this.props, because we might be about to receive new props.
-      props.onEnter(node);
-
-      this.safeSetState({ status: ENTERING }, function () {
-        _this2.props.onEntering(node);
-
-        _this2.onTransitionEnd(node, function () {
-          _this2.safeSetState({ status: ENTERED }, function () {
-            _this2.props.onEntered(node);
-          });
-        });
-      });
-    }
-  }, {
-    key: 'performExit',
-    value: function performExit(props) {
-      var _this3 = this;
-
-      this.cancelNextCallback();
-      var node = _reactDom2.default.findDOMNode(this);
-
-      // Not this.props, because we might be about to receive new props.
-      props.onExit(node);
-
-      this.safeSetState({ status: EXITING }, function () {
-        _this3.props.onExiting(node);
-
-        _this3.onTransitionEnd(node, function () {
-          _this3.safeSetState({ status: EXITED }, function () {
-            _this3.props.onExited(node);
-          });
-        });
-      });
-    }
-  }, {
-    key: 'cancelNextCallback',
-    value: function cancelNextCallback() {
-      if (this.nextCallback !== null) {
-        this.nextCallback.cancel();
-        this.nextCallback = null;
-      }
-    }
-  }, {
-    key: 'safeSetState',
-    value: function safeSetState(nextState, callback) {
-      // This shouldn't be necessary, but there are weird race conditions with
-      // setState callbacks and unmounting in testing, so always make sure that
-      // we can cancel any pending setState callbacks after we unmount.
-      this.setState(nextState, this.setNextCallback(callback));
-    }
-  }, {
-    key: 'setNextCallback',
-    value: function setNextCallback(callback) {
-      var _this4 = this;
-
-      var active = true;
-
-      this.nextCallback = function (event) {
-        if (active) {
-          active = false;
-          _this4.nextCallback = null;
-
-          callback(event);
-        }
-      };
-
-      this.nextCallback.cancel = function () {
-        active = false;
-      };
-
-      return this.nextCallback;
-    }
-  }, {
-    key: 'onTransitionEnd',
-    value: function onTransitionEnd(node, handler) {
-      this.setNextCallback(handler);
-
-      if (node) {
-        (0, _on2.default)(node, transitionEndEvent, this.nextCallback);
-        setTimeout(this.nextCallback, this.props.timeout);
-      } else {
-        setTimeout(this.nextCallback, 0);
-      }
     }
   }, {
     key: 'render',
@@ -273,18 +254,23 @@ Transition.propTypes = {
   /**
    * Show the component; triggers the enter or exit animation
    */
-  in: _react2.default.PropTypes.bool,
+  in: _propTypes2.default.bool,
+
+  /**
+   * Wait until the first "enter" transition to mount the component (add it to the DOM)
+   */
+  mountOnEnter: _propTypes2.default.bool,
 
   /**
    * Unmount the component (remove it from the DOM) when it is not shown
    */
-  unmountOnExit: _react2.default.PropTypes.bool,
+  unmountOnExit: _propTypes2.default.bool,
 
   /**
    * Run the enter animation when the component mounts, if it is initially
    * shown
    */
-  transitionAppear: _react2.default.PropTypes.bool,
+  transitionAppear: _propTypes2.default.bool,
 
   /**
    * A Timeout for the animation, in milliseconds, to ensure that a node doesn't
@@ -294,49 +280,49 @@ Transition.propTypes = {
    * By default this is set to a high number (5 seconds) as a failsafe. You should consider
    * setting this to the duration of your animation (or a bit above it).
    */
-  timeout: _react2.default.PropTypes.number,
+  timeout: _propTypes2.default.number,
 
   /**
    * CSS class or classes applied when the component is exited
    */
-  exitedClassName: _react2.default.PropTypes.string,
+  exitedClassName: _propTypes2.default.string,
   /**
    * CSS class or classes applied while the component is exiting
    */
-  exitingClassName: _react2.default.PropTypes.string,
+  exitingClassName: _propTypes2.default.string,
   /**
    * CSS class or classes applied when the component is entered
    */
-  enteredClassName: _react2.default.PropTypes.string,
+  enteredClassName: _propTypes2.default.string,
   /**
    * CSS class or classes applied while the component is entering
    */
-  enteringClassName: _react2.default.PropTypes.string,
+  enteringClassName: _propTypes2.default.string,
 
   /**
    * Callback fired before the "entering" classes are applied
    */
-  onEnter: _react2.default.PropTypes.func,
+  onEnter: _propTypes2.default.func,
   /**
    * Callback fired after the "entering" classes are applied
    */
-  onEntering: _react2.default.PropTypes.func,
+  onEntering: _propTypes2.default.func,
   /**
    * Callback fired after the "enter" classes are applied
    */
-  onEntered: _react2.default.PropTypes.func,
+  onEntered: _propTypes2.default.func,
   /**
    * Callback fired before the "exiting" classes are applied
    */
-  onExit: _react2.default.PropTypes.func,
+  onExit: _propTypes2.default.func,
   /**
    * Callback fired after the "exiting" classes are applied
    */
-  onExiting: _react2.default.PropTypes.func,
+  onExiting: _propTypes2.default.func,
   /**
    * Callback fired after the "exited" classes are applied
    */
-  onExited: _react2.default.PropTypes.func
+  onExited: _propTypes2.default.func
 };
 
 // Name the function so it is clearer in the documentation

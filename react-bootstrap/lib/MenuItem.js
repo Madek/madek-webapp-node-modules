@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _all = require('react-prop-types/lib/all');
 
 var _all2 = _interopRequireDefault(_all);
@@ -50,18 +54,18 @@ var propTypes = {
   /**
    * Highlight the menu item as active.
    */
-  active: _react2['default'].PropTypes.bool,
+  active: _propTypes2['default'].bool,
 
   /**
    * Disable the menu item, making it unselectable.
    */
-  disabled: _react2['default'].PropTypes.bool,
+  disabled: _propTypes2['default'].bool,
 
   /**
    * Styles the menu item as a horizontal rule, providing visual separation between
    * groups of menu items.
    */
-  divider: (0, _all2['default'])(_react2['default'].PropTypes.bool, function (_ref) {
+  divider: (0, _all2['default'])(_propTypes2['default'].bool, function (_ref) {
     var divider = _ref.divider,
         children = _ref.children;
     return divider && children ? new Error('Children will not be rendered for dividers') : null;
@@ -70,22 +74,22 @@ var propTypes = {
   /**
    * Value passed to the `onSelect` handler, useful for identifying the selected menu item.
    */
-  eventKey: _react2['default'].PropTypes.any,
+  eventKey: _propTypes2['default'].any,
 
   /**
    * Styles the menu item as a header label, useful for describing a group of menu items.
    */
-  header: _react2['default'].PropTypes.bool,
+  header: _propTypes2['default'].bool,
 
   /**
    * HTML `href` attribute corresponding to `a.href`.
    */
-  href: _react2['default'].PropTypes.string,
+  href: _propTypes2['default'].string,
 
   /**
    * Callback fired when the menu item is clicked.
    */
-  onClick: _react2['default'].PropTypes.func,
+  onClick: _propTypes2['default'].func,
 
   /**
    * Callback fired when the menu item is selected.
@@ -94,7 +98,7 @@ var propTypes = {
    * (eventKey: any, event: Object) => any
    * ```
    */
-  onSelect: _react2['default'].PropTypes.func
+  onSelect: _propTypes2['default'].func
 };
 
 var defaultProps = {

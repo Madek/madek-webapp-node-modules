@@ -6,6 +6,7 @@ import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import keycode from 'keycode';
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import all from 'react-prop-types/lib/all';
 import warning from 'warning';
@@ -26,19 +27,19 @@ var propTypes = {
    * Marks the NavItem with a matching `eventKey` as active. Has a
    * higher precedence over `activeHref`.
    */
-  activeKey: React.PropTypes.any,
+  activeKey: PropTypes.any,
 
   /**
    * Marks the child NavItem with a matching `href` prop as active.
    */
-  activeHref: React.PropTypes.string,
+  activeHref: PropTypes.string,
 
   /**
    * NavItems are be positioned vertically.
    */
-  stacked: React.PropTypes.bool,
+  stacked: PropTypes.bool,
 
-  justified: all(React.PropTypes.bool, function (_ref) {
+  justified: all(PropTypes.bool, function (_ref) {
     var justified = _ref.justified,
         navbar = _ref.navbar;
     return justified && navbar ? Error('justified navbar `Nav`s are not supported') : null;
@@ -54,7 +55,7 @@ var propTypes = {
    * )
    * ```
    */
-  onSelect: React.PropTypes.func,
+  onSelect: PropTypes.func,
 
   /**
    * ARIA role for the Nav, in the context of a TabContainer, the default will
@@ -64,25 +65,25 @@ var propTypes = {
    * the ARIA authoring practices for tabs:
    * https://www.w3.org/TR/2013/WD-wai-aria-practices-20130307/#tabpanel
    */
-  role: React.PropTypes.string,
+  role: PropTypes.string,
 
   /**
    * Apply styling an alignment for use in a Navbar. This prop will be set
    * automatically when the Nav is used inside a Navbar.
    */
-  navbar: React.PropTypes.bool,
+  navbar: PropTypes.bool,
 
   /**
    * Float the Nav to the right. When `navbar` is `true` the appropriate
    * contextual classes are added as well.
    */
-  pullRight: React.PropTypes.bool,
+  pullRight: PropTypes.bool,
 
   /**
    * Float the Nav to the left. When `navbar` is `true` the appropriate
    * contextual classes are added as well.
    */
-  pullLeft: React.PropTypes.bool
+  pullLeft: PropTypes.bool
 };
 
 var defaultProps = {
@@ -93,16 +94,16 @@ var defaultProps = {
 };
 
 var contextTypes = {
-  $bs_navbar: React.PropTypes.shape({
-    bsClass: React.PropTypes.string,
-    onSelect: React.PropTypes.func
+  $bs_navbar: PropTypes.shape({
+    bsClass: PropTypes.string,
+    onSelect: PropTypes.func
   }),
 
-  $bs_tabContainer: React.PropTypes.shape({
-    activeKey: React.PropTypes.any,
-    onSelect: React.PropTypes.func.isRequired,
-    getTabId: React.PropTypes.func.isRequired,
-    getPaneId: React.PropTypes.func.isRequired
+  $bs_tabContainer: PropTypes.shape({
+    activeKey: PropTypes.any,
+    onSelect: PropTypes.func.isRequired,
+    getTabId: PropTypes.func.isRequired,
+    getPaneId: PropTypes.func.isRequired
   })
 };
 
@@ -166,7 +167,7 @@ var Nav = function (_React$Component) {
 
     event.preventDefault();
 
-    if (onSelect && nextActiveChild && nextActiveChild.props.eventKey) {
+    if (onSelect && nextActiveChild && nextActiveChild.props.eventKey != null) {
       onSelect(nextActiveChild.props.eventKey);
     }
 
@@ -179,7 +180,7 @@ var Nav = function (_React$Component) {
     var children = this.props.children;
 
     var validChildren = children.filter(function (child) {
-      return child.props.eventKey && !child.props.disabled;
+      return child.props.eventKey != null && !child.props.disabled;
     });
 
     var _getActiveProps2 = this.getActiveProps(),

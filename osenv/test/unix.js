@@ -2,13 +2,13 @@
 // pretending to be another platform is too hacky, since it breaks
 // how the underlying system looks up module paths and runs
 // child processes, and all that stuff is cached.
-if (process.platform === 'win32') {
-  console.log('TAP Version 13\n' +
-              '1..0\n' +
-              '# Skip unix tests, this is not unix\n')
-  return
-}
 var tap = require('tap')
+
+
+if (process.platform === 'win32') {
+  tap.plan(0, 'Skip unix tests, this is not unix')
+  process.exit(0)
+}
 
 // like unix, but funny
 process.env.USER = 'sirUser'
@@ -22,7 +22,6 @@ process.env.PS1 = '(o_o) $ '
 process.env.EDITOR = 'edit'
 process.env.VISUAL = 'visualedit'
 process.env.SHELL = 'zsh'
-
 
 tap.test('basic unix sanity test', function (t) {
   var osenv = require('../osenv.js')
@@ -46,10 +45,6 @@ tap.test('basic unix sanity test', function (t) {
   t.equal(osenv.tmpdir(), process.env.TEMP)
 
   process.env.TEMP = ''
-  delete require.cache[require.resolve('../osenv.js')]
-  var osenv = require('../osenv.js')
-  t.equal(osenv.tmpdir(), '/home/sirUser/tmp')
-
   delete require.cache[require.resolve('../osenv.js')]
   var osenv = require('../osenv.js')
   osenv.home = function () { return null }

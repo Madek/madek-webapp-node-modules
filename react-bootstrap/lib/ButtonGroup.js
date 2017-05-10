@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _all = require('react-prop-types/lib/all');
 
 var _all2 = _interopRequireDefault(_all);
@@ -43,14 +47,14 @@ var _bootstrapUtils = require('./utils/bootstrapUtils');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  vertical: _react2['default'].PropTypes.bool,
-  justified: _react2['default'].PropTypes.bool,
+  vertical: _propTypes2['default'].bool,
+  justified: _propTypes2['default'].bool,
 
   /**
    * Display block buttons; only useful when used with the "vertical" prop.
    * @type {bool}
    */
-  block: (0, _all2['default'])(_react2['default'].PropTypes.bool, function (_ref) {
+  block: (0, _all2['default'])(_propTypes2['default'].bool, function (_ref) {
     var block = _ref.block,
         vertical = _ref.vertical;
     return block && !vertical ? new Error('`block` requires `vertical` to be set to have any effect') : null;

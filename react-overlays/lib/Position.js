@@ -16,6 +16,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -62,6 +66,23 @@ var Position = function (_React$Component) {
     _classCallCheck(this, Position);
 
     var _this = _possibleConstructorReturn(this, (Position.__proto__ || Object.getPrototypeOf(Position)).call(this, props, context));
+
+    _this.getTarget = function () {
+      var target = _this.props.target;
+
+      var targetElement = typeof target === 'function' ? target() : target;
+      return targetElement && _reactDom2.default.findDOMNode(targetElement) || null;
+    };
+
+    _this.maybeUpdatePosition = function (placementChanged) {
+      var target = _this.getTarget();
+
+      if (!_this.props.shouldUpdatePosition && target === _this._lastTarget && !placementChanged) {
+        return;
+      }
+
+      _this.updatePosition(target);
+    };
 
     _this.state = {
       positionLeft: 0,
@@ -130,25 +151,6 @@ var Position = function (_React$Component) {
       }));
     }
   }, {
-    key: 'getTarget',
-    value: function getTarget() {
-      var target = this.props.target;
-
-      var targetElement = typeof target === 'function' ? target() : target;
-      return targetElement && _reactDom2.default.findDOMNode(targetElement) || null;
-    }
-  }, {
-    key: 'maybeUpdatePosition',
-    value: function maybeUpdatePosition(placementChanged) {
-      var target = this.getTarget();
-
-      if (!this.props.shouldUpdatePosition && target === this._lastTarget && !placementChanged) {
-        return;
-      }
-
-      this.updatePosition(target);
-    }
-  }, {
     key: 'updatePosition',
     value: function updatePosition(target) {
       this._lastTarget = target;
@@ -179,24 +181,24 @@ Position.propTypes = {
    * A node, element, or function that returns either. The child will be
    * be positioned next to the `target` specified.
    */
-  target: _react2.default.PropTypes.oneOfType([_componentOrElement2.default, _react2.default.PropTypes.func]),
+  target: _propTypes2.default.oneOfType([_componentOrElement2.default, _propTypes2.default.func]),
 
   /**
    * "offsetParent" of the component
    */
-  container: _react2.default.PropTypes.oneOfType([_componentOrElement2.default, _react2.default.PropTypes.func]),
+  container: _propTypes2.default.oneOfType([_componentOrElement2.default, _propTypes2.default.func]),
   /**
    * Minimum spacing in pixels between container border and component border
    */
-  containerPadding: _react2.default.PropTypes.number,
+  containerPadding: _propTypes2.default.number,
   /**
    * How to position the component relative to the target
    */
-  placement: _react2.default.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+  placement: _propTypes2.default.oneOf(['top', 'right', 'bottom', 'left']),
   /**
    * Whether the position should be changed on each update
    */
-  shouldUpdatePosition: _react2.default.PropTypes.bool
+  shouldUpdatePosition: _propTypes2.default.bool
 };
 
 Position.displayName = 'Position';

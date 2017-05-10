@@ -1,12 +1,12 @@
 /**@license
- * mout v0.9.1 | http://moutjs.com | MIT license
+ * mout v1.0.0 | http://moutjs.com | MIT license
  */
 
 
 //automatically generated, do not edit!
 //run `node build` instead
 module.exports = {
-    'VERSION' : '0.9.1',
+    'VERSION' : '1.0.0',
     'array' : require('./array'),
     'collection' : require('./collection'),
     'date' : require('./date'),

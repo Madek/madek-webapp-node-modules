@@ -2,47 +2,52 @@
   "_args": [
     [
       {
-        "raw": "bulk-require@0.2.1",
+        "raw": "bulk-require@1.0.0",
         "scope": null,
         "escapedName": "bulk-require",
         "name": "bulk-require",
-        "rawSpec": "0.2.1",
-        "spec": "0.2.1",
+        "rawSpec": "1.0.0",
+        "spec": "1.0.0",
         "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "bulk-require@0.2.1",
-  "_id": "bulk-require@0.2.1",
+  "_from": "bulk-require@1.0.0",
+  "_id": "bulk-require@1.0.0",
   "_inCache": true,
   "_location": "/bulk-require",
+  "_nodeVersion": "5.5.0",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/bulk-require-1.0.0.tgz_1466634214234_0.20192094682715833"
+  },
   "_npmUser": {
     "name": "substack",
-    "email": "mail@substack.net"
+    "email": "substack@gmail.com"
   },
-  "_npmVersion": "1.4.3",
+  "_npmVersion": "3.7.1",
   "_phantomChildren": {
     "inherits": "2.0.1",
     "lru-cache": "2.7.3",
     "sigmund": "1.0.1"
   },
   "_requested": {
-    "raw": "bulk-require@0.2.1",
+    "raw": "bulk-require@1.0.0",
     "scope": null,
     "escapedName": "bulk-require",
     "name": "bulk-require",
-    "rawSpec": "0.2.1",
-    "spec": "0.2.1",
+    "rawSpec": "1.0.0",
+    "spec": "1.0.0",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/bulk-require/-/bulk-require-0.2.1.tgz",
-  "_shasum": "f118d7833118b0a1a20b465b136d9db513479d25",
+  "_resolved": "https://registry.npmjs.org/bulk-require/-/bulk-require-1.0.0.tgz",
+  "_shasum": "7c84e9dd25a0377c0d0deaa92072307141b43ca8",
   "_shrinkwrap": null,
-  "_spec": "bulk-require@0.2.1",
+  "_spec": "bulk-require@1.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "James Halliday",
@@ -61,9 +66,10 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "f118d7833118b0a1a20b465b136d9db513479d25",
-    "tarball": "https://registry.npmjs.org/bulk-require/-/bulk-require-0.2.1.tgz"
+    "shasum": "7c84e9dd25a0377c0d0deaa92072307141b43ca8",
+    "tarball": "https://registry.npmjs.org/bulk-require/-/bulk-require-1.0.0.tgz"
   },
+  "gitHead": "1a5ff4665843a8a967e4e06be8db7d35abe92418",
   "homepage": "https://github.com/substack/bulk-require",
   "keywords": [
     "require",
@@ -91,5 +97,5 @@
   "scripts": {
     "test": "tape test/*.js"
   },
-  "version": "0.2.1"
+  "version": "1.0.0"
 }

@@ -2,48 +2,53 @@
   "_args": [
     [
       {
-        "name": "dom-helpers",
-        "raw": "dom-helpers@^2.4.0",
-        "rawSpec": "^2.4.0",
+        "raw": "dom-helpers@^3.2.0",
         "scope": null,
-        "spec": ">=2.4.0 <3.0.0",
+        "escapedName": "dom-helpers",
+        "name": "dom-helpers",
+        "rawSpec": "^3.2.0",
+        "spec": ">=3.2.0 <4.0.0",
         "type": "range"
       },
       "/Users/ma/CODE/Madek/webapp/node_modules/react-bootstrap"
     ]
   ],
-  "_from": "dom-helpers@>=2.4.0 <3.0.0",
-  "_id": "dom-helpers@2.4.0",
+  "_from": "dom-helpers@>=3.2.0 <4.0.0",
+  "_id": "dom-helpers@3.2.1",
   "_inCache": true,
-  "_installable": true,
   "_location": "/dom-helpers",
-  "_nodeVersion": "0.12.3",
-  "_npmUser": {
-    "email": "monastic.panic@gmail.com",
-    "name": "monastic.panic"
+  "_nodeVersion": "6.3.1",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/dom-helpers-3.2.1.tgz_1486217700509_0.43450313596986234"
   },
-  "_npmVersion": "2.13.3",
+  "_npmUser": {
+    "name": "monastic.panic",
+    "email": "monastic.panic@gmail.com"
+  },
+  "_npmVersion": "3.10.3",
   "_phantomChildren": {},
   "_requested": {
-    "name": "dom-helpers",
-    "raw": "dom-helpers@^2.4.0",
-    "rawSpec": "^2.4.0",
+    "raw": "dom-helpers@^3.2.0",
     "scope": null,
-    "spec": ">=2.4.0 <3.0.0",
+    "escapedName": "dom-helpers",
+    "name": "dom-helpers",
+    "rawSpec": "^3.2.0",
+    "spec": ">=3.2.0 <4.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/react-bootstrap",
     "/react-overlays"
   ],
-  "_resolved": "https://registry.npmjs.org/dom-helpers/-/dom-helpers-2.4.0.tgz",
-  "_shasum": "9bb4b245f637367b1fa670274272aa28fe06c367",
+  "_resolved": "https://registry.npmjs.org/dom-helpers/-/dom-helpers-3.2.1.tgz",
+  "_shasum": "3203e07fed217bd1f424b019735582fc37b2825a",
   "_shrinkwrap": null,
-  "_spec": "dom-helpers@^2.4.0",
+  "_spec": "dom-helpers@^3.2.0",
   "_where": "/Users/ma/CODE/Madek/webapp/node_modules/react-bootstrap",
   "author": {
-    "email": "monastic.panic@gmail.com",
-    "name": "Jason Quense"
+    "name": "Jason Quense",
+    "email": "monastic.panic@gmail.com"
   },
   "bugs": {
     "url": "https://github.com/jquense/dom-helpers/issues"
@@ -53,8 +58,8 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "9bb4b245f637367b1fa670274272aa28fe06c367",
-    "tarball": "http://registry.npmjs.org/dom-helpers/-/dom-helpers-2.4.0.tgz"
+    "shasum": "3203e07fed217bd1f424b019735582fc37b2825a",
+    "tarball": "https://registry.npmjs.org/dom-helpers/-/dom-helpers-3.2.1.tgz"
   },
   "homepage": "https://github.com/jquense/dom-helpers#readme",
   "keywords": [
@@ -76,8 +81,8 @@
   "main": "index.js",
   "maintainers": [
     {
-      "email": "monastic.panic@gmail.com",
-      "name": "monastic.panic"
+      "name": "monastic.panic",
+      "email": "monastic.panic@gmail.com"
     }
   ],
   "name": "dom-helpers",
@@ -87,11 +92,6 @@
     "type": "git",
     "url": "git+https://github.com/jquense/dom-helpers.git"
   },
-  "scripts": {
-    "build": "gulp build",
-    "clean": "gulp clean",
-    "tdd": "karma start",
-    "test": "karma start --single-run"
-  },
-  "version": "2.4.0"
+  "scripts": {},
+  "version": "3.2.1"
 }

@@ -6,6 +6,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 
 import Collapse from './Collapse';
 import { bsStyles, bsClass, getClassSet, prefix, splitBsPropsAndOmit } from './utils/bootstrapUtils';
@@ -14,24 +15,24 @@ import { State, Style } from './utils/StyleConfig';
 // TODO: Use uncontrollable.
 
 var propTypes = {
-  collapsible: React.PropTypes.bool,
-  onSelect: React.PropTypes.func,
-  header: React.PropTypes.node,
-  id: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-  footer: React.PropTypes.node,
-  defaultExpanded: React.PropTypes.bool,
-  expanded: React.PropTypes.bool,
-  eventKey: React.PropTypes.any,
-  headerRole: React.PropTypes.string,
-  panelRole: React.PropTypes.string,
+  collapsible: PropTypes.bool,
+  onSelect: PropTypes.func,
+  header: PropTypes.node,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  footer: PropTypes.node,
+  defaultExpanded: PropTypes.bool,
+  expanded: PropTypes.bool,
+  eventKey: PropTypes.any,
+  headerRole: PropTypes.string,
+  panelRole: PropTypes.string,
 
   // From Collapse.
-  onEnter: React.PropTypes.func,
-  onEntering: React.PropTypes.func,
-  onEntered: React.PropTypes.func,
-  onExit: React.PropTypes.func,
-  onExiting: React.PropTypes.func,
-  onExited: React.PropTypes.func
+  onEnter: PropTypes.func,
+  onEntering: PropTypes.func,
+  onEntered: PropTypes.func,
+  onExit: PropTypes.func,
+  onExiting: PropTypes.func,
+  onExited: PropTypes.func
 };
 
 var defaultProps = {

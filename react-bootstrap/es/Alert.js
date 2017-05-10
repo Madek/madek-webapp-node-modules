@@ -6,13 +6,15 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass, bsStyles, getClassSet, prefix, splitBsProps } from './utils/bootstrapUtils';
 import { State } from './utils/StyleConfig';
+import CloseButton from './CloseButton';
 
 var propTypes = {
-  onDismiss: React.PropTypes.func,
-  closeLabel: React.PropTypes.string
+  onDismiss: PropTypes.func,
+  closeLabel: PropTypes.string
 };
 
 var defaultProps = {
@@ -27,36 +29,6 @@ var Alert = function (_React$Component) {
 
     return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
   }
-
-  Alert.prototype.renderDismissButton = function renderDismissButton(onDismiss) {
-    return React.createElement(
-      'button',
-      {
-        type: 'button',
-        className: 'close',
-        onClick: onDismiss,
-        'aria-hidden': 'true',
-        tabIndex: '-1'
-      },
-      React.createElement(
-        'span',
-        null,
-        '\xD7'
-      )
-    );
-  };
-
-  Alert.prototype.renderSrOnlyDismissButton = function renderSrOnlyDismissButton(onDismiss, closeLabel) {
-    return React.createElement(
-      'button',
-      {
-        type: 'button',
-        className: 'close sr-only',
-        onClick: onDismiss
-      },
-      closeLabel
-    );
-  };
 
   Alert.prototype.render = function render() {
     var _extends2;
@@ -81,9 +53,11 @@ var Alert = function (_React$Component) {
         role: 'alert',
         className: classNames(className, classes)
       }),
-      dismissable && this.renderDismissButton(onDismiss),
-      children,
-      dismissable && this.renderSrOnlyDismissButton(onDismiss, closeLabel)
+      dismissable && React.createElement(CloseButton, {
+        onClick: onDismiss,
+        label: closeLabel
+      }),
+      children
     );
   };
 

@@ -5,12 +5,13 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { prefix } from './utils/bootstrapUtils';
 
 var contextTypes = {
-  $bs_navbar: React.PropTypes.shape({
-    bsClass: React.PropTypes.string
+  $bs_navbar: PropTypes.shape({
+    bsClass: PropTypes.string
   })
 };
 

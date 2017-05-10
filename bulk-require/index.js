@@ -5,6 +5,7 @@ module.exports = function (root, globs, opts) {
     if (typeof globs === 'string') globs = [ globs ];
     if (!Array.isArray(globs)) return {};
     if (!opts) opts = {};
+    opts.index = opts.index === false ? false : true
     var requireFn = opts.require || require;
     
     var xglobs = globs.map(function (g) {
@@ -67,7 +68,7 @@ module.exports = function (root, globs, opts) {
             else return exp;
         }
         else if (typeof node === 'object') {
-            var init = node.index && typeof node.index[0] === 'string'
+            var init = opts.index && node.index && typeof node.index[0] === 'string'
                 && requireFn(node.index[0]);
             
             return Object.keys(node).reduce(function (acc, key) {

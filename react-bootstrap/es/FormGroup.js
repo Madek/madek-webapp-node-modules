@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass, bsSizes, getClassSet, splitBsPropsAndOmit } from './utils/bootstrapUtils';
 import { Size } from './utils/StyleConfig';
@@ -14,12 +15,12 @@ var propTypes = {
   /**
    * Sets `id` on `<FormControl>` and `htmlFor` on `<FormGroup.Label>`.
    */
-  controlId: React.PropTypes.string,
-  validationState: React.PropTypes.oneOf(['success', 'warning', 'error', null])
+  controlId: PropTypes.string,
+  validationState: PropTypes.oneOf(['success', 'warning', 'error', null])
 };
 
 var childContextTypes = {
-  $bs_formGroup: React.PropTypes.object.isRequired
+  $bs_formGroup: PropTypes.object.isRequired
 };
 
 var FormGroup = function (_React$Component) {

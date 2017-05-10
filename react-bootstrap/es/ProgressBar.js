@@ -5,7 +5,8 @@ import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
-import React, { cloneElement, PropTypes } from 'react';
+import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass as setBsClass, bsStyles, getClassSet, prefix, splitBsProps } from './utils/bootstrapUtils';
 import { State } from './utils/StyleConfig';

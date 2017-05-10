@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -68,33 +72,30 @@ var _createChainedFunction2 = _interopRequireDefault(_createChainedFunction);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-// TODO: Remove this pragma once we upgrade eslint-config-airbnb.
-/* eslint-disable react/no-multi-comp */
-
 var propTypes = {
   /**
    * Create a fixed navbar along the top of the screen, that scrolls with the
    * page
    */
-  fixedTop: _react2['default'].PropTypes.bool,
+  fixedTop: _propTypes2['default'].bool,
   /**
    * Create a fixed navbar along the bottom of the screen, that scrolls with
    * the page
    */
-  fixedBottom: _react2['default'].PropTypes.bool,
+  fixedBottom: _propTypes2['default'].bool,
   /**
    * Create a full-width navbar that scrolls away with the page
    */
-  staticTop: _react2['default'].PropTypes.bool,
+  staticTop: _propTypes2['default'].bool,
   /**
    * An alternative dark visual style for the Navbar
    */
-  inverse: _react2['default'].PropTypes.bool,
+  inverse: _propTypes2['default'].bool,
   /**
    * Allow the Navbar to fluidly adjust to the page or container width, instead
    * of at the predefined screen breakpoints
    */
-  fluid: _react2['default'].PropTypes.bool,
+  fluid: _propTypes2['default'].bool,
 
   /**
    * Set a custom element for this component.
@@ -107,7 +108,7 @@ var propTypes = {
    *
    * @controllable navExpanded
    */
-  onToggle: _react2['default'].PropTypes.func,
+  onToggle: _propTypes2['default'].func,
   /**
    * A callback fired when a descendant of a child `<Nav>` is selected. Should
    * be used to execute complex closing or other miscellaneous actions desired
@@ -129,7 +130,7 @@ var propTypes = {
    * ensure that you are setting `expanded` to false and not *toggling* between
    * true and false.
    */
-  onSelect: _react2['default'].PropTypes.func,
+  onSelect: _propTypes2['default'].func,
   /**
    * Sets `expanded` to `false` after the onSelect event of a descendant of a
    * child `<Nav>`. Does nothing if no `<Nav>` or `<Nav>` descendants exist.
@@ -137,16 +138,17 @@ var propTypes = {
    * The onSelect callback should be used instead for more complex operations
    * that need to be executed after the `select` event of `<Nav>` descendants.
    */
-  collapseOnSelect: _react2['default'].PropTypes.bool,
+  collapseOnSelect: _propTypes2['default'].bool,
   /**
    * Explicitly set the visiblity of the navbar body
    *
    * @controllable onToggle
    */
-  expanded: _react2['default'].PropTypes.bool,
+  expanded: _propTypes2['default'].bool,
 
-  role: _react2['default'].PropTypes.string
-};
+  role: _propTypes2['default'].string
+}; // TODO: Remove this pragma once we upgrade eslint-config-airbnb.
+/* eslint-disable react/no-multi-comp */
 
 var defaultProps = {
   componentClass: 'nav',
@@ -159,11 +161,11 @@ var defaultProps = {
 };
 
 var childContextTypes = {
-  $bs_navbar: _react.PropTypes.shape({
-    bsClass: _react.PropTypes.string,
-    expanded: _react.PropTypes.bool,
-    onToggle: _react.PropTypes.func.isRequired,
-    onSelect: _react.PropTypes.func
+  $bs_navbar: _propTypes2['default'].shape({
+    bsClass: _propTypes2['default'].string,
+    expanded: _propTypes2['default'].bool,
+    onToggle: _propTypes2['default'].func.isRequired,
+    onSelect: _propTypes2['default'].func
   })
 };
 
@@ -293,8 +295,8 @@ function createSimpleWrapper(tag, suffix, displayName) {
 
   Wrapper.propTypes = {
     componentClass: _elementType2['default'],
-    pullRight: _react2['default'].PropTypes.bool,
-    pullLeft: _react2['default'].PropTypes.bool
+    pullRight: _propTypes2['default'].bool,
+    pullLeft: _propTypes2['default'].bool
   };
 
   Wrapper.defaultProps = {
@@ -304,8 +306,8 @@ function createSimpleWrapper(tag, suffix, displayName) {
   };
 
   Wrapper.contextTypes = {
-    $bs_navbar: _react.PropTypes.shape({
-      bsClass: _react.PropTypes.string
+    $bs_navbar: _propTypes2['default'].shape({
+      bsClass: _propTypes2['default'].string
     })
   };
 

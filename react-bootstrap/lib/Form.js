@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -39,8 +43,8 @@ var _bootstrapUtils = require('./utils/bootstrapUtils');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  horizontal: _react2['default'].PropTypes.bool,
-  inline: _react2['default'].PropTypes.bool,
+  horizontal: _propTypes2['default'].bool,
+  inline: _propTypes2['default'].bool,
   componentClass: _elementType2['default']
 };
 

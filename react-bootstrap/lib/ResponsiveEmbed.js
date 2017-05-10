@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _warning = require('warning');
 
 var _warning2 = _interopRequireDefault(_warning);
@@ -44,15 +48,15 @@ var propTypes = {
   /**
    * This component requires a single child element
    */
-  children: _react.PropTypes.element.isRequired,
+  children: _propTypes2['default'].element.isRequired,
   /**
    * 16by9 aspect ratio
    */
-  a16by9: _react.PropTypes.bool,
+  a16by9: _propTypes2['default'].bool,
   /**
    * 4by3 aspect ratio
    */
-  a4by3: _react.PropTypes.bool
+  a4by3: _propTypes2['default'].bool
 };
 
 var defaultProps = {

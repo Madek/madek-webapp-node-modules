@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _style = require('dom-helpers/style');
 
 var _style2 = _interopRequireDefault(_style);
@@ -78,110 +76,103 @@ function removeContainerStyle(_ref, container) {
  * @internal Used by the Modal to ensure proper styling of containers.
  */
 
-var ModalManager = function () {
-  function ModalManager() {
-    var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+var ModalManager = function ModalManager() {
+  var _this = this;
 
-    var _ref2$hideSiblingNode = _ref2.hideSiblingNodes;
-    var hideSiblingNodes = _ref2$hideSiblingNode === undefined ? true : _ref2$hideSiblingNode;
-    var _ref2$handleContainer = _ref2.handleContainerOverflow;
-    var handleContainerOverflow = _ref2$handleContainer === undefined ? true : _ref2$handleContainer;
+  var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    _classCallCheck(this, ModalManager);
+  var _ref2$hideSiblingNode = _ref2.hideSiblingNodes;
+  var hideSiblingNodes = _ref2$hideSiblingNode === undefined ? true : _ref2$hideSiblingNode;
+  var _ref2$handleContainer = _ref2.handleContainerOverflow;
+  var handleContainerOverflow = _ref2$handleContainer === undefined ? true : _ref2$handleContainer;
 
-    this.hideSiblingNodes = hideSiblingNodes;
-    this.handleContainerOverflow = handleContainerOverflow;
-    this.modals = [];
-    this.containers = [];
-    this.data = [];
-  }
+  _classCallCheck(this, ModalManager);
 
-  _createClass(ModalManager, [{
-    key: 'add',
-    value: function add(modal, container, className) {
-      var modalIdx = this.modals.indexOf(modal);
-      var containerIdx = this.containers.indexOf(container);
+  this.add = function (modal, container, className) {
+    var modalIdx = _this.modals.indexOf(modal);
+    var containerIdx = _this.containers.indexOf(container);
 
-      if (modalIdx !== -1) {
-        return modalIdx;
-      }
-
-      modalIdx = this.modals.length;
-      this.modals.push(modal);
-
-      if (this.hideSiblingNodes) {
-        (0, _manageAriaHidden.hideSiblings)(container, modal.mountNode);
-      }
-
-      if (containerIdx !== -1) {
-        this.data[containerIdx].modals.push(modal);
-        return modalIdx;
-      }
-
-      var data = {
-        modals: [modal],
-        //right now only the first modal of a container will have its classes applied
-        classes: className ? className.split(/\s+/) : [],
-
-        overflowing: (0, _isOverflowing2.default)(container)
-      };
-
-      if (this.handleContainerOverflow) {
-        setContainerStyle(data, container);
-      }
-
-      data.classes.forEach(_class2.default.addClass.bind(null, container));
-
-      this.containers.push(container);
-      this.data.push(data);
-
+    if (modalIdx !== -1) {
       return modalIdx;
     }
-  }, {
-    key: 'remove',
-    value: function remove(modal) {
-      var modalIdx = this.modals.indexOf(modal);
 
-      if (modalIdx === -1) {
-        return;
+    modalIdx = _this.modals.length;
+    _this.modals.push(modal);
+
+    if (_this.hideSiblingNodes) {
+      (0, _manageAriaHidden.hideSiblings)(container, modal.mountNode);
+    }
+
+    if (containerIdx !== -1) {
+      _this.data[containerIdx].modals.push(modal);
+      return modalIdx;
+    }
+
+    var data = {
+      modals: [modal],
+      //right now only the first modal of a container will have its classes applied
+      classes: className ? className.split(/\s+/) : [],
+
+      overflowing: (0, _isOverflowing2.default)(container)
+    };
+
+    if (_this.handleContainerOverflow) {
+      setContainerStyle(data, container);
+    }
+
+    data.classes.forEach(_class2.default.addClass.bind(null, container));
+
+    _this.containers.push(container);
+    _this.data.push(data);
+
+    return modalIdx;
+  };
+
+  this.remove = function (modal) {
+    var modalIdx = _this.modals.indexOf(modal);
+
+    if (modalIdx === -1) {
+      return;
+    }
+
+    var containerIdx = findContainer(_this.data, modal);
+    var data = _this.data[containerIdx];
+    var container = _this.containers[containerIdx];
+
+    data.modals.splice(data.modals.indexOf(modal), 1);
+
+    _this.modals.splice(modalIdx, 1);
+
+    // if that was the last modal in a container,
+    // clean up the container
+    if (data.modals.length === 0) {
+      data.classes.forEach(_class2.default.removeClass.bind(null, container));
+
+      if (_this.handleContainerOverflow) {
+        removeContainerStyle(data, container);
       }
 
-      var containerIdx = findContainer(this.data, modal);
-      var data = this.data[containerIdx];
-      var container = this.containers[containerIdx];
-
-      data.modals.splice(data.modals.indexOf(modal), 1);
-
-      this.modals.splice(modalIdx, 1);
-
-      // if that was the last modal in a container,
-      // clean up the container
-      if (data.modals.length === 0) {
-        data.classes.forEach(_class2.default.removeClass.bind(null, container));
-
-        if (this.handleContainerOverflow) {
-          removeContainerStyle(data, container);
-        }
-
-        if (this.hideSiblingNodes) {
-          (0, _manageAriaHidden.showSiblings)(container, modal.mountNode);
-        }
-        this.containers.splice(containerIdx, 1);
-        this.data.splice(containerIdx, 1);
-      } else if (this.hideSiblingNodes) {
-        //otherwise make sure the next top modal is visible to a SR
-        (0, _manageAriaHidden.ariaHidden)(false, data.modals[data.modals.length - 1].mountNode);
+      if (_this.hideSiblingNodes) {
+        (0, _manageAriaHidden.showSiblings)(container, modal.mountNode);
       }
+      _this.containers.splice(containerIdx, 1);
+      _this.data.splice(containerIdx, 1);
+    } else if (_this.hideSiblingNodes) {
+      //otherwise make sure the next top modal is visible to a SR
+      (0, _manageAriaHidden.ariaHidden)(false, data.modals[data.modals.length - 1].mountNode);
     }
-  }, {
-    key: 'isTopModal',
-    value: function isTopModal(modal) {
-      return !!this.modals.length && this.modals[this.modals.length - 1] === modal;
-    }
-  }]);
+  };
 
-  return ModalManager;
-}();
+  this.isTopModal = function (modal) {
+    return !!_this.modals.length && _this.modals[_this.modals.length - 1] === modal;
+  };
+
+  this.hideSiblingNodes = hideSiblingNodes;
+  this.handleContainerOverflow = handleContainerOverflow;
+  this.modals = [];
+  this.containers = [];
+  this.data = [];
+};
 
 exports.default = ModalManager;
 module.exports = exports['default'];

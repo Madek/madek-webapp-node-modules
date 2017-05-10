@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 
 import PagerItem from './PagerItem';
 import { bsClass, getClassSet, splitBsProps } from './utils/bootstrapUtils';
@@ -12,7 +13,7 @@ import createChainedFunction from './utils/createChainedFunction';
 import ValidComponentChildren from './utils/ValidComponentChildren';
 
 var propTypes = {
-  onSelect: React.PropTypes.func
+  onSelect: PropTypes.func
 };
 
 var Pager = function (_React$Component) {
