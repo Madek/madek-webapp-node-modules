@@ -5,17 +5,18 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import warning from 'warning';
 
 import { bsClass, getClassSet, prefix, splitBsProps } from './utils/bootstrapUtils';
 
 var propTypes = {
-  inline: React.PropTypes.bool,
-  disabled: React.PropTypes.bool,
+  inline: PropTypes.bool,
+  disabled: PropTypes.bool,
   /**
    * Only valid if `inline` is not set.
    */
-  validationState: React.PropTypes.oneOf(['success', 'warning', 'error', null]),
+  validationState: PropTypes.oneOf(['success', 'warning', 'error', null]),
   /**
    * Attaches a ref to the `<input>` element. Only functions can be used here.
    *
@@ -23,7 +24,7 @@ var propTypes = {
    * <Checkbox inputRef={ref => { this.input = ref; }} />
    * ```
    */
-  inputRef: React.PropTypes.func
+  inputRef: PropTypes.func
 };
 
 var defaultProps = {

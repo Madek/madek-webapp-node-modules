@@ -26,6 +26,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -33,11 +37,11 @@ var _elementType2 = _interopRequireDefault(_elementType);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  href: _react2['default'].PropTypes.string,
-  onClick: _react2['default'].PropTypes.func,
-  disabled: _react2['default'].PropTypes.bool,
-  role: _react2['default'].PropTypes.string,
-  tabIndex: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.string]),
+  href: _propTypes2['default'].string,
+  onClick: _propTypes2['default'].func,
+  disabled: _propTypes2['default'].bool,
+  role: _propTypes2['default'].string,
+  tabIndex: _propTypes2['default'].oneOfType([_propTypes2['default'].number, _propTypes2['default'].string]),
   /**
    * this is sort of silly but needed for Button
    */

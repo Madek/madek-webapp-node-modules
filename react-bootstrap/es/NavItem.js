@@ -5,18 +5,19 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SafeAnchor from './SafeAnchor';
 import createChainedFunction from './utils/createChainedFunction';
 
 var propTypes = {
-  active: React.PropTypes.bool,
-  disabled: React.PropTypes.bool,
-  role: React.PropTypes.string,
-  href: React.PropTypes.string,
-  onClick: React.PropTypes.func,
-  onSelect: React.PropTypes.func,
-  eventKey: React.PropTypes.any
+  active: PropTypes.bool,
+  disabled: PropTypes.bool,
+  role: PropTypes.string,
+  href: PropTypes.string,
+  onClick: PropTypes.func,
+  onSelect: PropTypes.func,
+  eventKey: PropTypes.any
 };
 
 var defaultProps = {

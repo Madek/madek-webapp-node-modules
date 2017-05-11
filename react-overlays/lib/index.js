@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Transition = exports.Position = exports.Portal = exports.Overlay = exports.Modal = exports.AutoAffix = exports.Affix = undefined;
+exports.RootCloseWrapper = exports.Transition = exports.Position = exports.Portal = exports.Overlay = exports.Modal = exports.AutoAffix = exports.Affix = undefined;
 
 var _Affix2 = require('./Affix');
 
@@ -33,6 +33,10 @@ var _Transition2 = require('./Transition');
 
 var _Transition3 = _interopRequireDefault(_Transition2);
 
+var _RootCloseWrapper2 = require('./RootCloseWrapper');
+
+var _RootCloseWrapper3 = _interopRequireDefault(_RootCloseWrapper2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.Affix = _Affix3.default;
@@ -42,3 +46,4 @@ exports.Overlay = _Overlay3.default;
 exports.Portal = _Portal3.default;
 exports.Position = _Position3.default;
 exports.Transition = _Transition3.default;
+exports.RootCloseWrapper = _RootCloseWrapper3.default;

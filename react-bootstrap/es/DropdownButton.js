@@ -4,6 +4,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import _extends from 'babel-runtime/helpers/extends';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Dropdown from './Dropdown';
 import splitComponentProps from './utils/splitComponentProps';
@@ -11,16 +12,16 @@ import splitComponentProps from './utils/splitComponentProps';
 var propTypes = _extends({}, Dropdown.propTypes, {
 
   // Toggle props.
-  bsStyle: React.PropTypes.string,
-  bsSize: React.PropTypes.string,
-  title: React.PropTypes.node.isRequired,
-  noCaret: React.PropTypes.bool,
+  bsStyle: PropTypes.string,
+  bsSize: PropTypes.string,
+  title: PropTypes.node.isRequired,
+  noCaret: PropTypes.bool,
 
   // Override generated docs from <Dropdown>.
   /**
    * @private
    */
-  children: React.PropTypes.node
+  children: PropTypes.node
 });
 
 var DropdownButton = function (_React$Component) {

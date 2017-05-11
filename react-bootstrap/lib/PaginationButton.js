@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -50,12 +54,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var propTypes = {
   componentClass: _elementType2['default'],
-  className: _react2['default'].PropTypes.string,
-  eventKey: _react2['default'].PropTypes.any,
-  onSelect: _react2['default'].PropTypes.func,
-  disabled: _react2['default'].PropTypes.bool,
-  active: _react2['default'].PropTypes.bool,
-  onClick: _react2['default'].PropTypes.func
+  className: _propTypes2['default'].string,
+  eventKey: _propTypes2['default'].any,
+  onSelect: _propTypes2['default'].func,
+  disabled: _propTypes2['default'].bool,
+  active: _propTypes2['default'].bool,
+  onClick: _propTypes2['default'].func
 };
 
 var defaultProps = {

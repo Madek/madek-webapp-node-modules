@@ -2,51 +2,50 @@
   "_args": [
     [
       {
-        "raw": "react-bootstrap@latest",
+        "raw": "react-bootstrap@0.31.0",
         "scope": null,
         "escapedName": "react-bootstrap",
         "name": "react-bootstrap",
-        "rawSpec": "latest",
-        "spec": "latest",
-        "type": "tag"
+        "rawSpec": "0.31.0",
+        "spec": "0.31.0",
+        "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-bootstrap@latest",
-  "_id": "react-bootstrap@0.30.7",
+  "_from": "react-bootstrap@0.31.0",
+  "_id": "react-bootstrap@0.31.0",
   "_inCache": true,
   "_location": "/react-bootstrap",
-  "_nodeVersion": "7.1.0",
+  "_nodeVersion": "6.10.0",
   "_npmOperationalInternal": {
     "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/react-bootstrap-0.30.7.tgz_1479845049145_0.8373064689803869"
+    "tmp": "tmp/react-bootstrap-0.31.0.tgz_1493226493470_0.5446819693315774"
   },
   "_npmUser": {
-    "name": "taion",
-    "email": "tesrin@gmail.com"
+    "name": "monastic.panic",
+    "email": "monastic.panic@gmail.com"
   },
-  "_npmVersion": "3.10.9",
+  "_npmVersion": "3.10.10",
   "_phantomChildren": {
     "loose-envify": "1.1.0"
   },
   "_requested": {
-    "raw": "react-bootstrap@latest",
+    "raw": "react-bootstrap@0.31.0",
     "scope": null,
     "escapedName": "react-bootstrap",
     "name": "react-bootstrap",
-    "rawSpec": "latest",
-    "spec": "latest",
-    "type": "tag"
+    "rawSpec": "0.31.0",
+    "spec": "0.31.0",
+    "type": "version"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.30.7.tgz",
-  "_shasum": "39da80088693ecb71e8e63b5bdc313571fd993d1",
+  "_resolved": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.31.0.tgz",
+  "_shasum": "bbca804c0404d9c640102b2b656ae4cd5bea35c8",
   "_shrinkwrap": null,
-  "_spec": "react-bootstrap@latest",
+  "_spec": "react-bootstrap@0.31.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Stephen J. Collings",
@@ -58,12 +57,13 @@
   "dependencies": {
     "babel-runtime": "^6.11.6",
     "classnames": "^2.2.5",
-    "dom-helpers": "^2.4.0",
+    "dom-helpers": "^3.2.0",
     "invariant": "^2.2.1",
     "keycode": "^2.1.2",
-    "react-overlays": "^0.6.10",
+    "prop-types": "^15.5.6",
+    "react-overlays": "^0.7.0",
     "react-prop-types": "^0.4.0",
-    "uncontrollable": "^4.0.1",
+    "uncontrollable": "^4.1.0",
     "warning": "^3.0.0"
   },
   "description": "Bootstrap 3 components built with React",
@@ -82,7 +82,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-1": "^6.13.0",
     "babel-register": "^6.11.6",
-    "babel-standalone": "^6.12.0",
+    "babel-standalone": "^6.21.1",
     "bootstrap": "^3.3.6",
     "brfs": "^1.4.3",
     "chai": "^3.5.0",
@@ -146,8 +146,8 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "39da80088693ecb71e8e63b5bdc313571fd993d1",
-    "tarball": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.30.7.tgz"
+    "shasum": "bbca804c0404d9c640102b2b656ae4cd5bea35c8",
+    "tarball": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-0.31.0.tgz"
   },
   "files": [
     "CHANGELOG.md",
@@ -155,7 +155,7 @@
     "dist",
     "es"
   ],
-  "gitHead": "93814ff8053d4d3c06f8d96edf342430de1e2bf4",
+  "gitHead": "e332baa2162a15fb7e665ca967bd394ba1954b7b",
   "homepage": "https://react-bootstrap.github.io/",
   "jsnext:main": "es/index.js",
   "keywords": [
@@ -188,10 +188,11 @@
   "name": "react-bootstrap",
   "optionalDependencies": {},
   "peerDependencies": {
-    "react": ">=0.14.0",
-    "react-dom": ">=0.14.0"
+    "react": "^0.14.9 || >=15.3.0",
+    "react-dom": "^0.14.9 || >=15.3.0"
   },
-  "readme": "ERROR: No README data found!",
+  "readme": "# React-Bootstrap [![Travis][build-badge]][build] [![npm][npm-badge]][npm]\n\n[Bootstrap 3][bootstrap] components built with [React][react].\n\n[![Codecov][codecov-badge]][codecov]\n[![Discord][discord-badge]][discord]\n[![Thinkful][thinkful-badge]][thinkful]\n\n__Under active development - APIs will change.__ Check out the [1.0.0 roadmap](https://github.com/react-bootstrap/react-bootstrap/wiki#100-roadmap) and [contributing guidelines][contributing] to see where you can help out. Prior to the 1.0.0 release, deprecations or breaking changes will result in a minor version bump.\n\n## Docs\n\nSee the [documentation][documentation] with live editable examples.\n\n## Related modules\n\n- [react-router-bootstrap][react-router-bootstrap] – Integration with [React Router][react-router]\n\n## Local setup\n\n- Install the dependencies with `npm install`\n- Run tests `npm test`\n- Run tests in watch mode `npm run tdd`\n- Run the docs site in development mode with `npm run docs`. This will watch\n  for file changes as you work. Simply refresh the page to see the updates.\n- Build with `npm run build`\n\n## Contributions\n\nYes please! See the [contributing guidelines][contributing] for details.\n\n[bootstrap]: http://getbootstrap.com\n[react]: http://facebook.github.io/react/\n\n[documentation]: http://react-bootstrap.github.io\n[contributing]: CONTRIBUTING.md\n\n[build-badge]: https://travis-ci.org/react-bootstrap/react-bootstrap.svg?branch=master\n[build]: https://travis-ci.org/react-bootstrap/react-bootstrap\n\n[npm-badge]: https://badge.fury.io/js/react-bootstrap.svg\n[npm]: http://badge.fury.io/js/react-bootstrap\n\n[react-router-bootstrap]: https://github.com/react-bootstrap/react-router-bootstrap\n[react-router]: https://github.com/reactjs/react-router\n\n[thinkful-badge]: https://tf-assets-staging.s3.amazonaws.com/badges/thinkful_repo_badge.svg\n[thinkful]: http://start.thinkful.com/react/?utm_source=github&utm_medium=badge&utm_campaign=react-bootstrap\n\n[codecov-badge]: https://img.shields.io/codecov/c/github/react-bootstrap/react-bootstrap/master.svg\n[codecov]: https://codecov.io/gh/react-bootstrap/react-bootstrap\n\n[discord-badge]: https://img.shields.io/badge/Discord-Join%20chat%20%E2%86%92-738bd7.svg\n[discord]: https://discord.gg/0ZcbPKXt5bXLs9XK\n",
+  "readmeFilename": "README.md",
   "release-script": {
     "bowerRepo": "git@github.com:react-bootstrap/react-bootstrap-bower.git",
     "docsRepo": "git@github.com:react-bootstrap/react-bootstrap.github.io.git"
@@ -213,5 +214,5 @@
     "test-browser": "cross-env NODE_ENV=test karma start --single-run",
     "test-node": "mocha --compilers js:babel-register test/server/*Spec.js"
   },
-  "version": "0.30.7"
+  "version": "0.31.0"
 }

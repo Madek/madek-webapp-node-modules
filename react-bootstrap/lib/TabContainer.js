@@ -22,6 +22,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _uncontrollable = require('uncontrollable');
 
 var _uncontrollable2 = _interopRequireDefault(_uncontrollable);
@@ -31,7 +35,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 var TAB = 'tab';
 var PANE = 'pane';
 
-var idPropType = _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]);
+var idPropType = _propTypes2['default'].oneOfType([_propTypes2['default'].string, _propTypes2['default'].number]);
 
 var propTypes = {
   /**
@@ -68,29 +72,29 @@ var propTypes = {
    *
    * @defaultValue (eventKey, type) => `${this.props.id}-${type}-${key}`
    */
-  generateChildId: _react.PropTypes.func,
+  generateChildId: _propTypes2['default'].func,
 
   /**
    * A callback fired when a tab is selected.
    *
    * @controllable activeKey
    */
-  onSelect: _react.PropTypes.func,
+  onSelect: _propTypes2['default'].func,
 
   /**
    * The `eventKey` of the currently active tab.
    *
    * @controllable onSelect
    */
-  activeKey: _react.PropTypes.any
+  activeKey: _propTypes2['default'].any
 };
 
 var childContextTypes = {
-  $bs_tabContainer: _react2['default'].PropTypes.shape({
-    activeKey: _react.PropTypes.any,
-    onSelect: _react.PropTypes.func.isRequired,
-    getTabId: _react.PropTypes.func.isRequired,
-    getPaneId: _react.PropTypes.func.isRequired
+  $bs_tabContainer: _propTypes2['default'].shape({
+    activeKey: _propTypes2['default'].any,
+    onSelect: _propTypes2['default'].func.isRequired,
+    getTabId: _propTypes2['default'].func.isRequired,
+    getPaneId: _propTypes2['default'].func.isRequired
   })
 };
 

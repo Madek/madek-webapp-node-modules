@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass, prefix, splitBsProps } from './utils/bootstrapUtils';
 
@@ -12,22 +13,22 @@ var propTypes = {
   /**
    * Sets image as responsive image
    */
-  responsive: React.PropTypes.bool,
+  responsive: PropTypes.bool,
 
   /**
    * Sets image shape as rounded
    */
-  rounded: React.PropTypes.bool,
+  rounded: PropTypes.bool,
 
   /**
    * Sets image shape as circle
    */
-  circle: React.PropTypes.bool,
+  circle: PropTypes.bool,
 
   /**
    * Sets image shape as thumbnail
    */
-  thumbnail: React.PropTypes.bool
+  thumbnail: PropTypes.bool
 };
 
 var defaultProps = {

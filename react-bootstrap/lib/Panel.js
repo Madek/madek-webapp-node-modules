@@ -34,6 +34,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Collapse = require('./Collapse');
 
 var _Collapse2 = _interopRequireDefault(_Collapse);
@@ -47,24 +51,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 // TODO: Use uncontrollable.
 
 var propTypes = {
-  collapsible: _react2['default'].PropTypes.bool,
-  onSelect: _react2['default'].PropTypes.func,
-  header: _react2['default'].PropTypes.node,
-  id: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.number]),
-  footer: _react2['default'].PropTypes.node,
-  defaultExpanded: _react2['default'].PropTypes.bool,
-  expanded: _react2['default'].PropTypes.bool,
-  eventKey: _react2['default'].PropTypes.any,
-  headerRole: _react2['default'].PropTypes.string,
-  panelRole: _react2['default'].PropTypes.string,
+  collapsible: _propTypes2['default'].bool,
+  onSelect: _propTypes2['default'].func,
+  header: _propTypes2['default'].node,
+  id: _propTypes2['default'].oneOfType([_propTypes2['default'].string, _propTypes2['default'].number]),
+  footer: _propTypes2['default'].node,
+  defaultExpanded: _propTypes2['default'].bool,
+  expanded: _propTypes2['default'].bool,
+  eventKey: _propTypes2['default'].any,
+  headerRole: _propTypes2['default'].string,
+  panelRole: _propTypes2['default'].string,
 
   // From Collapse.
-  onEnter: _react2['default'].PropTypes.func,
-  onEntering: _react2['default'].PropTypes.func,
-  onEntered: _react2['default'].PropTypes.func,
-  onExit: _react2['default'].PropTypes.func,
-  onExiting: _react2['default'].PropTypes.func,
-  onExited: _react2['default'].PropTypes.func
+  onEnter: _propTypes2['default'].func,
+  onEntering: _propTypes2['default'].func,
+  onEntered: _propTypes2['default'].func,
+  onExit: _propTypes2['default'].func,
+  onExiting: _propTypes2['default'].func,
+  onExited: _propTypes2['default'].func
 };
 
 var defaultProps = {

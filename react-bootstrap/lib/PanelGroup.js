@@ -34,6 +34,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 var _createChainedFunction = require('./utils/createChainedFunction');
@@ -47,11 +51,11 @@ var _ValidComponentChildren2 = _interopRequireDefault(_ValidComponentChildren);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  accordion: _react2['default'].PropTypes.bool,
-  activeKey: _react2['default'].PropTypes.any,
-  defaultActiveKey: _react2['default'].PropTypes.any,
-  onSelect: _react2['default'].PropTypes.func,
-  role: _react2['default'].PropTypes.string
+  accordion: _propTypes2['default'].bool,
+  activeKey: _propTypes2['default'].any,
+  defaultActiveKey: _propTypes2['default'].any,
+  onSelect: _propTypes2['default'].func,
+  role: _propTypes2['default'].string
 };
 
 var defaultProps = {

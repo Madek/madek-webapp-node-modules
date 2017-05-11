@@ -2,18 +2,18 @@
   "_args": [
     [
       {
-        "raw": "video.js@^5.16.0",
+        "raw": "video.js@5.16.0",
         "scope": null,
         "escapedName": "video.js",
         "name": "video.js",
-        "rawSpec": "^5.16.0",
-        "spec": ">=5.16.0 <6.0.0",
-        "type": "range"
+        "rawSpec": "5.16.0",
+        "spec": "5.16.0",
+        "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "video.js@>=5.16.0 <6.0.0",
+  "_from": "video.js@5.16.0",
   "_id": "video.js@5.16.0",
   "_inCache": true,
   "_location": "/video.js",
@@ -28,19 +28,20 @@
   },
   "_npmVersion": "2.15.6",
   "_phantomChildren": {
-    "global": "4.3.0",
     "is-function": "1.0.1",
+    "min-document": "2.19.0",
     "parse-headers": "2.0.1",
+    "process": "0.5.2",
     "xtend": "4.0.1"
   },
   "_requested": {
-    "raw": "video.js@^5.16.0",
+    "raw": "video.js@5.16.0",
     "scope": null,
     "escapedName": "video.js",
     "name": "video.js",
-    "rawSpec": "^5.16.0",
-    "spec": ">=5.16.0 <6.0.0",
-    "type": "range"
+    "rawSpec": "5.16.0",
+    "spec": "5.16.0",
+    "type": "version"
   },
   "_requiredBy": [
     "/"
@@ -48,7 +49,7 @@
   "_resolved": "https://registry.npmjs.org/video.js/-/video.js-5.16.0.tgz",
   "_shasum": "f5e871d4e32852ec99979285e45dcb3e2251d1b5",
   "_shrinkwrap": null,
-  "_spec": "video.js@^5.16.0",
+  "_spec": "video.js@5.16.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Steve Heffernan"
@@ -186,7 +187,8 @@
   ],
   "name": "video.js",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "readme": "![Video.js logo][logo]\n\n# [Video.js - HTML5 Video Player][vjs]\n\n[![Build Status][travis-icon]][travis-link]\n[![Coverage Status][coveralls-icon]][coveralls-link]\n[![Slack Status][slack-icon]][slack-link]\n\n[![NPM][npm-icon]][npm-link]\n\n> Video.js is a web video player built from the ground up for an HTML5 world. It supports HTML5 and Flash video, as well as YouTube and Vimeo (through [plugins][plugins]). It supports video playback on desktops and mobile devices. This project was started mid 2010, and the player is now used on over ~~50,000~~ ~~100,000~~ ~~200,000~~ [400,000 websites][builtwith].\n\n## Quick Start\n\nThanks to the awesome folks over at [Fastly][fastly], there's a free, CDN hosted version of Video.js that anyone can use. Add these tags to your document's `<head>`:\n\n```html\n<link href=\"//vjs.zencdn.net/5.11/video-js.min.css\" rel=\"stylesheet\">\n<script src=\"//vjs.zencdn.net/5.11/video.min.js\"></script>\n```\n\n> For the latest URLs, check out the [Getting Started][getting-started] page on our website.\n\nNext, using Video.js is as simple as creating a `<video>` element, but with an additional `data-setup` attribute. At a minimum, this attribute must have a value of `'{}'`, but it can include any Video.js [options][options] - just make sure it contains valid JSON!\n\n```html\n<video\n    id=\"my-player\"\n    class=\"video-js\"\n    controls\n    preload=\"auto\"\n    poster=\"//vjs.zencdn.net/v/oceans.png\"\n    data-setup='{}'>\n  <source src=\"//vjs.zencdn.net/v/oceans.mp4\" type=\"video/mp4\"></source>\n  <source src=\"//vjs.zencdn.net/v/oceans.webm\" type=\"video/webm\"></source>\n  <source src=\"//vjs.zencdn.net/v/oceans.ogv\" type=\"video/ogg\"></source>\n  <p class=\"vjs-no-js\">\n    To view this video please enable JavaScript, and consider upgrading to a\n    web browser that\n    <a href=\"http://videojs.com/html5-video-support/\" target=\"_blank\">\n      supports HTML5 video\n    </a>\n  </p>\n</video>\n```\n\nWhen the page loads, Video.js will find this element and automatically setup a player in its place.\n\nIf you don't want to use automatic setup, you can leave off the `data-setup` attribute and initialize a `<video>` element manually using the `videojs` function:\n\n```js\nvar player = videojs('my-player');\n```\n\nThe `videojs` function also accepts an `options` object and a callback to be invoked\n when the player is ready:\n\n```js\nvar options = {};\n\nvar player = videojs('my-player', options, function onPlayerReady() {\n  videojs.log('Your player is ready!');\n\n  // In this context, `this` is the player that was created by Video.js.\n  this.play();\n\n  // How about an event listener?\n  this.on('ended', function() {\n    videojs.log('Awww...over so soon?!');\n  });\n});\n```\n\nIf you're ready to dive in, the [Getting Started][getting-started] page and [documentation][docs] are the best places to go for more information. If you get stuck, head over to our [Slack channel][slack-link]!\n\n## Contributing\n\nVideo.js is a free and open source library, and we appreciate any help you're willing to give - whether it's fixing bugs, improving documentation, or suggesting new features. Check out the [contributing guide][contributing] for more!\n\n_Video.js uses [BrowserStack][browserstack] for compatibility testing._\n\n## [License][license]\n\nVideo.js is [licensed][license] under the Apache License, Version 2.0.\n\n[browserstack]: https://browserstack.com\n\n[builtwith]: https://trends.builtwith.com/media/VideoJS\n\n[contributing]: CONTRIBUTING.md\n\n[coveralls-icon]: https://coveralls.io/repos/github/videojs/video.js/badge.svg?branch=master\n\n[coveralls-link]: https://coveralls.io/github/videojs/video.js?branch=master\n\n[docs]: http://docs.videojs.com\n\n[fastly]: http://www.fastly.com/\n\n[getting-started]: http://videojs.com/getting-started/\n\n[license]: LICENSE\n\n[logo]: http://videojs.com/img/logo.png\n\n[npm-icon]: https://nodei.co/npm/video.js.png?downloads=true&downloadRank=true\n\n[npm-link]: https://nodei.co/npm/video.js/\n\n[options]: docs/guides/options.md\n\n[plugins]: http://videojs.com/plugins/\n\n[slack-icon]: http://slack.videojs.com/badge.svg\n\n[slack-link]: http://slack.videojs.com\n\n[travis-icon]: https://travis-ci.org/videojs/video.js.svg?branch=master\n\n[travis-link]: https://travis-ci.org/videojs/video.js\n\n[vjs]: http://videojs.com\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/videojs/video.js.git"

@@ -1,18 +1,12 @@
 'use strict';
 
-/* eslint-disable no-undef */
-
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const findup = require('findup-sync');
-const _ = require('lodash');
 const semver = require('semver');
-const Promise = require('bluebird'); // TODO remove when Node.js 0.10 is dropped
 const spawn = require('child_process').spawn;
 const spawnSync = require('child_process').spawnSync;
-
-/* eslint-enable no-undef */
 
 const checkDependenciesHelper = (syncOrAsync, config, callback) => {
     // We treat the signature:
@@ -29,15 +23,15 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
             config = null;
         }
         if (typeof callback !== 'function') {
-            if (callback != null) {
+            if (callback == null) {
+                // In the async mode we return the promise anyway; assign callback
+                // to noop to keep code consistency.
+                callback = () => {/* noop */};
+            } else {
                 // If callback was simply not provided, we assume the user wanted
                 // to handle the returned promise. If it was passed but not a function
                 // we assume user error and throw.
-                throw new Error('The provided callback wasn\'t a function! Got:', callback);
-            } else {
-                // In the async mode we return the promise anyway; assign callback
-                // to noop to keep code consistency.
-                callback = _.noop;
+                throw new TypeError(`The provided callback wasn't a function! Got: ${ callback }`);
             }
         }
     }
@@ -45,16 +39,14 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
     const win32 = process.platform === 'win32';
     const output = {log: [], error: []};
 
-    let bowerConfig, depsMappings, optionalDepsMappings, fullDepsMappings,
-        depsDir, depsDirName, depsJsonName,
-        packageJson, packageJsonName, packageJsonRegex, pkgManagerPath;
+    let depsDirName, packageJson, pkgManagerPath;
 
-    let installPrunePromise = Promise.all([]);
+    let installPrunePromise = Promise.resolve();
     let success = true;
     let installNeeded = false;
     let pruneNeeded = false;
 
-    const options = _.defaults({}, config, {
+    const options = Object.assign({
         packageManager: 'npm',
         onlySpecified: false,
         install: false,
@@ -65,10 +57,10 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         checkCustomPackageNames: false,
         log: console.log.bind(console),
         error: console.error.bind(console),
-    });
+    }, config);
 
-    packageJsonName = options.packageManager === 'npm' ? 'package.json' : 'bower.json';
-    packageJsonRegex = options.packageManager === 'npm' ? /package\.json$/ : /bower\.json$/;
+    const packageJsonName = options.packageManager === 'npm' ? 'package.json' : 'bower.json';
+    const packageJsonRegex = options.packageManager === 'npm' ? /package\.json$/ : /bower\.json$/;
     depsDirName = options.packageManager === 'npm' ? 'node_modules' : 'bower_components';
 
     const log = message => {
@@ -89,7 +81,7 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         output.status = success ? 0 : 1;
         if (syncOrAsync === 'async') {
             callback(output);
-            return new Promise(resolve => resolve(output));
+            return Promise.resolve(output);
         }
         return output;
     };
@@ -113,36 +105,37 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
     packageJson = require(packageJson);
 
     if (options.packageManager === 'bower') {
-        bowerConfig = require('bower-config').create(options.packageDir).load();
+        const bowerConfig = require('bower-config').create(options.packageDir).load();
         depsDirName = bowerConfig._config.directory;
     }
 
     // Bower uses a different name (with a dot) for package data of dependencies.
-    depsJsonName = options.packageManager === 'npm' ? 'package.json' : '.bower.json';
+    const depsJsonName = options.packageManager === 'npm' ? 'package.json' : '.bower.json';
 
     if (options.packageManager === 'bower') {
         // Allow a local bower.
         pkgManagerPath = findup('node_modules/bower/bin/bower');
     }
 
-    depsDir = `${ options.packageDir }/${ depsDirName }`;
+    const depsDir = `${ options.packageDir }/${ depsDirName }`;
 
-    const getDepsMappingsFromScopeList = scopeList => {
+    const getDepsMappingsFromScopeList = scopeList =>
         // Get names of all packages specified in package.json/bower.json at keys from scopeList
         // together with specified version numbers.
-        return scopeList.reduce((result, scope) => _.merge(result, packageJson[scope] || {}), {});
-    };
+        scopeList.reduce((result, scope) => Object.assign(result, packageJson[scope]), {});
 
     // Make sure each package from `scopeList` is present and matches the specified version range.
     // Packages from `optionalScopeList` may not be present but if they are, they are required
     // to match the specified version range.
-    const checkPackage = (name, versionString, isOptional) => {
-        let depVersion;
+    const checkPackage = pkg => {
+        const name = pkg.name;
+        let versionString = pkg.versionString;
+
         const depDir = `${ depsDir }/${ name }`;
         const depJson = `${ depDir }/${ depsJsonName }`;
 
         if (!fs.existsSync(depDir) || !fs.existsSync(depJson)) {
-            if (isOptional) {
+            if (pkg.isOptional) {
                 log(`${ name }: ${ chalk.red('not installed!') }`);
             } else {
                 error(`${ name }: ${ chalk.red('not installed!') }`);
@@ -152,8 +145,8 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         }
 
         // Let's look if we can get a valid version from a Git URL
-        if (options.checkGitUrls && /\.git.*\#v?(.+)$/.test(versionString)) {
-            versionString = (/\#v?(.+)$/.exec(versionString))[1];
+        if (options.checkGitUrls && /\.git.*#v?(.+)$/.test(versionString)) {
+            versionString = (/#v?(.+)$/.exec(versionString))[1];
             if (!semver.valid(versionString)) {
                 return;
             }
@@ -167,8 +160,8 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         // Bower has the option to specify a custom name, e.g. 'packageOld' : 'package#1.2.3'
         if (options.checkCustomPackageNames && options.packageManager !== 'npm') {
             // Let's look if we can get a valid version from a custom package name (with a # in it)
-            if (/\.*\#v?(.+)$/.test(versionString)) {
-                versionString = (/\#v?(.+)$/.exec(versionString))[1];
+            if (/\.*#v?(.+)$/.test(versionString)) {
+                versionString = (/#v?(.+)$/.exec(versionString))[1];
                 if (!semver.valid(versionString)) {
                     return;
                 }
@@ -176,7 +169,7 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         }
 
         // If we are dealing with a custom package name, semver check won't work - skip it
-        if (/\#/.test(versionString)) {
+        if (/#/.test(versionString)) {
             return;
         }
 
@@ -186,33 +179,34 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
             return;
         }
 
-        depVersion = require(depJson).version;
-        if (!semver.satisfies(depVersion, versionString)) {
-            success = false;
-            error(`${ name }: installed: ${ chalk.red(depVersion)
+        const depVersion = require(depJson).version;
+        if (semver.satisfies(depVersion, versionString)) {
+            log(`${ name }: installed: ${ chalk.green(depVersion)
                 }, expected: ${ chalk.green(versionString) }`);
         } else {
-            log(`${ name }: installed: ${ chalk.green(depVersion)
+            success = false;
+            error(`${ name }: installed: ${ chalk.red(depVersion)
                 }, expected: ${ chalk.green(versionString) }`);
         }
     };
 
-    depsMappings = getDepsMappingsFromScopeList(options.scopeList);
-    optionalDepsMappings = getDepsMappingsFromScopeList(options.optionalScopeList);
-    fullDepsMappings = _.assign({}, depsMappings, optionalDepsMappings);
+    const depsMappings = getDepsMappingsFromScopeList(options.scopeList);
+    const optionalDepsMappings = getDepsMappingsFromScopeList(options.optionalScopeList);
+    const fullDepsMappings = Object.assign({}, depsMappings, optionalDepsMappings);
 
-    _.forEach(depsMappings, (versionString, name) => {
-        checkPackage(name, versionString, false /* isOptional */);
+    Object.keys(depsMappings).forEach(name => {
+        checkPackage({name, versionString: depsMappings[name], isOptional: false});
     });
 
-    _.forEach(optionalDepsMappings, (versionString, name) => {
-        checkPackage(name, versionString, true /* isOptional */);
+    Object.keys(optionalDepsMappings).forEach(name => {
+        checkPackage({name, versionString: optionalDepsMappings[name], isOptional: true});
     });
 
     installNeeded = !success;
 
     if (options.onlySpecified) {
-        fs.readdirSync(depsDir)
+        fs
+            .readdirSync(depsDir)
 
             // Ignore hidden directories
             .filter(depName => depName[0] !== '.')
@@ -275,7 +269,7 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
 
         if (win32) {
             spawnReturn = method(pkgManagerPath ? 'node' : 'cmd',
-                (pkgManagerPath ? [pkgManagerPath] : ['/c', options.packageManager]).concat([mode]),
+                (pkgManagerPath ? [pkgManagerPath] : ['/c', options.packageManager]).concat(mode),
                 {
                     cwd: options.packageDir,
                     stdio: 'inherit',
@@ -295,29 +289,24 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
                     chalk.red(spawnReturn.status) }`;
                 throw new Error(msg);
             }
-        } else {
-            return new Promise((resolve, reject) => {
-                spawnReturn.on('close', code => {
-                    if (code === 0) {
-                        resolve();
-                        return;
-                    }
-                    msg = `${ options.packageManager } ${ mode } failed with code: ${
-                        chalk.red(code) }`;
-                    error(msg);
-                    reject(msg);
-                });
-            });
+            return null;
         }
+        return new Promise((resolve, reject) => {
+            spawnReturn.on('close', code => {
+                if (code === 0) {
+                    resolve();
+                    return;
+                }
+                msg = `${ options.packageManager } ${ mode } failed with code: ${
+                    chalk.red(code) }`;
+                error(msg);
+                reject(msg);
+            });
+        });
     };
 
     const installMissing = () => installOrPrune('install');
     const pruneExcessive = () => installOrPrune('prune');
-
-    if (syncOrAsync !== 'sync') {
-        // TODO disable it in a more clever way?
-        Promise.onPossiblyUnhandledRejection();
-    }
 
     if (syncOrAsync === 'sync') {
         try {
@@ -356,21 +345,5 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         });
 };
 
-module.exports = function checkDependencies(/* config, callback */) {
-    const args = Array.prototype.slice.call(arguments);
-    args.unshift('async');
-    return checkDependenciesHelper.apply(null, args);
-};
-
-module.exports.sync = function checkDependenciesSync(/* config */) {
-    if (!spawnSync) {
-        throw new Error([
-            'Your version of Node.js doesn\'t support child_process.spawnSync.',
-            'Update Node.js or use require(\'checkDependencies\') instead of',
-            'require(\'checkDependencies\').sync.',
-        ].join(' '));
-    }
-    const args = Array.prototype.slice.call(arguments);
-    args.unshift('sync');
-    return checkDependenciesHelper.apply(null, args);
-};
+module.exports = (cfg, cb) => checkDependenciesHelper('async', cfg, cb);
+module.exports.sync = (cfg, cb) => checkDependenciesHelper('sync', cfg, cb);

@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
 import { bsClass, prefix, splitBsProps } from './utils/bootstrapUtils';
@@ -20,7 +21,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-`
    */
-  xs: React.PropTypes.number,
+  xs: PropTypes.number,
   /**
    * The number of columns you wish to span
    *
@@ -28,7 +29,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-`
    */
-  sm: React.PropTypes.number,
+  sm: PropTypes.number,
   /**
    * The number of columns you wish to span
    *
@@ -36,7 +37,7 @@ var propTypes = {
    *
    * class-prefix `col-md-`
    */
-  md: React.PropTypes.number,
+  md: PropTypes.number,
   /**
    * The number of columns you wish to span
    *
@@ -44,7 +45,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-`
    */
-  lg: React.PropTypes.number,
+  lg: PropTypes.number,
   /**
    * Hide column
    *
@@ -52,7 +53,7 @@ var propTypes = {
    *
    * adds class `hidden-xs`
    */
-  xsHidden: React.PropTypes.bool,
+  xsHidden: PropTypes.bool,
   /**
    * Hide column
    *
@@ -60,7 +61,7 @@ var propTypes = {
    *
    * adds class `hidden-sm`
    */
-  smHidden: React.PropTypes.bool,
+  smHidden: PropTypes.bool,
   /**
    * Hide column
    *
@@ -68,7 +69,7 @@ var propTypes = {
    *
    * adds class `hidden-md`
    */
-  mdHidden: React.PropTypes.bool,
+  mdHidden: PropTypes.bool,
   /**
    * Hide column
    *
@@ -76,7 +77,7 @@ var propTypes = {
    *
    * adds class `hidden-lg`
    */
-  lgHidden: React.PropTypes.bool,
+  lgHidden: PropTypes.bool,
   /**
    * Move columns to the right
    *
@@ -84,7 +85,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-offset-`
    */
-  xsOffset: React.PropTypes.number,
+  xsOffset: PropTypes.number,
   /**
    * Move columns to the right
    *
@@ -92,7 +93,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-offset-`
    */
-  smOffset: React.PropTypes.number,
+  smOffset: PropTypes.number,
   /**
    * Move columns to the right
    *
@@ -100,7 +101,7 @@ var propTypes = {
    *
    * class-prefix `col-md-offset-`
    */
-  mdOffset: React.PropTypes.number,
+  mdOffset: PropTypes.number,
   /**
    * Move columns to the right
    *
@@ -108,7 +109,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-offset-`
    */
-  lgOffset: React.PropTypes.number,
+  lgOffset: PropTypes.number,
   /**
    * Change the order of grid columns to the right
    *
@@ -116,7 +117,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-push-`
    */
-  xsPush: React.PropTypes.number,
+  xsPush: PropTypes.number,
   /**
    * Change the order of grid columns to the right
    *
@@ -124,7 +125,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-push-`
    */
-  smPush: React.PropTypes.number,
+  smPush: PropTypes.number,
   /**
    * Change the order of grid columns to the right
    *
@@ -132,7 +133,7 @@ var propTypes = {
    *
    * class-prefix `col-md-push-`
    */
-  mdPush: React.PropTypes.number,
+  mdPush: PropTypes.number,
   /**
    * Change the order of grid columns to the right
    *
@@ -140,7 +141,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-push-`
    */
-  lgPush: React.PropTypes.number,
+  lgPush: PropTypes.number,
   /**
    * Change the order of grid columns to the left
    *
@@ -148,7 +149,7 @@ var propTypes = {
    *
    * class-prefix `col-xs-pull-`
    */
-  xsPull: React.PropTypes.number,
+  xsPull: PropTypes.number,
   /**
    * Change the order of grid columns to the left
    *
@@ -156,7 +157,7 @@ var propTypes = {
    *
    * class-prefix `col-sm-pull-`
    */
-  smPull: React.PropTypes.number,
+  smPull: PropTypes.number,
   /**
    * Change the order of grid columns to the left
    *
@@ -164,7 +165,7 @@ var propTypes = {
    *
    * class-prefix `col-md-pull-`
    */
-  mdPull: React.PropTypes.number,
+  mdPull: PropTypes.number,
   /**
    * Change the order of grid columns to the left
    *
@@ -172,7 +173,7 @@ var propTypes = {
    *
    * class-prefix `col-lg-pull-`
    */
-  lgPull: React.PropTypes.number
+  lgPull: PropTypes.number
 };
 
 var defaultProps = {

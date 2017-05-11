@@ -12,6 +12,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Portal = require('./Portal');
 
 var _Portal2 = _interopRequireDefault(_Portal);
@@ -48,6 +52,16 @@ var Overlay = function (_React$Component) {
     _classCallCheck(this, Overlay);
 
     var _this = _possibleConstructorReturn(this, (Overlay.__proto__ || Object.getPrototypeOf(Overlay)).call(this, props, context));
+
+    _this.handleHidden = function () {
+      _this.setState({ exited: true });
+
+      if (_this.props.onExited) {
+        var _this$props;
+
+        (_this$props = _this.props).onExited.apply(_this$props, arguments);
+      }
+    };
 
     _this.state = { exited: !props.show };
     _this.onHiddenListener = _this.handleHidden.bind(_this);
@@ -139,17 +153,6 @@ var Overlay = function (_React$Component) {
         child
       );
     }
-  }, {
-    key: 'handleHidden',
-    value: function handleHidden() {
-      this.setState({ exited: true });
-
-      if (this.props.onExited) {
-        var _props2;
-
-        (_props2 = this.props).onExited.apply(_props2, arguments);
-      }
-    }
   }]);
 
   return Overlay;
@@ -160,12 +163,12 @@ Overlay.propTypes = _extends({}, _Portal2.default.propTypes, _Position2.default.
   /**
    * Set the visibility of the Overlay
    */
-  show: _react2.default.PropTypes.bool,
+  show: _propTypes2.default.bool,
 
   /**
    * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
    */
-  rootClose: _react2.default.PropTypes.bool,
+  rootClose: _propTypes2.default.bool,
 
   /**
    * A Callback fired by the Overlay when it wishes to be hidden.
@@ -175,7 +178,7 @@ Overlay.propTypes = _extends({}, _Portal2.default.propTypes, _Position2.default.
    * @type func
    */
   onHide: function onHide(props) {
-    var propType = _react2.default.PropTypes.func;
+    var propType = _propTypes2.default.func;
     if (props.rootClose) {
       propType = propType.isRequired;
     }
@@ -196,32 +199,32 @@ Overlay.propTypes = _extends({}, _Portal2.default.propTypes, _Position2.default.
   /**
    * Callback fired before the Overlay transitions in
    */
-  onEnter: _react2.default.PropTypes.func,
+  onEnter: _propTypes2.default.func,
 
   /**
    * Callback fired as the Overlay begins to transition in
    */
-  onEntering: _react2.default.PropTypes.func,
+  onEntering: _propTypes2.default.func,
 
   /**
    * Callback fired after the Overlay finishes transitioning in
    */
-  onEntered: _react2.default.PropTypes.func,
+  onEntered: _propTypes2.default.func,
 
   /**
    * Callback fired right before the Overlay transitions out
    */
-  onExit: _react2.default.PropTypes.func,
+  onExit: _propTypes2.default.func,
 
   /**
    * Callback fired as the Overlay begins to transition out
    */
-  onExiting: _react2.default.PropTypes.func,
+  onExiting: _propTypes2.default.func,
 
   /**
    * Callback fired after the Overlay finishes transitioning out
    */
-  onExited: _react2.default.PropTypes.func
+  onExited: _propTypes2.default.func
 });
 
 exports.default = Overlay;

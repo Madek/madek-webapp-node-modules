@@ -29,6 +29,14 @@ test('api: lintText', function (t) {
   })
 })
 
+test('api: lintTextSync', function (t) {
+  t.plan(2)
+  var standard = getStandard()
+  var result = standard.lintTextSync('console.log("hi there")\n')
+  t.equal(typeof result, 'object', 'result is an object')
+  t.equal(result.errorCount, 1, 'should have used single quotes')
+})
+
 test('api: parseOpts -- avoid self.eslintConfig parser mutation', function (t) {
   t.plan(2)
   var standard = getStandard()

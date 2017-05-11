@@ -2,13 +2,11 @@
 
 > Checks if currently installed npm/bower dependencies are installed in the exact same versions that are specified in package.json/bower.json
 
-[![Travis build Status](https://travis-ci.org/mzgol/check-dependencies.svg?branch=master)](https://travis-ci.org/mzgol/check-dependencies)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/mmlmha7ntge8j9hp/branch/master?svg=true)](https://ci.appveyor.com/project/mzgol/check-dependencies/branch/master)
+[![Travis build](https://img.shields.io/travis/mgol/check-dependencies.svg?style=flat-square)](https://travis-ci.org/mgol/check-dependencies)
+[![AppVeyor build](https://img.shields.io/appveyor/mgol/check-dependencies.svg?style=flat-square)](https://ci.appveyor.com/project/mgol/check-dependencies)
 [![Version](https://img.shields.io/npm/v/check-dependencies.svg?style=flat-square)](http://npm.im/check-dependencies)
 [![Downloads](https://img.shields.io/npm/dm/check-dependencies.svg?style=flat-square)](http://npm-stat.com/charts.html?package=check-dependencies)
 [![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-
-(Note: the package previously published under this name is now called [dependency-status](https://www.npmjs.org/package/dependency-status))
 
 ## Installation
 
@@ -76,8 +74,6 @@ There is a synchronous alternative -- the following code:
 var output = require('check-dependencies').sync(config);
 ```
 will assign to `output` the same object that would otherwise be passed to the `callback` in the asynchronous scenario.
-
-NOTE: the `sync` method is only available in Node.js >= 0.12.
 
 The `config` object may have the following fields:
 
@@ -214,9 +210,7 @@ require('check-dependencies')({}, callback);
 behave in the same way - `callback` is invoked upon completion; if there was an error, it's passed as a parameter to `callback`.
 
 ## Supported Node.js versions
-This project aims to support all Node.js LTS versions in the "active" phase (see [LTS README](https://github.com/nodejs/LTS/blob/master/README.md) for more details) as well as the latest stable Node.js. Today that means Node.js 0.12 & 4.x.
-
-Because of the popularity of this package and Node.js 0.10, this version is temporarily supported as well.
+This project aims to support all Node.js LTS versions in the "active" phase (see [LTS README](https://github.com/nodejs/LTS/blob/master/README.md) for more details) as well as the latest stable Node.js.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using `npm test`.

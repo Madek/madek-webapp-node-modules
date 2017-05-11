@@ -3,6 +3,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import _extends from 'babel-runtime/helpers/extends';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import TabContainer from './TabContainer';
 import TabContent from './TabContent';
@@ -10,14 +11,14 @@ import TabPane from './TabPane';
 
 var propTypes = _extends({}, TabPane.propTypes, {
 
-  disabled: React.PropTypes.bool,
+  disabled: PropTypes.bool,
 
-  title: React.PropTypes.node,
+  title: PropTypes.node,
 
   /**
    * tabClassName is used as className for the associated NavItem
    */
-  tabClassName: React.PropTypes.string
+  tabClassName: PropTypes.string
 });
 
 var Tab = function (_React$Component) {

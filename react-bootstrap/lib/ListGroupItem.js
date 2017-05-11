@@ -34,6 +34,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 var _StyleConfig = require('./utils/StyleConfig');
@@ -41,13 +45,13 @@ var _StyleConfig = require('./utils/StyleConfig');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  active: _react2['default'].PropTypes.any,
-  disabled: _react2['default'].PropTypes.any,
-  header: _react2['default'].PropTypes.node,
-  listItem: _react2['default'].PropTypes.bool,
-  onClick: _react2['default'].PropTypes.func,
-  href: _react2['default'].PropTypes.string,
-  type: _react2['default'].PropTypes.string
+  active: _propTypes2['default'].any,
+  disabled: _propTypes2['default'].any,
+  header: _propTypes2['default'].node,
+  listItem: _propTypes2['default'].bool,
+  onClick: _propTypes2['default'].func,
+  href: _propTypes2['default'].string,
+  type: _propTypes2['default'].string
 };
 
 var defaultProps = {

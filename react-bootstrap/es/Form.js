@@ -5,13 +5,14 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
 import { bsClass, prefix, splitBsProps } from './utils/bootstrapUtils';
 
 var propTypes = {
-  horizontal: React.PropTypes.bool,
-  inline: React.PropTypes.bool,
+  horizontal: PropTypes.bool,
+  inline: PropTypes.bool,
   componentClass: elementType
 };
 

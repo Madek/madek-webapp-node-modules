@@ -20,6 +20,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _componentOrElement = require('react-prop-types/lib/componentOrElement');
 
 var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
@@ -69,6 +73,61 @@ var AutoAffix = function (_React$Component) {
     _classCallCheck(this, AutoAffix);
 
     var _this = _possibleConstructorReturn(this, (AutoAffix.__proto__ || Object.getPrototypeOf(AutoAffix)).call(this, props, context));
+
+    _this.onWindowScroll = function () {
+      _this.onUpdate();
+    };
+
+    _this.onWindowResize = function () {
+      if (_this.props.autoWidth) {
+        (0, _requestAnimationFrame2.default)(function () {
+          return _this.onUpdate();
+        });
+      }
+    };
+
+    _this.onDocumentClick = function () {
+      (0, _requestAnimationFrame2.default)(function () {
+        return _this.onUpdate();
+      });
+    };
+
+    _this.onUpdate = function () {
+      if (!_this._isMounted) {
+        return;
+      }
+
+      var _getOffset = (0, _offset2.default)(_this.refs.positioner);
+
+      var offsetTop = _getOffset.top;
+      var width = _getOffset.width;
+
+
+      var container = (0, _getContainer2.default)(_this.props.container);
+      var offsetBottom = void 0;
+      if (container) {
+        var documentHeight = (0, _getDocumentHeight2.default)((0, _ownerDocument2.default)(_this));
+
+        var _getOffset2 = (0, _offset2.default)(container);
+
+        var top = _getOffset2.top;
+        var height = _getOffset2.height;
+
+        offsetBottom = documentHeight - top - height;
+      } else {
+        offsetBottom = null;
+      }
+
+      _this.updateState(offsetTop, offsetBottom, width);
+    };
+
+    _this.updateState = function (offsetTop, offsetBottom, width) {
+      if (offsetTop === _this.state.offsetTop && offsetBottom === _this.state.offsetBottom && width === _this.state.width) {
+        return;
+      }
+
+      _this.setState({ offsetTop: offsetTop, offsetBottom: offsetBottom, width: width });
+    };
 
     _this.state = {
       offsetTop: null,
@@ -128,70 +187,6 @@ var AutoAffix = function (_React$Component) {
       }
     }
   }, {
-    key: 'onWindowScroll',
-    value: function onWindowScroll() {
-      this.onUpdate();
-    }
-  }, {
-    key: 'onWindowResize',
-    value: function onWindowResize() {
-      var _this3 = this;
-
-      if (this.props.autoWidth) {
-        (0, _requestAnimationFrame2.default)(function () {
-          return _this3.onUpdate();
-        });
-      }
-    }
-  }, {
-    key: 'onDocumentClick',
-    value: function onDocumentClick() {
-      var _this4 = this;
-
-      (0, _requestAnimationFrame2.default)(function () {
-        return _this4.onUpdate();
-      });
-    }
-  }, {
-    key: 'onUpdate',
-    value: function onUpdate() {
-      if (!this._isMounted) {
-        return;
-      }
-
-      var _getOffset = (0, _offset2.default)(this.refs.positioner);
-
-      var offsetTop = _getOffset.top;
-      var width = _getOffset.width;
-
-
-      var container = (0, _getContainer2.default)(this.props.container);
-      var offsetBottom = void 0;
-      if (container) {
-        var documentHeight = (0, _getDocumentHeight2.default)((0, _ownerDocument2.default)(this));
-
-        var _getOffset2 = (0, _offset2.default)(container);
-
-        var top = _getOffset2.top;
-        var height = _getOffset2.height;
-
-        offsetBottom = documentHeight - top - height;
-      } else {
-        offsetBottom = null;
-      }
-
-      this.updateState(offsetTop, offsetBottom, width);
-    }
-  }, {
-    key: 'updateState',
-    value: function updateState(offsetTop, offsetBottom, width) {
-      if (offsetTop === this.state.offsetTop && offsetBottom === this.state.offsetBottom && width === this.state.width) {
-        return;
-      }
-
-      this.setState({ offsetTop: offsetTop, offsetBottom: offsetBottom, width: width });
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
@@ -247,11 +242,11 @@ AutoAffix.propTypes = _extends({}, _Affix2.default.propTypes, {
    * The logical container node or component for determining offset from bottom
    * of viewport, or a function that returns it
    */
-  container: _react2.default.PropTypes.oneOfType([_componentOrElement2.default, _react2.default.PropTypes.func]),
+  container: _propTypes2.default.oneOfType([_componentOrElement2.default, _propTypes2.default.func]),
   /**
    * Automatically set width when affixed
    */
-  autoWidth: _react2.default.PropTypes.bool
+  autoWidth: _propTypes2.default.bool
 });
 
 // This intentionally doesn't inherit default props from `<Affix>`, so that the

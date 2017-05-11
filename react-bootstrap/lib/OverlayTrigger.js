@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -62,74 +66,74 @@ function isOneOf(one, of) {
   return one === of;
 }
 
-var triggerType = _react2['default'].PropTypes.oneOf(['click', 'hover', 'focus']);
+var triggerType = _propTypes2['default'].oneOf(['click', 'hover', 'focus']);
 
 var propTypes = (0, _extends3['default'])({}, _Overlay2['default'].propTypes, {
 
   /**
   * Specify which action or actions trigger Overlay visibility
   */
-  trigger: _react2['default'].PropTypes.oneOfType([triggerType, _react2['default'].PropTypes.arrayOf(triggerType)]),
+  trigger: _propTypes2['default'].oneOfType([triggerType, _propTypes2['default'].arrayOf(triggerType)]),
 
   /**
    * A millisecond delay amount to show and hide the Overlay once triggered
    */
-  delay: _react2['default'].PropTypes.number,
+  delay: _propTypes2['default'].number,
   /**
    * A millisecond delay amount before showing the Overlay once triggered.
    */
-  delayShow: _react2['default'].PropTypes.number,
+  delayShow: _propTypes2['default'].number,
   /**
    * A millisecond delay amount before hiding the Overlay once triggered.
    */
-  delayHide: _react2['default'].PropTypes.number,
+  delayHide: _propTypes2['default'].number,
 
   // FIXME: This should be `defaultShow`.
   /**
    * The initial visibility state of the Overlay. For more nuanced visibility
    * control, consider using the Overlay component directly.
    */
-  defaultOverlayShown: _react2['default'].PropTypes.bool,
+  defaultOverlayShown: _propTypes2['default'].bool,
 
   /**
    * An element or text to overlay next to the target.
    */
-  overlay: _react2['default'].PropTypes.node.isRequired,
+  overlay: _propTypes2['default'].node.isRequired,
 
   /**
    * @private
    */
-  onBlur: _react2['default'].PropTypes.func,
+  onBlur: _propTypes2['default'].func,
   /**
    * @private
    */
-  onClick: _react2['default'].PropTypes.func,
+  onClick: _propTypes2['default'].func,
   /**
    * @private
    */
-  onFocus: _react2['default'].PropTypes.func,
+  onFocus: _propTypes2['default'].func,
   /**
    * @private
    */
-  onMouseOut: _react2['default'].PropTypes.func,
+  onMouseOut: _propTypes2['default'].func,
   /**
    * @private
    */
-  onMouseOver: _react2['default'].PropTypes.func,
+  onMouseOver: _propTypes2['default'].func,
 
   // Overridden props from `<Overlay>`.
   /**
    * @private
    */
-  target: _react2['default'].PropTypes.oneOf([null]),
+  target: _propTypes2['default'].oneOf([null]),
   /**
   * @private
   */
-  onHide: _react2['default'].PropTypes.oneOf([null]),
+  onHide: _propTypes2['default'].oneOf([null]),
   /**
    * @private
    */
-  show: _react2['default'].PropTypes.oneOf([null])
+  show: _propTypes2['default'].oneOf([null])
 });
 
 var defaultProps = {
@@ -305,10 +309,11 @@ var OverlayTrigger = function (_React$Component) {
 
     var child = _react2['default'].Children.only(children);
     var childProps = child.props;
+    var triggerProps = {};
 
-    var triggerProps = {
-      'aria-describedby': overlay.props.id
-    };
+    if (this.state.show) {
+      triggerProps['aria-describedby'] = overlay.props.id;
+    }
 
     // FIXME: The logic here for passing through handlers on this component is
     // inconsistent. We shouldn't be passing any of these props through.

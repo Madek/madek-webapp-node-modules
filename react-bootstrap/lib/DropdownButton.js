@@ -26,6 +26,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Dropdown = require('./Dropdown');
 
 var _Dropdown2 = _interopRequireDefault(_Dropdown);
@@ -39,16 +43,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 var propTypes = (0, _extends3['default'])({}, _Dropdown2['default'].propTypes, {
 
   // Toggle props.
-  bsStyle: _react2['default'].PropTypes.string,
-  bsSize: _react2['default'].PropTypes.string,
-  title: _react2['default'].PropTypes.node.isRequired,
-  noCaret: _react2['default'].PropTypes.bool,
+  bsStyle: _propTypes2['default'].string,
+  bsSize: _propTypes2['default'].string,
+  title: _propTypes2['default'].node.isRequired,
+  noCaret: _propTypes2['default'].bool,
 
   // Override generated docs from <Dropdown>.
   /**
    * @private
    */
-  children: _react2['default'].PropTypes.node
+  children: _propTypes2['default'].node
 });
 
 var DropdownButton = function (_React$Component) {

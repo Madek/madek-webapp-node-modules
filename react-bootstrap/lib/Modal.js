@@ -46,6 +46,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -106,17 +110,17 @@ var propTypes = (0, _extends3['default'])({}, _Modal2['default'].propTypes, _Mod
    * Include a backdrop component. Specify 'static' for a backdrop that doesn't
    * trigger an "onHide" when clicked.
    */
-  backdrop: _react2['default'].PropTypes.oneOf(['static', true, false]),
+  backdrop: _propTypes2['default'].oneOf(['static', true, false]),
 
   /**
    * Close the modal when escape key is pressed
    */
-  keyboard: _react2['default'].PropTypes.bool,
+  keyboard: _propTypes2['default'].bool,
 
   /**
    * Open and close the Modal with a slide and fade animation.
    */
-  animation: _react2['default'].PropTypes.bool,
+  animation: _propTypes2['default'].bool,
 
   /**
    * A Component type that provides the modal content Markup. This is a useful
@@ -131,55 +135,61 @@ var propTypes = (0, _extends3['default'])({}, _Modal2['default'].propTypes, _Mod
    * Generally this should never be set to false as it makes the Modal less
    * accessible to assistive technologies, like screen-readers.
    */
-  autoFocus: _react2['default'].PropTypes.bool,
+  autoFocus: _propTypes2['default'].bool,
 
   /**
    * When `true` The modal will prevent focus from leaving the Modal while
    * open. Consider leaving the default value here, as it is necessary to make
    * the Modal work well with assistive technologies, such as screen readers.
    */
-  enforceFocus: _react2['default'].PropTypes.bool,
+  enforceFocus: _propTypes2['default'].bool,
+
+  /**
+   * When `true` The modal will restore focus to previously focused element once
+   * modal is hidden
+   */
+  restoreFocus: _propTypes2['default'].bool,
 
   /**
    * When `true` The modal will show itself.
    */
-  show: _react2['default'].PropTypes.bool,
+  show: _propTypes2['default'].bool,
 
   /**
    * A callback fired when the header closeButton or non-static backdrop is
    * clicked. Required if either are specified.
    */
-  onHide: _react2['default'].PropTypes.func,
+  onHide: _propTypes2['default'].func,
 
   /**
    * Callback fired before the Modal transitions in
    */
-  onEnter: _react2['default'].PropTypes.func,
+  onEnter: _propTypes2['default'].func,
 
   /**
    * Callback fired as the Modal begins to transition in
    */
-  onEntering: _react2['default'].PropTypes.func,
+  onEntering: _propTypes2['default'].func,
 
   /**
    * Callback fired after the Modal finishes transitioning in
    */
-  onEntered: _react2['default'].PropTypes.func,
+  onEntered: _propTypes2['default'].func,
 
   /**
    * Callback fired right before the Modal transitions out
    */
-  onExit: _react2['default'].PropTypes.func,
+  onExit: _propTypes2['default'].func,
 
   /**
    * Callback fired as the Modal begins to transition out
    */
-  onExiting: _react2['default'].PropTypes.func,
+  onExiting: _propTypes2['default'].func,
 
   /**
    * Callback fired after the Modal finishes transitioning out
    */
-  onExited: _react2['default'].PropTypes.func,
+  onExited: _propTypes2['default'].func,
 
   /**
    * @private
@@ -193,8 +203,8 @@ var defaultProps = (0, _extends3['default'])({}, _Modal2['default'].defaultProps
 });
 
 var childContextTypes = {
-  $bs_modal: _react2['default'].PropTypes.shape({
-    onHide: _react2['default'].PropTypes.func
+  $bs_modal: _propTypes2['default'].shape({
+    onHide: _propTypes2['default'].func
   })
 };
 

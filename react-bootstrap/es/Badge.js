@@ -5,13 +5,14 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass, getClassSet, splitBsProps } from './utils/bootstrapUtils';
 
 // TODO: `pullRight` doesn't belong here. There's no special handling here.
 
 var propTypes = {
-  pullRight: React.PropTypes.bool
+  pullRight: PropTypes.bool
 };
 
 var defaultProps = {

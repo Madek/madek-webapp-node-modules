@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 var _createChainedFunction = require('./utils/createChainedFunction');
@@ -39,18 +43,18 @@ var _createChainedFunction2 = _interopRequireDefault(_createChainedFunction);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  onClick: _react.PropTypes.func,
+  onClick: _propTypes2['default'].func,
   /**
    * The toggle content, if left empty it will render the default toggle (seen above).
    */
-  children: _react.PropTypes.node
+  children: _propTypes2['default'].node
 };
 
 var contextTypes = {
-  $bs_navbar: _react.PropTypes.shape({
-    bsClass: _react.PropTypes.string,
-    expanded: _react.PropTypes.bool,
-    onToggle: _react.PropTypes.func.isRequired
+  $bs_navbar: _propTypes2['default'].shape({
+    bsClass: _propTypes2['default'].string,
+    expanded: _propTypes2['default'].bool,
+    onToggle: _propTypes2['default'].func.isRequired
   })
 };
 

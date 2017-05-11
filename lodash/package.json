@@ -2,49 +2,119 @@
   "_args": [
     [
       {
-        "raw": "lodash@^4.16.2",
+        "raw": "lodash@4.17.4",
         "scope": null,
         "escapedName": "lodash",
         "name": "lodash",
-        "rawSpec": "^4.16.2",
-        "spec": ">=4.16.2 <5.0.0",
-        "type": "range"
+        "rawSpec": "4.17.4",
+        "spec": "4.17.4",
+        "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "lodash@>=4.16.2 <5.0.0",
-  "_id": "lodash@4.16.3",
+  "_from": "lodash@4.17.4",
+  "_id": "lodash@4.17.4",
   "_inCache": true,
-  "_installable": true,
   "_location": "/lodash",
-  "_nodeVersion": "4.4.7",
+  "_nodeVersion": "7.2.1",
   "_npmOperationalInternal": {
-    "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/lodash-4.16.3.tgz_1475513008878_0.7973488194402307"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/lodash-4.17.4.tgz_1483223634314_0.5332164366263896"
   },
   "_npmUser": {
     "name": "jdalton",
     "email": "john.david.dalton@gmail.com"
   },
-  "_npmVersion": "2.15.10",
+  "_npmVersion": "2.15.11",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "lodash@^4.16.2",
+    "raw": "lodash@4.17.4",
     "scope": null,
     "escapedName": "lodash",
     "name": "lodash",
-    "rawSpec": "^4.16.2",
-    "spec": ">=4.16.2 <5.0.0",
-    "type": "range"
+    "rawSpec": "4.17.4",
+    "spec": "4.17.4",
+    "type": "version"
   },
   "_requiredBy": [
-    "/"
+    "/",
+    "/ampersand-app",
+    "/ampersand-app/ampersand-events",
+    "/async",
+    "/babel-core",
+    "/babel-generator",
+    "/babel-helper-builder-binary-assignment-operator-visitor/babel-types",
+    "/babel-helper-builder-react-jsx",
+    "/babel-helper-builder-react-jsx/babel-types",
+    "/babel-helper-call-delegate/babel-traverse",
+    "/babel-helper-call-delegate/babel-types",
+    "/babel-helper-define-map",
+    "/babel-helper-define-map/babel-types",
+    "/babel-helper-explode-assignable-expression/babel-traverse",
+    "/babel-helper-explode-assignable-expression/babel-types",
+    "/babel-helper-function-name/babel-template",
+    "/babel-helper-function-name/babel-traverse",
+    "/babel-helper-function-name/babel-types",
+    "/babel-helper-get-function-arity/babel-types",
+    "/babel-helper-hoist-variables/babel-types",
+    "/babel-helper-optimise-call-expression/babel-types",
+    "/babel-helper-regex",
+    "/babel-helper-regex/babel-types",
+    "/babel-helper-remap-async-to-generator/babel-template",
+    "/babel-helper-remap-async-to-generator/babel-traverse",
+    "/babel-helper-remap-async-to-generator/babel-types",
+    "/babel-helper-replace-supers/babel-template",
+    "/babel-helper-replace-supers/babel-traverse",
+    "/babel-helper-replace-supers/babel-types",
+    "/babel-plugin-transform-es2015-block-scoping",
+    "/babel-plugin-transform-es2015-block-scoping/babel-template",
+    "/babel-plugin-transform-es2015-block-scoping/babel-traverse",
+    "/babel-plugin-transform-es2015-block-scoping/babel-types",
+    "/babel-plugin-transform-es2015-classes/babel-template",
+    "/babel-plugin-transform-es2015-classes/babel-traverse",
+    "/babel-plugin-transform-es2015-classes/babel-types",
+    "/babel-plugin-transform-es2015-computed-properties/babel-template",
+    "/babel-plugin-transform-es2015-computed-properties/babel-traverse",
+    "/babel-plugin-transform-es2015-computed-properties/babel-types",
+    "/babel-plugin-transform-es2015-duplicate-keys/babel-types",
+    "/babel-plugin-transform-es2015-function-name/babel-types",
+    "/babel-plugin-transform-es2015-modules-amd/babel-template",
+    "/babel-plugin-transform-es2015-modules-amd/babel-traverse",
+    "/babel-plugin-transform-es2015-modules-amd/babel-types",
+    "/babel-plugin-transform-es2015-modules-commonjs/babel-template",
+    "/babel-plugin-transform-es2015-modules-commonjs/babel-traverse",
+    "/babel-plugin-transform-es2015-modules-commonjs/babel-types",
+    "/babel-plugin-transform-es2015-modules-systemjs/babel-template",
+    "/babel-plugin-transform-es2015-modules-systemjs/babel-traverse",
+    "/babel-plugin-transform-es2015-modules-systemjs/babel-types",
+    "/babel-plugin-transform-es2015-modules-umd/babel-template",
+    "/babel-plugin-transform-es2015-modules-umd/babel-traverse",
+    "/babel-plugin-transform-es2015-modules-umd/babel-types",
+    "/babel-plugin-transform-es2015-parameters/babel-template",
+    "/babel-plugin-transform-es2015-parameters/babel-traverse",
+    "/babel-plugin-transform-es2015-parameters/babel-types",
+    "/babel-plugin-transform-es2015-shorthand-properties/babel-types",
+    "/babel-plugin-transform-es2015-sticky-regex/babel-types",
+    "/babel-plugin-transform-react-jsx/babel-types",
+    "/babel-plugin-transform-regenerator/babel-types",
+    "/babel-plugin-transform-strict-mode/babel-types",
+    "/babel-preset-es2015/babel-template",
+    "/babel-preset-es2015/babel-traverse",
+    "/babel-preset-es2015/babel-types",
+    "/babel-register",
+    "/babel-template",
+    "/babel-traverse",
+    "/babel-types",
+    "/eslint",
+    "/inquirer",
+    "/regenerator-transform/babel-types",
+    "/table"
   ],
-  "_resolved": "https://registry.npmjs.org/lodash/-/lodash-4.16.3.tgz",
-  "_shasum": "0ba761439529127c7a38c439114ca153efa999a2",
+  "_resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz",
+  "_shasum": "78203a4d1c328ae1d86dca6460e369b57f4055ae",
   "_shrinkwrap": null,
-  "_spec": "lodash@^4.16.2",
+  "_spec": "lodash@4.17.4",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "John-David Dalton",
@@ -61,11 +131,6 @@
       "url": "http://allyoucanleet.com/"
     },
     {
-      "name": "Blaine Bublitz",
-      "email": "blaine.bublitz@gmail.com",
-      "url": "https://github.com/phated"
-    },
-    {
       "name": "Mathias Bynens",
       "email": "mathias@qiwi.be",
       "url": "https://mathiasbynens.be/"
@@ -76,8 +141,8 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "0ba761439529127c7a38c439114ca153efa999a2",
-    "tarball": "https://registry.npmjs.org/lodash/-/lodash-4.16.3.tgz"
+    "shasum": "78203a4d1c328ae1d86dca6460e369b57f4055ae",
+    "tarball": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
   },
   "homepage": "https://lodash.com/",
   "icon": "https://lodash.com/icon.svg",
@@ -96,15 +161,12 @@
     {
       "name": "mathias",
       "email": "mathias@qiwi.be"
-    },
-    {
-      "name": "phated",
-      "email": "blaine.bublitz@gmail.com"
     }
   ],
   "name": "lodash",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "readme": "# lodash v4.17.4\n\nThe [Lodash](https://lodash.com/) library exported as [Node.js](https://nodejs.org/) modules.\n\n## Installation\n\nUsing npm:\n```shell\n$ npm i -g npm\n$ npm i --save lodash\n```\n\nIn Node.js:\n```js\n// Load the full build.\nvar _ = require('lodash');\n// Load the core build.\nvar _ = require('lodash/core');\n// Load the FP build for immutable auto-curried iteratee-first data-last methods.\nvar fp = require('lodash/fp');\n\n// Load method categories.\nvar array = require('lodash/array');\nvar object = require('lodash/fp/object');\n\n// Cherry-pick methods for smaller browserify/rollup/webpack bundles.\nvar at = require('lodash/at');\nvar curryN = require('lodash/fp/curryN');\n```\n\nSee the [package source](https://github.com/lodash/lodash/tree/4.17.4-npm) for more details.\n\n**Note:**<br>\nInstall [n_](https://www.npmjs.com/package/n_) for Lodash use in the Node.js < 6 REPL.\n\n## Support\n\nTested in Chrome 54-55, Firefox 49-50, IE 11, Edge 14, Safari 9-10, Node.js 6-7, & PhantomJS 2.1.1.<br>\nAutomated [browser](https://saucelabs.com/u/lodash) & [CI](https://travis-ci.org/lodash/lodash/) test runs are available.\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lodash/lodash.git"
@@ -112,5 +174,5 @@
   "scripts": {
     "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
   },
-  "version": "4.16.3"
+  "version": "4.17.4"
 }

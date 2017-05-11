@@ -1,14 +1,13 @@
-# Standard Engine
-[![travis][travis-image]][travis-url]
-[![npm][npm-image]][npm-url]
-[![downloads][downloads-image]][downloads-url]
+# standard-engine [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
 
-[travis-image]: https://img.shields.io/travis/Flet/standard-engine.svg?style=flat
+[travis-image]: https://img.shields.io/travis/Flet/standard-engine/master.svg
 [travis-url]: https://travis-ci.org/Flet/standard-engine
-[npm-image]: https://img.shields.io/npm/v/standard-engine.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/standard-engine.svg
 [npm-url]: https://npmjs.org/package/standard-engine
-[downloads-image]: https://img.shields.io/npm/dm/standard-engine.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/standard-engine.svg
 [downloads-url]: https://npmjs.org/package/standard-engine
+[standard-image]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
+[standard-url]: https://standardjs.com
 
 ## Overview
 Wrap your own eslint rules in a easy-to-use command line tool and/or a JS module.
@@ -21,11 +20,12 @@ npm install standard-engine
 ## Who is using `standard-engine`?
 Here is a list of packages using `standard-engine`. Dive into them for ideas!
 
-- [standard](https://github.com/feross/standard) - JavaScript Standard Style.
+- [standard](https://standardjs.com) - JavaScript Standard Style.
 -  [semistandard](https://github.com/Flet/semistandard) - Its `standard` with semicolons sprinkled on top.
 - [happiness](https://github.com/JedWatson/happiness) - JavaScript Happiness Style (semicolons and tabs)
 - [doublestandard](https://github.com/flet/doublestandard) - Require TWO semicolons at the end of every line!
 - [strict-standard](https://github.com/denis-sokolov/strict-standard) - Standard Style with strict error checking.
+- [standard-own](https://github.com/o2team/standard-own) - Standard configurable.
 
 Did you make your own? Create a pull request and we will add it to the README!
 
@@ -67,6 +67,8 @@ module.exports = {
   cwd: '' // current working directory, passed to eslint
 }
 ```
+
+Additionally an optional `parseOpts()` function can be provided. See below for details.
 
 **eslintrc.json**
  Put all your .eslintrc rules in this file. A good practice is to create an  [ESLint Shareable Config](http://eslint.org/docs/developer-guide/shareable-configs) and extend it, but its not required:
@@ -200,9 +202,47 @@ You may use `env` as an alias for `envs` (just don't specify both).
 If you're using your custom linter globally (you installed it with `-g`), then you also need to
 install `babel-eslint` globally with `npm install babel-eslint -g`.
 
+### Custom options
+
+You can provide a `parseOpts()` function in the `options.js` exports:
+
+```js
+var eslint = require('eslint')
+var path = require('path')
+var pkg = require('./package.json')
+
+module.exports = {
+  // homepage, version and bugs pulled from package.json
+  version: pkg.version,
+  homepage: pkg.homepage,
+  bugs: pkg.bugs.url,
+  eslint: eslint, // pass any version of eslint >= 1.0.0
+  cmd: 'pocketlint', // should match the "bin" key in your package.json
+  tagline: 'Live by your own standards!', // displayed in output --help
+  eslintConfig: {
+    configFile: path.join(__dirname, 'eslintrc.json')
+  },
+  parseOpts (opts, packageOpts, rootDir) {
+    // provide implementation here, then return the opts object (or a new one)
+    return opts
+  }
+}
+```
+
+This function is called with the current options object (`opts`), any options extracted from the project's `package.json` (`packageOpts`), and the directory that contained that `package.json` file (`rootDir`, equivalent to `opts.cwd` if no file was found).
+
+Modify and return `opts`, or return a new object with the options that are to be used.
+
+The following options are provided in the `opts` object, and must be on the returned object:
+
+* `ignore`: array of file globs to ignore
+* `cwd`: string, the current working directory
+* `fix`: boolean, whether to automatically fix problems
+* `eslintConfig`: object, the options passed to [ESLint's `CLIEngine`](http://eslint.org/docs/developer-guide/nodejs-api#cliengine)
+
 ## API Usage
 
-### `standardEngine.lintText(text, [opts], callback)`
+### `engine.lintText(text, [opts], callback)`
 
 Lint the provided source `text` to enforce your defined style. An `opts` object may
 be provided:
@@ -210,7 +250,7 @@ be provided:
 ```js
 {
   cwd: '',      // current working directory (default: process.cwd())
-  filename: '', // path of the file containing the text being linted (optional)
+  filename: '', // path of the file containing the text being linted (optional, though some eslint plugins require it)
   fix: false,   // automatically fix problems
   globals: [],  // custom global variables to declare
   plugins: [],  // custom eslint plugins
@@ -221,7 +261,9 @@ be provided:
 
 Additional options may be loaded from a `package.json` if it's found for the current working directory. See below for further details.
 
-The `callback` will be called with an `Error` and `results` object:
+The `callback` will be called with an `Error` and `results` object.
+
+The `results` object will contain the following properties:
 
 ```js
 {
@@ -241,7 +283,12 @@ The `callback` will be called with an `Error` and `results` object:
 }
 ```
 
-### `standardEngine.lintFiles(files, [opts], callback)`
+### `results = engine.lintTextSync(text, [opts])`
+
+Synchronous version of `engine.lintText()`. If an error occurs, an exception is
+thrown. Otherwise, a `results` object is returned.
+
+### `engine.lintFiles(files, [opts], callback)`
 
 Lint the provided `files` globs. An `opts` object may be provided:
 
@@ -262,6 +309,8 @@ Additional options may be loaded from a `package.json` if it's found for the cur
 Both `ignore` and `files` globs are resolved relative to the current working directory.
 
 The `callback` will be called with an `Error` and `results` object (same as above).
+
+**NOTE: There is no synchronous version of `engine.lintFiles()`.**
 
 ### Full set of `opts`
 

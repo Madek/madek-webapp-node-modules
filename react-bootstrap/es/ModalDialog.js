@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass, bsSizes, getClassSet, prefix, splitBsProps } from './utils/bootstrapUtils';
 import { Size } from './utils/StyleConfig';
@@ -13,7 +14,7 @@ var propTypes = {
   /**
    * A css class to apply to the Modal dialog DOM node.
    */
-  dialogClassName: React.PropTypes.string
+  dialogClassName: PropTypes.string
 };
 
 var ModalDialog = function (_React$Component) {

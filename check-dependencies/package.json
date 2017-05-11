@@ -2,99 +2,104 @@
   "_args": [
     [
       {
-        "raw": "check-dependencies@0.11.0",
+        "raw": "check-dependencies@1.0.1",
         "scope": null,
         "escapedName": "check-dependencies",
         "name": "check-dependencies",
-        "rawSpec": "0.11.0",
-        "spec": "0.11.0",
+        "rawSpec": "1.0.1",
+        "spec": "1.0.1",
         "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "check-dependencies@0.11.0",
-  "_id": "check-dependencies@0.11.0",
+  "_from": "check-dependencies@1.0.1",
+  "_id": "check-dependencies@1.0.1",
   "_inCache": true,
   "_location": "/check-dependencies",
-  "_nodeVersion": "4.1.2",
+  "_nodeVersion": "6.4.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/check-dependencies-1.0.1.tgz_1472155751333_0.3820559112355113"
+  },
   "_npmUser": {
     "name": "m_gol",
     "email": "m.goleb@gmail.com"
   },
-  "_npmVersion": "3.3.6",
-  "_phantomChildren": {},
+  "_npmVersion": "3.10.7",
+  "_phantomChildren": {
+    "escape-string-regexp": "1.0.3",
+    "has-ansi": "2.0.0",
+    "strip-ansi": "3.0.0",
+    "supports-color": "2.0.0"
+  },
   "_requested": {
-    "raw": "check-dependencies@0.11.0",
+    "raw": "check-dependencies@1.0.1",
     "scope": null,
     "escapedName": "check-dependencies",
     "name": "check-dependencies",
-    "rawSpec": "0.11.0",
-    "spec": "0.11.0",
+    "rawSpec": "1.0.1",
+    "spec": "1.0.1",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/check-dependencies/-/check-dependencies-0.11.0.tgz",
-  "_shasum": "f6d8b118459c20f5c7b3ecf7fd8cb02c754e8580",
+  "_resolved": "https://registry.npmjs.org/check-dependencies/-/check-dependencies-1.0.1.tgz",
+  "_shasum": "9e7f15822de20621ec6b9ffaabac4d588c3811b0",
   "_shrinkwrap": null,
-  "_spec": "check-dependencies@0.11.0",
+  "_spec": "check-dependencies@1.0.1",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Michał Gołębiowski",
     "email": "m.goleb@gmail.com"
   },
   "bin": {
-    "check-dependencies": "./bin.js"
+    "check-dependencies": "./bin/cli.js"
   },
   "bugs": {
-    "url": "https://github.com/mzgol/check-dependencies/issues"
+    "url": "https://github.com/mgol/check-dependencies/issues"
   },
   "dependencies": {
-    "bluebird": "^2.10.0",
-    "bower-config": "^0.6.1",
-    "chalk": "^1.1.1",
-    "findup-sync": "^0.3.0",
-    "lodash": "^3.10.1",
+    "bower-config": "^1.4.0",
+    "chalk": "^1.1.3",
+    "findup-sync": "^0.4.2",
+    "lodash.camelcase": "^4.3.0",
     "minimist": "^1.2.0",
-    "semver": "^5.0.3"
+    "semver": "^5.3.0"
   },
   "description": "Checks if currently installed npm/bower dependencies are installed in the exact same versions that are specified in package.json/bower.json",
   "devDependencies": {
-    "bower": "1.5.2",
-    "eslint-config-mzgol": "0.0.3",
-    "fs-extra": "0.24.0",
-    "grunt": "0.4.5",
-    "grunt-babel": "5.0.1",
-    "grunt-cli": "0.1.13",
-    "grunt-contrib-clean": "0.6.0",
-    "grunt-contrib-copy": "0.8.1",
-    "grunt-eslint": "17.1.0",
+    "bluebird": "3.4.1",
+    "bower": "1.7.9",
+    "eslint-config-mgol": "0.0.27",
+    "fs-extra": "0.30.0",
+    "graceful-fs": "4.1.6",
+    "grunt": "1.0.1",
+    "grunt-cli": "1.2.0",
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-eslint": "19.0.0",
     "grunt-mocha-test": "0.12.7",
-    "load-grunt-tasks": "3.2.0",
-    "mocha": "2.3.2",
-    "sinon": "1.16.1",
-    "time-grunt": "1.2.1"
+    "load-grunt-tasks": "3.5.2",
+    "mocha": "3.0.2",
+    "sinon": "1.17.5",
+    "time-grunt": "1.4.0"
   },
   "directories": {},
   "dist": {
-    "shasum": "f6d8b118459c20f5c7b3ecf7fd8cb02c754e8580",
-    "tarball": "https://registry.npmjs.org/check-dependencies/-/check-dependencies-0.11.0.tgz"
+    "shasum": "9e7f15822de20621ec6b9ffaabac4d588c3811b0",
+    "tarball": "https://registry.npmjs.org/check-dependencies/-/check-dependencies-1.0.1.tgz"
   },
   "engines": {
-    "node": ">=0.12.7 <0.13 || >=4.1.1"
+    "node": ">=4.4 <5 || >=6.3"
   },
   "files": [
-    "bin.js",
-    "index.js",
     "bin",
-    "lib",
-    "dist/bin",
-    "dist/lib"
+    "lib"
   ],
-  "gitHead": "7df0baddc22cfeb2ed1429160bfab7ca75762bba",
-  "homepage": "https://github.com/mzgol/check-dependencies",
+  "gitHead": "7e4ae26d56883b6fa971b70fab6cfe30816928ce",
+  "homepage": "https://github.com/mgol/check-dependencies",
   "keywords": [
     "dependency",
     "packages",
@@ -102,6 +107,7 @@
     "dependencies"
   ],
   "license": "MIT",
+  "main": "./lib/check-dependencies.js",
   "maintainers": [
     {
       "name": "m_gol",
@@ -110,13 +116,14 @@
   ],
   "name": "check-dependencies",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "readme": "# check-dependencies\n\n> Checks if currently installed npm/bower dependencies are installed in the exact same versions that are specified in package.json/bower.json\n\n[![Travis build](https://img.shields.io/travis/mgol/check-dependencies.svg?style=flat-square)](https://travis-ci.org/mgol/check-dependencies)\n[![AppVeyor build](https://img.shields.io/appveyor/mgol/check-dependencies.svg?style=flat-square)](https://ci.appveyor.com/project/mgol/check-dependencies)\n[![Version](https://img.shields.io/npm/v/check-dependencies.svg?style=flat-square)](http://npm.im/check-dependencies)\n[![Downloads](https://img.shields.io/npm/dm/check-dependencies.svg?style=flat-square)](http://npm-stat.com/charts.html?package=check-dependencies)\n[![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)\n\n## Installation\n\nTo install the package and add it to your `package.json`, invoke:\n\n```shell\nnpm install check-dependencies --save-dev\n```\n\n## Rationale\n\nWhen dependencies are changed in `package.json` (or `bower.json`), whether it's a version bump or a new package, one can forget to invoke `npm install` (or `bower install`) and continue using the application, possibly encountering errors caused by obsolete package versions. To avoid it, use the `check-dependencies` module at the top of the entry point of your application; it will inform about not up-to-date setup and optionally install the dependencies.\n\nAnother option would be to always invoke `npm install` (or `bower install`) at the top of the main file but it can be slow and `check-dependencies` is fast.\n\n## Usage\n\nOnce the package has been installed, it may be used via:\n\n### CLI\n\n```bash\n$ check-dependencies\n```\n\nAll options from the [API](#api) except `log` and `error` can be passed to the CLI, example:\n\n```bash\n$ check-dependencies --verbose --package-manager bower --scope-list dependencies\n```\n\nOptions accepting array values in the API (like [`scopeList`](#scopelist)) should have each value passed individually, example:\n```bash\n$ check-dependencies --scope-list dependencies --scope-list devDependencies\n```\n\n### API\n\n```js\nrequire('check-dependencies')(config, callback);\n```\nwhere `callback` is invoked upon completion and `config` is a configuration object.\n\n`callback` is invoked with the object containing fields:\n```js\n{\n    status: number,      // 0 if successful, 1 otherwise\n    depsWereOk: boolean, // true if dependencies were already satisfied\n    log: array,          // array of logged messages\n    error: array,        // array of logged errors\n}\n```\n\nThe function returns a promise so passing a callback is not necessary; instead you can do:\n```js\nrequire('check-dependencies')(config)\n    .then(function (output) {\n        /* handle output */\n    });\n```\nThe promise should never fail.\n\nThere is a synchronous alternative -- the following code:\n```js\nvar output = require('check-dependencies').sync(config);\n```\nwill assign to `output` the same object that would otherwise be passed to the `callback` in the asynchronous scenario.\n\nThe `config` object may have the following fields:\n\n#### packageManager\n\nPackage manager to check against. Possible values: `'npm'`, `'bower'`. (Note: for `bower` you need to have the `bower` package installed either globally or locally in the same project in which you use `check-dependencies`).\n\nType: `string`\n\nDefault: `'npm'`\n\n#### packageDir\n\nPath to the directory containing `package.json` or `bower.json`.\n\nType: `string`\n\nDefault: the closest directory containing `package.json` or `bower.json` (depending on `packageManager` specified) when going up the tree, starting from the current one\n\n#### onlySpecified\n\nEnsures all installed dependencies are specified in `package.json` or `bower.json`.\n\nNOTE: Don't use this option with npm 3.0.0 or newer as it deduplicates the file dependency tree by default so `check-dependencies` will think many modules are excessive whereas in fact they will not.\n\nType: `boolean`\n\nDefault: `false`\n\n#### install\n\nInstalls packages if they don't match. With the `onlySpecified` option enabled prune excessive packages as well.\n\nType: `boolean`\n\nDefault: `false`\n\n#### scopeList\n\nThe list of keys in `package.json` or `bower.json` where to look for package names & versions.\n\nType: `array`\n\nDefault: `['dependencies', 'devDependencies']`\n\n#### optionalScopeList\n\nThe list of keys in `package.json` or `bower.json` where to look for *optional* package names & versions. An optional package is not required to be installed but if it's installed, it's supposed to match the specified version range.\n\nThis list is also consulted when using `onlySpecified: true`.\n\nType: `array`\n\nDefault: `['optionalDependencies']`\n\n#### checkCustomPackageNames\n\nBy default, check-dependencies will skip version check for custom package names, but will still check to see if they are installed.  For example:\n\n```js\n    \"dependencies\": {\n      \"specialSemver059\": \"semver#0.5.9\"\n    }\n```\n\nIf checkCustomPackageNames is enabled, check-dependencies will parse the version number (after the hash) for custom package names and check it against the version of the installed package of the same name.\n\nType: `boolean`\n\nDefault: `false`\n\n#### checkGitUrls\n\nBy default, check-dependencies will skip version check for packages whose version contains the full repository path.  For example:\n\n```js\n    \"dependencies\": {\n      \"semver\": \"https://github.com/npm/node-semver.git#0.5.9\"\n    }\n```\n\nIf checkGitUrls is enabled, check-dependencies will parse the version number (after the path to the git repository and the hash) and check it against the version of the installed package.\n\nType: `boolean`\n\nDefault: `false`\n\n#### verbose\n\nPrints messages to the console.\n\nType: `boolean`\n\nDefault: `false`\n\n#### log\n\nA function logging debug messages (applies only if `verbose: true`).\n\nType: `function`\n\nDefault: `console.log.bind(console)`\n\n#### error\n\nA function logging error messages (applies only if `verbose: true`).\n\nType: `function`\n\nDefault: `console.error.bind(console)`\n\n## Usage Examples\n\nThe most basic usage:\n```js\nrequire('check-dependencies')(callback);\n```\nThis will check packages' versions and report an error to `callback` if packages' versions are mismatched.\n\nThe following:\n```js\nrequire('check-dependencies')({\n    install: true,\n    verbose: true,\n}, callback);\n```\nwill install mismatched ones and call `callback`.\n\nThe following two examples:\n```js\nrequire('check-dependencies')(callback);\nrequire('check-dependencies')({}, callback);\n```\nbehave in the same way - `callback` is invoked upon completion; if there was an error, it's passed as a parameter to `callback`.\n\n## Supported Node.js versions\nThis project aims to support all Node.js LTS versions in the \"active\" phase (see [LTS README](https://github.com/nodejs/LTS/blob/master/README.md) for more details) as well as the latest stable Node.js.\n\n## Contributing\nIn lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using `npm test`.\n\n## License\nCopyright (c) 2014 Michał Gołębiowski. Licensed under the MIT license.\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mzgol/check-dependencies.git"
+    "url": "git+https://github.com/mgol/check-dependencies.git"
   },
   "scripts": {
     "test": "grunt"
   },
-  "version": "0.11.0"
+  "version": "1.0.1"
 }

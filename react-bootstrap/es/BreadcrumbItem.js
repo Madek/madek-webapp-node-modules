@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SafeAnchor from './SafeAnchor';
 
@@ -12,19 +13,19 @@ var propTypes = {
   /**
    * If set to true, renders `span` instead of `a`
    */
-  active: React.PropTypes.bool,
+  active: PropTypes.bool,
   /**
    * `href` attribute for the inner `a` element
    */
-  href: React.PropTypes.string,
+  href: PropTypes.string,
   /**
    * `title` attribute for the inner `a` element
    */
-  title: React.PropTypes.node,
+  title: PropTypes.node,
   /**
    * `target` attribute for the inner `a` element
    */
-  target: React.PropTypes.string
+  target: PropTypes.string
 };
 
 var defaultProps = {

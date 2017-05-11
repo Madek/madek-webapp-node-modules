@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _warning = require('warning');
 
 var _warning2 = _interopRequireDefault(_warning);
@@ -42,8 +46,8 @@ var propTypes = {
   /**
    * Uses `controlId` from `<FormGroup>` if not explicitly specified.
    */
-  htmlFor: _react2['default'].PropTypes.string,
-  srOnly: _react2['default'].PropTypes.bool
+  htmlFor: _propTypes2['default'].string,
+  srOnly: _propTypes2['default'].bool
 };
 
 var defaultProps = {
@@ -51,7 +55,7 @@ var defaultProps = {
 };
 
 var contextTypes = {
-  $bs_formGroup: _react2['default'].PropTypes.object
+  $bs_formGroup: _propTypes2['default'].object
 };
 
 var ControlLabel = function (_React$Component) {

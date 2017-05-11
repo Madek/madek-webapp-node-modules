@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -44,7 +48,7 @@ var propTypes = {
    *
    * Adds `container-fluid` class.
    */
-  fluid: _react2['default'].PropTypes.bool,
+  fluid: _propTypes2['default'].bool,
   /**
    * You can use a custom element for this component
    */

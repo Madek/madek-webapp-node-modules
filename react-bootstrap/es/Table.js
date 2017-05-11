@@ -5,15 +5,16 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { bsClass, getClassSet, prefix, splitBsProps } from './utils/bootstrapUtils';
 
 var propTypes = {
-  striped: React.PropTypes.bool,
-  bordered: React.PropTypes.bool,
-  condensed: React.PropTypes.bool,
-  hover: React.PropTypes.bool,
-  responsive: React.PropTypes.bool
+  striped: PropTypes.bool,
+  bordered: PropTypes.bool,
+  condensed: PropTypes.bool,
+  hover: PropTypes.bool,
+  responsive: PropTypes.bool
 };
 
 var defaultProps = {

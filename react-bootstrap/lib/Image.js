@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _bootstrapUtils = require('./utils/bootstrapUtils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -38,22 +42,22 @@ var propTypes = {
   /**
    * Sets image as responsive image
    */
-  responsive: _react2['default'].PropTypes.bool,
+  responsive: _propTypes2['default'].bool,
 
   /**
    * Sets image shape as rounded
    */
-  rounded: _react2['default'].PropTypes.bool,
+  rounded: _propTypes2['default'].bool,
 
   /**
    * Sets image shape as circle
    */
-  circle: _react2['default'].PropTypes.bool,
+  circle: _propTypes2['default'].bool,
 
   /**
    * Sets image shape as thumbnail
    */
-  thumbnail: _react2['default'].PropTypes.bool
+  thumbnail: _propTypes2['default'].bool
 };
 
 var defaultProps = {

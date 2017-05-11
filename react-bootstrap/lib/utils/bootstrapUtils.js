@@ -21,7 +21,9 @@ var _invariant = require('invariant');
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _react = require('react');
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _StyleConfig = require('./StyleConfig');
 
@@ -52,7 +54,7 @@ var bsClass = exports.bsClass = curry(function (defaultClass, Component) {
   var propTypes = Component.propTypes || (Component.propTypes = {});
   var defaultProps = Component.defaultProps || (Component.defaultProps = {});
 
-  propTypes.bsClass = _react.PropTypes.string;
+  propTypes.bsClass = _propTypes2['default'].string;
   defaultProps.bsClass = defaultClass;
 
   return Component;
@@ -73,7 +75,7 @@ var bsStyles = exports.bsStyles = curry(function (styles, defaultStyle, Componen
     }
   });
 
-  var propType = _react.PropTypes.oneOf(existing);
+  var propType = _propTypes2['default'].oneOf(existing);
 
   // expose the values on the propType function for documentation
   Component.STYLES = propType._values = existing;
@@ -115,7 +117,7 @@ var bsSizes = exports.bsSizes = curry(function (sizes, defaultSize, Component) {
     values.push(size);
   });
 
-  var propType = _react.PropTypes.oneOf(values);
+  var propType = _propTypes2['default'].oneOf(values);
   propType._values = values;
 
   // expose the values on the propType function for documentation

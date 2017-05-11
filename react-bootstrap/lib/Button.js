@@ -34,6 +34,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _elementType = require('react-prop-types/lib/elementType');
 
 var _elementType2 = _interopRequireDefault(_elementType);
@@ -49,17 +53,17 @@ var _SafeAnchor2 = _interopRequireDefault(_SafeAnchor);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  active: _react2['default'].PropTypes.bool,
-  disabled: _react2['default'].PropTypes.bool,
-  block: _react2['default'].PropTypes.bool,
-  onClick: _react2['default'].PropTypes.func,
+  active: _propTypes2['default'].bool,
+  disabled: _propTypes2['default'].bool,
+  block: _propTypes2['default'].bool,
+  onClick: _propTypes2['default'].func,
   componentClass: _elementType2['default'],
-  href: _react2['default'].PropTypes.string,
+  href: _propTypes2['default'].string,
   /**
    * Defines HTML button type attribute
    * @defaultValue 'button'
    */
-  type: _react2['default'].PropTypes.oneOf(['button', 'reset', 'submit'])
+  type: _propTypes2['default'].oneOf(['button', 'reset', 'submit'])
 };
 
 var defaultProps = {

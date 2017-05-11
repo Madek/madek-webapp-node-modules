@@ -5,6 +5,7 @@ import _inherits from 'babel-runtime/helpers/inherits';
 import _extends from 'babel-runtime/helpers/extends';
 import contains from 'dom-helpers/query/contains';
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import warning from 'warning';
 
@@ -26,74 +27,74 @@ function isOneOf(one, of) {
   return one === of;
 }
 
-var triggerType = React.PropTypes.oneOf(['click', 'hover', 'focus']);
+var triggerType = PropTypes.oneOf(['click', 'hover', 'focus']);
 
 var propTypes = _extends({}, Overlay.propTypes, {
 
   /**
   * Specify which action or actions trigger Overlay visibility
   */
-  trigger: React.PropTypes.oneOfType([triggerType, React.PropTypes.arrayOf(triggerType)]),
+  trigger: PropTypes.oneOfType([triggerType, PropTypes.arrayOf(triggerType)]),
 
   /**
    * A millisecond delay amount to show and hide the Overlay once triggered
    */
-  delay: React.PropTypes.number,
+  delay: PropTypes.number,
   /**
    * A millisecond delay amount before showing the Overlay once triggered.
    */
-  delayShow: React.PropTypes.number,
+  delayShow: PropTypes.number,
   /**
    * A millisecond delay amount before hiding the Overlay once triggered.
    */
-  delayHide: React.PropTypes.number,
+  delayHide: PropTypes.number,
 
   // FIXME: This should be `defaultShow`.
   /**
    * The initial visibility state of the Overlay. For more nuanced visibility
    * control, consider using the Overlay component directly.
    */
-  defaultOverlayShown: React.PropTypes.bool,
+  defaultOverlayShown: PropTypes.bool,
 
   /**
    * An element or text to overlay next to the target.
    */
-  overlay: React.PropTypes.node.isRequired,
+  overlay: PropTypes.node.isRequired,
 
   /**
    * @private
    */
-  onBlur: React.PropTypes.func,
+  onBlur: PropTypes.func,
   /**
    * @private
    */
-  onClick: React.PropTypes.func,
+  onClick: PropTypes.func,
   /**
    * @private
    */
-  onFocus: React.PropTypes.func,
+  onFocus: PropTypes.func,
   /**
    * @private
    */
-  onMouseOut: React.PropTypes.func,
+  onMouseOut: PropTypes.func,
   /**
    * @private
    */
-  onMouseOver: React.PropTypes.func,
+  onMouseOver: PropTypes.func,
 
   // Overridden props from `<Overlay>`.
   /**
    * @private
    */
-  target: React.PropTypes.oneOf([null]),
+  target: PropTypes.oneOf([null]),
   /**
   * @private
   */
-  onHide: React.PropTypes.oneOf([null]),
+  onHide: PropTypes.oneOf([null]),
   /**
    * @private
    */
-  show: React.PropTypes.oneOf([null])
+  show: PropTypes.oneOf([null])
 });
 
 var defaultProps = {
@@ -268,10 +269,11 @@ var OverlayTrigger = function (_React$Component) {
 
     var child = React.Children.only(children);
     var childProps = child.props;
+    var triggerProps = {};
 
-    var triggerProps = {
-      'aria-describedby': overlay.props.id
-    };
+    if (this.state.show) {
+      triggerProps['aria-describedby'] = overlay.props.id;
+    }
 
     // FIXME: The logic here for passing through handlers on this component is
     // inconsistent. We shouldn't be passing any of these props through.

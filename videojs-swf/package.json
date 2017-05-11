@@ -108,7 +108,8 @@
   ],
   "name": "videojs-swf",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "readme": "The light-weight Flash video player that makes Flash work like HTML5 video. This allows player skins, plugins, and other features to work with both HTML5 and Flash\n\nThis project doesn't need to be used if you simply want to use the Flash video player.  Head back to the main Video.js project if that's all you need, as the compiled SWF is checked in there.\n\nInstallation\n============\n\n1. Install Node Packages.\n```bash\n    npm install\n   ```\n2. Compile SWF.\nDevelopment (places new SWF in /dist/):\n```bash\n    grunt mxmlc\n   ```\nProduction/ Distribution (runs mxmlc task and copies SWF to dist/):\n```bash\n    grunt dist\n   ```\n3. Run Connect Server.\n```bash\n    grunt connect:dev\n```\n4. Open your browser at [http://localhost:8000/index.html](http://localhost:8000/index.html) to see a video play.  You can keep using grunt to rebuild the Flash code.\n\n\nRunning Unit and Integration Tests\n===========\n\n** Note - We want to drop all of this for grunt based / Karma testing.\n\nFor unit tests, this project uses [FlexUnit](http://flexunit.org/). The unit tests can be found in [project root]/src/com/videojs/test/\n\nFor integration tests, this project uses [qunit](http://qunitjs.com/). The integration tests can be found in [project root]/test\n\nIn order to run all of the tests, use the links at  [http://localhost:8000/index.html](http://localhost:8000/index.html)\n\nThere are very few tests.  Adding to them is a fantastic and much appreciated way to contribute.\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/videojs/video-js-swf.git"

@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _warning = require('warning');
 
 var _warning2 = _interopRequireDefault(_warning);
@@ -39,12 +43,12 @@ var _bootstrapUtils = require('./utils/bootstrapUtils');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var propTypes = {
-  inline: _react2['default'].PropTypes.bool,
-  disabled: _react2['default'].PropTypes.bool,
+  inline: _propTypes2['default'].bool,
+  disabled: _propTypes2['default'].bool,
   /**
    * Only valid if `inline` is not set.
    */
-  validationState: _react2['default'].PropTypes.oneOf(['success', 'warning', 'error', null]),
+  validationState: _propTypes2['default'].oneOf(['success', 'warning', 'error', null]),
   /**
    * Attaches a ref to the `<input>` element. Only functions can be used here.
    *
@@ -52,7 +56,7 @@ var propTypes = {
    * <Checkbox inputRef={ref => { this.input = ref; }} />
    * ```
    */
-  inputRef: _react2['default'].PropTypes.func
+  inputRef: _propTypes2['default'].func
 };
 
 var defaultProps = {

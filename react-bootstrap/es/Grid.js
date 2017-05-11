@@ -5,6 +5,7 @@ import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructo
 import _inherits from 'babel-runtime/helpers/inherits';
 import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
 import { bsClass, prefix, splitBsProps } from './utils/bootstrapUtils';
@@ -15,7 +16,7 @@ var propTypes = {
    *
    * Adds `container-fluid` class.
    */
-  fluid: React.PropTypes.bool,
+  fluid: PropTypes.bool,
   /**
    * You can use a custom element for this component
    */

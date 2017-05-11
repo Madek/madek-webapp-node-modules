@@ -30,6 +30,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
@@ -44,12 +48,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 // not wait until transition end to trigger continuing animations.
 
 var propTypes = {
-  direction: _react2['default'].PropTypes.oneOf(['prev', 'next']),
-  onAnimateOutEnd: _react2['default'].PropTypes.func,
-  active: _react2['default'].PropTypes.bool,
-  animateIn: _react2['default'].PropTypes.bool,
-  animateOut: _react2['default'].PropTypes.bool,
-  index: _react2['default'].PropTypes.number
+  direction: _propTypes2['default'].oneOf(['prev', 'next']),
+  onAnimateOutEnd: _propTypes2['default'].func,
+  active: _propTypes2['default'].bool,
+  animateIn: _propTypes2['default'].bool,
+  animateOut: _propTypes2['default'].bool,
+  index: _propTypes2['default'].number
 };
 
 var defaultProps = {
