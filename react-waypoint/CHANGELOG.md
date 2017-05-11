@@ -1,5 +1,13 @@
 ## master (unreleased)
 
+## 7.0.3
+
+- Fix bug in onNextTick.
+
+## 7.0.2
+
+- Fix bug if waypoint updates before being initialized.
+
 ## 7.0.1
 
 - Improve startup time by consolidating `setTimeout`s and deferring work until

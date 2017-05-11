@@ -130,6 +130,11 @@ var Waypoint = function (_React$Component) {
         return;
       }
 
+      if (!this.scrollableAncestor) {
+        // The Waypoint has not yet initialized.
+        return;
+      }
+
       // The element may have moved.
       this._handleScroll(null);
     }

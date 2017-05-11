@@ -2,25 +2,25 @@
   "_args": [
     [
       {
-        "raw": "react-waypoint@7.0.1",
+        "raw": "react-waypoint@7.0.3",
         "scope": null,
         "escapedName": "react-waypoint",
         "name": "react-waypoint",
-        "rawSpec": "7.0.1",
-        "spec": "7.0.1",
+        "rawSpec": "7.0.3",
+        "spec": "7.0.3",
         "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-waypoint@7.0.1",
-  "_id": "react-waypoint@7.0.1",
+  "_from": "react-waypoint@7.0.3",
+  "_id": "react-waypoint@7.0.3",
   "_inCache": true,
   "_location": "/react-waypoint",
   "_nodeVersion": "6.2.2",
   "_npmOperationalInternal": {
     "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/react-waypoint-7.0.1.tgz_1494441244916_0.7328357337974012"
+    "tmp": "tmp/react-waypoint-7.0.3.tgz_1494515041473_0.031193164410069585"
   },
   "_npmUser": {
     "name": "lencioni",
@@ -29,21 +29,21 @@
   "_npmVersion": "3.9.5",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "react-waypoint@7.0.1",
+    "raw": "react-waypoint@7.0.3",
     "scope": null,
     "escapedName": "react-waypoint",
     "name": "react-waypoint",
-    "rawSpec": "7.0.1",
-    "spec": "7.0.1",
+    "rawSpec": "7.0.3",
+    "spec": "7.0.3",
     "type": "version"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-7.0.1.tgz",
-  "_shasum": "6eae48f4e6d9b5c1d643a0333f8e7fc36b09973a",
+  "_resolved": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-7.0.3.tgz",
+  "_shasum": "dc80bf5ac16640567340c0f1f0a9ef5d44f41437",
   "_shrinkwrap": null,
-  "_spec": "react-waypoint@7.0.1",
+  "_spec": "react-waypoint@7.0.3",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Brigade Engineering"
@@ -83,10 +83,10 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "6eae48f4e6d9b5c1d643a0333f8e7fc36b09973a",
-    "tarball": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-7.0.1.tgz"
+    "shasum": "dc80bf5ac16640567340c0f1f0a9ef5d44f41437",
+    "tarball": "https://registry.npmjs.org/react-waypoint/-/react-waypoint-7.0.3.tgz"
   },
-  "gitHead": "0ca607e4a5d4773de1b7312cf35d927caac6df13",
+  "gitHead": "8e149164afa6e58548a4235d5f2aa0fff1951fc2",
   "homepage": "https://github.com/brigade/react-waypoint",
   "keywords": [
     "react",
@@ -143,5 +143,5 @@
     "testonly:watch": "karma start --no-single-run"
   },
   "types": "index.d.ts",
-  "version": "7.0.1"
+  "version": "7.0.3"
 }

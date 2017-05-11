@@ -23,15 +23,12 @@ function onNextTick(cb) {
     }, 0);
   }
 
-  var isSubscribed = true;
-
   return function unsubscribe() {
-    if (!isSubscribed) {
+    var index = timeoutQueue.indexOf(cb);
+    if (index === -1) {
       return;
     }
 
-    isSubscribed = false;
-    var index = timeoutQueue.indexOf(cb);
     timeoutQueue.splice(index, 1);
 
     if (!timeoutQueue.length && timeout) {
