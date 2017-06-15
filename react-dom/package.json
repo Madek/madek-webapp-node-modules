@@ -2,49 +2,51 @@
   "_args": [
     [
       {
-        "raw": "react-dom@15.5.4",
+        "raw": "react-dom@15.6.1",
         "scope": null,
         "escapedName": "react-dom",
         "name": "react-dom",
-        "rawSpec": "15.5.4",
-        "spec": "15.5.4",
+        "rawSpec": "15.6.1",
+        "spec": "15.6.1",
         "type": "version"
       },
       "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "react-dom@15.5.4",
-  "_id": "react-dom@15.5.4",
+  "_from": "react-dom@15.6.1",
+  "_id": "react-dom@15.6.1",
   "_inCache": true,
   "_location": "/react-dom",
-  "_nodeVersion": "7.8.0",
+  "_nodeVersion": "6.2.1",
   "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/react-dom-15.5.4.tgz_1491939006776_0.3741262429393828"
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/react-dom-15.6.1.tgz_1497485123117_0.07075862702913582"
   },
   "_npmUser": {
     "name": "gaearon",
     "email": "dan.abramov@gmail.com"
   },
-  "_npmVersion": "4.2.0",
-  "_phantomChildren": {},
+  "_npmVersion": "3.9.3",
+  "_phantomChildren": {
+    "fbjs": "0.8.12"
+  },
   "_requested": {
-    "raw": "react-dom@15.5.4",
+    "raw": "react-dom@15.6.1",
     "scope": null,
     "escapedName": "react-dom",
     "name": "react-dom",
-    "rawSpec": "15.5.4",
-    "spec": "15.5.4",
+    "rawSpec": "15.6.1",
+    "spec": "15.6.1",
     "type": "version"
   },
   "_requiredBy": [
     "/",
     "/linkifyjs"
   ],
-  "_resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.5.4.tgz",
-  "_shasum": "ba0c28786fd52ed7e4f2135fe0288d462aef93da",
+  "_resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.6.1.tgz",
+  "_shasum": "2cb0ed4191038e53c209eb3a79a23e2a4cf99470",
   "_shrinkwrap": null,
-  "_spec": "react-dom@15.5.4",
+  "_spec": "react-dom@15.6.1",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "browserify": {
     "transform": [
@@ -58,14 +60,14 @@
     "fbjs": "^0.8.9",
     "loose-envify": "^1.1.0",
     "object-assign": "^4.1.0",
-    "prop-types": "~15.5.7"
+    "prop-types": "^15.5.10"
   },
   "description": "React package for working with the DOM.",
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "ba0c28786fd52ed7e4f2135fe0288d462aef93da",
-    "tarball": "https://registry.npmjs.org/react-dom/-/react-dom-15.5.4.tgz"
+    "shasum": "2cb0ed4191038e53c209eb3a79a23e2a4cf99470",
+    "tarball": "https://registry.npmjs.org/react-dom/-/react-dom-15.6.1.tgz"
   },
   "files": [
     "LICENSE",
@@ -128,7 +130,7 @@
   "name": "react-dom",
   "optionalDependencies": {},
   "peerDependencies": {
-    "react": "^15.5.4"
+    "react": "^15.6.1"
   },
   "readme": "# `react-dom`\n\nThis package serves as the entry point of the DOM-related rendering paths. It is intended to be paired with the isomorphic React, which will be shipped as `react` to npm.\n\n## Installation\n\n```sh\nnpm install react react-dom\n```\n\n## Usage\n\n### In the browser\n\n```js\nvar React = require('react');\nvar ReactDOM = require('react-dom');\n\nclass MyComponent extends React.Component {\n  render() {\n    return <div>Hello World</div>;\n  }\n}\n\nReactDOM.render(<MyComponent />, node);\n```\n\n### On the server\n\n```js\nvar React = require('react');\nvar ReactDOMServer = require('react-dom/server');\n\nclass MyComponent extends React.Component {\n  render() {\n    return <div>Hello World</div>;\n  }\n}\n\nReactDOMServer.renderToString(<MyComponent />);\n```\n\n## API\n\n### `react-dom`\n\n- `findDOMNode`\n- `render`\n- `unmountComponentAtNode`\n\n### `react-dom/server`\n\n- `renderToString`\n- `renderToStaticMarkup`\n",
   "readmeFilename": "README.md",
@@ -139,5 +141,5 @@
   "scripts": {
     "start": "node server.js"
   },
-  "version": "15.5.4"
+  "version": "15.6.1"
 }
