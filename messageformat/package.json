@@ -1,0 +1,142 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "messageformat@^1.0.2",
+        "scope": null,
+        "escapedName": "messageformat",
+        "name": "messageformat",
+        "rawSpec": "^1.0.2",
+        "spec": ">=1.0.2 <2.0.0",
+        "type": "range"
+      },
+      "/Users/ma/CODE/Madek/webapp/node_modules/prettier-standard"
+    ]
+  ],
+  "_from": "messageformat@>=1.0.2 <2.0.0",
+  "_id": "messageformat@1.0.2",
+  "_inCache": true,
+  "_location": "/messageformat",
+  "_nodeVersion": "6.5.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/messageformat-1.0.2.tgz_1474925491168_0.9978468660265207"
+  },
+  "_npmUser": {
+    "name": "eemeli",
+    "email": "eemeli@gmail.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {
+    "concat-map": "0.0.1",
+    "fs.realpath": "1.0.0",
+    "inflight": "1.0.4",
+    "inherits": "2.0.1",
+    "once": "1.4.0",
+    "path-is-absolute": "1.0.0"
+  },
+  "_requested": {
+    "raw": "messageformat@^1.0.2",
+    "scope": null,
+    "escapedName": "messageformat",
+    "name": "messageformat",
+    "rawSpec": "^1.0.2",
+    "spec": ">=1.0.2 <2.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/prettier-standard"
+  ],
+  "_resolved": "https://registry.npmjs.org/messageformat/-/messageformat-1.0.2.tgz",
+  "_shasum": "908f4691f29ff28dae35c45436a24cff93402388",
+  "_shrinkwrap": null,
+  "_spec": "messageformat@^1.0.2",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/prettier-standard",
+  "author": {
+    "name": "Alex Sexton",
+    "email": "alexsexton@gmail.com"
+  },
+  "bin": {
+    "messageformat": "./bin/messageformat.js"
+  },
+  "browser": {
+    "fs": false
+  },
+  "bugs": {
+    "url": "https://github.com/messageformat/messageformat.js/issues"
+  },
+  "contributors": [
+    {
+      "name": "Eemeli Aro",
+      "email": "eemeli@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "glob": "~7.0.6",
+    "make-plural": "~3.0.6",
+    "messageformat-parser": "^1.0.0",
+    "nopt": "~3.0.6",
+    "reserved-words": "^0.1.1"
+  },
+  "description": "PluralFormat and SelectFormat Message and i18n Tool - A JavaScript Implemenation of the ICU standards.",
+  "devDependencies": {
+    "browserify": "~13.1.0",
+    "expect.js": "*",
+    "jsdoc": "~3.4.0",
+    "mocha": "~3.0.2",
+    "serve": "*",
+    "tmp": "*",
+    "uglify-js": "~2.7.3"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "908f4691f29ff28dae35c45436a24cff93402388",
+    "tarball": "https://registry.npmjs.org/messageformat/-/messageformat-1.0.2.tgz"
+  },
+  "files": [
+    "bin",
+    "doc",
+    "example",
+    "lib",
+    "messageformat.js",
+    "messageformat.min.js",
+    "messageformat.min.js.map"
+  ],
+  "gitHead": "0eaa81d275de52ecf7e5f54d5a4e7b34c62ece26",
+  "homepage": "https://messageformat.github.io/",
+  "keywords": [
+    "i18n",
+    "pluralformat",
+    "icu",
+    "gettext",
+    "choiceformat",
+    "selectformat",
+    "messageformat",
+    "internationalization"
+  ],
+  "license": "MIT",
+  "main": "lib/",
+  "maintainers": [
+    {
+      "name": "slexaxton",
+      "email": "alexsexton@gmail.com"
+    },
+    {
+      "name": "eemeli",
+      "email": "eemeli@gmail.com"
+    }
+  ],
+  "name": "messageformat",
+  "optionalDependencies": {},
+  "readme": "[![Build Status](https://secure.travis-ci.org/messageformat/messageformat.js.png)](http://travis-ci.org/messageformat/messageformat.js)\n\n# messageformat.js\n\nThe experience and subtlety of your program's text can be important. MessageFormat is a mechanism for handling both **pluralization** and **gender** in your applications. It can also lead to much better translations, as it's designed to support [all the languages](http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html) included in the [Unicode CLDR](http://cldr.unicode.org/).\n\nThe ICU has an [official guide](http://userguide.icu-project.org/formatparse/messages) for the format. Messageformat.js supports and extends all parts of the [standard](http://icu-project.org/apiref/icu4j/com/ibm/icu/text/MessageFormat.html), with the exception of the deprecated ChoiceFormat.\n\nThere is a good slide-deck on [Plural and Gender in Translated Messages](https://docs.google.com/presentation/d/1ZyN8-0VXmod5hbHveq-M1AeQ61Ga3BmVuahZjbmbBxo/pub?start=false&loop=false&delayms=3000#slide=id.g1bc43a82_2_14) by Markus Scherer and Mark Davis. But, again, remember that many of these problems apply even if you're only outputting english.\n\nPlease see [messageformat.github.io](https://messageformat.github.io/) for a guide to MessageFormat, more information on on the build-time use of messageformat.js, and the code documentation.\n\n\n## What problems does it solve?\n\nUsing messageformat.js, you can separate your code from your text formatting, while enabling much more humane expressions. In other words, you won't need to see this anymore in your output:\n\n> There are 1 results.  \n> There are 1 result(s).  \n> Number of results: 5.\n\n\n## What does it look like?\n\nWith this message:\n\n```js\n> var msg =\n  '{GENDER, select, male{He} female{She} other{They} }' +\n  ' found ' +\n  '{RES, plural, =0{no results} one{1 result} other{# results} }' +\n  ' in the ' +\n  '{CAT, selectordinal, one{#st} two{#nd} few{#rd} other{#th} }' +\n  ' category.';\n```\n\nYou'll get these results:\n\n```js\n> var mfunc = new MessageFormat('en').compile(msg);\n\n> mfunc({ GENDER: 'male', RES: 1, CAT: 2 })\n'He found 1 result in the 2nd category.'\n\n> mfunc({ GENDER: 'female', RES: 1, CAT: 2 })\n'She found 1 result in the 2nd category.'\n\n> mfunc({ GENDER: 'male', RES: 2, CAT: 1 })\n'He found 2 results in the 1st category.'\n\n> mfunc({ RES: 2, CAT: 2 })\n'They found 2 results in the 2nd category.'\n```\n\n\n## Features\n\n* Handles arbitrary nesting of pluralization and select rules\n* Supports all ~466 languages included in the Unicode CLDR\n* Works on the server and the client\n* Remarkably useful even for single-language use\n* Speed & efficiency: Can pre-compile messages to JavaScript code\n  * Great for speed: message formatting is just string concatenation\n* Compatible with other MessageFormat implementations\n* Extendable with custom formatting functions\n* Very whitespace tolerant\n* Supports Unicode\n\n\n## Installation\n\n### Node\n```\nnpm install messageformat\n```\n\n```js\nvar MessageFormat = require('messageformat');\nvar mf = new MessageFormat('en');\n```\n\n### Bower\n```\nbower install messageformat\n```\n\n```html\n<script src=\"path/to/bower_components/messageformat/messageformat.js\"></script>\n<script>\n  var mf = new MessageFormat('en');\n</script>\n```\n\n### Git / Direct download\nThe tagged [releases](https://github.com/messageformat/messageformat.js/releases) available on github.com include all of the compiled files that are kept off the master branch of the repository. When working with a clone of the repository, you'll likely want to run `make all` to generate them yourself.\n\n\n## License\n\nYou may use this software under the MIT License.\n\nYou may contribute to this software under the [Dojo CLA](http://dojofoundation.org/about/cla).\n\n\n## Authors\n\n* Alex Sexton - [@SlexAxton](http://twitter.com/SlexAxton) - <http://alexsexton.com/>\n* Eemeli Aro - [@eemeli](http://twitter.com/eemeli_aro) - <https://github.com/eemeli>\n\n\n## Credits\n\nThanks to:\n\n* [Bazaarvoice](https://github.com/Bazaarvoice) - my previous employer - for letting me do cool stuff like this.\n* Google has an implementation that is similar in Google Closure, I tried to vet my code against many of their tests.\n* Norbert Lindenberg for showing me how good it can be.\n\n\n## Implementations in other languages\n\n[Jeff Hansen](https://github.com/jeffijoe) ([@jeffijoe](https://twitter.com/jeffijoe)) has written an [implementation for .NET](https://github.com/jeffijoe/messageformat.net) - it's a Portable Class Library, making it possible to use on iOS, Android, Windows Phone, and pretty much any other .NET target.\n\n\n## Additional tools\n\n[icu-converter](https://github.com/alex-dow/icu-converter) is a NodeJS tool for converting message files in the [ICU Resource Bundle](http://userguide.icu-project.org/locale/resources) format into JSON or .property files.\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/messageformat/messageformat.js.git"
+  },
+  "scripts": {
+    "prepublish": "make all",
+    "test": "mocha"
+  },
+  "version": "1.0.2"
+}

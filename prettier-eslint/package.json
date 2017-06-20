@@ -1,0 +1,159 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "prettier-eslint@^6.3.0",
+        "scope": null,
+        "escapedName": "prettier-eslint",
+        "name": "prettier-eslint",
+        "rawSpec": "^6.3.0",
+        "spec": ">=6.3.0 <7.0.0",
+        "type": "range"
+      },
+      "/Users/ma/CODE/Madek/webapp/node_modules/prettier-standard"
+    ]
+  ],
+  "_from": "prettier-eslint@>=6.3.0 <7.0.0",
+  "_id": "prettier-eslint@6.3.0",
+  "_inCache": true,
+  "_location": "/prettier-eslint",
+  "_nodeVersion": "6.10.3",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/prettier-eslint-6.3.0.tgz_1496694846707_0.3193371435627341"
+  },
+  "_npmUser": {
+    "name": "kentcdodds",
+    "email": "kent@doddsfamily.us"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "prettier-eslint@^6.3.0",
+    "scope": null,
+    "escapedName": "prettier-eslint",
+    "name": "prettier-eslint",
+    "rawSpec": "^6.3.0",
+    "spec": ">=6.3.0 <7.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/prettier-standard"
+  ],
+  "_resolved": "https://registry.npmjs.org/prettier-eslint/-/prettier-eslint-6.3.0.tgz",
+  "_shasum": "2c86ae959439c25d9a9ce8fce90c7bd809b7082f",
+  "_shrinkwrap": null,
+  "_spec": "prettier-eslint@^6.3.0",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/prettier-standard",
+  "author": {
+    "name": "Kent C. Dodds",
+    "email": "kent@doddsfamily.us",
+    "url": "http://kentcdodds.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/prettier/prettier-eslint/issues"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "common-tags": "^1.4.0",
+    "dlv": "^1.1.0",
+    "eslint": "^3.19.0",
+    "indent-string": "^3.1.0",
+    "lodash.merge": "^4.6.0",
+    "loglevel-colored-level-prefix": "^1.0.0",
+    "prettier": "^1.4.2",
+    "pretty-format": "^20.0.3",
+    "require-relative": "^0.8.7"
+  },
+  "description": "Formats your JavaScript using prettier followed by eslint --fix",
+  "devDependencies": {
+    "all-contributors-cli": "^4.3.0",
+    "babel-cli": "^6.24.1",
+    "babel-jest": "^20.0.3",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-env": "^1.5.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "chalk": "^1.1.3",
+    "codecov": "^2.2.0",
+    "commitizen": "^2.8.6",
+    "cz-conventional-changelog": "^2.0.0",
+    "eslint-config-kentcdodds": "^12.4.1",
+    "husky": "^0.13.4",
+    "jest-cli": "^20.0.4",
+    "nps": "^5.3.1",
+    "nps-utils": "^1.2.0",
+    "opt-cli": "^1.5.1",
+    "prettier-eslint-cli": "^4.0.3",
+    "rimraf": "^2.5.4",
+    "semantic-release": "^6.3.2",
+    "strip-indent": "^2.0.0",
+    "validate-commit-msg": "^2.12.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "2c86ae959439c25d9a9ce8fce90c7bd809b7082f",
+    "tarball": "https://registry.npmjs.org/prettier-eslint/-/prettier-eslint-6.3.0.tgz"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "kentcdodds",
+      "kentcdodds/jest"
+    ],
+    "rules": {
+      "valid-jsdoc": 0,
+      "max-len": [
+        2,
+        80
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "gitHead": "da962abca86c9f0031b8f58a589510b591e2b6b8",
+  "homepage": "https://github.com/prettier/prettier-eslint#readme",
+  "jest": {
+    "testEnvironment": "jest-environment-node",
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
+  "keywords": [],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "maintainers": [
+    {
+      "name": "kentcdodds",
+      "email": "kent@doddsfamily.us"
+    }
+  ],
+  "name": "prettier-eslint",
+  "optionalDependencies": {},
+  "readme": "# prettier-eslint\n\nFormats your JavaScript using [`prettier`][prettier] followed by [`eslint --fix`][eslint]\n\nFor files with an extension of `.css`, `.less`, or `.scss`,\nthis only runs `prettier` since `eslint` cannot process those.\n\n[![Build Status][build-badge]][build]\n[![Code Coverage][coverage-badge]][coverage]\n[![Dependencies][dependencyci-badge]][dependencyci]\n[![version][version-badge]][package]\n[![downloads][downloads-badge]][npm-stat]\n[![MIT License][license-badge]][LICENSE]\n\n[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors)\n[![PRs Welcome][prs-badge]][prs]\n[![Donate][donate-badge]][donate]\n[![Code of Conduct][coc-badge]][coc]\n[![Roadmap][roadmap-badge]][roadmap]\n[![Examples][examples-badge]][examples]\n\n[![Watch on GitHub][github-watch-badge]][github-watch]\n[![Star on GitHub][github-star-badge]][github-star]\n[![Tweet][twitter-badge]][twitter]\n\n## The problem\n\nThe [`fix`][fix] feature of [`eslint`][eslint] is pretty great and can auto-format/fix much of your code according to\nyour ESLint config. [`prettier`][prettier] is a more powerful automatic formatter. One of the nice things about prettier\nis how opinionated it is. Unfortunately it's not opinionated enough and/or some opinions differ from my own. So after\nprettier formats the code, I start getting linting errors.\n\n## This solution\n\nThis formats your code via `prettier`, and then passes the result of that to `eslint --fix`. This way you can get the\nbenefits of `prettier`'s superior formatting capabilities, but also benefit from the configuration capabilities of\n`eslint`.\n\n## Installation\n\nThis module is distributed via [npm][npm] which is bundled with [node][node] and should be installed as one of your\nproject's `devDependencies`:\n\n```\nnpm install --save-dev prettier-eslint\n```\n\n## Usage\n\n### Example\n\n```javascript\nconst format = require('prettier-eslint')\n\n// notice, no semicolon in the original text\nconst sourceCode = 'const {foo} = bar'\n\nconst options = {\n  text: sourceCode,\n  eslintConfig: {\n    parserOptions: {\n      ecmaVersion: 7,\n    },\n    rules: {\n      semi: ['error', 'never'],\n    },\n  },\n  prettierOptions: {\n    bracketSpacing: true,\n  },\n  fallbackPrettierOptions: {\n    singleQuote: false,\n  }\n}\n\nconst formatted = format(options)\n\n// notice no semicolon in the formatted text\nformatted // const { foo } = bar\n```\n\n### options\n\n#### text (String)\n\nThe source code to format.\n\n#### filePath (?String)\n\nThe path of the file being formatted can be used to override `eslintConfig` (eslint will be used to find the relevant\nconfig for the file).\n\n#### eslintConfig (?Object)\n\nThe config to use for formatting with ESLint. Can be overridden with `filePath`.\n\n#### prettierOptions (?Object)\n\nThe options to pass for formatting with `prettier`. If not provided, `prettier-eslint` will attempt to create the\noptions based on the `eslintConfig` (whether that's provided or derived via `filePath`). You can also provide _some_ of\nthe options and have the remaining options derived via your eslint config. This is useful for options like `parser`.\n\n**NOTE:** these options _override_ the eslint config. If you want fallback options to be used only in the case that the\nrule cannot be inferred from eslint, see \"fallbackPrettierOptions\" below.\n\n#### fallbackPrettierOptions (?Object)\n\nThe options to pass for formatting with `prettier` if `prettier-eslint` is not able to create the options based on the\nthe `eslintConfig` (whether that's provided or derived via `filePath`). These options will only be used in the case that\nthe corresponding eslint rule cannot be found and the prettier option has not been manually defined in `prettierOptions`.\nIf the fallback is not given, `prettier-eslint` will just use the default `prettier` value in this scenario.\n\n#### logLevel (?Enum: ['trace', 'debug', 'info', 'warn', 'error', 'silent'])\n\n`prettier-eslint` does quite a bit of logging if you want it to. Pass this to set the amount of logs you want to see.\nDefault is `process.env.LOG_LEVEL || 'warn'`.\n\n#### eslintPath (?String)\n\nBy default, `prettier-eslint` will try to find the relevant `eslint` (and `prettier`) module based on the `filePath`. If\nit cannot find one, then it will use the version that `prettier-eslint` has installed locally. If you'd like to specify\na path to the `eslint` module you would like to have `prettier-eslint` use, then you can provide the full path to it\nwith the `eslintPath` option.\n\n#### prettierPath (?String)\n\nThis is basically the same as `eslintPath` except for the `prettier` module.\n\n#### prettierLast (?Boolean)\n\nBy default, `prettier-eslint` will run `prettier` first, then `eslint --fix`. This is great if you want to use `prettier`,\nbut override some of the styles you don't like using `eslint --fix`.\n\nAn alternative approach is to use different tools for different concerns. If you provide `pretterLast: true`, it will\nrun `eslint --fix` first, then `prettier`. This allows you to use `eslint` to look for bugs and/or bad practices, and use\n`prettier` to enforce code style.\n\n### throws\n\n`prettier-eslint` will propagate errors when either `prettier` or `eslint` fails for one reason or another. In addition\nto propagating the errors, it will also log a specific message indicating what it was doing at the time of the failure.\n\n## Technical details\n\n> Code ➡️ prettier ➡️ eslint --fix ➡️ Formatted Code ✨\n\n### inferring prettierOptions via eslintConfig\n\nThe `eslintConfig` and `prettierOptions` can each be provided as an argument. If\nthe `eslintConfig` is not provided, then `prettier-eslint` will look for them\nbased on the `fileName` (if no `fileName` is provided then it uses\n`process.cwd()`). Once `prettier-eslint` has found the `eslintConfig`, the\n`prettierOptions` are inferred from the `eslintConfig`. If some of the\n`prettierOptions` have already been provided, then `prettier-eslint` will only\ninfer the remaining options. This inference happens in `src/utils.js`.\n\n**An important thing to note** about this inference is that it may not support\nyour specific eslint config. So you'll want to check `src/utils.js` to see how\nthe inference is done for each option (what rule(s) are referenced, etc.) and\n[make a pull request][prs] if your configuration is supported.\n\n**Defaults** if you have all of the relevant ESLint rules disabled (or have\nESLint disabled entirely via `/* eslint-disable */` then prettier options will\nfall back to the `prettier` defaults:\n\n```javascript\n{\n  printWidth: 80,\n  tabWidth: 2,\n  singleQuote: false,\n  trailingComma: 'none',\n  bracketSpacing: true,\n  semi: true,\n  useTabs: false,\n  // prettier-eslint doesn't currently support\n  // inferring these two (Pull Requests welcome):\n  parser: 'babylon',\n  jsxBracketSameLine: false,\n}\n```\n\n## Troubleshooting\n\n### debugging issues\n\nThere is a lot of logging available with `prettier-eslint`. When debugging, you can use one of the [`logLevel`](#loglevel-enum-trace-debug-info-warn-error-silent)s to get a better idea of what's going on. If you're using `prettier-eslint-cli` then you can use the `--log-level trace`, if you're using [the Atom plugin][atom-plugin], then you can [open the developer tools][atom-dev-tools] and enter: `process.env.LOG_LEVEL = 'trace'` in the console, then run the format. You'll see a bunch of logs that should help you determine whether the problem is `prettier`, `eslint --fix`, how `prettier-eslint` infers your `prettier` options, or any number of other things. You will be asked to do this before filing issues, so please do :smile:\n\n> NOTE: When you're doing this, it's recommended that you only run this on a single file because there are a LOT of logs :)\n\n### eslint-disable-line\n\nWhile using `// eslint-disable-line`, sometimes you may get linting errors after the code has been processed by this module. That is because `prettier` changes this:\n\n```js\nif (x) { // eslint-disable-line\n}\n```\n\nto this:\n\n```js\nif (x) {\n  // eslint-disable-line\n}\n```\n\nAnd the `eslint --fix` wont change it back. You can notice that `// eslint-disable-line` has moved to a new line. To work around this issue, you can use `//eslint-disable-next-line` instead of `// eslint-disable-line` like this:\n\n```js\n// eslint-disable-next-line\nif (x) {\n}\n```\n\n## Inspiration\n\n- [`prettier`][prettier]\n- [`eslint`][eslint]\n\n## Other Solutions\n\nNone that I'm aware of. Feel free to file a PR if you know of any other solutions.\n\n## Related\n\n- [`prettier-eslint-cli`](https://github.com/prettier/prettier-eslint-cli) - Command Line Interface\n- [`prettier-atom`][atom-plugin] - Atom plugin (enable eslint intigration in settings)\n- [`prettier-eslint-vscode`](https://github.com/RobinMalfait/prettier-eslint-code) - Visual Studio Code plugin\n- [`eslint-plugin-prettier`](https://github.com/not-an-aardvark/eslint-plugin-prettier) - ESLint plugin. While prettier-eslint uses `eslint --fix` to change the output of `prettier`, eslint-plugin-prettier keeps the `prettier` output as-is and integrates it with the regular ESLint workflow.\n- [`prettier-eslint-webpack-plugin`](https://github.com/danielterwiel/prettier-eslint-webpack-plugin) - Prettier ESlint Webpack Plugin\n\n## Contributors\n\nThanks goes to these people ([emoji key][emojis]):\n\n<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->\n| [<img src=\"https://avatars.githubusercontent.com/u/1500684?v=3\" width=\"100px;\"/><br /><sub>Kent C. Dodds</sub>](https://kentcdodds.com)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=kentcdodds) [📖](https://github.com/prettier/prettier-eslint/commits?author=kentcdodds) 🚇 [⚠️](https://github.com/prettier/prettier-eslint/commits?author=kentcdodds) | [<img src=\"https://avatars.githubusercontent.com/u/5554486?v=3\" width=\"100px;\"/><br /><sub>Gyandeep Singh</sub>](http://gyandeeps.com)<br />👀 | [<img src=\"https://avatars.githubusercontent.com/u/682584?v=3\" width=\"100px;\"/><br /><sub>Igor Pnev</sub>](https://github.com/exdeniz)<br />[🐛](https://github.com/prettier/prettier-eslint/issues?q=author%3Aexdeniz) | [<img src=\"https://avatars.githubusercontent.com/u/813865?v=3\" width=\"100px;\"/><br /><sub>Benjamin Tan</sub>](https://demoneaux.github.io/)<br />💬 👀 | [<img src=\"https://avatars.githubusercontent.com/u/622118?v=3\" width=\"100px;\"/><br /><sub>Eric McCormick</sub>](https://ericmccormick.io)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=edm00se) [📖](https://github.com/prettier/prettier-eslint/commits?author=edm00se) [⚠️](https://github.com/prettier/prettier-eslint/commits?author=edm00se) | [<img src=\"https://avatars.githubusercontent.com/u/2142817?v=3\" width=\"100px;\"/><br /><sub>Simon Lydell</sub>](https://github.com/lydell)<br />[📖](https://github.com/prettier/prettier-eslint/commits?author=lydell) | [<img src=\"https://avatars0.githubusercontent.com/u/981957?v=3\" width=\"100px;\"/><br /><sub>Tom McKearney</sub>](https://github.com/tommck)<br />[📖](https://github.com/prettier/prettier-eslint/commits?author=tommck) 💡 |\n| :---: | :---: | :---: | :---: | :---: | :---: | :---: |\n| [<img src=\"https://avatars.githubusercontent.com/u/463105?v=3\" width=\"100px;\"/><br /><sub>Patrik Åkerstrand</sub>](https://github.com/PAkerstrand)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=PAkerstrand) | [<img src=\"https://avatars.githubusercontent.com/u/1560301?v=3\" width=\"100px;\"/><br /><sub>Lochlan Bunn</sub>](https://twitter.com/loklaan)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=loklaan) | [<img src=\"https://avatars.githubusercontent.com/u/25886902?v=3\" width=\"100px;\"/><br /><sub>Daniël Terwiel</sub>](https://github.com/danielterwiel)<br />🔌 🔧 | [<img src=\"https://avatars1.githubusercontent.com/u/1834413?v=3\" width=\"100px;\"/><br /><sub>Robin Malfait</sub>](https://robinmalfait.com)<br />🔧 | [<img src=\"https://avatars0.githubusercontent.com/u/8161781?v=3\" width=\"100px;\"/><br /><sub>Michael McDermott</sub>](http://mgmcdermott.com)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=mgmcdermott) | [<img src=\"https://avatars3.githubusercontent.com/u/292365?v=3\" width=\"100px;\"/><br /><sub>Adam Stankiewicz</sub>](http://sheerun.net)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=sheerun) | [<img src=\"https://avatars3.githubusercontent.com/u/487068?v=3\" width=\"100px;\"/><br /><sub>Stephen John Sorensen</sub>](http://www.stephenjohnsorensen.com/)<br />[💻](https://github.com/prettier/prettier-eslint/commits?author=spudly) |\n| [<img src=\"https://avatars2.githubusercontent.com/u/1597820?v=3\" width=\"100px;\"/><br /><sub>Brian Di Palma</sub>](https://github.com/briandipalma)<br />[🐛](https://github.com/prettier/prettier-eslint/issues?q=author%3Abriandipalma) [💻](https://github.com/prettier/prettier-eslint/commits?author=briandipalma) | [<img src=\"https://avatars0.githubusercontent.com/u/6173488?v=3\" width=\"100px;\"/><br /><sub>Rob Wise</sub>](https://robwise.github.io)<br />[📖](https://github.com/prettier/prettier-eslint/commits?author=robwise) [💻](https://github.com/prettier/prettier-eslint/commits?author=robwise) | [<img src=\"https://avatars0.githubusercontent.com/u/4818642?v=3\" width=\"100px;\"/><br /><sub>Patryk Peas</sub>](https://github.com/Belir)<br />[🐛](https://github.com/prettier/prettier-eslint/issues?q=author%3ABelir) [💻](https://github.com/prettier/prettier-eslint/commits?author=Belir) [⚠️](https://github.com/prettier/prettier-eslint/commits?author=Belir) | [<img src=\"https://avatars2.githubusercontent.com/u/1193520?v=3\" width=\"100px;\"/><br /><sub>Thijs Koerselman</sub>](http://vauxlab.com)<br />[🐛](https://github.com/prettier/prettier-eslint/issues?q=author%3A0x80) [💻](https://github.com/prettier/prettier-eslint/commits?author=0x80) [⚠️](https://github.com/prettier/prettier-eslint/commits?author=0x80) | [<img src=\"https://avatars3.githubusercontent.com/u/7918284?v=3\" width=\"100px;\"/><br /><sub>Enrique Caballero</sub>](https://github.com/enriquecaballero)<br />[🐛](https://github.com/prettier/prettier-eslint/issues?q=author%3Aenriquecaballero) [💻](https://github.com/prettier/prettier-eslint/commits?author=enriquecaballero) | [<img src=\"https://avatars2.githubusercontent.com/u/1408542?v=3\" width=\"100px;\"/><br /><sub>Łukasz Moroz</sub>](https://github.com/lukaszmoroz)<br />[🐛](https://github.com/prettier/prettier-eslint/issues?q=author%3Alukaszmoroz) [⚠️](https://github.com/prettier/prettier-eslint/commits?author=lukaszmoroz) |\n<!-- ALL-CONTRIBUTORS-LIST:END -->\n\nThis project follows the [all-contributors][all-contributors] specification. Contributions of any kind welcome!\n\n## LICENSE\n\nMIT\n\n[prettier]: https://github.com/jlongster/prettier\n[eslint]: http://eslint.org/\n[fix]: http://eslint.org/docs/user-guide/command-line-interface#fix\n[npm]: https://www.npmjs.com/\n[node]: https://nodejs.org\n[build-badge]: https://img.shields.io/travis/prettier/prettier-eslint.svg?style=flat-square\n[build]: https://travis-ci.org/prettier/prettier-eslint\n[coverage-badge]: https://img.shields.io/codecov/c/github/prettier/prettier-eslint.svg?style=flat-square\n[coverage]: https://codecov.io/github/prettier/prettier-eslint\n[dependencyci-badge]: https://dependencyci.com/github/prettier/prettier-eslint/badge?style=flat-square\n[dependencyci]: https://dependencyci.com/github/prettier/prettier-eslint\n[version-badge]: https://img.shields.io/npm/v/prettier-eslint.svg?style=flat-square\n[package]: https://www.npmjs.com/package/prettier-eslint\n[downloads-badge]: https://img.shields.io/npm/dm/prettier-eslint.svg?style=flat-square\n[npm-stat]: http://npm-stat.com/charts.html?package=prettier-eslint&from=2016-04-01\n[license-badge]: https://img.shields.io/npm/l/prettier-eslint.svg?style=flat-square\n[license]: https://github.com/prettier/prettier-eslint/blob/master/other/LICENSE\n[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square\n[prs]: http://makeapullrequest.com\n[donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square\n[donate]: http://kcd.im/donate\n[coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square\n[coc]: https://github.com/prettier/prettier-eslint/blob/master/other/CODE_OF_CONDUCT.md\n[roadmap-badge]: https://img.shields.io/badge/%F0%9F%93%94-roadmap-CD9523.svg?style=flat-square\n[roadmap]: https://github.com/prettier/prettier-eslint/blob/master/other/ROADMAP.md\n[examples-badge]: https://img.shields.io/badge/%F0%9F%92%A1-examples-8C8E93.svg?style=flat-square\n[examples]: https://github.com/prettier/prettier-eslint/blob/master/other/EXAMPLES.md\n[github-watch-badge]: https://img.shields.io/github/watchers/prettier/prettier-eslint.svg?style=social\n[github-watch]: https://github.com/prettier/prettier-eslint/watchers\n[github-star-badge]: https://img.shields.io/github/stars/prettier/prettier-eslint.svg?style=social\n[github-star]: https://github.com/prettier/prettier-eslint/stargazers\n[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20prettier-eslint!%20https://github.com/prettier/prettier-eslint%20%F0%9F%91%8D\n[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/prettier/prettier-eslint.svg?style=social\n[emojis]: https://github.com/kentcdodds/all-contributors#emoji-key\n[all-contributors]: https://github.com/kentcdodds/all-contributors\n[atom-plugin]: https://github.com/prettier/prettier-atom\n[atom-dev-tools]: https://discuss.atom.io/t/how-to-make-developer-tools-appear/16232\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prettier/prettier-eslint.git"
+  },
+  "scripts": {
+    "commitmsg": "opt --in commit-msg --exec \"validate-commit-msg\"",
+    "precommit": "opt --in pre-commit --exec \"npm start validate\"",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "start": "nps",
+    "test": "nps test"
+  },
+  "version": "6.3.0"
+}

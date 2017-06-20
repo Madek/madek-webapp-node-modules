@@ -1,0 +1,105 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "dlv@^1.1.0",
+        "scope": null,
+        "escapedName": "dlv",
+        "name": "dlv",
+        "rawSpec": "^1.1.0",
+        "spec": ">=1.1.0 <2.0.0",
+        "type": "range"
+      },
+      "/Users/ma/CODE/Madek/webapp/node_modules/prettier-eslint"
+    ]
+  ],
+  "_from": "dlv@>=1.1.0 <2.0.0",
+  "_id": "dlv@1.1.0",
+  "_inCache": true,
+  "_location": "/dlv",
+  "_nodeVersion": "6.9.4",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/dlv-1.1.0.tgz_1485891985481_0.9088218901306391"
+  },
+  "_npmUser": {
+    "name": "developit",
+    "email": "jason@developit.ca"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "dlv@^1.1.0",
+    "scope": null,
+    "escapedName": "dlv",
+    "name": "dlv",
+    "rawSpec": "^1.1.0",
+    "spec": ">=1.1.0 <2.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/prettier-eslint"
+  ],
+  "_resolved": "https://registry.npmjs.org/dlv/-/dlv-1.1.0.tgz",
+  "_shasum": "fee1a7c43f63be75f3f679e85262da5f102764a7",
+  "_shrinkwrap": null,
+  "_spec": "dlv@^1.1.0",
+  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/prettier-eslint",
+  "author": {
+    "name": "Jason Miller",
+    "email": "jason@developit.ca",
+    "url": "http://jasonformat.com"
+  },
+  "browser": "dist/dlv.umd.js",
+  "bugs": {
+    "url": "https://github.com/developit/dlv/issues"
+  },
+  "dependencies": {},
+  "description": "Safely get a dot-notated property within an object.",
+  "devDependencies": {
+    "rollup": "^0.34.3",
+    "uglifyjs": "^2.4.10"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "fee1a7c43f63be75f3f679e85262da5f102764a7",
+    "tarball": "https://registry.npmjs.org/dlv/-/dlv-1.1.0.tgz"
+  },
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "gitHead": "465f3b5c57c72a924c235ead52635262fb009fc2",
+  "homepage": "https://github.com/developit/dlv#readme",
+  "jsnext:main": "index.js",
+  "keywords": [
+    "delve",
+    "dot notation",
+    "dot"
+  ],
+  "license": "MIT",
+  "main": "dist/dlv.js",
+  "maintainers": [
+    {
+      "name": "developit",
+      "email": "jason@developit.ca"
+    }
+  ],
+  "name": "dlv",
+  "optionalDependencies": {},
+  "readme": "# `dlv(obj, keypath)` [![NPM](https://img.shields.io/npm/v/dlv.svg)](https://npmjs.com/package/dlv) [![Build](https://travis-ci.org/developit/dlv.svg?branch=master)](https://travis-ci.org/developit/dlv)\n\n> Safely get a dot-notated path within a nested object, with ability to return a default if the full key path does not exist or the value is undefined\n\n### Why?\n\nSmallest possible implementation: only **165 bytes.**\n\nYou could write this yourself, but then you'd have to write [tests].\n\nSupports ES Modules, CommonJS and globals.\n\n### Installation\n\n`npm install --save dlv`\n\n\n### Usage\n\n`delve(object, keypath, [default])`\n\n```js\nimport delve from 'dlv';\n\nlet obj = {\n\ta: {\n\t\tb: {\n\t\t\tc: 1\n\t\t\td: undefined\n\t\t\te: null\n\t\t}\n\t}\n};\n\n//use string dot notation for keys\ndelve(obj, 'a.b.c') === 1;\n\n//or use an array key\ndelve(obj, ['a', 'b', 'c']) === 1;\n\ndelve(obj, 'a.b') === obj.a.b;\n\n//returns undefined if the full key path does not exist and no default is specified\ndelve(obj, 'a.b.c.f') === undefined;\n\n//optional third parameter for default if the full key in path is missing\ndelve(obj, 'a.b.c.f', 'foo') === 'foo';\n\n//or if the key exists but the value is undefined\ndelve(obj, 'a.b.c.d', 'foo') === 'foo';\n\n//Non-truthy defined values are still returned if they exist at the full keypath\ndelve(obj, 'a.b.c.e', 'foo') === null;\n\n//undefined obj or key returns undefined, unless a default is supplied\ndelve(undefined, 'a.b.c') === undefined;\ndelve(undefined, 'a.b.c', 'foo') === 'foo';\ndelve(obj, undefined, 'foo') === 'foo';\n```\n\n### License\n\nMIT\n\n\n[preact]: https://github.com/developit/preact\n[tests]: https://github.com/developit/dlv/blob/master/test.js\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/developit/dlv.git"
+  },
+  "scripts": {
+    "build": "mkdir -p dist && npm run -s build:cjs && npm run -s build:umd",
+    "build:cjs": "rollup -i $npm_package_jsnext_main -f cjs --no-strict | uglifyjs -cm -o $npm_package_main",
+    "build:umd": "rollup -i $npm_package_jsnext_main -n $npm_package_name -f umd --no-strict | uglifyjs -cm -o $npm_package_browser",
+    "prepublish": "npm run build",
+    "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "node test"
+  },
+  "version": "1.1.0"
+}

@@ -1,0 +1,154 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "prettier-standard",
+        "scope": null,
+        "escapedName": "prettier-standard",
+        "name": "prettier-standard",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_from": "prettier-standard@latest",
+  "_id": "prettier-standard@5.1.0",
+  "_inCache": true,
+  "_location": "/prettier-standard",
+  "_nodeVersion": "6.9.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/prettier-standard-5.1.0.tgz_1497272829772_0.8172374195419252"
+  },
+  "_npmUser": {
+    "name": "sheerun",
+    "email": "sheerun@sher.pl"
+  },
+  "_npmVersion": "4.6.1",
+  "_phantomChildren": {
+    "concat-map": "0.0.1",
+    "escape-string-regexp": "1.0.3",
+    "fs.realpath": "1.0.0",
+    "has-ansi": "2.0.0",
+    "inflight": "1.0.4",
+    "inherits": "2.0.1",
+    "locate-path": "2.0.0",
+    "once": "1.4.0",
+    "path-is-absolute": "1.0.0",
+    "strip-ansi": "3.0.0",
+    "supports-color": "2.0.0"
+  },
+  "_requested": {
+    "raw": "prettier-standard",
+    "scope": null,
+    "escapedName": "prettier-standard",
+    "name": "prettier-standard",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/prettier-standard/-/prettier-standard-5.1.0.tgz",
+  "_shasum": "2d851df1b4c180c52933330a42a9d2c4e6946608",
+  "_shrinkwrap": null,
+  "_spec": "prettier-standard",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Adam Stankiewicz",
+    "email": "sheerun@sher.pl"
+  },
+  "bin": {
+    "prettier-standard": "lib/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/sheerun/prettier-standard/issues"
+  },
+  "dependencies": {
+    "babel-eslint": ">=7.2.3",
+    "babel-runtime": "^6.23.0",
+    "chalk": "^1.1.3",
+    "eslint": "^3.19.0",
+    "find-up": "^2.1.0",
+    "get-stdin": "^5.0.1",
+    "glob": "^7.1.2",
+    "ignore": "^3.3.3",
+    "indent-string": "^3.1.0",
+    "lodash.memoize": "^4.1.2",
+    "loglevel-colored-level-prefix": "^1.0.0",
+    "meow": "3.7.0",
+    "messageformat": "^1.0.2",
+    "prettier": "^1.4.4",
+    "prettier-eslint": "^6.3.0",
+    "rxjs": "^5.4.0"
+  },
+  "description": "Prettier and standard brought together!",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-jest": "^20.0.3",
+    "babel-plugin-syntax-dynamic-import": "6.18.0",
+    "babel-preset-node-module": "^1.3.0",
+    "babel-register": "^6.24.1",
+    "cross-run": "^1.0.1",
+    "husky": "^0.13.4",
+    "jest": "^20.0.4",
+    "lint-staged": "^3.6.1",
+    "rimraf": "^2.6.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "2d851df1b4c180c52933330a42a9d2c4e6946608",
+    "tarball": "https://registry.npmjs.org/prettier-standard/-/prettier-standard-5.1.0.tgz"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "gitHead": "279eb44f0125bd49a1540fc4b97339e13fa05a62",
+  "homepage": "https://github.com/sheerun/prettier-standard#readme",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [
+    "prettier",
+    "eslint",
+    "standard"
+  ],
+  "license": "MIT",
+  "lint-staged": {
+    "*.js": [
+      "babel-node ./src/index.js",
+      "git add",
+      "jest --bail --findRelatedTests"
+    ]
+  },
+  "main": "lib/no-main.js",
+  "maintainers": [
+    {
+      "name": "sheerun",
+      "email": "sheerun@sher.pl"
+    }
+  ],
+  "name": "prettier-standard",
+  "optionalDependencies": {},
+  "readme": "# (✿◠‿◠) prettier-standard [![Build Status][build-badge]][build] [![version][version-badge]][package] [![Modern Node](https://img.shields.io/badge/modern-node-9BB48F.svg)](https://github.com/sheerun/modern-node)\n\n[prettier](https://github.com/prettier/prettier) and [standard](https://github.com/feross/standard) brought together\n\n## Installation\n\n```\nyarn add --dev prettier-standard\n```\n\n> If you're using the [`npm`][npm]: `npm install --save-dev prettier-standard`.\n\n> You can also install globally with `npm install -g prettier-standard`\n\n## Usage\n\n```\nPrettier and standard brought together!\n\nUsage\n  $ prettier-standard [<glob>...]\n\nOptions\n  --log-level  Log level to use (default: warn)\n\nExamples\n  $ prettier-standard 'src/**/*.js'\n  $ echo \"const {foo} = \"bar\";\" | prettier-standard\n```\n\nTypically you'll use this in your [npm scripts][npm scripts] (or [package scripts][package scripts]):\n\n```json\n{\n  \"scripts\": {\n    \"format\": \"prettier-standard 'src/**/*.js'\"\n  }\n}\n```\n\nWe also encourage to use [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged). You can configure it as follows:\n\n```\n{\n  \"lint-staged\": {\n    \"linters\": {\n      \"src/**/*.js\": [\n        \"prettier-standard\",\n        \"git add\"\n      ]\n    }\n  }\n}\n```\n\nNOTE: Unlike [prettier](https://github.com/prettier/prettier) this package simplifies your workflow by making `--write` flag a default, and allowing for passing code to stdin without additional `--stdin` flag. Now **that's** prettier!\n\n### Vim\n\nVim users can add the following to their .vimrc:\n\n```\nautocmd FileType javascript set formatprg=prettier-standard\n```\n\nThis makes prettier-standard power the gq command for automatic formatting without any plugins. You can also add the following to your .vimrc to run prettier-standard when .js files are saved:\n\n```\nautocmd BufWritePre *.js :normal gggqG\n```\n\n## Customizing\n\nBecause this package is built on top of [prettier-eslint](https://github.com/prettier/prettier-eslint), you can fully configure its behavior with custom `.eslintrc` file. For example you might want to opt-out of single quotes with following. Any eslint rules are supported.\n\n\n```json\n{\n  \"rules\": {\n    \"quotes\": [\"error\", \"double\"],\n    \"jsx-quotes\": [\"error\", \"prefer-double\"]\n  }\n}\n```\n\nAdditionaly you can use different version of eslint and prettier, just include them as a devDependency of your project. prettier-standard will properly recognize this, and use your versions of prettier and eslint instead.\n\n\n## Related\n\n- [prettier](https://github.com/prettier/prettier) - the core package\n- [prettier-eslint](https://github.com/prettier/prettier-eslint) - used for integrating with eslint\n- [prettier-eslint-cli](https://github.com/prettier/prettier-eslint-cli) - this package is based on it\n\n## Contributors\n\nThis package follows [all-contributors](https://github.com/kentcdodds/all-contributors) specification.\n\n<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->\n| [<img src=\"https://avatars3.githubusercontent.com/u/292365?v=3\" width=\"100px;\"/><br /><sub>Adam Stankiewicz</sub>](http://sheerun.net)<br />[💻](https://github.com/prettier/prettier-standard/commits?author=sheerun) 🚇 | [<img src=\"https://avatars.githubusercontent.com/u/1500684?v=3\" width=\"100px;\"/><br /><sub>Kent C. Dodds</sub>](https://kentcdodds.com)<br />[💻](https://github.com/prettier/prettier-standard/commits?author=kentcdodds) | [<img src=\"https://avatars3.githubusercontent.com/u/3266363?v=3\" width=\"100px;\"/><br /><sub>Adam Harris</sub>](https://github.com/aharris88)<br />[💻](https://github.com/prettier/prettier-standard/commits?author=aharris88) | [<img src=\"https://avatars3.githubusercontent.com/u/17006335?v=3\" width=\"100px;\"/><br /><sub>Benoit Averty</sub>](https://github.com/BenoitAverty)<br />[🐛](https://github.com/prettier/prettier-standard/issues?q=author%3ABenoitAverty) |\n| :---: | :---: | :---: | :---: |\n<!-- ALL-CONTRIBUTORS-LIST:END -->\n\n## LICENSE\n\nMIT\n\n[yarn]: https://yarnpkg.com/\n[npm]: https://www.npmjs.com/\n[node]: https://nodejs.org\n[build-badge]: https://img.shields.io/travis/sheerun/prettier-standard.svg?style=flat-square\n[build]: https://travis-ci.org/sheerun/prettier-standard\n[coverage-badge]: https://img.shields.io/codecov/c/github/sheerun/prettier-standard.svg?style=flat-square\n[coverage]: https://codecov.io/github/sheerun/prettier-standard\n[dependencyci-badge]: https://dependencyci.com/github/sheerun/prettier-standard/badge?style=flat-square\n[dependencyci]: https://dependencyci.com/github/sheerun/prettier-standard\n[version-badge]: https://img.shields.io/npm/v/prettier-standard.svg?style=flat-square\n[package]: https://www.npmjs.com/package/prettier-standard\n[emojis]: https://github.com/kentcdodds/all-contributors#emoji-key\n[all-contributors]: https://github.com/kentcdodds/all-contributors\n[npm scripts]: https://docs.npmjs.com/misc/scripts\n[package scripts]: https://github.com/kentcdodds/p-s\n[glob]: https://github.com/isaacs/node-glob\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sheerun/prettier-standard.git"
+  },
+  "scripts": {
+    "build": "run NODE_ENV=production babel src --out-dir lib",
+    "cli": "babel-node src/cli.js",
+    "format": "babel-node ./src/index.js 'src/**/*.js'",
+    "postpublish": "rimraf lib",
+    "precommit": "lint-staged",
+    "prepublishOnly": "npm run build",
+    "test": "run NODE_ENV=test jest && cat test/input.js | run NODE_ENV=test babel-node ./src/index.js > ./test/output.js && export DIFF=\"$(diff ./test/expected.js ./test/output.js)\" && [ -z \"$DIFF\" ] || (echo \"$DIFF\" && exit 1)"
+  },
+  "version": "5.1.0"
+}
