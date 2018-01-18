@@ -1,48 +1,25 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "i18n-iso-countries@^1.11.0",
-        "scope": null,
-        "escapedName": "i18n-iso-countries",
-        "name": "i18n-iso-countries",
-        "rawSpec": "^1.11.0",
-        "spec": ">=1.11.0 <2.0.0",
-        "type": "range"
-      },
-      "/Users/ma/CODE/Madek/webapp"
-    ]
-  ],
-  "_from": "i18n-iso-countries@>=1.11.0 <2.0.0",
-  "_id": "i18n-iso-countries@1.11.0",
-  "_inCache": true,
+  "_from": "i18n-iso-countries@^1.11.0",
+  "_id": "i18n-iso-countries@1.16.1",
+  "_inBundle": false,
+  "_integrity": "sha512-cuuXtASFhH7u6lcQF9DLFSeZ/atqNrsJSTjkg+E5Pht+PX5BpWbFTuxe1gm30iO/CZtxpjJakA7+G/nADg5XBw==",
   "_location": "/i18n-iso-countries",
-  "_nodeVersion": "7.7.3",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/i18n-iso-countries-1.11.0.tgz_1490079831607_0.806332492036745"
-  },
-  "_npmUser": {
-    "name": "hellomichibye",
-    "email": "post@michaelwittig.info"
-  },
-  "_npmVersion": "4.1.2",
   "_phantomChildren": {},
   "_requested": {
+    "type": "range",
+    "registry": true,
     "raw": "i18n-iso-countries@^1.11.0",
-    "scope": null,
-    "escapedName": "i18n-iso-countries",
     "name": "i18n-iso-countries",
+    "escapedName": "i18n-iso-countries",
     "rawSpec": "^1.11.0",
-    "spec": ">=1.11.0 <2.0.0",
-    "type": "range"
+    "saveSpec": null,
+    "fetchSpec": "^1.11.0"
   },
   "_requiredBy": [
     "#DEV:/"
   ],
-  "_resolved": "https://registry.npmjs.org/i18n-iso-countries/-/i18n-iso-countries-1.11.0.tgz",
-  "_shasum": "3656864c023e582f37a86d5c7d13ac19f2c6ae8b",
-  "_shrinkwrap": null,
+  "_resolved": "https://registry.npmjs.org/i18n-iso-countries/-/i18n-iso-countries-1.16.1.tgz",
+  "_shasum": "acc1aecdd7e13f8c41c0da245eef9dba7105dfa6",
   "_spec": "i18n-iso-countries@^1.11.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
@@ -52,6 +29,7 @@
   "bugs": {
     "url": "https://github.com/michaelwittig/node-i18n-iso-countries/issues"
   },
+  "bundleDependencies": false,
   "contributors": [
     {
       "name": "Michael Wittig",
@@ -65,6 +43,7 @@
   "dependencies": {
     "pad": "1.0.0"
   },
+  "deprecated": false,
   "description": "i18n for ISO 3166-1 country codes",
   "devDependencies": {
     "assert-plus": "0.2.0",
@@ -74,15 +53,9 @@
     "mocha": "2.3.4",
     "npmedge": "0.2.2"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "3656864c023e582f37a86d5c7d13ac19f2c6ae8b",
-    "tarball": "https://registry.npmjs.org/i18n-iso-countries/-/i18n-iso-countries-1.11.0.tgz"
-  },
   "engines": {
     "node": ">= 0.10.0"
   },
-  "gitHead": "4b386e5e40abffe9f4bc4231d98da363831b366f",
   "homepage": "https://github.com/michaelwittig/node-i18n-iso-countries#readme",
   "keywords": [
     "i18n",
@@ -98,14 +71,19 @@
     "countries",
     "ar",
     "cs",
+    "da",
     "de",
     "en",
     "es",
     "et",
     "fi",
     "fr",
+    "gr",
+    "he",
     "hu",
     "it",
+    "ja",
+    "ko",
     "nb",
     "nl",
     "nn",
@@ -120,16 +98,7 @@
   ],
   "license": "MIT",
   "main": "index",
-  "maintainers": [
-    {
-      "name": "hellomichibye",
-      "email": "post@michaelwittig.info"
-    }
-  ],
   "name": "i18n-iso-countries",
-  "optionalDependencies": {},
-  "readme": "[![Build Status](https://secure.travis-ci.org/michaelwittig/node-i18n-iso-countries.png)](http://travis-ci.org/michaelwittig/node-i18n-iso-countries)\n[![NPM version](https://badge.fury.io/js/i18n-iso-countries.png)](http://badge.fury.io/js/i18n-iso-countries)\n\n# i18n-iso-countries\n\ni18n for ISO 3166-1 country codes. We support Alpha-2, Alpha-3 and Numeric codes from http://en.wikipedia.org/wiki/ISO_3166-1#Officially_assigned_code_elements\n\n## Code to Country\n\n### Get the name of a country by it's ISO 3166-1 Alpha-2, Alpha-3 or Numeric code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(\"US (Alpha-2) => \" + countries.getName(\"US\", \"en\")); // United States of America\nconsole.log(\"US (Alpha-2) => \" + countries.getName(\"US\", \"de\")); // Vereinigte Staaten von Amerika\nconsole.log(\"USA (Alpha-3) => \" + countries.getName(\"USA\", \"en\")); // United States of America\nconsole.log(\"USA (Numeric) => \" + countries.getName(\"840\", \"en\")); // United States of America\n`````\n\n### Get all names by their ISO 3166-1 Alpha-2 code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(countries.getNames(\"en\")); // { 'AF': 'Afghanistan', 'AL': 'Albania', [...], 'ZM': 'Zambia', 'ZW': 'Zimbabwe' }\n`````\n\n### Supported languages\n\n* `ar`: arabic\n* `cs`: czech\n* `de`: german\n* `en`: english\n* `es`: spanish\n* `et`: estonian\n* `fi`: finnish\n* `fr`: french\n* `hu`: hungarian\n* `it`: italian\n* `nb`: Norwegian Bokmål\n* `nl`: dutch\n* `nn`: Norwegian Nynorsk\n* `pl`: polish\n* `pt`: portuguese\n* `ru`: russian\n* `sv`: swedish\n* `tr`: turkish\n* `uk`: ukrainian\n* `zh`: Chinese\n\n### Country to Code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(\"United States of America => \" + countries.getAlpha2Code('United States of America', 'en'));\n// United States of America => US\n\nconsole.log(\"United States of America => \" + countries.getAlpha3Code('United States of America', 'en'));\n// United States of America => USA\n`````\n\n## Codes\n\n### Convert Alpha-3 to Alpha-2 code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(\"USA (Alpha-3) => \" + countries.alpha3ToAlpha2(\"USA\") + \" (Alpha-2)\");\n// USA (Alpha-3) => US (Alpha-2)\n`````\n\n### Convert Numeric to Alpha-2 code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(\"840 (Numeric) => \" + countries.numericToAlpha2(\"840\") + \" (Alpha-2)\");\n// 840 (Numeric) => US (Alpha-2)\n`````\n\n### Convert Alpha-2 to Alpha-3 coe\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(\"DE (Alpha-2) => \" + countries.alpha2ToAlpha3(\"DE\") + \" (Alpha-3)\");\n// DE (Alpha-2) => DEU (Alpha-3)\n`````\n\n### Convert Numeric to Alpha-3 code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(\"840 (Numeric) => \" + countries.numericToAlpha3(\"840\") + \" (Alpha-3)\");\n// 840 (Numeric) => USA (Alpha-3)\n`````\n\n### Convert Alpha-3 to Numeric code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(countries.alpha3ToNumeric(\"SWE\"));\n// 752\n`````\n\n### Convert Alpha-2 to Numeric code\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(countries.alpha2ToNumeric(\"SE\"));\n// 752\n`````\n\n### Get all Alpha-2 codes\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(countries.getAlpha2Codes());\n// { 'AF': 'AFG', 'AX': 'ALA', [...], 'ZM': 'ZMB', 'ZW': 'ZWE' }\n`````\n\n### Get all Alpha-3 codes\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(countries.getAlpha3Codes());\n// { 'AFG': 'AF', 'ALA': 'AX', [...], 'ZMB': 'ZM', 'ZWE': 'ZW' }\n`````\n\n### Get all Numeric codes\n\n`````javascript\nvar countries = require(\"i18n-iso-countries\");\nconsole.log(countries.getNumericCodes());\n// { '004': 'AF', '008': 'AL', [...], '887': 'YE', '894': 'ZM' }\n`````\n\n## Contribution\n\nTo add a language:\n\n* add a json file under langs/\n* add the language to the `data` object in index.js at the top\n* add language to section **Supported languages** in README.md\n* add language to keywords in package.json\n* run `npm install && make test` to make sure that tests are passing\n* open a PR on GitHub\n",
-  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/michaelwittig/node-i18n-iso-countries.git"
@@ -138,5 +107,5 @@
     "test": "make test"
   },
   "typings": "index.d.js",
-  "version": "1.11.0"
+  "version": "1.16.1"
 }

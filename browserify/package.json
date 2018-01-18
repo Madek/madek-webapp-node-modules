@@ -1,60 +1,35 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "browserify@latest",
-        "scope": null,
-        "escapedName": "browserify",
-        "name": "browserify",
-        "rawSpec": "latest",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "/Users/ma/CODE/Madek/webapp"
-    ]
-  ],
-  "_from": "browserify@latest",
-  "_id": "browserify@14.0.0",
-  "_inCache": true,
+  "_from": "browserify@^14.0.0",
+  "_id": "browserify@14.5.0",
+  "_inBundle": false,
+  "_integrity": "sha512-gKfOsNQv/toWz+60nSPfYzuwSEdzvV2WdxrVPUbPD/qui44rAkB3t3muNtmmGYHqrG56FGwX9SUEQmzNLAeS7g==",
   "_location": "/browserify",
-  "_nodeVersion": "0.10.46",
-  "_npmOperationalInternal": {
-    "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/browserify-14.0.0.tgz_1485318715400_0.7139890603721142"
-  },
-  "_npmUser": {
-    "name": "feross",
-    "email": "feross@feross.org"
-  },
-  "_npmVersion": "2.15.1",
   "_phantomChildren": {
-    "buffer-shims": "1.0.0",
     "core-util-is": "1.0.2",
     "inherits": "2.0.1",
     "process-nextick-args": "1.0.7",
-    "string_decoder": "0.10.31",
+    "safe-buffer": "5.1.1",
     "typedarray": "0.0.6",
     "util": "0.10.3",
     "util-deprecate": "1.0.2",
     "xtend": "4.0.1"
   },
   "_requested": {
-    "raw": "browserify@latest",
-    "scope": null,
-    "escapedName": "browserify",
+    "type": "range",
+    "registry": true,
+    "raw": "browserify@^14.0.0",
     "name": "browserify",
-    "rawSpec": "latest",
-    "spec": "latest",
-    "type": "tag"
+    "escapedName": "browserify",
+    "rawSpec": "^14.0.0",
+    "saveSpec": null,
+    "fetchSpec": "^14.0.0"
   },
   "_requiredBy": [
-    "#DEV:/",
-    "#USER"
+    "#DEV:/"
   ],
-  "_resolved": "https://registry.npmjs.org/browserify/-/browserify-14.0.0.tgz",
-  "_shasum": "67e6cfe7acb2fb1a1908e8a763452306de0bcf38",
-  "_shrinkwrap": null,
-  "_spec": "browserify@latest",
+  "_resolved": "https://registry.npmjs.org/browserify/-/browserify-14.5.0.tgz",
+  "_shasum": "0bbbce521acd6e4d1d54d8e9365008efb85a9cc5",
+  "_spec": "browserify@^14.0.0",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "James Halliday",
@@ -67,12 +42,13 @@
   "bugs": {
     "url": "https://github.com/substack/node-browserify/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "JSONStream": "^1.0.3",
     "assert": "^1.4.0",
     "browser-pack": "^6.0.1",
     "browser-resolve": "^1.11.0",
-    "browserify-zlib": "~0.1.2",
+    "browserify-zlib": "~0.2.0",
     "buffer": "^5.0.2",
     "cached-path-relative": "^1.0.0",
     "concat-stream": "~1.5.1",
@@ -87,12 +63,12 @@
     "glob": "^7.1.0",
     "has": "^1.0.0",
     "htmlescape": "^1.1.0",
-    "https-browserify": "~0.0.0",
+    "https-browserify": "^1.0.0",
     "inherits": "~2.0.1",
     "insert-module-globals": "^7.0.0",
     "labeled-stream-splicer": "^2.0.0",
     "module-deps": "^4.0.8",
-    "os-browserify": "~0.1.1",
+    "os-browserify": "~0.3.0",
     "parents": "^1.0.1",
     "path-browserify": "~0.0.0",
     "process": "~0.11.0",
@@ -105,7 +81,7 @@
     "shell-quote": "^1.6.1",
     "stream-browserify": "^2.0.0",
     "stream-http": "^2.0.0",
-    "string_decoder": "~0.10.0",
+    "string_decoder": "~1.0.0",
     "subarg": "^1.0.0",
     "syntax-error": "^1.1.1",
     "through2": "^2.0.0",
@@ -116,6 +92,7 @@
     "vm-browserify": "~0.0.1",
     "xtend": "^4.0.0"
   },
+  "deprecated": false,
   "description": "browser-side require() the node way",
   "devDependencies": {
     "backbone": "~0.9.2",
@@ -129,12 +106,6 @@
     "temp": "^0.8.1",
     "through": "^2.3.4"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "67e6cfe7acb2fb1a1908e8a763452306de0bcf38",
-    "tarball": "https://registry.npmjs.org/browserify/-/browserify-14.0.0.tgz"
-  },
-  "gitHead": "691239d48f2743e0ba5092e5cd9199a7a009e4a6",
   "homepage": "https://github.com/substack/node-browserify#readme",
   "keywords": [
     "browser",
@@ -147,55 +118,7 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "maintainers": [
-    {
-      "name": "domenic",
-      "email": "d@domenic.me"
-    },
-    {
-      "name": "dominictarr",
-      "email": "dominic.tarr@gmail.com"
-    },
-    {
-      "name": "feross",
-      "email": "feross@feross.org"
-    },
-    {
-      "name": "jmm",
-      "email": "npm-public@jessemccarthy.net"
-    },
-    {
-      "name": "mafintosh",
-      "email": "mathiasbuus@gmail.com"
-    },
-    {
-      "name": "maxogden",
-      "email": "max@maxogden.com"
-    },
-    {
-      "name": "mellowmelon",
-      "email": "palmermebane@gmail.com"
-    },
-    {
-      "name": "substack",
-      "email": "substack@gmail.com"
-    },
-    {
-      "name": "terinjokes",
-      "email": "terinjokes@gmail.com"
-    },
-    {
-      "name": "thlorenz",
-      "email": "thlorenz@gmx.de"
-    },
-    {
-      "name": "zertosh",
-      "email": "zertosh@gmail.com"
-    }
-  ],
   "name": "browserify",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/substack/node-browserify.git"
@@ -203,5 +126,5 @@
   "scripts": {
     "test": "tap test/*.js"
   },
-  "version": "14.0.0"
+  "version": "14.5.0"
 }
