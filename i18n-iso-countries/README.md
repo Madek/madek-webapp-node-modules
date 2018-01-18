@@ -5,6 +5,22 @@
 
 i18n for ISO 3166-1 country codes. We support Alpha-2, Alpha-3 and Numeric codes from http://en.wikipedia.org/wiki/ISO_3166-1#Officially_assigned_code_elements
 
+## Installing
+
+Install it using npm: `npm install i18n-iso-countries`
+
+This library requires that [String#padStart](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart) is available. If your environment does not support this method, you will need to [polyfill](https://www.npmjs.com/package/core-js) it.
+
+If used in a browser environment, you will need to manually install the local you wish to support.
+
+```javascript
+var countries = require("i18n-iso-countries");
+
+// Support french & english languages.
+countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
+```
+
 ## Code to Country
 
 ### Get the name of a country by it's ISO 3166-1 Alpha-2, Alpha-3 or Numeric code
@@ -24,28 +40,55 @@ var countries = require("i18n-iso-countries");
 console.log(countries.getNames("en")); // { 'AF': 'Afghanistan', 'AL': 'Albania', [...], 'ZM': 'Zambia', 'ZW': 'Zimbabwe' }
 `````
 
-### Supported languages
+### Supported languages (ISO 639-1)
 
-* `ar`: arabic
-* `cs`: czech
-* `de`: german
-* `en`: english
-* `es`: spanish
-* `et`: estonian
-* `fi`: finnish
-* `fr`: french
-* `hu`: hungarian
-* `it`: italian
+* `ar`: Arabic
+* `az`: Azerbaijani
+* `be`: Belorussian
+* `bg`: Bulgarian
+* `bs`: Bosnian
+* `cs`: Czech
+* `da`: Danish
+* `de`: German
+* `en`: English
+* `es`: Spanish
+* `et`: Estonian
+* `fa`: Persian
+* `fi`: Finnish
+* `fr`: French
+* `el`: Greek
+* `he`: Hebrew
+* `hr`: Croatian
+* `hu`: Hungarian
+* `hy`: Armenian
+* `it`: Italian
+* `id`: Indonesian
+* `ja`: Japanese
+* `ka`: Georgian
+* `kk`: Kazakh
+* `ko`: Korean
+* `ky`: Kyrgyz
+* `lt`: Lithuanian
+* `lv`: Latvian
+* `mk`: Macedonian
+* `mn`: Mongolian
 * `nb`: Norwegian Bokmål
-* `nl`: dutch
+* `nl`: Dutch
 * `nn`: Norwegian Nynorsk
-* `pl`: polish
-* `pt`: portuguese
-* `ru`: russian
-* `sv`: swedish
-* `tr`: turkish
-* `uk`: ukrainian
+* `pl`: Polish
+* `pt`: Portuguese
+* `ro`: Romanian
+* `ru`: Russian
+* `sk`: Slovak
+* `sl`: Slovene
+* `sr`: Serbian
+* `sv`: Swedish
+* `tr`: Turkish
+* `uk`: Ukrainian
+* `uz`: Uzbek
 * `zh`: Chinese
+
+[List of ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 
 ### Country to Code
 
@@ -136,7 +179,7 @@ console.log(countries.getNumericCodes());
 To add a language:
 
 * add a json file under langs/
-* add the language to the `data` object in index.js at the top
+* add the language to the `data` object in enty-node.js at the top
 * add language to section **Supported languages** in README.md
 * add language to keywords in package.json
 * run `npm install && make test` to make sure that tests are passing

@@ -1,37 +1,26 @@
 {
-  "_args": [
-    [
-      "react-file-drop@^0.1.8",
-      "/Users/ma/CODE/Madek/webapp"
-    ]
-  ],
-  "_from": "react-file-drop@>=0.1.8 <0.2.0",
-  "_id": "react-file-drop@0.1.8",
-  "_inCache": true,
-  "_installable": true,
+  "_from": "react-file-drop@0.1.9",
+  "_id": "react-file-drop@0.1.9",
+  "_inBundle": false,
+  "_integrity": "sha512-fKXuOdGHGLpy+pQrUdUVa7yhOrrMQ91edIUi6c99OnUetUrC4Fm6Gg2vLUe9E0DCwtwSG6AadMlWVd0sdSl2rw==",
   "_location": "/react-file-drop",
-  "_nodeVersion": "5.3.0",
-  "_npmUser": {
-    "email": "sarink87@gmail.com",
-    "name": "sarink"
-  },
-  "_npmVersion": "3.5.0",
   "_phantomChildren": {},
   "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-file-drop@0.1.9",
     "name": "react-file-drop",
-    "raw": "react-file-drop@^0.1.8",
-    "rawSpec": "^0.1.8",
-    "scope": null,
-    "spec": ">=0.1.8 <0.2.0",
-    "type": "range"
+    "escapedName": "react-file-drop",
+    "rawSpec": "0.1.9",
+    "saveSpec": null,
+    "fetchSpec": "0.1.9"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.8.tgz",
-  "_shasum": "2347d7b8b7777457180eb0c91f385efb75093563",
-  "_shrinkwrap": null,
-  "_spec": "react-file-drop@^0.1.8",
+  "_resolved": "https://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.9.tgz",
+  "_shasum": "97102ebdfcddafd948bb20c16bfe3f07ddaf7a52",
+  "_spec": "react-file-drop@0.1.9",
   "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Kabir Sarin"
@@ -39,54 +28,45 @@
   "bugs": {
     "url": "https://github.com/sarink/react-file-drop/issues"
   },
-  "dependencies": {},
+  "bundleDependencies": false,
+  "dependencies": {
+    "create-react-class": "^15.5.2",
+    "prop-types": "^15.5.8"
+  },
+  "deprecated": false,
   "description": "React component for Gmail or Facbook -like drag and drop file uploader. Drag files anywhere onto the window (or user defined \"frame\" prop)! Very extensible, provides many hooks so you can use it to develop any custom behavior that you desire.",
   "devDependencies": {},
   "directories": {},
-  "dist": {
-    "shasum": "2347d7b8b7777457180eb0c91f385efb75093563",
-    "tarball": "http://registry.npmjs.org/react-file-drop/-/react-file-drop-0.1.8.tgz"
-  },
-  "gitHead": "6e70ca8cd97c59819d796b13577a6e414f08bb58",
   "homepage": "https://github.com/sarink/react-file-drop#readme",
   "keywords": [
-    "document",
-    "drag",
-    "drag and drop",
-    "drag n drop",
-    "drop",
-    "dropzone",
-    "facebook",
+    "react file gmail",
+    "react file facebook",
+    "react",
+    "react-file-drop",
     "file",
     "gmail",
-    "react",
-    "react dropzone",
-    "react file drag drop",
-    "react file facebook",
-    "react file gmail",
-    "react file upload",
-    "react-file-drop",
+    "facebook",
+    "dropzone",
     "upload",
-    "window"
+    "drag",
+    "drop",
+    "drag and drop",
+    "drag n drop",
+    "react file upload",
+    "react file drag drop",
+    "react dropzone",
+    "window",
+    "document"
   ],
   "license": "MIT",
   "main": "./FileDrop",
-  "maintainers": [
-    {
-      "name": "sarink",
-      "email": "sarink87@gmail.com"
-    }
-  ],
   "name": "react-file-drop",
-  "optionalDependencies": {},
   "peerDependencies": {
     "react": ">=0.13"
   },
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sarink/react-file-drop.git"
   },
-  "scripts": {},
-  "version": "0.1.8"
+  "version": "0.1.9"
 }

@@ -14,6 +14,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var options = linkify.options;
 var Options = options.Options;
 
@@ -111,8 +117,16 @@ function linkifyReactElement(element, opts) {
 	return _react2.default.cloneElement(element, newProps, children);
 }
 
-var Linkify = _react2.default.createClass({
-	render: function render() {
+var Linkify = function (_React$Component) {
+	_inherits(Linkify, _React$Component);
+
+	function Linkify() {
+		_classCallCheck(this, Linkify);
+
+		return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+	}
+
+	Linkify.prototype.render = function render() {
 		// Copy over all non-linkify-specific props
 		var newProps = { key: 'linkified-element-0' };
 		for (var prop in this.props) {
@@ -126,7 +140,9 @@ var Linkify = _react2.default.createClass({
 		var element = _react2.default.createElement(tagName, newProps);
 
 		return linkifyReactElement(element, opts, 0);
-	}
-});
+	};
+
+	return Linkify;
+}(_react2.default.Component);
 
 exports.default = Linkify;

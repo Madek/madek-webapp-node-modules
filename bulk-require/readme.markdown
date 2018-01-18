@@ -30,6 +30,9 @@ data/
     data.js
 glob.js
 render/
+  xyz/
+    ignored.js
+  x.js
 ```
 
 Gives this output:

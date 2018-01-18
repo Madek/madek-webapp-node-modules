@@ -1,7 +1,7 @@
 /*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 /* eslint-disable no-proto */
@@ -34,10 +34,12 @@ exports.kMaxLength = K_MAX_LENGTH
  */
 Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport()
 
-if (!Buffer.TYPED_ARRAY_SUPPORT) {
+if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== 'undefined' &&
+    typeof console.error === 'function') {
   console.error(
     'This browser lacks typed array (Uint8Array) support which is required by ' +
-    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.')
+    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.'
+  )
 }
 
 function typedArraySupport () {
@@ -102,7 +104,7 @@ function from (value, encodingOrOffset, length) {
     throw new TypeError('"value" argument must not be a number')
   }
 
-  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+  if (isArrayBuffer(value)) {
     return fromArrayBuffer(value, encodingOrOffset, length)
   }
 
@@ -214,8 +216,6 @@ function fromArrayLike (array) {
 }
 
 function fromArrayBuffer (array, byteOffset, length) {
-  array.byteLength // this throws if `array` is not a valid ArrayBuffer
-
   if (byteOffset < 0 || array.byteLength < byteOffset) {
     throw new RangeError('\'offset\' is out of bounds')
   }
@@ -252,9 +252,8 @@ function fromObject (obj) {
   }
 
   if (obj) {
-    if ((typeof ArrayBuffer !== 'undefined' &&
-        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
-      if (typeof obj.length !== 'number' || isnan(obj.length)) {
+    if (isArrayBufferView(obj) || 'length' in obj) {
+      if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
         return createBuffer(0)
       }
       return fromArrayLike(obj)
@@ -286,7 +285,7 @@ function SlowBuffer (length) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return !!(b != null && b._isBuffer)
+  return b != null && b._isBuffer === true
 }
 
 Buffer.compare = function compare (a, b) {
@@ -365,8 +364,7 @@ function byteLength (string, encoding) {
   if (Buffer.isBuffer(string)) {
     return string.length
   }
-  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
-      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+  if (isArrayBufferView(string) || isArrayBuffer(string)) {
     return string.byteLength
   }
   if (typeof string !== 'string') {
@@ -476,8 +474,12 @@ function slowToString (encoding, start, end) {
   }
 }
 
-// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
-// Buffer instances.
+// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
+// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
+// reliably in a browserify context because there could be multiple different
+// copies of the 'buffer' package in use. This method works even for Buffer
+// instances that were created from another copy of the `buffer` package.
+// See: https://github.com/feross/buffer/issues/154
 Buffer.prototype._isBuffer = true
 
 function swap (b, n, m) {
@@ -628,7 +630,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     byteOffset = -0x80000000
   }
   byteOffset = +byteOffset  // Coerce to Number.
-  if (isNaN(byteOffset)) {
+  if (numberIsNaN(byteOffset)) {
     // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
     byteOffset = dir ? 0 : (buffer.length - 1)
   }
@@ -759,7 +761,7 @@ function hexWrite (buf, string, offset, length) {
   }
   for (var i = 0; i < length; ++i) {
     var parsed = parseInt(string.substr(i * 2, 2), 16)
-    if (isNaN(parsed)) return i
+    if (numberIsNaN(parsed)) return i
     buf[offset + i] = parsed
   }
   return i
@@ -806,7 +808,6 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
       encoding = length
       length = undefined
     }
-  // legacy write(string, encoding, offset, length) - remove in v0.13
   } else {
     throw new Error(
       'Buffer.write(string, encoding, offset[, length]) is no longer supported'
@@ -1005,7 +1006,7 @@ function utf16leSlice (buf, start, end) {
   var bytes = buf.slice(start, end)
   var res = ''
   for (var i = 0; i < bytes.length; i += 2) {
-    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256)
+    res += String.fromCharCode(bytes[i] + (bytes[i + 1] * 256))
   }
   return res
 }
@@ -1311,7 +1312,7 @@ Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, no
   value = +value
   offset = offset >>> 0
   if (!noAssert) {
-    var limit = Math.pow(2, 8 * byteLength - 1)
+    var limit = Math.pow(2, (8 * byteLength) - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
   }
@@ -1334,7 +1335,7 @@ Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, no
   value = +value
   offset = offset >>> 0
   if (!noAssert) {
-    var limit = Math.pow(2, 8 * byteLength - 1)
+    var limit = Math.pow(2, (8 * byteLength) - 1)
 
     checkInt(this, value, offset, byteLength, limit - 1, -limit)
   }
@@ -1563,7 +1564,7 @@ var INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
 
 function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
-  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  str = str.trim().replace(INVALID_BASE64_RE, '')
   // Node converts strings with length < 2 to ''
   if (str.length < 2) return ''
   // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
@@ -1571,11 +1572,6 @@ function base64clean (str) {
     str = str + '='
   }
   return str
-}
-
-function stringtrim (str) {
-  if (str.trim) return str.trim()
-  return str.replace(/^\s+|\s+$/g, '')
 }
 
 function toHex (n) {
@@ -1700,6 +1696,19 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-function isnan (val) {
-  return val !== val // eslint-disable-line no-self-compare
+// ArrayBuffers from another context (i.e. an iframe) do not pass the `instanceof` check
+// but they should be treated as valid. See: https://github.com/feross/buffer/issues/166
+function isArrayBuffer (obj) {
+  return obj instanceof ArrayBuffer ||
+    (obj != null && obj.constructor != null && obj.constructor.name === 'ArrayBuffer' &&
+      typeof obj.byteLength === 'number')
+}
+
+// Node 0.10 supports `ArrayBuffer` but lacks `ArrayBuffer.isView`
+function isArrayBufferView (obj) {
+  return (typeof ArrayBuffer.isView === 'function') && ArrayBuffer.isView(obj)
+}
+
+function numberIsNaN (obj) {
+  return obj !== obj // eslint-disable-line no-self-compare
 }
