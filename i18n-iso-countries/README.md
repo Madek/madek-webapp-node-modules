@@ -28,21 +28,26 @@ console.log(countries.getNames("en")); // { 'AF': 'Afghanistan', 'AL': 'Albania'
 
 * `ar`: arabic
 * `cs`: czech
+* `da`: danish
 * `de`: german
 * `en`: english
 * `es`: spanish
 * `et`: estonian
 * `fi`: finnish
 * `fr`: french
+* `gr`: greek
+* `he`: hebrew
 * `hu`: hungarian
 * `it`: italian
+* `ja`: japanese
+* `ko`: korean
 * `nb`: Norwegian Bokmål
 * `nl`: dutch
 * `nn`: Norwegian Nynorsk
 * `pl`: polish
 * `pt`: portuguese
 * `ru`: russian
-* `sv`: swedish
+* `se`: swedish
 * `tr`: turkish
 * `uk`: ukrainian
 * `zh`: Chinese

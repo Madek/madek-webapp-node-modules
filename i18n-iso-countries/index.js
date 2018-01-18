@@ -2,8 +2,10 @@ var pad = require("pad");
 
 var codes = require("./codes.json");
 var data = {
+  "gr": require("./langs/gr.json"),
   "ar": require("./langs/ar.json"),
   "cs": require("./langs/cs.json"),
+  "da": require("./langs/da.json"),
   "de": require("./langs/de.json"),
   "en": require("./langs/en.json"),
   "es": require("./langs/es.json"),
@@ -12,6 +14,8 @@ var data = {
   "fr": require("./langs/fr.json"),
   "hu": require("./langs/hu.json"),
   "it": require("./langs/it.json"),
+  "ja": require("./langs/ja.json"),
+  "ko": require("./langs/ko.json"),
   "nb": require("./langs/nb.json"),
   "nl": require("./langs/nl.json"),
   "nn": require("./langs/nn.json"),
@@ -21,7 +25,8 @@ var data = {
   "sv": require("./langs/sv.json"),
   "tr": require("./langs/tr.json"),
   "uk": require("./langs/uk.json"),
-  "zh": require("./langs/zh.json")
+  "zh": require("./langs/zh.json"),
+  "he": require("./langs/he.json")
 };
 
 /*
@@ -172,8 +177,8 @@ exports.getName = function(code, lang) {
 };
 
 /*
- * @param lang language for country name
- * @return hash
+ * @param lang language for country names
+ * @return Object of country code mapped to county name
  */
 exports.getNames = function(lang) {
   "use strict";
@@ -207,7 +212,7 @@ exports.getAlpha2Code = function(name, lang) {
 };
 
 /*
- * @return Array of alpha-2 codes
+ * @return Object of alpha-2 codes mapped to alpha-3 codes
  */
 exports.getAlpha2Codes = function() {
   "use strict";
@@ -230,7 +235,7 @@ exports.getAlpha3Code = function(name, lang) {
 };
 
 /*
- * @return Array of alpha-3 codes
+ * @return Object of alpha-3 codes mapped to alpha-2 codes
  */
 exports.getAlpha3Codes = function() {
   "use strict";
@@ -238,7 +243,7 @@ exports.getAlpha3Codes = function() {
 };
 
 /*
- * @return Array of numeric codes
+ * @return Object of numeric codes mapped to alpha-2 codes
  */
 exports.getNumericCodes = function() {
   "use strict";
