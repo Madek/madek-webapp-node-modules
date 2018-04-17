@@ -1,29 +1,35 @@
 {
-  "_from": "pretty-format@^20.0.3",
-  "_id": "pretty-format@20.0.3",
+  "_args": [
+    [
+      "pretty-format@22.4.3",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_development": true,
+  "_from": "pretty-format@22.4.3",
+  "_id": "pretty-format@22.4.3",
   "_inBundle": false,
-  "_integrity": "sha1-Ag41ClYKH+GpjcO+tsz/s4beixQ=",
+  "_integrity": "sha512-S4oT9/sT6MN7/3COoOy+ZJeA92VmOnveLHgrwBE3Z1W5N9S2A1QGNYiE1z75DAENbJrXXUb+OWXhpJcg05QKQQ==",
   "_location": "/pretty-format",
   "_phantomChildren": {
-    "color-convert": "1.9.0"
+    "color-convert": "1.9.1"
   },
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "pretty-format@^20.0.3",
+    "raw": "pretty-format@22.4.3",
     "name": "pretty-format",
     "escapedName": "pretty-format",
-    "rawSpec": "^20.0.3",
+    "rawSpec": "22.4.3",
     "saveSpec": null,
-    "fetchSpec": "^20.0.3"
+    "fetchSpec": "22.4.3"
   },
   "_requiredBy": [
     "/prettier-eslint"
   ],
-  "_resolved": "https://registry.npmjs.org/pretty-format/-/pretty-format-20.0.3.tgz",
-  "_shasum": "020e350a560a1fe1a98dc3beb6ccffb386de8b14",
-  "_spec": "pretty-format@^20.0.3",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/prettier-eslint",
+  "_resolved": "https://registry.npmjs.org/pretty-format/-/pretty-format-22.4.3.tgz",
+  "_spec": "22.4.3",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "James Kyle",
     "email": "me@thejameskyle.com"
@@ -32,20 +38,18 @@
   "bugs": {
     "url": "https://github.com/facebook/jest/issues"
   },
-  "bundleDependencies": false,
   "dependencies": {
-    "ansi-regex": "^2.1.1",
-    "ansi-styles": "^3.0.0"
+    "ansi-regex": "^3.0.0",
+    "ansi-styles": "^3.2.0"
   },
-  "deprecated": false,
   "description": "Stringify any JavaScript value.",
   "homepage": "https://github.com/facebook/jest#readme",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "main": "build/index.js",
   "name": "pretty-format",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/facebook/jest.git"
   },
-  "version": "20.0.3"
+  "version": "22.4.3"
 }

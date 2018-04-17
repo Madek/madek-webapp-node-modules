@@ -1,29 +1,26 @@
 {
   "_args": [
     [
-      "es6-symbol@~3.0.1",
-      "/Users/ma/CODE/Madek/webapp/node_modules/es6-map"
+      "es6-symbol@3.1.1",
+      "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "es6-symbol@>=3.0.1 <3.1.0",
-  "_id": "es6-symbol@3.0.2",
-  "_inCache": true,
-  "_installable": true,
+  "_development": true,
+  "_from": "es6-symbol@3.1.1",
+  "_id": "es6-symbol@3.1.1",
+  "_inBundle": false,
+  "_integrity": "sha1-vwDvT9q2uhtG7Le2KbTH7VcVzHc=",
   "_location": "/es6-symbol",
-  "_nodeVersion": "5.2.0",
-  "_npmUser": {
-    "email": "medikoo+npm@medikoo.com",
-    "name": "medikoo"
-  },
-  "_npmVersion": "3.3.12",
   "_phantomChildren": {},
   "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "es6-symbol@3.1.1",
     "name": "es6-symbol",
-    "raw": "es6-symbol@~3.0.1",
-    "rawSpec": "~3.0.1",
-    "scope": null,
-    "spec": ">=3.0.1 <3.1.0",
-    "type": "range"
+    "escapedName": "es6-symbol",
+    "rawSpec": "3.1.1",
+    "saveSpec": null,
+    "fetchSpec": "3.1.1"
   },
   "_requiredBy": [
     "/es5-ext",
@@ -32,56 +29,40 @@
     "/es6-set",
     "/es6-weak-map"
   ],
-  "_resolved": "https://registry.npmjs.org/es6-symbol/-/es6-symbol-3.0.2.tgz",
-  "_shasum": "1e928878c6f5e63541625b4bb4df4af07d154219",
-  "_shrinkwrap": null,
-  "_spec": "es6-symbol@~3.0.1",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/es6-map",
+  "_resolved": "https://registry.npmjs.org/es6-symbol/-/es6-symbol-3.1.1.tgz",
+  "_spec": "3.1.1",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "medyk@medikoo.com",
     "name": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
     "url": "http://www.medikoo.com/"
   },
   "bugs": {
     "url": "https://github.com/medikoo/es6-symbol/issues"
   },
   "dependencies": {
-    "d": "~0.1.1",
-    "es5-ext": "~0.10.10"
+    "d": "1",
+    "es5-ext": "~0.10.14"
   },
   "description": "ECMAScript 6 Symbol polyfill",
   "devDependencies": {
-    "tad": "~0.2.4",
+    "tad": "~0.2.7",
     "xlint": "~0.2.2",
     "xlint-jslint-medikoo": "~0.1.4"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "1e928878c6f5e63541625b4bb4df4af07d154219",
-    "tarball": "http://registry.npmjs.org/es6-symbol/-/es6-symbol-3.0.2.tgz"
-  },
-  "gitHead": "b7da6b926c44e3745de69b17c98c00a5c84b4ebe",
   "homepage": "https://github.com/medikoo/es6-symbol#readme",
   "keywords": [
-    "ecmascript",
-    "es6",
-    "harmony",
-    "polyfill",
-    "ponyfill",
+    "symbol",
     "private",
     "property",
-    "symbol"
+    "es6",
+    "ecmascript",
+    "harmony",
+    "ponyfill",
+    "polyfill"
   ],
   "license": "MIT",
-  "maintainers": [
-    {
-      "name": "medikoo",
-      "email": "medikoo+npm@medikoo.com"
-    }
-  ],
   "name": "es6-symbol",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/medikoo/es6-symbol.git"
@@ -91,5 +72,5 @@
     "lint-console": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --watch",
     "test": "node ./node_modules/tad/bin/tad"
   },
-  "version": "3.0.2"
+  "version": "3.1.1"
 }

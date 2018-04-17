@@ -4,7 +4,7 @@
  */
 'use strict';
 
-var find = require('array.prototype.find');
+const docsUrl = require('../util/docsUrl');
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -33,7 +33,8 @@ module.exports = {
     docs: {
       description: 'Prevent passing of children as props.',
       category: 'Best Practices',
-      recommended: false
+      recommended: true,
+      url: docsUrl('no-children-prop')
     },
     schema: []
   },
@@ -54,10 +55,8 @@ module.exports = {
           return;
         }
 
-        var props = node.arguments[1].properties;
-        var childrenProp = find(props, function(prop) {
-          return prop.key && prop.key.name === 'children';
-        });
+        const props = node.arguments[1].properties;
+        const childrenProp = props.find(prop => prop.key && prop.key.name === 'children');
 
         if (childrenProp) {
           context.report({

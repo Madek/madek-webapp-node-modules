@@ -1,29 +1,26 @@
 {
   "_args": [
     [
-      "es5-ext@~0.10.8",
-      "/Users/ma/CODE/Madek/webapp/node_modules/es6-map"
+      "es5-ext@0.10.42",
+      "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "es5-ext@>=0.10.8 <0.11.0",
-  "_id": "es5-ext@0.10.11",
-  "_inCache": true,
-  "_installable": true,
+  "_development": true,
+  "_from": "es5-ext@0.10.42",
+  "_id": "es5-ext@0.10.42",
+  "_inBundle": false,
+  "_integrity": "sha512-AJxO1rmPe1bDEfSR6TJ/FgMFYuTBhR5R57KW58iCkYACMyFbrkqVyzXSurYoScDGvgyMpk7uRF/lPUPPTmsRSA==",
   "_location": "/es5-ext",
-  "_nodeVersion": "4.2.3",
-  "_npmUser": {
-    "email": "medikoo+npm@medikoo.com",
-    "name": "medikoo"
-  },
-  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "es5-ext@0.10.42",
     "name": "es5-ext",
-    "raw": "es5-ext@~0.10.8",
-    "rawSpec": "~0.10.8",
-    "scope": null,
-    "spec": ">=0.10.8 <0.11.0",
-    "type": "range"
+    "escapedName": "es5-ext",
+    "rawSpec": "0.10.42",
+    "saveSpec": null,
+    "fetchSpec": "0.10.42"
   },
   "_requiredBy": [
     "/d",
@@ -34,72 +31,63 @@
     "/es6-weak-map",
     "/event-emitter"
   ],
-  "_resolved": "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.11.tgz",
-  "_shasum": "8184c3e705a820948c2dbe043849379b1dbd0c45",
-  "_shrinkwrap": null,
-  "_spec": "es5-ext@~0.10.8",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/es6-map",
+  "_resolved": "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.42.tgz",
+  "_spec": "0.10.42",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "medyk@medikoo.com",
     "name": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
     "url": "http://www.medikoo.com/"
   },
   "bugs": {
     "url": "https://github.com/medikoo/es5-ext/issues"
   },
   "dependencies": {
-    "es6-iterator": "2",
-    "es6-symbol": "~3.0.2"
+    "es6-iterator": "~2.0.3",
+    "es6-symbol": "~3.1.1",
+    "next-tick": "1"
   },
   "description": "ECMAScript extensions and shims",
   "devDependencies": {
-    "tad": "~0.2.4",
-    "xlint": "~0.2.2",
-    "xlint-jslint-medikoo": "~0.1.4"
+    "eslint": "^4.15",
+    "eslint-config-medikoo-es5": "^1.4.8",
+    "tad": "~0.2.7"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "8184c3e705a820948c2dbe043849379b1dbd0c45",
-    "tarball": "http://registry.npmjs.org/es5-ext/-/es5-ext-0.10.11.tgz"
+  "eslintConfig": {
+    "extends": "medikoo-es5",
+    "root": true,
+    "rules": {
+      "no-extend-native": "off"
+    }
   },
-  "gitHead": "aba94140a6bf79ce1a448a2db8834e8c1842b527",
   "homepage": "https://github.com/medikoo/es5-ext#readme",
   "keywords": [
-    "addons",
     "ecmascript",
     "ecmascript5",
     "ecmascript6",
     "es5",
     "es6",
-    "ext",
     "extensions",
+    "ext",
+    "addons",
     "extras",
     "harmony",
     "javascript",
     "polyfill",
     "shim",
     "util",
-    "utilities",
-    "utils"
+    "utils",
+    "utilities"
   ],
-  "license": "MIT",
-  "maintainers": [
-    {
-      "name": "medikoo",
-      "email": "medikoo+npm@medikoo.com"
-    }
-  ],
+  "license": "ISC",
   "name": "es5-ext",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/medikoo/es5-ext.git"
   },
   "scripts": {
-    "lint": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --no-cache --no-stream",
-    "lint-console": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --watch",
+    "lint": "eslint --ignore-path=.gitignore .",
     "test": "node ./node_modules/tad/bin/tad"
   },
-  "version": "0.10.11"
+  "version": "0.10.42"
 }

@@ -4,8 +4,6 @@
  */
 'use strict';
 
-var find = require('array.prototype.find');
-
 /**
  * Search a particular variable in a list
  * @param {Array} variables The variables list.
@@ -13,9 +11,7 @@ var find = require('array.prototype.find');
  * @returns {Boolean} True if the variable was found, false if not.
  */
 function findVariable(variables, name) {
-  return variables.some(function (variable) {
-    return variable.name === name;
-  });
+  return variables.some(variable => variable.name === name);
 }
 
 /**
@@ -25,9 +21,7 @@ function findVariable(variables, name) {
  * @returns {Object} Variable if the variable was found, null if not.
  */
 function getVariable(variables, name) {
-  return find(variables, function (variable) {
-    return variable.name === name;
-  });
+  return variables.find(variable => variable.name === name);
 }
 
 /**
@@ -39,8 +33,8 @@ function getVariable(variables, name) {
  * @returns {Array} The variables list
  */
 function variablesInScope(context) {
-  var scope = context.getScope();
-  var variables = scope.variables;
+  let scope = context.getScope();
+  let variables = scope.variables;
 
   while (scope.type !== 'global') {
     scope = scope.upper;
@@ -57,8 +51,29 @@ function variablesInScope(context) {
   return variables;
 }
 
+/**
+ * Find a variable by name in the current scope.
+ * @param {Object} context The current rule context.
+ * @param  {string} name Name of the variable to look for.
+ * @returns {ASTNode|null} Return null if the variable could not be found, ASTNode otherwise.
+ */
+function findVariableByName(context, name) {
+  const variable = getVariable(variablesInScope(context), name);
+
+  if (!variable || !variable.defs[0] || !variable.defs[0].node) {
+    return null;
+  }
+
+  if (variable.defs[0].node.type === 'TypeAlias') {
+    return variable.defs[0].node.right;
+  }
+
+  return variable.defs[0].node.init;
+}
+
 module.exports = {
   findVariable: findVariable,
+  findVariableByName: findVariableByName,
   getVariable: getVariable,
   variablesInScope: variablesInScope
 };

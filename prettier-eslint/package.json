@@ -1,27 +1,35 @@
 {
-  "_from": "prettier-eslint@^6.3.0",
-  "_id": "prettier-eslint@6.4.1",
+  "_args": [
+    [
+      "prettier-eslint@8.8.1",
+      "/Users/ma/CODE/Madek/webapp"
+    ]
+  ],
+  "_development": true,
+  "_from": "prettier-eslint@8.8.1",
+  "_id": "prettier-eslint@8.8.1",
   "_inBundle": false,
-  "_integrity": "sha1-FGcuKXuQSXdcY4xkSMOZjB8CaPk=",
+  "_integrity": "sha512-8YMkJZnA+XVfEW6fPet05jpNmSQbD+Htbh/QyOxQcVf2GIUEZsnGP7ZScaM9Mq2Ra2261eCu60E7/TRIy9coXQ==",
   "_location": "/prettier-eslint",
-  "_phantomChildren": {},
+  "_phantomChildren": {
+    "core-js": "2.4.1"
+  },
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "prettier-eslint@^6.3.0",
+    "raw": "prettier-eslint@8.8.1",
     "name": "prettier-eslint",
     "escapedName": "prettier-eslint",
-    "rawSpec": "^6.3.0",
+    "rawSpec": "8.8.1",
     "saveSpec": null,
-    "fetchSpec": "^6.3.0"
+    "fetchSpec": "8.8.1"
   },
   "_requiredBy": [
-    "/prettier-standard"
+    "#DEV:/"
   ],
-  "_resolved": "https://registry.npmjs.org/prettier-eslint/-/prettier-eslint-6.4.1.tgz",
-  "_shasum": "14672e297b9049775c638c6448c3998c1f0268f9",
-  "_spec": "prettier-eslint@^6.3.0",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/prettier-standard",
+  "_resolved": "https://registry.npmjs.org/prettier-eslint/-/prettier-eslint-8.8.1.tgz",
+  "_spec": "8.8.1",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
     "name": "Kent C. Dodds",
     "email": "kent@doddsfamily.us",
@@ -30,94 +38,69 @@
   "bugs": {
     "url": "https://github.com/prettier/prettier-eslint/issues"
   },
-  "bundleDependencies": false,
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "common-tags": "^1.4.0",
     "dlv": "^1.1.0",
-    "eslint": "^3.19.0",
-    "indent-string": "^3.1.0",
+    "eslint": "^4.0.0",
+    "indent-string": "^3.2.0",
     "lodash.merge": "^4.6.0",
     "loglevel-colored-level-prefix": "^1.0.0",
-    "prettier": "^1.5.0",
-    "pretty-format": "^20.0.3",
-    "require-relative": "^0.8.7"
+    "prettier": "^1.7.0",
+    "pretty-format": "^22.0.3",
+    "require-relative": "^0.8.7",
+    "typescript": "^2.5.1",
+    "typescript-eslint-parser": "^11.0.0"
   },
-  "deprecated": false,
   "description": "Formats your JavaScript using prettier followed by eslint --fix",
   "devDependencies": {
-    "all-contributors-cli": "^4.3.0",
-    "babel-cli": "^6.24.1",
-    "babel-jest": "^20.0.3",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-env": "^1.5.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.24.1",
-    "chalk": "^1.1.3",
-    "codecov": "^2.2.0",
-    "commitizen": "^2.8.6",
-    "cz-conventional-changelog": "^2.0.0",
-    "eslint-config-kentcdodds": "^12.4.1",
-    "husky": "^0.13.4",
-    "jest-cli": "^20.0.4",
-    "nps": "^5.3.1",
-    "nps-utils": "^1.2.0",
-    "opt-cli": "^1.5.1",
-    "prettier-eslint-cli": "^4.0.3",
+    "all-contributors-cli": "^4.4.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "6.26.0",
+    "babel-jest": "^22.0.3",
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "chalk": "^2.1.0",
+    "eslint-config-kentcdodds": "^13.0.1",
+    "husky": "^0.14.3",
+    "jest": "^22.0.3",
+    "jest-cli": "^22.0.3",
+    "nps": "^5.7.1",
+    "nps-utils": "^1.3.0",
+    "opt-cli": "^1.5.2",
+    "prettier-eslint-cli": "^4.2.1",
     "rimraf": "^2.5.4",
-    "semantic-release": "^6.3.2",
-    "strip-indent": "^2.0.0",
-    "validate-commit-msg": "^2.12.1"
+    "strip-indent": "^2.0.0"
   },
   "engines": {
     "node": ">=4.0.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "kentcdodds",
-      "kentcdodds/jest"
-    ],
-    "rules": {
-      "valid-jsdoc": 0,
-      "max-len": [
-        2,
-        80
-      ]
-    }
   },
   "files": [
     "dist"
   ],
   "homepage": "https://github.com/prettier/prettier-eslint#readme",
-  "jest": {
-    "testEnvironment": "jest-environment-node",
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
-  },
   "keywords": [],
   "license": "MIT",
   "main": "dist/index.js",
+  "maintainers": [
+    {
+      "name": "Simon Fridlund",
+      "email": "simon@fridlund.email"
+    }
+  ],
   "name": "prettier-eslint",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/prettier/prettier-eslint.git"
   },
   "scripts": {
-    "commitmsg": "opt --in commit-msg --exec \"validate-commit-msg\"",
     "precommit": "opt --in pre-commit --exec \"npm start validate\"",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "start": "nps",
     "test": "nps test"
   },
-  "version": "6.4.1"
+  "version": "8.8.1"
 }

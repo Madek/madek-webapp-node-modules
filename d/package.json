@@ -1,28 +1,26 @@
 {
   "_args": [
     [
-      "d@~0.1.1",
-      "/Users/ma/CODE/Madek/webapp/node_modules/es6-map"
+      "d@1.0.0",
+      "/Users/ma/CODE/Madek/webapp"
     ]
   ],
-  "_from": "d@>=0.1.1 <0.2.0",
-  "_id": "d@0.1.1",
-  "_inCache": true,
-  "_installable": true,
+  "_development": true,
+  "_from": "d@1.0.0",
+  "_id": "d@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha1-dUu1v+VUUdpppYuU1F9MWwRi1Y8=",
   "_location": "/d",
-  "_npmUser": {
-    "email": "medikoo+npm@medikoo.com",
-    "name": "medikoo"
-  },
-  "_npmVersion": "1.4.3",
   "_phantomChildren": {},
   "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "d@1.0.0",
     "name": "d",
-    "raw": "d@~0.1.1",
-    "rawSpec": "~0.1.1",
-    "scope": null,
-    "spec": ">=0.1.1 <0.2.0",
-    "type": "range"
+    "escapedName": "d",
+    "rawSpec": "1.0.0",
+    "saveSpec": null,
+    "fetchSpec": "1.0.0"
   },
   "_requiredBy": [
     "/es6-iterator",
@@ -32,58 +30,47 @@
     "/es6-weak-map",
     "/event-emitter"
   ],
-  "_resolved": "https://registry.npmjs.org/d/-/d-0.1.1.tgz",
-  "_shasum": "da184c535d18d8ee7ba2aa229b914009fae11309",
-  "_shrinkwrap": null,
-  "_spec": "d@~0.1.1",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/es6-map",
+  "_resolved": "https://registry.npmjs.org/d/-/d-1.0.0.tgz",
+  "_spec": "1.0.0",
+  "_where": "/Users/ma/CODE/Madek/webapp",
   "author": {
-    "email": "medyk@medikoo.com",
     "name": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
     "url": "http://www.medikoo.com/"
   },
   "bugs": {
     "url": "https://github.com/medikoo/d/issues"
   },
   "dependencies": {
-    "es5-ext": "~0.10.2"
+    "es5-ext": "^0.10.9"
   },
   "description": "Property descriptor factory",
   "devDependencies": {
-    "tad": "~0.1.21"
+    "tad": "^0.2.4",
+    "xlint": "^0.2.2",
+    "xlint-jslint-medikoo": "^0.1.4"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "da184c535d18d8ee7ba2aa229b914009fae11309",
-    "tarball": "http://registry.npmjs.org/d/-/d-0.1.1.tgz"
-  },
-  "homepage": "https://github.com/medikoo/d",
+  "homepage": "https://github.com/medikoo/d#readme",
   "keywords": [
     "descriptor",
-    "descriptors",
-    "ecma",
-    "ecmascript",
     "es",
+    "ecmascript",
+    "ecma",
+    "property",
+    "descriptors",
     "meta",
-    "properties",
-    "property"
+    "properties"
   ],
   "license": "MIT",
-  "maintainers": [
-    {
-      "name": "medikoo",
-      "email": "medikoo+npm@medikoo.com"
-    }
-  ],
   "name": "d",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/medikoo/d.git"
   },
   "scripts": {
+    "lint": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --no-cache --no-stream",
+    "lint-console": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --watch",
     "test": "node node_modules/tad/bin/tad"
   },
-  "version": "0.1.1"
+  "version": "1.0.0"
 }
