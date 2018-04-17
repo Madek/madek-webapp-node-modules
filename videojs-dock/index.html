@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <!--[if IE 8]><script src="http://vjs.zencdn.net/ie8/1.1.0/videojs-ie8.min.js"></script><!--<![endif]-->
+    <link rel='stylesheet' href='node_modules/video.js/dist/video-js.css'></script>
+    <script src='node_modules/video.js/dist/video.js'></script>
+    <script src="node_modules/es5-shim/es5-shim.js"></script>
+
+    <!-- include the playlist plugin -->
+    <script src='dist/videojs-dock.js'></script>
+    <link rel='stylesheet' href='dist/videojs-dock.css'>
+
+    <style>
+      .video-js {
+        /*width: 622.22px;*/
+        width: 840px;
+        height: 350px;
+      }
+
+      .video-js .vjs-poster {
+        /*background-color: white;*/
+        /*background-image: inherit !important;*/
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <video class="video-js vjs-big-play-centered" controls width='600' height='250'
+      poster='poster.jpg'
+    >
+      <source src='http://vjs.zencdn.net/v/oceans.mp4' type='video/mp4' >
+    </video>
+
+    <script>
+    var video = document.querySelector('video');
+
+    var player = videojs(video, {
+    }, function() {
+      player.dock({
+        title: 'Bacon ipsum dolor amet ribeye',
+        description: 'Doner shank pork loin sirloin, meatloaf shankle chicken bresaola cow shoulder cupim.'
+      });
+
+      player.shelf.addChild('playToggle');
+    });
+
+
+    </script>
+  </body>
+</html>
