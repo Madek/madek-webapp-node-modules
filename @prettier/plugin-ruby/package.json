@@ -1,0 +1,69 @@
+{
+  "_from": "@prettier/plugin-ruby",
+  "_id": "@prettier/plugin-ruby@0.10.0",
+  "_inBundle": false,
+  "_integrity": "sha512-AIua0gE+sG4zoioYU2iU32AJpoRTPBC+69wAdbLYYdxoh0g3hDFeUmm8R17Ig30hMXa8pJGU/SuW4MHCWmhQcQ==",
+  "_location": "/@prettier/plugin-ruby",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@prettier/plugin-ruby",
+    "name": "@prettier/plugin-ruby",
+    "escapedName": "@prettier%2fplugin-ruby",
+    "scope": "@prettier",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@prettier/plugin-ruby/-/plugin-ruby-0.10.0.tgz",
+  "_shasum": "052e31f056b76709e9e68b6270952b232d1f8bfd",
+  "_spec": "@prettier/plugin-ruby",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Kevin Deisz"
+  },
+  "bugs": {
+    "url": "https://github.com/prettier/plugin-ruby/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "prettier": "^1.16.4"
+  },
+  "deprecated": false,
+  "description": "prettier plugin for the Ruby programming language",
+  "devDependencies": {
+    "all-contributors-cli": "^6.1.2",
+    "eslint": "^5.15.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "jest": "^24.0.0",
+    "pkg": "^4.3.7"
+  },
+  "homepage": "https://github.com/prettier/plugin-ruby#readme",
+  "jest": {
+    "setupFiles": [
+      "./test/testRunner.js"
+    ],
+    "testRegex": ".test.js$"
+  },
+  "license": "MIT",
+  "main": "src/ruby.js",
+  "name": "@prettier/plugin-ruby",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prettier/plugin-ruby.git"
+  },
+  "scripts": {
+    "build": "pkg --output pkg/prettier --targets=linux,macos,win node_modules/prettier/bin-prettier.js",
+    "lint": "eslint .",
+    "print": "prettier --plugin=.",
+    "rubocop": "run() { prettier --plugin=. $@ | bundle exec rubocop --stdin $1; }; run",
+    "test": "jest"
+  },
+  "version": "0.10.0"
+}
