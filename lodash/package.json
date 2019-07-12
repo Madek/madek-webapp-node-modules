@@ -1,41 +1,25 @@
 {
   "_args": [
     [
-      {
-        "raw": "lodash@4.17.4",
-        "scope": null,
-        "escapedName": "lodash",
-        "name": "lodash",
-        "rawSpec": "4.17.4",
-        "spec": "4.17.4",
-        "type": "version"
-      },
-      "/Users/ma/CODE/Madek/webapp"
+      "lodash@4.17.13",
+      "/Users/ma/CODE/madek-delivery/webapp"
     ]
   ],
-  "_from": "lodash@4.17.4",
-  "_id": "lodash@4.17.4",
-  "_inCache": true,
+  "_from": "lodash@4.17.13",
+  "_id": "lodash@4.17.13",
+  "_inBundle": false,
+  "_integrity": "sha512-vm3/XWXfWtRua0FkUyEHBZy8kCPjErNBT9fJx8Zvs+U6zjqPbTUOpkaoum3O5uiA8sm+yNMHXfYkTUHFoMxFNA==",
   "_location": "/lodash",
-  "_nodeVersion": "7.2.1",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/lodash-4.17.4.tgz_1483223634314_0.5332164366263896"
-  },
-  "_npmUser": {
-    "name": "jdalton",
-    "email": "john.david.dalton@gmail.com"
-  },
-  "_npmVersion": "2.15.11",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "lodash@4.17.4",
-    "scope": null,
-    "escapedName": "lodash",
+    "type": "version",
+    "registry": true,
+    "raw": "lodash@4.17.13",
     "name": "lodash",
-    "rawSpec": "4.17.4",
-    "spec": "4.17.4",
-    "type": "version"
+    "escapedName": "lodash",
+    "rawSpec": "4.17.13",
+    "saveSpec": null,
+    "fetchSpec": "4.17.13"
   },
   "_requiredBy": [
     "/",
@@ -43,6 +27,8 @@
     "/ampersand-app/ampersand-events",
     "/async",
     "/babel-core",
+    "/babel-eslint/babel-traverse",
+    "/babel-eslint/babel-types",
     "/babel-generator",
     "/babel-helper-builder-binary-assignment-operator-visitor/babel-types",
     "/babel-helper-builder-react-jsx",
@@ -99,27 +85,41 @@
     "/babel-plugin-transform-react-jsx/babel-types",
     "/babel-plugin-transform-regenerator/babel-types",
     "/babel-plugin-transform-strict-mode/babel-types",
+    "/babel-preset-es2015/babel-helper-define-map",
+    "/babel-preset-es2015/babel-helper-regex",
+    "/babel-preset-es2015/babel-plugin-transform-es2015-block-scoping",
     "/babel-preset-es2015/babel-template",
     "/babel-preset-es2015/babel-traverse",
     "/babel-preset-es2015/babel-types",
+    "/babel-preset-es2016/babel-traverse",
+    "/babel-preset-es2016/babel-types",
+    "/babel-preset-es2017/babel-template",
+    "/babel-preset-es2017/babel-traverse",
+    "/babel-preset-es2017/babel-types",
     "/babel-register",
     "/babel-template",
     "/babel-traverse",
     "/babel-types",
     "/eslint",
     "/inquirer",
+    "/prettier-standard/eslint",
+    "/prettier-standard/inquirer",
+    "/prettier-standard/prettier-eslint/eslint",
+    "/prettier-standard/prettier-eslint/inquirer",
+    "/prettier-standard/prettier-eslint/table",
+    "/prettier-standard/table",
     "/regenerator-transform/babel-types",
+    "/standard/eslint",
+    "/standard/inquirer",
+    "/standard/table",
     "/table"
   ],
-  "_resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz",
-  "_shasum": "78203a4d1c328ae1d86dca6460e369b57f4055ae",
-  "_shrinkwrap": null,
-  "_spec": "lodash@4.17.4",
-  "_where": "/Users/ma/CODE/Madek/webapp",
+  "_resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.13.tgz",
+  "_spec": "4.17.13",
+  "_where": "/Users/ma/CODE/madek-delivery/webapp",
   "author": {
     "name": "John-David Dalton",
-    "email": "john.david.dalton@gmail.com",
-    "url": "http://allyoucanleet.com/"
+    "email": "john.david.dalton@gmail.com"
   },
   "bugs": {
     "url": "https://github.com/lodash/lodash/issues"
@@ -127,23 +127,14 @@
   "contributors": [
     {
       "name": "John-David Dalton",
-      "email": "john.david.dalton@gmail.com",
-      "url": "http://allyoucanleet.com/"
+      "email": "john.david.dalton@gmail.com"
     },
     {
       "name": "Mathias Bynens",
-      "email": "mathias@qiwi.be",
-      "url": "https://mathiasbynens.be/"
+      "email": "mathias@qiwi.be"
     }
   ],
-  "dependencies": {},
   "description": "Lodash modular utilities.",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "78203a4d1c328ae1d86dca6460e369b57f4055ae",
-    "tarball": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
-  },
   "homepage": "https://lodash.com/",
   "icon": "https://lodash.com/icon.svg",
   "keywords": [
@@ -153,26 +144,13 @@
   ],
   "license": "MIT",
   "main": "lodash.js",
-  "maintainers": [
-    {
-      "name": "jdalton",
-      "email": "john.david.dalton@gmail.com"
-    },
-    {
-      "name": "mathias",
-      "email": "mathias@qiwi.be"
-    }
-  ],
   "name": "lodash",
-  "optionalDependencies": {},
-  "readme": "# lodash v4.17.4\n\nThe [Lodash](https://lodash.com/) library exported as [Node.js](https://nodejs.org/) modules.\n\n## Installation\n\nUsing npm:\n```shell\n$ npm i -g npm\n$ npm i --save lodash\n```\n\nIn Node.js:\n```js\n// Load the full build.\nvar _ = require('lodash');\n// Load the core build.\nvar _ = require('lodash/core');\n// Load the FP build for immutable auto-curried iteratee-first data-last methods.\nvar fp = require('lodash/fp');\n\n// Load method categories.\nvar array = require('lodash/array');\nvar object = require('lodash/fp/object');\n\n// Cherry-pick methods for smaller browserify/rollup/webpack bundles.\nvar at = require('lodash/at');\nvar curryN = require('lodash/fp/curryN');\n```\n\nSee the [package source](https://github.com/lodash/lodash/tree/4.17.4-npm) for more details.\n\n**Note:**<br>\nInstall [n_](https://www.npmjs.com/package/n_) for Lodash use in the Node.js < 6 REPL.\n\n## Support\n\nTested in Chrome 54-55, Firefox 49-50, IE 11, Edge 14, Safari 9-10, Node.js 6-7, & PhantomJS 2.1.1.<br>\nAutomated [browser](https://saucelabs.com/u/lodash) & [CI](https://travis-ci.org/lodash/lodash/) test runs are available.\n",
-  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lodash/lodash.git"
   },
   "scripts": {
-    "test": "echo \"See https://travis-ci.org/lodash/lodash-cli for testing details.\""
+    "test": "echo \"See https://travis-ci.org/lodash-archive/lodash-cli for testing details.\""
   },
-  "version": "4.17.4"
+  "version": "4.17.13"
 }
