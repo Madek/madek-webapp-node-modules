@@ -1,0 +1,68 @@
+{
+  "_from": "@prettier/plugin-ruby",
+  "_id": "@prettier/plugin-ruby@0.13.0",
+  "_inBundle": false,
+  "_integrity": "sha512-usGr/yxvjewlNqeOw7EngvkmlBuHYacS/05yqdT1OanGVSnxbz3BCxDyIXWLchfuxSL/DWyioiucptqW1ZzO9g==",
+  "_location": "/@prettier/plugin-ruby",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@prettier/plugin-ruby",
+    "name": "@prettier/plugin-ruby",
+    "escapedName": "@prettier%2fplugin-ruby",
+    "scope": "@prettier",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/@prettier/plugin-ruby/-/plugin-ruby-0.13.0.tgz",
+  "_shasum": "c39c630f33d01731267eea35b4eb469cd307cc29",
+  "_spec": "@prettier/plugin-ruby",
+  "_where": "/Users/ma/CODE/Madek/webapp",
+  "author": {
+    "name": "Kevin Deisz"
+  },
+  "bugs": {
+    "url": "https://github.com/prettier/plugin-ruby/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "prettier": "^1.16.4"
+  },
+  "deprecated": false,
+  "description": "prettier plugin for the Ruby programming language",
+  "devDependencies": {
+    "all-contributors-cli": "^6.1.2",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "jest": "^24.0.0"
+  },
+  "homepage": "https://github.com/prettier/plugin-ruby#readme",
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./test/js/setupTests.js"
+    ],
+    "testRegex": ".test.js$"
+  },
+  "license": "MIT",
+  "main": "src/ruby.js",
+  "name": "@prettier/plugin-ruby",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prettier/plugin-ruby.git"
+  },
+  "scripts": {
+    "lint": "eslint --cache .",
+    "print": "prettier --plugin=.",
+    "rubocop": "run() { prettier --plugin=. $@ | bundle exec rubocop --stdin $1; }; run",
+    "test": "jest"
+  },
+  "version": "0.13.0"
+}

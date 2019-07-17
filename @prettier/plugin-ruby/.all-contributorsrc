@@ -1,0 +1,131 @@
+{
+  "projectName": "plugin-ruby",
+  "projectOwner": "kddeisz",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "kddeisz",
+      "name": "Kevin Deisz",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5093358?v=4",
+      "profile": "https://kevindeisz.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "bug"
+      ]
+    },
+    {
+      "login": "AlanFoster",
+      "name": "Alan Foster",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1271782?v=4",
+      "profile": "https://www.alanfoster.me/",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "bug"
+      ]
+    },
+    {
+      "login": "johnschoeman",
+      "name": "johnschoeman",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16049495?v=4",
+      "profile": "https://github.com/johnschoeman",
+      "contributions": [
+        "test"
+      ]
+    },
+    {
+      "login": "aaronjensen",
+      "name": "Aaron Jensen",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8588?v=4",
+      "profile": "https://twitter.com/aaronjensen",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "cbothner",
+      "name": "Cameron Bothner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4642599?v=4",
+      "profile": "http://cameronbothner.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "localhostdotdev",
+      "name": "localhost.dev",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/47308085?v=4",
+      "profile": "https://localhost.dev",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "deecewan",
+      "name": "David Buchan-Swanson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4755785?v=4",
+      "profile": "https://deecewan.github.io",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "jpickwell",
+      "name": "Jordan Pickwell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4682321?v=4",
+      "profile": "https://github.com/jpickwell",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "CodingItWrong",
+      "name": "Josh Justice",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15832198?v=4",
+      "profile": "http://codingitwrong.com",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "xipgroc",
+      "name": "xipgroc",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/28561131?v=4",
+      "profile": "https://github.com/xipgroc",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "glejeune",
+      "name": "Gregoire Lejeune",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15168?v=4",
+      "profile": "http://lejeun.es",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "petevk",
+      "name": "Pete Van Klaveren",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5108627?v=4",
+      "profile": "https://github.com/petevk",
+      "contributions": [
+        "bug"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "commitConvention": "none"
+}
