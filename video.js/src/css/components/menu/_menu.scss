@@ -16,12 +16,19 @@
   display: block;
   padding: 0;
   margin: 0;
-  overflow: auto;
   font-family: $text-font-family;
+
+  // This allows scrolling of content if need be.
+  overflow: auto;
 }
 
-// prevent menus from opening while scrubbing (FF, IE)
-.vjs-scrubbing .vjs-menu-button:hover .vjs-menu {
+// Reset box-sizing inside the menu.
+.vjs-menu .vjs-menu-content > * {
+  box-sizing: border-box;
+}
+
+// prevent menus from opening while scrubbing
+.vjs-scrubbing .vjs-control.vjs-menu-button:hover .vjs-menu {
   display: none;
 }
 
@@ -36,16 +43,22 @@
 }
 
 .vjs-menu li.vjs-menu-item:focus,
-.vjs-menu li.vjs-menu-item:hover {
-  outline: 0;
+.vjs-menu li.vjs-menu-item:hover,
+.js-focus-visible .vjs-menu li.vjs-menu-item:hover {
   @include background-color-with-alpha($secondary-background-color, $secondary-background-transparency);
 }
 
 .vjs-menu li.vjs-selected,
 .vjs-menu li.vjs-selected:focus,
-.vjs-menu li.vjs-selected:hover {
+.vjs-menu li.vjs-selected:hover,
+.js-focus-visible .vjs-menu li.vjs-selected:hover {
   background-color: $primary-foreground-color;
   color: $primary-background-color;
+}
+
+.video-js .vjs-menu *:not(.vjs-selected):focus:not(:focus-visible),
+.js-focus-visible .vjs-menu *:not(.vjs-selected):focus:not(.focus-visible) {
+  background: none;
 }
 
 .vjs-menu li.vjs-menu-title {

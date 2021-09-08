@@ -2,7 +2,6 @@
 // It's used on both real buttons (play button)
 // and div buttons (menu buttons)
 .video-js .vjs-control {
-  outline: none;
   position: relative;
   text-align: center;
   margin: 0;
@@ -11,12 +10,16 @@
   width: 4em;
   @include flex(none);
 
-  &:before {
-    font-size: 1.8em;
-    line-height: 1.67;
+}
+.vjs-button > .vjs-icon-placeholder:before {
+  font-size: 1.8em;
+  line-height: 1.67;
 
-    @extend %icon-default;
-  }
+  @extend %icon-default;
+}
+
+.vjs-button > .vjs-icon-placeholder {
+    display: block;
 }
 
 // Replacement for focus outline
@@ -31,7 +34,6 @@
   @include hide-visually;
 }
 
-// IE 8 + 9 Support
 .vjs-no-flex .vjs-control {
   display: table-cell;
   vertical-align: middle;

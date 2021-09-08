@@ -14,296 +14,273 @@
  * limitations under the License.
  */
 
-(function(root, vttjs) {
+var autoKeyword = "auto";
+var directionSetting = {
+  "": 1,
+  "lr": 1,
+  "rl": 1
+};
+var alignSetting = {
+  "start": 1,
+  "center": 1,
+  "end": 1,
+  "left": 1,
+  "right": 1,
+  "auto": 1,
+  "line-left": 1,
+  "line-right": 1
+};
 
-  var autoKeyword = "auto";
-  var directionSetting = {
-    "": true,
-    "lr": true,
-    "rl": true
-  };
-  var alignSetting = {
-    "start": true,
-    "middle": true,
-    "end": true,
-    "left": true,
-    "right": true
-  };
-
-  function findDirectionSetting(value) {
-    if (typeof value !== "string") {
-      return false;
-    }
-    var dir = directionSetting[value.toLowerCase()];
-    return dir ? value.toLowerCase() : false;
+function findDirectionSetting(value) {
+  if (typeof value !== "string") {
+    return false;
   }
+  var dir = directionSetting[value.toLowerCase()];
+  return dir ? value.toLowerCase() : false;
+}
 
-  function findAlignSetting(value) {
-    if (typeof value !== "string") {
-      return false;
-    }
-    var align = alignSetting[value.toLowerCase()];
-    return align ? value.toLowerCase() : false;
+function findAlignSetting(value) {
+  if (typeof value !== "string") {
+    return false;
   }
+  var align = alignSetting[value.toLowerCase()];
+  return align ? value.toLowerCase() : false;
+}
 
-  function extend(obj) {
-    var i = 1;
-    for (; i < arguments.length; i++) {
-      var cobj = arguments[i];
-      for (var p in cobj) {
-        obj[p] = cobj[p];
+function VTTCue(startTime, endTime, text) {
+  /**
+   * Shim implementation specific properties. These properties are not in
+   * the spec.
+   */
+
+  // Lets us know when the VTTCue's data has changed in such a way that we need
+  // to recompute its display state. This lets us compute its display state
+  // lazily.
+  this.hasBeenReset = false;
+
+  /**
+   * VTTCue and TextTrackCue properties
+   * http://dev.w3.org/html5/webvtt/#vttcue-interface
+   */
+
+  var _id = "";
+  var _pauseOnExit = false;
+  var _startTime = startTime;
+  var _endTime = endTime;
+  var _text = text;
+  var _region = null;
+  var _vertical = "";
+  var _snapToLines = true;
+  var _line = "auto";
+  var _lineAlign = "start";
+  var _position = "auto";
+  var _positionAlign = "auto";
+  var _size = 100;
+  var _align = "center";
+
+  Object.defineProperties(this, {
+    "id": {
+      enumerable: true,
+      get: function() {
+        return _id;
+      },
+      set: function(value) {
+        _id = "" + value;
       }
-    }
+    },
 
-    return obj;
-  }
+    "pauseOnExit": {
+      enumerable: true,
+      get: function() {
+        return _pauseOnExit;
+      },
+      set: function(value) {
+        _pauseOnExit = !!value;
+      }
+    },
 
-  function VTTCue(startTime, endTime, text) {
-    var cue = this;
-    var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-    var baseObj = {};
-
-    if (isIE8) {
-      cue = document.createElement('custom');
-    } else {
-      baseObj.enumerable = true;
-    }
-
-    /**
-     * Shim implementation specific properties. These properties are not in
-     * the spec.
-     */
-
-    // Lets us know when the VTTCue's data has changed in such a way that we need
-    // to recompute its display state. This lets us compute its display state
-    // lazily.
-    cue.hasBeenReset = false;
-
-    /**
-     * VTTCue and TextTrackCue properties
-     * http://dev.w3.org/html5/webvtt/#vttcue-interface
-     */
-
-    var _id = "";
-    var _pauseOnExit = false;
-    var _startTime = startTime;
-    var _endTime = endTime;
-    var _text = text;
-    var _region = null;
-    var _vertical = "";
-    var _snapToLines = true;
-    var _line = "auto";
-    var _lineAlign = "start";
-    var _position = 50;
-    var _positionAlign = "middle";
-    var _size = 50;
-    var _align = "middle";
-
-    Object.defineProperty(cue,
-      "id", extend({}, baseObj, {
-        get: function() {
-          return _id;
-        },
-        set: function(value) {
-          _id = "" + value;
+    "startTime": {
+      enumerable: true,
+      get: function() {
+        return _startTime;
+      },
+      set: function(value) {
+        if (typeof value !== "number") {
+          throw new TypeError("Start time must be set to a number.");
         }
-      }));
+        _startTime = value;
+        this.hasBeenReset = true;
+      }
+    },
 
-    Object.defineProperty(cue,
-      "pauseOnExit", extend({}, baseObj, {
-        get: function() {
-          return _pauseOnExit;
-        },
-        set: function(value) {
-          _pauseOnExit = !!value;
+    "endTime": {
+      enumerable: true,
+      get: function() {
+        return _endTime;
+      },
+      set: function(value) {
+        if (typeof value !== "number") {
+          throw new TypeError("End time must be set to a number.");
         }
-      }));
+        _endTime = value;
+        this.hasBeenReset = true;
+      }
+    },
 
-    Object.defineProperty(cue,
-      "startTime", extend({}, baseObj, {
-        get: function() {
-          return _startTime;
-        },
-        set: function(value) {
-          if (typeof value !== "number") {
-            throw new TypeError("Start time must be set to a number.");
-          }
-          _startTime = value;
-          this.hasBeenReset = true;
+    "text": {
+      enumerable: true,
+      get: function() {
+        return _text;
+      },
+      set: function(value) {
+        _text = "" + value;
+        this.hasBeenReset = true;
+      }
+    },
+
+    "region": {
+      enumerable: true,
+      get: function() {
+        return _region;
+      },
+      set: function(value) {
+        _region = value;
+        this.hasBeenReset = true;
+      }
+    },
+
+    "vertical": {
+      enumerable: true,
+      get: function() {
+        return _vertical;
+      },
+      set: function(value) {
+        var setting = findDirectionSetting(value);
+        // Have to check for false because the setting an be an empty string.
+        if (setting === false) {
+          throw new SyntaxError("Vertical: an invalid or illegal direction string was specified.");
         }
-      }));
+        _vertical = setting;
+        this.hasBeenReset = true;
+      }
+    },
 
-    Object.defineProperty(cue,
-      "endTime", extend({}, baseObj, {
-        get: function() {
-          return _endTime;
-        },
-        set: function(value) {
-          if (typeof value !== "number") {
-            throw new TypeError("End time must be set to a number.");
-          }
-          _endTime = value;
-          this.hasBeenReset = true;
+    "snapToLines": {
+      enumerable: true,
+      get: function() {
+        return _snapToLines;
+      },
+      set: function(value) {
+        _snapToLines = !!value;
+        this.hasBeenReset = true;
+      }
+    },
+
+    "line": {
+      enumerable: true,
+      get: function() {
+        return _line;
+      },
+      set: function(value) {
+        if (typeof value !== "number" && value !== autoKeyword) {
+          throw new SyntaxError("Line: an invalid number or illegal string was specified.");
         }
-      }));
+        _line = value;
+        this.hasBeenReset = true;
+      }
+    },
 
-    Object.defineProperty(cue,
-      "text", extend({}, baseObj, {
-        get: function() {
-          return _text;
-        },
-        set: function(value) {
-          _text = "" + value;
-          this.hasBeenReset = true;
-        }
-      }));
-
-    Object.defineProperty(cue,
-      "region", extend({}, baseObj, {
-        get: function() {
-          return _region;
-        },
-        set: function(value) {
-          _region = value;
-          this.hasBeenReset = true;
-        }
-      }));
-
-    Object.defineProperty(cue,
-      "vertical", extend({}, baseObj, {
-        get: function() {
-          return _vertical;
-        },
-        set: function(value) {
-          var setting = findDirectionSetting(value);
-          // Have to check for false because the setting an be an empty string.
-          if (setting === false) {
-            throw new SyntaxError("An invalid or illegal string was specified.");
-          }
-          _vertical = setting;
-          this.hasBeenReset = true;
-        }
-      }));
-
-    Object.defineProperty(cue,
-      "snapToLines", extend({}, baseObj, {
-        get: function() {
-          return _snapToLines;
-        },
-        set: function(value) {
-          _snapToLines = !!value;
-          this.hasBeenReset = true;
-        }
-      }));
-
-    Object.defineProperty(cue,
-      "line", extend({}, baseObj, {
-        get: function() {
-          return _line;
-        },
-        set: function(value) {
-          if (typeof value !== "number" && value !== autoKeyword) {
-            throw new SyntaxError("An invalid number or illegal string was specified.");
-          }
-          _line = value;
-          this.hasBeenReset = true;
-        }
-      }));
-
-    Object.defineProperty(cue,
-      "lineAlign", extend({}, baseObj, {
-        get: function() {
-          return _lineAlign;
-        },
-        set: function(value) {
-          var setting = findAlignSetting(value);
-          if (!setting) {
-            throw new SyntaxError("An invalid or illegal string was specified.");
-          }
+    "lineAlign": {
+      enumerable: true,
+      get: function() {
+        return _lineAlign;
+      },
+      set: function(value) {
+        var setting = findAlignSetting(value);
+        if (!setting) {
+          console.warn("lineAlign: an invalid or illegal string was specified.");
+        } else {
           _lineAlign = setting;
           this.hasBeenReset = true;
         }
-      }));
+      }
+    },
 
-    Object.defineProperty(cue,
-      "position", extend({}, baseObj, {
-        get: function() {
-          return _position;
-        },
-        set: function(value) {
-          if (value < 0 || value > 100) {
-            throw new Error("Position must be between 0 and 100.");
-          }
-          _position = value;
-          this.hasBeenReset = true;
+    "position": {
+      enumerable: true,
+      get: function() {
+        return _position;
+      },
+      set: function(value) {
+        if (value < 0 || value > 100) {
+          throw new Error("Position must be between 0 and 100.");
         }
-      }));
+        _position = value;
+        this.hasBeenReset = true;
+      }
+    },
 
-    Object.defineProperty(cue,
-      "positionAlign", extend({}, baseObj, {
-        get: function() {
-          return _positionAlign;
-        },
-        set: function(value) {
-          var setting = findAlignSetting(value);
-          if (!setting) {
-            throw new SyntaxError("An invalid or illegal string was specified.");
-          }
+    "positionAlign": {
+      enumerable: true,
+      get: function() {
+        return _positionAlign;
+      },
+      set: function(value) {
+        var setting = findAlignSetting(value);
+        if (!setting) {
+          console.warn("positionAlign: an invalid or illegal string was specified.");
+        } else {
           _positionAlign = setting;
           this.hasBeenReset = true;
         }
-      }));
+      }
+    },
 
-    Object.defineProperty(cue,
-      "size", extend({}, baseObj, {
-        get: function() {
-          return _size;
-        },
-        set: function(value) {
-          if (value < 0 || value > 100) {
-            throw new Error("Size must be between 0 and 100.");
-          }
-          _size = value;
-          this.hasBeenReset = true;
+    "size": {
+      enumerable: true,
+      get: function() {
+        return _size;
+      },
+      set: function(value) {
+        if (value < 0 || value > 100) {
+          throw new Error("Size must be between 0 and 100.");
         }
-      }));
+        _size = value;
+        this.hasBeenReset = true;
+      }
+    },
 
-    Object.defineProperty(cue,
-      "align", extend({}, baseObj, {
-        get: function() {
-          return _align;
-        },
-        set: function(value) {
-          var setting = findAlignSetting(value);
-          if (!setting) {
-            throw new SyntaxError("An invalid or illegal string was specified.");
-          }
-          _align = setting;
-          this.hasBeenReset = true;
+    "align": {
+      enumerable: true,
+      get: function() {
+        return _align;
+      },
+      set: function(value) {
+        var setting = findAlignSetting(value);
+        if (!setting) {
+          throw new SyntaxError("align: an invalid or illegal alignment string was specified.");
         }
-      }));
-
-    /**
-     * Other <track> spec defined properties
-     */
-
-    // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#text-track-cue-display-state
-    cue.displayState = undefined;
-
-    if (isIE8) {
-      return cue;
+        _align = setting;
+        this.hasBeenReset = true;
+      }
     }
-  }
+  });
 
   /**
-   * VTTCue methods
+   * Other <track> spec defined properties
    */
 
-  VTTCue.prototype.getCueAsHTML = function() {
-    // Assume WebVTT.convertCueToDOMTree is on the global.
-    return WebVTT.convertCueToDOMTree(window, this.text);
-  };
+  // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#text-track-cue-display-state
+  this.displayState = undefined;
+}
 
-  root.VTTCue = root.VTTCue || VTTCue;
-  vttjs.VTTCue = VTTCue;
-}(this, (this.vttjs || {})));
+/**
+ * VTTCue methods
+ */
+
+VTTCue.prototype.getCueAsHTML = function() {
+  // Assume WebVTT.convertCueToDOMTree is on the global.
+  return WebVTT.convertCueToDOMTree(window, this.text);
+};
+
+module.exports = VTTCue;
