@@ -16,16 +16,19 @@
 
 var autoKeyword = "auto";
 var directionSetting = {
-  "": true,
-  "lr": true,
-  "rl": true
+  "": 1,
+  "lr": 1,
+  "rl": 1
 };
 var alignSetting = {
-  "start": true,
-  "middle": true,
-  "end": true,
-  "left": true,
-  "right": true
+  "start": 1,
+  "center": 1,
+  "end": 1,
+  "left": 1,
+  "right": 1,
+  "auto": 1,
+  "line-left": 1,
+  "line-right": 1
 };
 
 function findDirectionSetting(value) {
@@ -44,29 +47,7 @@ function findAlignSetting(value) {
   return align ? value.toLowerCase() : false;
 }
 
-function extend(obj) {
-  var i = 1;
-  for (; i < arguments.length; i++) {
-    var cobj = arguments[i];
-    for (var p in cobj) {
-      obj[p] = cobj[p];
-    }
-  }
-
-  return obj;
-}
-
 function VTTCue(startTime, endTime, text) {
-  var cue = this;
-  var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-  var baseObj = {};
-
-  if (isIE8) {
-    cue = document.createElement('custom');
-  } else {
-    baseObj.enumerable = true;
-  }
-
   /**
    * Shim implementation specific properties. These properties are not in
    * the spec.
@@ -75,7 +56,7 @@ function VTTCue(startTime, endTime, text) {
   // Lets us know when the VTTCue's data has changed in such a way that we need
   // to recompute its display state. This lets us compute its display state
   // lazily.
-  cue.hasBeenReset = false;
+  this.hasBeenReset = false;
 
   /**
    * VTTCue and TextTrackCue properties
@@ -92,33 +73,34 @@ function VTTCue(startTime, endTime, text) {
   var _snapToLines = true;
   var _line = "auto";
   var _lineAlign = "start";
-  var _position = 50;
-  var _positionAlign = "middle";
-  var _size = 50;
-  var _align = "middle";
+  var _position = "auto";
+  var _positionAlign = "auto";
+  var _size = 100;
+  var _align = "center";
 
-  Object.defineProperty(cue,
-    "id", extend({}, baseObj, {
+  Object.defineProperties(this, {
+    "id": {
+      enumerable: true,
       get: function() {
         return _id;
       },
       set: function(value) {
         _id = "" + value;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "pauseOnExit", extend({}, baseObj, {
+    "pauseOnExit": {
+      enumerable: true,
       get: function() {
         return _pauseOnExit;
       },
       set: function(value) {
         _pauseOnExit = !!value;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "startTime", extend({}, baseObj, {
+    "startTime": {
+      enumerable: true,
       get: function() {
         return _startTime;
       },
@@ -129,10 +111,10 @@ function VTTCue(startTime, endTime, text) {
         _startTime = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "endTime", extend({}, baseObj, {
+    "endTime": {
+      enumerable: true,
       get: function() {
         return _endTime;
       },
@@ -143,10 +125,10 @@ function VTTCue(startTime, endTime, text) {
         _endTime = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "text", extend({}, baseObj, {
+    "text": {
+      enumerable: true,
       get: function() {
         return _text;
       },
@@ -154,10 +136,10 @@ function VTTCue(startTime, endTime, text) {
         _text = "" + value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "region", extend({}, baseObj, {
+    "region": {
+      enumerable: true,
       get: function() {
         return _region;
       },
@@ -165,10 +147,10 @@ function VTTCue(startTime, endTime, text) {
         _region = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "vertical", extend({}, baseObj, {
+    "vertical": {
+      enumerable: true,
       get: function() {
         return _vertical;
       },
@@ -176,15 +158,15 @@ function VTTCue(startTime, endTime, text) {
         var setting = findDirectionSetting(value);
         // Have to check for false because the setting an be an empty string.
         if (setting === false) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          throw new SyntaxError("Vertical: an invalid or illegal direction string was specified.");
         }
         _vertical = setting;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "snapToLines", extend({}, baseObj, {
+    "snapToLines": {
+      enumerable: true,
       get: function() {
         return _snapToLines;
       },
@@ -192,39 +174,40 @@ function VTTCue(startTime, endTime, text) {
         _snapToLines = !!value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "line", extend({}, baseObj, {
+    "line": {
+      enumerable: true,
       get: function() {
         return _line;
       },
       set: function(value) {
         if (typeof value !== "number" && value !== autoKeyword) {
-          throw new SyntaxError("An invalid number or illegal string was specified.");
+          throw new SyntaxError("Line: an invalid number or illegal string was specified.");
         }
         _line = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "lineAlign", extend({}, baseObj, {
+    "lineAlign": {
+      enumerable: true,
       get: function() {
         return _lineAlign;
       },
       set: function(value) {
         var setting = findAlignSetting(value);
         if (!setting) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          console.warn("lineAlign: an invalid or illegal string was specified.");
+        } else {
+          _lineAlign = setting;
+          this.hasBeenReset = true;
         }
-        _lineAlign = setting;
-        this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "position", extend({}, baseObj, {
+    "position": {
+      enumerable: true,
       get: function() {
         return _position;
       },
@@ -235,25 +218,26 @@ function VTTCue(startTime, endTime, text) {
         _position = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "positionAlign", extend({}, baseObj, {
+    "positionAlign": {
+      enumerable: true,
       get: function() {
         return _positionAlign;
       },
       set: function(value) {
         var setting = findAlignSetting(value);
         if (!setting) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          console.warn("positionAlign: an invalid or illegal string was specified.");
+        } else {
+          _positionAlign = setting;
+          this.hasBeenReset = true;
         }
-        _positionAlign = setting;
-        this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "size", extend({}, baseObj, {
+    "size": {
+      enumerable: true,
       get: function() {
         return _size;
       },
@@ -264,33 +248,30 @@ function VTTCue(startTime, endTime, text) {
         _size = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "align", extend({}, baseObj, {
+    "align": {
+      enumerable: true,
       get: function() {
         return _align;
       },
       set: function(value) {
         var setting = findAlignSetting(value);
         if (!setting) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          throw new SyntaxError("align: an invalid or illegal alignment string was specified.");
         }
         _align = setting;
         this.hasBeenReset = true;
       }
-    }));
+    }
+  });
 
   /**
    * Other <track> spec defined properties
    */
 
   // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#text-track-cue-display-state
-  cue.displayState = undefined;
-
-  if (isIE8) {
-    return cue;
-  }
+  this.displayState = undefined;
 }
 
 /**

@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.vttjs = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.vttjs = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /**
  * Copyright 2013 vtt.js Contributors
  *
@@ -17,6 +17,8 @@
 
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+var document = require('global/document');
+
 var _objCreate = Object.create || (function() {
   function F() {}
   return function(o) {
@@ -59,7 +61,7 @@ function parseTimeStamp(input) {
     return (h | 0) * 3600 + (m | 0) * 60 + (s | 0) + (f | 0) / 1000;
   }
 
-  var m = input.match(/^(\d+):(\d{2})(:\d{2})?\.(\d{3})/);
+  var m = input.match(/^(\d+):(\d{1,2})(:\d{1,2})?\.(\d{3})/);
   if (!m) {
     return null;
   }
@@ -146,8 +148,8 @@ function parseOptions(input, callback, keyValueDelim, groupDelim) {
     if (kv.length !== 2) {
       continue;
     }
-    var k = kv[0];
-    var v = kv[1];
+    var k = kv[0].trim();
+    var v = kv[1].trim();
     callback(k, v);
   }
 }
@@ -192,21 +194,21 @@ function parseCue(input, cue, regionList) {
         settings.percent(k, vals0) ? settings.set("snapToLines", false) : null;
         settings.alt(k, vals0, ["auto"]);
         if (vals.length === 2) {
-          settings.alt("lineAlign", vals[1], ["start", "middle", "end"]);
+          settings.alt("lineAlign", vals[1], ["start", "center", "end"]);
         }
         break;
       case "position":
         vals = v.split(",");
         settings.percent(k, vals[0]);
         if (vals.length === 2) {
-          settings.alt("positionAlign", vals[1], ["start", "middle", "end"]);
+          settings.alt("positionAlign", vals[1], ["start", "center", "end"]);
         }
         break;
       case "size":
         settings.percent(k, v);
         break;
       case "align":
-        settings.alt(k, v, ["start", "middle", "end", "left", "right"]);
+        settings.alt(k, v, ["start", "center", "end", "left", "right"]);
         break;
       }
     }, /:/, /\s/);
@@ -214,22 +216,37 @@ function parseCue(input, cue, regionList) {
     // Apply default values for any missing fields.
     cue.region = settings.get("region", null);
     cue.vertical = settings.get("vertical", "");
-    cue.line = settings.get("line", "auto");
+    try {
+      cue.line = settings.get("line", "auto");
+    } catch (e) {}
     cue.lineAlign = settings.get("lineAlign", "start");
     cue.snapToLines = settings.get("snapToLines", true);
     cue.size = settings.get("size", 100);
-    cue.align = settings.get("align", "middle");
-    cue.position = settings.get("position", {
-      start: 0,
-      left: 0,
-      middle: 50,
-      end: 100,
-      right: 100
-    }, cue.align);
+    // Safari still uses the old middle value and won't accept center
+    try {
+      cue.align = settings.get("align", "center");
+    } catch (e) {
+      cue.align = settings.get("align", "middle");
+    }
+    try {
+      cue.position = settings.get("position", "auto");
+    } catch (e) {
+      cue.position = settings.get("position", {
+        start: 0,
+        left: 0,
+        center: 50,
+        middle: 50,
+        end: 100,
+        right: 100
+      }, cue.align);
+    }
+
+
     cue.positionAlign = settings.get("positionAlign", {
       start: "start",
       left: "start",
-      middle: "middle",
+      center: "center",
+      middle: "center",
       end: "end",
       right: "end"
     }, cue.align);
@@ -257,14 +274,9 @@ function parseCue(input, cue, regionList) {
   consumeCueSettings(input, cue);
 }
 
-var ESCAPE = {
-  "&amp;": "&",
-  "&lt;": "<",
-  "&gt;": ">",
-  "&lrm;": "\u200e",
-  "&rlm;": "\u200f",
-  "&nbsp;": "\u00a0"
-};
+// When evaluating this file as part of a Webpack bundle for server
+// side rendering, `document` is an empty object.
+var TEXTAREA_ELEMENT = document.createElement && document.createElement("textarea");
 
 var TAG_NAME = {
   c: "span",
@@ -275,6 +287,19 @@ var TAG_NAME = {
   rt: "rt",
   v: "span",
   lang: "span"
+};
+
+// 5.1 default text color
+// 5.2 default text background color is equivalent to text color with bg_ prefix
+var DEFAULT_COLOR_CLASS = {
+  white: 'rgba(255,255,255,1)',
+  lime: 'rgba(0,255,0,1)',
+  cyan: 'rgba(0,255,255,1)',
+  red: 'rgba(255,0,0,1)',
+  yellow: 'rgba(255,255,0,1)',
+  magenta: 'rgba(255,0,255,1)',
+  blue: 'rgba(0,0,255,1)',
+  black: 'rgba(0,0,0,1)'
 };
 
 var TAG_ANNOTATION = {
@@ -306,14 +331,10 @@ function parseContent(window, input) {
     return consume(m[1] ? m[1] : m[2]);
   }
 
-  // Unescape a string 's'.
-  function unescape1(e) {
-    return ESCAPE[e];
-  }
   function unescape(s) {
-    while ((m = s.match(/&(amp|lt|gt|lrm|rlm|nbsp);/))) {
-      s = s.replace(m[0], unescape1);
-    }
+    TEXTAREA_ELEMENT.innerHTML = s;
+    s = TEXTAREA_ELEMENT.textContent;
+    TEXTAREA_ELEMENT.textContent = "";
     return s;
   }
 
@@ -329,7 +350,6 @@ function parseContent(window, input) {
       return null;
     }
     var element = window.document.createElement(tagName);
-    element.localName = tagName;
     var name = TAG_ANNOTATION[type];
     if (name && annotation) {
       element[name] = annotation.trim();
@@ -379,7 +399,22 @@ function parseContent(window, input) {
       }
       // Set the class list (as a list of classes, separated by space).
       if (m[2]) {
-        node.className = m[2].substr(1).replace('.', ' ');
+        var classes = m[2].split('.');
+
+        classes.forEach(function(cl) {
+          var bgColor = /^bg_/.test(cl);
+          // slice out `bg_` if it's a background color
+          var colorName = bgColor ? cl.slice(3) : cl;
+
+          if (DEFAULT_COLOR_CLASS.hasOwnProperty(colorName)) {
+            var propName = bgColor ? 'background-color' : 'color';
+            var propValue = DEFAULT_COLOR_CLASS[colorName];
+
+            node.style[propName] = propValue;
+          }
+        });
+
+        node.className = classes.join(' ');
       }
       // Append the node to the current node, and enter the scope of the new
       // node.
@@ -532,15 +567,6 @@ StyleBox.prototype.formatStyle = function(val, unit) {
 // Constructs the computed display state of the cue (a div). Places the div
 // into the overlay which should be a block level element (usually a div).
 function CueStyleBox(window, cue, styleOptions) {
-  var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-  var color = "rgba(255, 255, 255, 1)";
-  var backgroundColor = "rgba(0, 0, 0, 0.8)";
-
-  if (isIE8) {
-    color = "rgb(255, 255, 255)";
-    backgroundColor = "rgb(0, 0, 0)";
-  }
-
   StyleBox.call(this);
   this.cue = cue;
 
@@ -548,45 +574,39 @@ function CueStyleBox(window, cue, styleOptions) {
   // have inline positioning and will function as the cue background box.
   this.cueDiv = parseContent(window, cue.text);
   var styles = {
-    color: color,
-    backgroundColor: backgroundColor,
+    color: "rgba(255, 255, 255, 1)",
+    backgroundColor:  "rgba(0, 0, 0, 0.8)",
     position: "relative",
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    display: "inline"
+    display: "inline",
+    writingMode: cue.vertical === "" ? "horizontal-tb"
+                                     : cue.vertical === "lr" ? "vertical-lr"
+                                                             : "vertical-rl",
+    unicodeBidi: "plaintext"
   };
 
-  if (!isIE8) {
-    styles.writingMode = cue.vertical === "" ? "horizontal-tb"
-                                             : cue.vertical === "lr" ? "vertical-lr"
-                                                                     : "vertical-rl";
-    styles.unicodeBidi = "plaintext";
-  }
   this.applyStyles(styles, this.cueDiv);
 
   // Create an absolutely positioned div that will be used to position the cue
   // div. Note, all WebVTT cue-setting alignments are equivalent to the CSS
-  // mirrors of them except "middle" which is "center" in CSS.
+  // mirrors of them except middle instead of center on Safari.
   this.div = window.document.createElement("div");
   styles = {
+    direction: determineBidi(this.cueDiv),
+    writingMode: cue.vertical === "" ? "horizontal-tb"
+                                     : cue.vertical === "lr" ? "vertical-lr"
+                                                             : "vertical-rl",
+    unicodeBidi: "plaintext",
     textAlign: cue.align === "middle" ? "center" : cue.align,
     font: styleOptions.font,
     whiteSpace: "pre-line",
     position: "absolute"
   };
 
-  if (!isIE8) {
-    styles.direction = determineBidi(this.cueDiv);
-    styles.writingMode = cue.vertical === "" ? "horizontal-tb"
-                                             : cue.vertical === "lr" ? "vertical-lr"
-                                                                     : "vertical-rl".
-    stylesunicodeBidi =  "plaintext";
-  }
-
   this.applyStyles(styles);
-
   this.div.appendChild(this.cueDiv);
 
   // Calculate the distance from the reference edge of the viewport to the text
@@ -595,12 +615,14 @@ function CueStyleBox(window, cue, styleOptions) {
   var textPos = 0;
   switch (cue.positionAlign) {
   case "start":
+  case "line-left":
     textPos = cue.position;
     break;
-  case "middle":
+  case "center":
     textPos = cue.position - (cue.size / 2);
     break;
   case "end":
+  case "line-right":
     textPos = cue.position - cue.size;
     break;
   }
@@ -641,8 +663,6 @@ CueStyleBox.prototype.constructor = CueStyleBox;
 // compute things with such as if it overlaps or intersects with another Element.
 // Can initialize it with either a StyleBox or another BoxPosition.
 function BoxPosition(obj) {
-  var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-
   // Either a BoxPosition was passed in and we need to copy it, or a StyleBox
   // was passed in and we need to copy the results of 'getBoundingClientRect'
   // as the object returned is readonly. All co-ordinate values are in reference
@@ -671,10 +691,6 @@ function BoxPosition(obj) {
   this.bottom = obj.bottom || (top + (obj.height || height));
   this.width = obj.width || width;
   this.lineHeight = lh !== undefined ? lh : obj.lineHeight;
-
-  if (isIE8 && !this.lineHeight) {
-    this.lineHeight = 13;
-  }
 }
 
 // Move the box along a particular axis. Optionally pass in an amount to move
@@ -881,7 +897,7 @@ function moveBoxToLinePosition(window, styleBox, containerBox, boxPositions) {
     var calculatedPercentage = (boxPosition.lineHeight / containerBox.height) * 100;
 
     switch (cue.lineAlign) {
-    case "middle":
+    case "center":
       linePos -= (calculatedPercentage / 2);
       break;
     case "end":
@@ -1242,6 +1258,12 @@ WebVTT.Parser.prototype = {
             continue;
           }
           self.cue = new (self.vttjs.VTTCue || self.window.VTTCue)(0, 0, "");
+          // Safari still uses the old middle value and won't accept center
+          try {
+            self.cue.align = "center";
+          } catch (e) {
+            self.cue.align = "middle";
+          }
           self.state = "CUE";
           // 30-39 - Check if self line contains an optional identifier or timing data.
           if (line.indexOf("-->") === -1) {
@@ -1279,7 +1301,7 @@ WebVTT.Parser.prototype = {
           if (self.cue.text) {
             self.cue.text += "\n";
           }
-          self.cue.text += line;
+          self.cue.text += line.replace(/\u2028/g, '\n').replace(/u2029/g, '\n');
           continue;
         case "BADCUE": // BADCUE
           // 54-62 - Collect and discard the remaining cue.
@@ -1329,7 +1351,7 @@ WebVTT.Parser.prototype = {
 
 module.exports = WebVTT;
 
-},{}],2:[function(require,module,exports){
+},{"global/document":5}],2:[function(require,module,exports){
 /**
  * Copyright 2013 vtt.js Contributors
  *
@@ -1348,16 +1370,19 @@ module.exports = WebVTT;
 
 var autoKeyword = "auto";
 var directionSetting = {
-  "": true,
-  "lr": true,
-  "rl": true
+  "": 1,
+  "lr": 1,
+  "rl": 1
 };
 var alignSetting = {
-  "start": true,
-  "middle": true,
-  "end": true,
-  "left": true,
-  "right": true
+  "start": 1,
+  "center": 1,
+  "end": 1,
+  "left": 1,
+  "right": 1,
+  "auto": 1,
+  "line-left": 1,
+  "line-right": 1
 };
 
 function findDirectionSetting(value) {
@@ -1376,29 +1401,7 @@ function findAlignSetting(value) {
   return align ? value.toLowerCase() : false;
 }
 
-function extend(obj) {
-  var i = 1;
-  for (; i < arguments.length; i++) {
-    var cobj = arguments[i];
-    for (var p in cobj) {
-      obj[p] = cobj[p];
-    }
-  }
-
-  return obj;
-}
-
 function VTTCue(startTime, endTime, text) {
-  var cue = this;
-  var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-  var baseObj = {};
-
-  if (isIE8) {
-    cue = document.createElement('custom');
-  } else {
-    baseObj.enumerable = true;
-  }
-
   /**
    * Shim implementation specific properties. These properties are not in
    * the spec.
@@ -1407,7 +1410,7 @@ function VTTCue(startTime, endTime, text) {
   // Lets us know when the VTTCue's data has changed in such a way that we need
   // to recompute its display state. This lets us compute its display state
   // lazily.
-  cue.hasBeenReset = false;
+  this.hasBeenReset = false;
 
   /**
    * VTTCue and TextTrackCue properties
@@ -1424,33 +1427,34 @@ function VTTCue(startTime, endTime, text) {
   var _snapToLines = true;
   var _line = "auto";
   var _lineAlign = "start";
-  var _position = 50;
-  var _positionAlign = "middle";
-  var _size = 50;
-  var _align = "middle";
+  var _position = "auto";
+  var _positionAlign = "auto";
+  var _size = 100;
+  var _align = "center";
 
-  Object.defineProperty(cue,
-    "id", extend({}, baseObj, {
+  Object.defineProperties(this, {
+    "id": {
+      enumerable: true,
       get: function() {
         return _id;
       },
       set: function(value) {
         _id = "" + value;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "pauseOnExit", extend({}, baseObj, {
+    "pauseOnExit": {
+      enumerable: true,
       get: function() {
         return _pauseOnExit;
       },
       set: function(value) {
         _pauseOnExit = !!value;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "startTime", extend({}, baseObj, {
+    "startTime": {
+      enumerable: true,
       get: function() {
         return _startTime;
       },
@@ -1461,10 +1465,10 @@ function VTTCue(startTime, endTime, text) {
         _startTime = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "endTime", extend({}, baseObj, {
+    "endTime": {
+      enumerable: true,
       get: function() {
         return _endTime;
       },
@@ -1475,10 +1479,10 @@ function VTTCue(startTime, endTime, text) {
         _endTime = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "text", extend({}, baseObj, {
+    "text": {
+      enumerable: true,
       get: function() {
         return _text;
       },
@@ -1486,10 +1490,10 @@ function VTTCue(startTime, endTime, text) {
         _text = "" + value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "region", extend({}, baseObj, {
+    "region": {
+      enumerable: true,
       get: function() {
         return _region;
       },
@@ -1497,10 +1501,10 @@ function VTTCue(startTime, endTime, text) {
         _region = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "vertical", extend({}, baseObj, {
+    "vertical": {
+      enumerable: true,
       get: function() {
         return _vertical;
       },
@@ -1508,15 +1512,15 @@ function VTTCue(startTime, endTime, text) {
         var setting = findDirectionSetting(value);
         // Have to check for false because the setting an be an empty string.
         if (setting === false) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          throw new SyntaxError("Vertical: an invalid or illegal direction string was specified.");
         }
         _vertical = setting;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "snapToLines", extend({}, baseObj, {
+    "snapToLines": {
+      enumerable: true,
       get: function() {
         return _snapToLines;
       },
@@ -1524,39 +1528,40 @@ function VTTCue(startTime, endTime, text) {
         _snapToLines = !!value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "line", extend({}, baseObj, {
+    "line": {
+      enumerable: true,
       get: function() {
         return _line;
       },
       set: function(value) {
         if (typeof value !== "number" && value !== autoKeyword) {
-          throw new SyntaxError("An invalid number or illegal string was specified.");
+          throw new SyntaxError("Line: an invalid number or illegal string was specified.");
         }
         _line = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "lineAlign", extend({}, baseObj, {
+    "lineAlign": {
+      enumerable: true,
       get: function() {
         return _lineAlign;
       },
       set: function(value) {
         var setting = findAlignSetting(value);
         if (!setting) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          console.warn("lineAlign: an invalid or illegal string was specified.");
+        } else {
+          _lineAlign = setting;
+          this.hasBeenReset = true;
         }
-        _lineAlign = setting;
-        this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "position", extend({}, baseObj, {
+    "position": {
+      enumerable: true,
       get: function() {
         return _position;
       },
@@ -1567,25 +1572,26 @@ function VTTCue(startTime, endTime, text) {
         _position = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "positionAlign", extend({}, baseObj, {
+    "positionAlign": {
+      enumerable: true,
       get: function() {
         return _positionAlign;
       },
       set: function(value) {
         var setting = findAlignSetting(value);
         if (!setting) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          console.warn("positionAlign: an invalid or illegal string was specified.");
+        } else {
+          _positionAlign = setting;
+          this.hasBeenReset = true;
         }
-        _positionAlign = setting;
-        this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "size", extend({}, baseObj, {
+    "size": {
+      enumerable: true,
       get: function() {
         return _size;
       },
@@ -1596,33 +1602,30 @@ function VTTCue(startTime, endTime, text) {
         _size = value;
         this.hasBeenReset = true;
       }
-    }));
+    },
 
-  Object.defineProperty(cue,
-    "align", extend({}, baseObj, {
+    "align": {
+      enumerable: true,
       get: function() {
         return _align;
       },
       set: function(value) {
         var setting = findAlignSetting(value);
         if (!setting) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          throw new SyntaxError("align: an invalid or illegal alignment string was specified.");
         }
         _align = setting;
         this.hasBeenReset = true;
       }
-    }));
+    }
+  });
 
   /**
    * Other <track> spec defined properties
    */
 
   // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#text-track-cue-display-state
-  cue.displayState = undefined;
-
-  if (isIE8) {
-    return cue;
-  }
+  this.displayState = undefined;
 }
 
 /**
@@ -1762,9 +1765,10 @@ function VTTRegion() {
         var setting = findScrollSetting(value);
         // Have to check for false as an empty string is a legal value.
         if (setting === false) {
-          throw new SyntaxError("An invalid or illegal string was specified.");
+          console.warn("Scroll: an invalid or illegal string was specified.");
+        } else {
+          _scroll = setting;
         }
-        _scroll = setting;
       }
     }
   });
@@ -1773,19 +1777,46 @@ function VTTRegion() {
 module.exports = VTTRegion;
 
 },{}],4:[function(require,module,exports){
+
+},{}],5:[function(require,module,exports){
 (function (global){
-if (typeof window !== "undefined") {
-    module.exports = window;
-} else if (typeof global !== "undefined") {
-    module.exports = global;
-} else if (typeof self !== "undefined"){
-    module.exports = self;
+var topLevel = typeof global !== 'undefined' ? global :
+    typeof window !== 'undefined' ? window : {}
+var minDoc = require('min-document');
+
+var doccy;
+
+if (typeof document !== 'undefined') {
+    doccy = document;
 } else {
-    module.exports = {};
+    doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'];
+
+    if (!doccy) {
+        doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'] = minDoc;
+    }
 }
 
+module.exports = doccy;
+
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],5:[function(require,module,exports){
+},{"min-document":4}],6:[function(require,module,exports){
+(function (global){
+var win;
+
+if (typeof window !== "undefined") {
+    win = window;
+} else if (typeof global !== "undefined") {
+    win = global;
+} else if (typeof self !== "undefined"){
+    win = self;
+} else {
+    win = {};
+}
+
+module.exports = win;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],7:[function(require,module,exports){
 /**
  * Copyright 2013 vtt.js Contributors
  *
@@ -1837,5 +1868,5 @@ if (!window.VTTCue) {
   vttjs.shim();
 }
 
-},{"./vtt.js":1,"./vttcue.js":2,"./vttregion.js":3,"global/window":4}]},{},[5])(5)
+},{"./vtt.js":1,"./vttcue.js":2,"./vttregion.js":3,"global/window":6}]},{},[7])(7)
 });

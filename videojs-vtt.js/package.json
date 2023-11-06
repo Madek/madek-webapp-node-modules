@@ -1,14 +1,17 @@
 {
   "author": "Andreas Gal <gal@mozilla.com>",
+  "contributors": [
+    "Gary Katsevman <me@gkatsev.com>"
+  ],
   "name": "videojs-vtt.js",
-  "description": "A JavaScript implementation of the WebVTT specification.",
-  "version": "0.12.6",
+  "description": "A JavaScript implementation of the WebVTT specification, forked from vtt.js for use with Video.js",
+  "version": "0.15.5",
   "main": "lib/browser-index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gkatsev/vtt.js.git"
+    "url": "https://github.com/videojs/vtt.js.git"
   },
-  "homepage": "https://github.com/gkatsev/vtt.js",
+  "homepage": "https://github.com/videojs/vtt.js",
   "devDependencies": {
     "async": "0.9.0",
     "browserify": "^14.3.0",
@@ -54,12 +57,10 @@
     "build-global": "browserify -s vttjs -p deumdify  . -o dist/vtt.global.js",
     "postbuild": "npm run minify",
     "minify": "grunt uglify:dist uglify:global",
-    "test": "grunt"
+    "test": "grunt",
+    "prepublishOnly": "npm run build"
   },
-  "license": {
-    "type": "Apache-2.0",
-    "url": "https://github.com/gkatsev/vtt.js/blob/master/LICENSE"
-  },
+  "license": "Apache-2.0",
   "dependencies": {
     "global": "^4.3.1"
   }

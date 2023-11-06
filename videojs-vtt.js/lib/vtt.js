@@ -16,6 +16,8 @@
 
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+var document = require('global/document');
+
 var _objCreate = Object.create || (function() {
   function F() {}
   return function(o) {
@@ -58,7 +60,7 @@ function parseTimeStamp(input) {
     return (h | 0) * 3600 + (m | 0) * 60 + (s | 0) + (f | 0) / 1000;
   }
 
-  var m = input.match(/^(\d+):(\d{2})(:\d{2})?\.(\d{3})/);
+  var m = input.match(/^(\d+):(\d{1,2})(:\d{1,2})?\.(\d{3})/);
   if (!m) {
     return null;
   }
@@ -145,8 +147,8 @@ function parseOptions(input, callback, keyValueDelim, groupDelim) {
     if (kv.length !== 2) {
       continue;
     }
-    var k = kv[0];
-    var v = kv[1];
+    var k = kv[0].trim();
+    var v = kv[1].trim();
     callback(k, v);
   }
 }
@@ -191,21 +193,21 @@ function parseCue(input, cue, regionList) {
         settings.percent(k, vals0) ? settings.set("snapToLines", false) : null;
         settings.alt(k, vals0, ["auto"]);
         if (vals.length === 2) {
-          settings.alt("lineAlign", vals[1], ["start", "middle", "end"]);
+          settings.alt("lineAlign", vals[1], ["start", "center", "end"]);
         }
         break;
       case "position":
         vals = v.split(",");
         settings.percent(k, vals[0]);
         if (vals.length === 2) {
-          settings.alt("positionAlign", vals[1], ["start", "middle", "end"]);
+          settings.alt("positionAlign", vals[1], ["start", "center", "end"]);
         }
         break;
       case "size":
         settings.percent(k, v);
         break;
       case "align":
-        settings.alt(k, v, ["start", "middle", "end", "left", "right"]);
+        settings.alt(k, v, ["start", "center", "end", "left", "right"]);
         break;
       }
     }, /:/, /\s/);
@@ -213,22 +215,37 @@ function parseCue(input, cue, regionList) {
     // Apply default values for any missing fields.
     cue.region = settings.get("region", null);
     cue.vertical = settings.get("vertical", "");
-    cue.line = settings.get("line", "auto");
+    try {
+      cue.line = settings.get("line", "auto");
+    } catch (e) {}
     cue.lineAlign = settings.get("lineAlign", "start");
     cue.snapToLines = settings.get("snapToLines", true);
     cue.size = settings.get("size", 100);
-    cue.align = settings.get("align", "middle");
-    cue.position = settings.get("position", {
-      start: 0,
-      left: 0,
-      middle: 50,
-      end: 100,
-      right: 100
-    }, cue.align);
+    // Safari still uses the old middle value and won't accept center
+    try {
+      cue.align = settings.get("align", "center");
+    } catch (e) {
+      cue.align = settings.get("align", "middle");
+    }
+    try {
+      cue.position = settings.get("position", "auto");
+    } catch (e) {
+      cue.position = settings.get("position", {
+        start: 0,
+        left: 0,
+        center: 50,
+        middle: 50,
+        end: 100,
+        right: 100
+      }, cue.align);
+    }
+
+
     cue.positionAlign = settings.get("positionAlign", {
       start: "start",
       left: "start",
-      middle: "middle",
+      center: "center",
+      middle: "center",
       end: "end",
       right: "end"
     }, cue.align);
@@ -256,14 +273,9 @@ function parseCue(input, cue, regionList) {
   consumeCueSettings(input, cue);
 }
 
-var ESCAPE = {
-  "&amp;": "&",
-  "&lt;": "<",
-  "&gt;": ">",
-  "&lrm;": "\u200e",
-  "&rlm;": "\u200f",
-  "&nbsp;": "\u00a0"
-};
+// When evaluating this file as part of a Webpack bundle for server
+// side rendering, `document` is an empty object.
+var TEXTAREA_ELEMENT = document.createElement && document.createElement("textarea");
 
 var TAG_NAME = {
   c: "span",
@@ -274,6 +286,19 @@ var TAG_NAME = {
   rt: "rt",
   v: "span",
   lang: "span"
+};
+
+// 5.1 default text color
+// 5.2 default text background color is equivalent to text color with bg_ prefix
+var DEFAULT_COLOR_CLASS = {
+  white: 'rgba(255,255,255,1)',
+  lime: 'rgba(0,255,0,1)',
+  cyan: 'rgba(0,255,255,1)',
+  red: 'rgba(255,0,0,1)',
+  yellow: 'rgba(255,255,0,1)',
+  magenta: 'rgba(255,0,255,1)',
+  blue: 'rgba(0,0,255,1)',
+  black: 'rgba(0,0,0,1)'
 };
 
 var TAG_ANNOTATION = {
@@ -305,14 +330,10 @@ function parseContent(window, input) {
     return consume(m[1] ? m[1] : m[2]);
   }
 
-  // Unescape a string 's'.
-  function unescape1(e) {
-    return ESCAPE[e];
-  }
   function unescape(s) {
-    while ((m = s.match(/&(amp|lt|gt|lrm|rlm|nbsp);/))) {
-      s = s.replace(m[0], unescape1);
-    }
+    TEXTAREA_ELEMENT.innerHTML = s;
+    s = TEXTAREA_ELEMENT.textContent;
+    TEXTAREA_ELEMENT.textContent = "";
     return s;
   }
 
@@ -328,7 +349,6 @@ function parseContent(window, input) {
       return null;
     }
     var element = window.document.createElement(tagName);
-    element.localName = tagName;
     var name = TAG_ANNOTATION[type];
     if (name && annotation) {
       element[name] = annotation.trim();
@@ -378,7 +398,22 @@ function parseContent(window, input) {
       }
       // Set the class list (as a list of classes, separated by space).
       if (m[2]) {
-        node.className = m[2].substr(1).replace('.', ' ');
+        var classes = m[2].split('.');
+
+        classes.forEach(function(cl) {
+          var bgColor = /^bg_/.test(cl);
+          // slice out `bg_` if it's a background color
+          var colorName = bgColor ? cl.slice(3) : cl;
+
+          if (DEFAULT_COLOR_CLASS.hasOwnProperty(colorName)) {
+            var propName = bgColor ? 'background-color' : 'color';
+            var propValue = DEFAULT_COLOR_CLASS[colorName];
+
+            node.style[propName] = propValue;
+          }
+        });
+
+        node.className = classes.join(' ');
       }
       // Append the node to the current node, and enter the scope of the new
       // node.
@@ -531,15 +566,6 @@ StyleBox.prototype.formatStyle = function(val, unit) {
 // Constructs the computed display state of the cue (a div). Places the div
 // into the overlay which should be a block level element (usually a div).
 function CueStyleBox(window, cue, styleOptions) {
-  var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-  var color = "rgba(255, 255, 255, 1)";
-  var backgroundColor = "rgba(0, 0, 0, 0.8)";
-
-  if (isIE8) {
-    color = "rgb(255, 255, 255)";
-    backgroundColor = "rgb(0, 0, 0)";
-  }
-
   StyleBox.call(this);
   this.cue = cue;
 
@@ -547,45 +573,39 @@ function CueStyleBox(window, cue, styleOptions) {
   // have inline positioning and will function as the cue background box.
   this.cueDiv = parseContent(window, cue.text);
   var styles = {
-    color: color,
-    backgroundColor: backgroundColor,
+    color: "rgba(255, 255, 255, 1)",
+    backgroundColor:  "rgba(0, 0, 0, 0.8)",
     position: "relative",
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    display: "inline"
+    display: "inline",
+    writingMode: cue.vertical === "" ? "horizontal-tb"
+                                     : cue.vertical === "lr" ? "vertical-lr"
+                                                             : "vertical-rl",
+    unicodeBidi: "plaintext"
   };
 
-  if (!isIE8) {
-    styles.writingMode = cue.vertical === "" ? "horizontal-tb"
-                                             : cue.vertical === "lr" ? "vertical-lr"
-                                                                     : "vertical-rl";
-    styles.unicodeBidi = "plaintext";
-  }
   this.applyStyles(styles, this.cueDiv);
 
   // Create an absolutely positioned div that will be used to position the cue
   // div. Note, all WebVTT cue-setting alignments are equivalent to the CSS
-  // mirrors of them except "middle" which is "center" in CSS.
+  // mirrors of them except middle instead of center on Safari.
   this.div = window.document.createElement("div");
   styles = {
+    direction: determineBidi(this.cueDiv),
+    writingMode: cue.vertical === "" ? "horizontal-tb"
+                                     : cue.vertical === "lr" ? "vertical-lr"
+                                                             : "vertical-rl",
+    unicodeBidi: "plaintext",
     textAlign: cue.align === "middle" ? "center" : cue.align,
     font: styleOptions.font,
     whiteSpace: "pre-line",
     position: "absolute"
   };
 
-  if (!isIE8) {
-    styles.direction = determineBidi(this.cueDiv);
-    styles.writingMode = cue.vertical === "" ? "horizontal-tb"
-                                             : cue.vertical === "lr" ? "vertical-lr"
-                                                                     : "vertical-rl".
-    stylesunicodeBidi =  "plaintext";
-  }
-
   this.applyStyles(styles);
-
   this.div.appendChild(this.cueDiv);
 
   // Calculate the distance from the reference edge of the viewport to the text
@@ -594,12 +614,14 @@ function CueStyleBox(window, cue, styleOptions) {
   var textPos = 0;
   switch (cue.positionAlign) {
   case "start":
+  case "line-left":
     textPos = cue.position;
     break;
-  case "middle":
+  case "center":
     textPos = cue.position - (cue.size / 2);
     break;
   case "end":
+  case "line-right":
     textPos = cue.position - cue.size;
     break;
   }
@@ -640,8 +662,6 @@ CueStyleBox.prototype.constructor = CueStyleBox;
 // compute things with such as if it overlaps or intersects with another Element.
 // Can initialize it with either a StyleBox or another BoxPosition.
 function BoxPosition(obj) {
-  var isIE8 = (/MSIE\s8\.0/).test(navigator.userAgent);
-
   // Either a BoxPosition was passed in and we need to copy it, or a StyleBox
   // was passed in and we need to copy the results of 'getBoundingClientRect'
   // as the object returned is readonly. All co-ordinate values are in reference
@@ -670,10 +690,6 @@ function BoxPosition(obj) {
   this.bottom = obj.bottom || (top + (obj.height || height));
   this.width = obj.width || width;
   this.lineHeight = lh !== undefined ? lh : obj.lineHeight;
-
-  if (isIE8 && !this.lineHeight) {
-    this.lineHeight = 13;
-  }
 }
 
 // Move the box along a particular axis. Optionally pass in an amount to move
@@ -880,7 +896,7 @@ function moveBoxToLinePosition(window, styleBox, containerBox, boxPositions) {
     var calculatedPercentage = (boxPosition.lineHeight / containerBox.height) * 100;
 
     switch (cue.lineAlign) {
-    case "middle":
+    case "center":
       linePos -= (calculatedPercentage / 2);
       break;
     case "end":
@@ -1241,6 +1257,12 @@ WebVTT.Parser.prototype = {
             continue;
           }
           self.cue = new (self.vttjs.VTTCue || self.window.VTTCue)(0, 0, "");
+          // Safari still uses the old middle value and won't accept center
+          try {
+            self.cue.align = "center";
+          } catch (e) {
+            self.cue.align = "middle";
+          }
           self.state = "CUE";
           // 30-39 - Check if self line contains an optional identifier or timing data.
           if (line.indexOf("-->") === -1) {
@@ -1278,7 +1300,7 @@ WebVTT.Parser.prototype = {
           if (self.cue.text) {
             self.cue.text += "\n";
           }
-          self.cue.text += line;
+          self.cue.text += line.replace(/\u2028/g, '\n').replace(/u2029/g, '\n');
           continue;
         case "BADCUE": // BADCUE
           // 54-62 - Collect and discard the remaining cue.
