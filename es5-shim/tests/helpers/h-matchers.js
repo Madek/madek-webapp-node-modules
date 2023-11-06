@@ -1,5 +1,3 @@
-/* global beforeEach, expect */
-
 var has = Object.prototype.hasOwnProperty;
 var getKeys = function (o) {
     'use strict';
@@ -11,6 +9,7 @@ var getKeys = function (o) {
             a.push(key);
         }
     }
+    a.sort();
     return a;
 };
 
