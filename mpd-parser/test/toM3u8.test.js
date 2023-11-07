@@ -213,6 +213,591 @@ QUnit.test('playlists', function(assert) {
   assert.deepEqual(toM3u8({ dashPlaylists }), expected);
 });
 
+QUnit.test('playlists with content steering and resolvable URLs', function(assert) {
+  const contentSteering = {
+    defaultServiceLocation: 'beta',
+    proxyServerURL: 'http://127.0.0.1:3455/steer',
+    queryBeforeStart: false,
+    serverURL: 'https://example.com/app/url'
+  };
+
+  const dashPlaylists = [
+    {
+      attributes: {
+        bandwidth: 5000000,
+        baseUrl: 'https://cdn1.example.com/video',
+        clientOffset: 0,
+        codecs: 'avc1.64001e',
+        duration: 0,
+        height: 404,
+        id: 'test',
+        mimeType: 'video/mp4',
+        periodStart: 0,
+        role: {
+          value: 'main'
+        },
+        serviceLocation: 'alpha',
+        sourceDuration: 0,
+        type: 'dyanmic',
+        width: 720
+      },
+      segments: [
+        {
+          duration: 0,
+          map: {
+            resolvedUri: 'https://cdn1.example.com/video',
+            uri: ''
+          },
+          number: 1,
+          presentationTime: 0,
+          resolvedUri: 'https://cdn1.example.com/video',
+          timeline: 0,
+          uri: ''
+        }
+      ]
+    },
+    {
+      attributes: {
+        bandwidth: 5000000,
+        baseUrl: 'https://cdn2.example.com/video',
+        clientOffset: 0,
+        codecs: 'avc1.64001e',
+        duration: 0,
+        height: 404,
+        id: 'test',
+        mimeType: 'video/mp4',
+        periodStart: 0,
+        role: {
+          value: 'main'
+        },
+        serviceLocation: 'beta',
+        sourceDuration: 0,
+        type: 'dyanmic',
+        width: 720
+      },
+      segments: [
+        {
+          duration: 0,
+          map: {
+            resolvedUri: 'https://cdn2.example.com/video',
+            uri: ''
+          },
+          number: 1,
+          presentationTime: 0,
+          resolvedUri: 'https://cdn2.example.com/video',
+          timeline: 0,
+          uri: ''
+        }
+      ]
+    },
+    {
+      attributes: {
+        bandwidth: 256,
+        baseUrl: 'https://cdn1.example.com/vtt',
+        clientOffset: 0,
+        duration: 0,
+        id: 'en',
+        lang: 'en',
+        mimeType: 'text/vtt',
+        periodStart: 0,
+        role: {},
+        serviceLocation: 'alpha',
+        sourceDuration: 0,
+        type: 'dyanmic'
+      },
+      segments: [
+        {
+          duration: 0,
+          map: {
+            resolvedUri: 'https://cdn1.example.com/vtt',
+            uri: ''
+          },
+          number: 1,
+          presentationTime: 0,
+          resolvedUri: 'https://cdn1.example.com/vtt',
+          timeline: 0,
+          uri: ''
+        }
+      ]
+    },
+    {
+      attributes: {
+        bandwidth: 256,
+        baseUrl: 'https://cdn2.example.com/vtt',
+        clientOffset: 0,
+        id: 'en',
+        lang: 'en',
+        mimeType: 'text/vtt',
+        periodStart: 0,
+        role: {},
+        serviceLocation: 'beta',
+        sourceDuration: 0,
+        type: 'dyanmic'
+      }
+    }
+  ];
+
+  const expected = {
+    allowCache: true,
+    contentSteering: {
+      defaultServiceLocation: 'beta',
+      proxyServerURL: 'http://127.0.0.1:3455/steer',
+      queryBeforeStart: false,
+      serverURL: 'https://example.com/app/url'
+    },
+    discontinuityStarts: [],
+    duration: 0,
+    endList: true,
+    mediaGroups: {
+      AUDIO: {},
+      ['CLOSED-CAPTIONS']: {},
+      SUBTITLES: {
+        subs: {
+          en: {
+            autoselect: false,
+            default: false,
+            language: 'en',
+            playlists: [
+              {
+                attributes: {
+                  BANDWIDTH: 256,
+                  NAME: 'en',
+                  ['PROGRAM-ID']: 1,
+                  serviceLocation: 'alpha'
+                },
+                discontinuitySequence: 0,
+                discontinuityStarts: [],
+                endList: false,
+                mediaSequence: 0,
+                resolvedUri: 'https://cdn1.example.com/vtt',
+                segments: [
+                  {
+                    duration: 0,
+                    map: {
+                      resolvedUri: 'https://cdn1.example.com/vtt',
+                      uri: ''
+                    },
+                    number: 0,
+                    presentationTime: 0,
+                    resolvedUri: 'https://cdn1.example.com/vtt',
+                    timeline: 0,
+                    uri: ''
+                  }
+                ],
+                targetDuration: 0,
+                timeline: 0,
+                timelineStarts: [
+                  {
+                    start: 0,
+                    timeline: 0
+                  }
+                ],
+                uri: ''
+              },
+              {
+                attributes: {
+                  BANDWIDTH: 256,
+                  NAME: 'en',
+                  ['PROGRAM-ID']: 1,
+                  serviceLocation: 'beta'
+                },
+                discontinuitySequence: 0,
+                discontinuityStarts: [],
+                endList: false,
+                mediaSequence: 0,
+                resolvedUri: 'https://cdn2.example.com/vtt',
+                segments: [
+                  {
+                    duration: 0,
+                    number: 0,
+                    resolvedUri: 'https://cdn2.example.com/vtt',
+                    timeline: 0,
+                    uri: 'https://cdn2.example.com/vtt'
+                  }
+                ],
+                targetDuration: 0,
+                timeline: 0,
+                timelineStarts: [
+                  {
+                    start: 0,
+                    timeline: 0
+                  }
+                ],
+                uri: ''
+              }
+            ],
+            uri: ''
+          }
+        }
+      },
+      VIDEO: {}
+    },
+    playlists: [
+      {
+        attributes: {
+          AUDIO: 'audio',
+          BANDWIDTH: 5000000,
+          CODECS: 'avc1.64001e',
+          NAME: 'test',
+          ['PROGRAM-ID']: 1,
+          RESOLUTION: {
+            height: 404,
+            width: 720
+          },
+          SUBTITLES: 'subs',
+          serviceLocation: 'alpha'
+        },
+        discontinuitySequence: 0,
+        discontinuityStarts: [],
+        endList: false,
+        mediaSequence: 0,
+        resolvedUri: 'https://cdn1.example.com/video',
+        segments: [
+          {
+            duration: 0,
+            map: {
+              resolvedUri: 'https://cdn1.example.com/video',
+              uri: ''
+            },
+            number: 0,
+            presentationTime: 0,
+            resolvedUri: 'https://cdn1.example.com/video',
+            timeline: 0,
+            uri: ''
+          }
+        ],
+        targetDuration: 0,
+        timeline: 0,
+        timelineStarts: [
+          {
+            start: 0,
+            timeline: 0
+          }
+        ],
+        uri: ''
+      },
+      {
+        attributes: {
+          AUDIO: 'audio',
+          BANDWIDTH: 5000000,
+          CODECS: 'avc1.64001e',
+          NAME: 'test',
+          ['PROGRAM-ID']: 1,
+          RESOLUTION: {
+            height: 404,
+            width: 720
+          },
+          SUBTITLES: 'subs',
+          serviceLocation: 'beta'
+        },
+        discontinuitySequence: 0,
+        discontinuityStarts: [],
+        endList: false,
+        mediaSequence: 0,
+        resolvedUri: 'https://cdn2.example.com/video',
+        segments: [
+          {
+            duration: 0,
+            map: {
+              resolvedUri: 'https://cdn2.example.com/video',
+              uri: ''
+            },
+            number: 0,
+            presentationTime: 0,
+            resolvedUri: 'https://cdn2.example.com/video',
+            timeline: 0,
+            uri: ''
+          }
+        ],
+        targetDuration: 0,
+        timeline: 0,
+        timelineStarts: [
+          {
+            start: 0,
+            timeline: 0
+          }
+        ],
+        uri: ''
+      }
+    ],
+    segments: [],
+    timelineStarts: [
+      {
+        start: 0,
+        timeline: 0
+      }
+    ],
+    uri: ''
+  };
+
+  assert.deepEqual(toM3u8({ dashPlaylists, contentSteering }), expected);
+});
+
+QUnit.test('playlists with content steering', function(assert) {
+  const contentSteering = {
+    defaultServiceLocation: 'beta',
+    proxyServerURL: 'http://127.0.0.1:3455/steer',
+    queryBeforeStart: false,
+    serverURL: 'https://example.com/app/url'
+  };
+
+  const dashPlaylists = [{
+    attributes: {
+      bandwidth: 5000000,
+      baseUrl: 'https://cdn1.example.com/',
+      clientOffset: 0,
+      codecs: 'avc1.64001e',
+      duration: 0,
+      height: 404,
+      id: 'test',
+      mimeType: 'video/mp4',
+      periodStart: 0,
+      role: {
+        value: 'main'
+      },
+      serviceLocation: 'alpha',
+      sourceDuration: 0,
+      type: 'dyanmic',
+      width: 720
+    },
+    segments: [
+      {
+        duration: 0,
+        map: {
+          resolvedUri: 'https://cdn1.example.com/',
+          uri: ''
+        },
+        number: 1,
+        presentationTime: 0,
+        resolvedUri: 'https://cdn1.example.com/',
+        timeline: 0,
+        uri: ''
+      }
+    ]
+  }, {
+    attributes: {
+      bandwidth: 5000000,
+      baseUrl: 'https://cdn2.example.com/',
+      clientOffset: 0,
+      codecs: 'avc1.64001e',
+      duration: 0,
+      height: 404,
+      id: 'test',
+      mimeType: 'video/mp4',
+      periodStart: 0,
+      role: {
+        value: 'main'
+      },
+      serviceLocation: 'beta',
+      sourceDuration: 0,
+      type: 'dyanmic',
+      width: 720
+    },
+    segments: [
+      {
+        duration: 0,
+        map: {
+          resolvedUri: 'https://cdn2.example.com/',
+          uri: ''
+        },
+        number: 1,
+        presentationTime: 0,
+        resolvedUri: 'https://cdn2.example.com/',
+        timeline: 0,
+        uri: ''
+      }
+    ]
+  }, {
+    attributes: {
+      bandwidth: 256,
+      baseUrl: 'https://example.com/en.vtt',
+      clientOffset: 0,
+      id: 'en',
+      lang: 'en',
+      mimeType: 'text/vtt',
+      periodStart: 0,
+      role: {},
+      sourceDuration: 0,
+      type: 'dyanmic'
+    }
+  }, {
+    attributes: {
+      bandwidth: 256,
+      baseUrl: 'https://example.com/en.vtt',
+      clientOffset: 0,
+      id: 'en',
+      lang: 'en',
+      mimeType: 'text/vtt',
+      periodStart: 0,
+      role: {},
+      sourceDuration: 0,
+      type: 'dyanmic'
+    }
+  }];
+
+  const expected = {
+    allowCache: true,
+    contentSteering: {
+      defaultServiceLocation: 'beta',
+      proxyServerURL: 'http://127.0.0.1:3455/steer',
+      queryBeforeStart: false,
+      serverURL: 'https://example.com/app/url'
+    },
+    discontinuityStarts: [],
+    duration: 0,
+    endList: true,
+    mediaGroups: {
+      AUDIO: {},
+      ['CLOSED-CAPTIONS']: {},
+      SUBTITLES: {
+        subs: {
+          en: {
+            autoselect: false,
+            default: false,
+            language: 'en',
+            playlists: [
+              {
+                attributes: {
+                  BANDWIDTH: 256,
+                  NAME: 'en',
+                  ['PROGRAM-ID']: 1
+                },
+                discontinuitySequence: 0,
+                discontinuityStarts: [],
+                endList: false,
+                mediaSequence: 0,
+                resolvedUri: 'https://example.com/en.vtt',
+                segments: [
+                  {
+                    duration: 0,
+                    number: 0,
+                    resolvedUri: 'https://example.com/en.vtt',
+                    timeline: 0,
+                    uri: 'https://example.com/en.vtt'
+                  }
+                ],
+                targetDuration: 0,
+                timeline: 0,
+                timelineStarts: [
+                  {
+                    start: 0,
+                    timeline: 0
+                  },
+                  {
+                    start: 0,
+                    timeline: 0
+                  }
+                ],
+                uri: ''
+              }
+            ],
+            uri: ''
+          }
+        }
+      },
+      VIDEO: {}
+    },
+    playlists: [
+      {
+        attributes: {
+          AUDIO: 'audio',
+          BANDWIDTH: 5000000,
+          CODECS: 'avc1.64001e',
+          NAME: 'test',
+          ['PROGRAM-ID']: 1,
+          RESOLUTION: {
+            height: 404,
+            width: 720
+          },
+          SUBTITLES: 'subs',
+          serviceLocation: 'alpha'
+        },
+        discontinuitySequence: 0,
+        discontinuityStarts: [],
+        endList: false,
+        mediaSequence: 0,
+        resolvedUri: 'https://cdn1.example.com/',
+        segments: [
+          {
+            duration: 0,
+            map: {
+              resolvedUri: 'https://cdn1.example.com/',
+              uri: ''
+            },
+            number: 0,
+            presentationTime: 0,
+            resolvedUri: 'https://cdn1.example.com/',
+            timeline: 0,
+            uri: ''
+          }
+        ],
+        targetDuration: 0,
+        timeline: 0,
+        timelineStarts: [
+          {
+            start: 0,
+            timeline: 0
+          }
+        ],
+        uri: ''
+      },
+      {
+        attributes: {
+          AUDIO: 'audio',
+          BANDWIDTH: 5000000,
+          CODECS: 'avc1.64001e',
+          NAME: 'test',
+          ['PROGRAM-ID']: 1,
+          RESOLUTION: {
+            height: 404,
+            width: 720
+          },
+          SUBTITLES: 'subs',
+          serviceLocation: 'beta'
+        },
+        discontinuitySequence: 0,
+        discontinuityStarts: [],
+        endList: false,
+        mediaSequence: 0,
+        resolvedUri: 'https://cdn2.example.com/',
+        segments: [
+          {
+            duration: 0,
+            map: {
+              resolvedUri: 'https://cdn2.example.com/',
+              uri: ''
+            },
+            number: 0,
+            presentationTime: 0,
+            resolvedUri: 'https://cdn2.example.com/',
+            timeline: 0,
+            uri: ''
+          }
+        ],
+        targetDuration: 0,
+        timeline: 0,
+        timelineStarts: [
+          {
+            start: 0,
+            timeline: 0
+          }
+        ],
+        uri: ''
+      }
+    ],
+    segments: [],
+    timelineStarts: [
+      {
+        start: 0,
+        timeline: 0
+      }
+    ],
+    uri: ''
+  };
+
+  assert.deepEqual(toM3u8({ dashPlaylists, contentSteering }), expected);
+});
+
 QUnit.test('playlists with segments', function(assert) {
   const dashPlaylists = [{
     attributes: {
@@ -911,10 +1496,27 @@ QUnit.test('playlists with label', function(assert) {
       type: 'static'
     },
     segments: []
+  }, {
+    attributes: {
+      sourceDuration: 100,
+      id: '1',
+      width: 800,
+      height: 600,
+      codecs: 'foo;bar',
+      duration: 0,
+      bandwidth: 10000,
+      periodStart: 0,
+      mimeType: 'text/vtt',
+      type: 'static',
+      label
+    },
+    segments: []
   }];
   const output = toM3u8({ dashPlaylists });
 
   assert.ok(label in output.mediaGroups.AUDIO.audio, 'label exists');
+  assert.ok(label in output.mediaGroups.SUBTITLES.subs, 'label exists');
+
 });
 
 QUnit.test('608 captions', function(assert) {
@@ -1113,4 +1715,264 @@ QUnit.test('includes all media group playlists', function(assert) {
     ],
     'included all media group playlists'
   );
+});
+
+QUnit.module('eventStream');
+
+QUnit.test('eventStreams with playlists', function(assert) {
+  const dashPlaylists = [{
+    attributes: {
+      id: '1',
+      codecs: 'foo;bar',
+      sourceDuration: 100,
+      duration: 0,
+      bandwidth: 20000,
+      periodStart: 0,
+      mimeType: 'audio/mp4',
+      type: 'static'
+    },
+    segments: []
+  }, {
+    attributes: {
+      id: '2',
+      codecs: 'foo;bar',
+      sourceDuration: 100,
+      duration: 0,
+      bandwidth: 10000,
+      periodStart: 0,
+      mimeType: 'audio/mp4',
+      type: 'static'
+    },
+    segments: []
+  }, {
+    attributes: {
+      sourceDuration: 100,
+      id: '1',
+      width: 800,
+      height: 600,
+      codecs: 'foo;bar',
+      duration: 0,
+      bandwidth: 10000,
+      frameRate: 30,
+      periodStart: 0,
+      mimeType: 'video/mp4',
+      type: 'static'
+    },
+    segments: []
+  }, {
+    attributes: {
+      sourceDuration: 100,
+      id: '1',
+      bandwidth: 20000,
+      periodStart: 0,
+      mimeType: 'text/vtt',
+      type: 'static',
+      baseUrl: 'https://www.example.com/vtt'
+    }
+  }, {
+    attributes: {
+      sourceDuration: 100,
+      id: '2',
+      bandwidth: 10000,
+      periodStart: 0,
+      mimeType: 'text/vtt',
+      type: 'static',
+      baseUrl: 'https://www.example.com/vtt'
+    }
+  }];
+
+  const eventStream = [
+    {
+      end: 1,
+      id: 'one',
+      messageData: 'foo',
+      schemeIdUri: 'urn:foo.bar.2023',
+      start: 1,
+      value: 'bar'
+    },
+    {
+      end: 2,
+      id: 'two',
+      messageData: 'bar',
+      schemeIdUri: 'urn:foo.bar.2023',
+      start: 2,
+      value: 'foo'
+    },
+    {
+      end: 3,
+      id: 'three',
+      messageData: 'foo_bar',
+      schemeIdUri: 'urn:foo.bar.2023',
+      start: 3,
+      value: 'bar_foo'
+    }
+  ];
+
+  const expected = {
+    allowCache: true,
+    discontinuityStarts: [],
+    timelineStarts: [{ start: 0, timeline: 0 }],
+    duration: 100,
+    endList: true,
+    eventStream: [
+      {
+        end: 1,
+        id: 'one',
+        messageData: 'foo',
+        schemeIdUri: 'urn:foo.bar.2023',
+        start: 1,
+        value: 'bar'
+      },
+      {
+        end: 2,
+        id: 'two',
+        messageData: 'bar',
+        schemeIdUri: 'urn:foo.bar.2023',
+        start: 2,
+        value: 'foo'
+      },
+      {
+        end: 3,
+        id: 'three',
+        messageData: 'foo_bar',
+        schemeIdUri: 'urn:foo.bar.2023',
+        start: 3,
+        value: 'bar_foo'
+      }
+    ],
+    mediaGroups: {
+      AUDIO: {
+        audio: {
+          main: {
+            autoselect: true,
+            default: true,
+            language: '',
+            playlists: [{
+              attributes: {
+                BANDWIDTH: 20000,
+                CODECS: 'foo;bar',
+                NAME: '1',
+                ['PROGRAM-ID']: 1
+              },
+              mediaSequence: 0,
+              discontinuitySequence: 0,
+              discontinuityStarts: [],
+              timelineStarts: [{ start: 0, timeline: 0 }],
+              endList: true,
+              resolvedUri: '',
+              segments: [],
+              timeline: 0,
+              uri: '',
+              targetDuration: 0
+            }, {
+              attributes: {
+                BANDWIDTH: 10000,
+                CODECS: 'foo;bar',
+                NAME: '2',
+                ['PROGRAM-ID']: 1
+              },
+              mediaSequence: 0,
+              discontinuitySequence: 0,
+              discontinuityStarts: [],
+              timelineStarts: [{ start: 0, timeline: 0 }],
+              endList: true,
+              resolvedUri: '',
+              segments: [],
+              timeline: 0,
+              uri: '',
+              targetDuration: 0
+
+            }],
+            uri: ''
+          }
+        }
+      },
+      ['CLOSED-CAPTIONS']: {},
+      SUBTITLES: {
+        subs: {
+          text: {
+            autoselect: false,
+            default: false,
+            language: 'text',
+            playlists: [{
+              attributes: {
+                BANDWIDTH: 20000,
+                NAME: '1',
+                ['PROGRAM-ID']: 1
+              },
+              mediaSequence: 0,
+              discontinuitySequence: 0,
+              discontinuityStarts: [],
+              timelineStarts: [{ start: 0, timeline: 0 }],
+              targetDuration: 100,
+              endList: true,
+              resolvedUri: 'https://www.example.com/vtt',
+              segments: [{
+                duration: 100,
+                resolvedUri: 'https://www.example.com/vtt',
+                timeline: 0,
+                uri: 'https://www.example.com/vtt',
+                number: 0
+              }],
+              timeline: 0,
+              uri: ''
+            }, {
+              attributes: {
+                BANDWIDTH: 10000,
+                NAME: '2',
+                ['PROGRAM-ID']: 1
+              },
+              mediaSequence: 0,
+              discontinuitySequence: 0,
+              discontinuityStarts: [],
+              timelineStarts: [{ start: 0, timeline: 0 }],
+              targetDuration: 100,
+              endList: true,
+              resolvedUri: 'https://www.example.com/vtt',
+              segments: [{
+                duration: 100,
+                resolvedUri: 'https://www.example.com/vtt',
+                timeline: 0,
+                uri: 'https://www.example.com/vtt',
+                number: 0
+              }],
+              timeline: 0,
+              uri: ''
+            }],
+            uri: ''
+          }
+        }
+      },
+      VIDEO: {}
+    },
+    playlists: [{
+      attributes: {
+        AUDIO: 'audio',
+        SUBTITLES: 'subs',
+        BANDWIDTH: 10000,
+        CODECS: 'foo;bar',
+        NAME: '1',
+        ['FRAME-RATE']: 30,
+        ['PROGRAM-ID']: 1,
+        RESOLUTION: {
+          height: 600,
+          width: 800
+        }
+      },
+      endList: true,
+      mediaSequence: 0,
+      discontinuitySequence: 0,
+      discontinuityStarts: [],
+      timelineStarts: [{ start: 0, timeline: 0 }],
+      targetDuration: 0,
+      resolvedUri: '',
+      segments: [],
+      timeline: 0,
+      uri: ''
+    }],
+    segments: [],
+    uri: ''
+  };
+
+  assert.deepEqual(toM3u8({ dashPlaylists, eventStream }), expected);
 });

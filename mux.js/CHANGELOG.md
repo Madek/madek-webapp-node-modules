@@ -1,3 +1,79 @@
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/videojs/mux.js/compare/v7.0.0...v7.0.1) (2023-10-12)
+
+### Bug Fixes
+
+* 708 captions multi-byte char fix ([#439](https://github.com/videojs/mux.js/issues/439)) ([ec31749](https://github.com/videojs/mux.js/commit/ec31749))
+
+### Chores
+
+* update v7.0.0 documentation ([#435](https://github.com/videojs/mux.js/issues/435)) ([21e55aa](https://github.com/videojs/mux.js/commit/21e55aa))
+
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/videojs/mux.js/compare/v6.3.0...v7.0.0) (2023-07-21)
+
+### Features
+
+* add position data to captions ([#434](https://github.com/videojs/mux.js/issues/434)) ([30f2132](https://github.com/videojs/mux.js/commit/30f2132))
+
+### Chores
+
+* add npm publish step to the release workflow ([a8306cd](https://github.com/videojs/mux.js/commit/a8306cd))
+* rename workflow name from github-release to release and add discussion category name for github releases ([4ba1607](https://github.com/videojs/mux.js/commit/4ba1607))
+* Update CI and release workflows ([#431](https://github.com/videojs/mux.js/issues/431)) ([dc56f1b](https://github.com/videojs/mux.js/commit/dc56f1b))
+* update collaborator guide md ([51b3ed4](https://github.com/videojs/mux.js/commit/51b3ed4))
+* update git push suggestion in collaborator guide md ([73a5b60](https://github.com/videojs/mux.js/commit/73a5b60))
+
+### BREAKING CHANGES
+
+* In the case of CEA-608 captions, mux.js will now be returning captions in the form of caption sets.
+This means that rather then returning a single text of combined caption cues, an array of caption cues is returned in the `content` property.
+
+```js
+transmuxer.on('data', function (segment) {
+  // create a VTTCue for all the parsed CEA-608 captions:>
+  segment.captions.forEach(function(captionSet) {
+    // Caption sets contains multiple captions with text and position data.
+    captionSet.content.forEach(function(cue) {
+      const newCue = new VTTCue(cue.startTime, cue.endTime, cue.text);
+      newCue.line = cue.line;
+      newCue.position = cue.position;
+
+      captionTextTrack.addCue(newCue);
+    });
+  });
+});
+```
+
+<a name="6.3.0"></a>
+# [6.3.0](https://github.com/videojs/mux.js/compare/v6.2.0...v6.3.0) (2023-02-22)
+
+### Features
+
+* support emsg box parsing ([2e77285](https://github.com/videojs/mux.js/commit/2e77285))
+
+### Bug Fixes
+
+* emsg ie11 test failures ([528e9ed](https://github.com/videojs/mux.js/commit/528e9ed))
+
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/videojs/mux.js/compare/v6.1.0...v6.2.0) (2022-07-08)
+
+### Features
+
+* add ID3 parsing for text, link, and APIC frames ([#412](https://github.com/videojs/mux.js/issues/412)) ([5454bdd](https://github.com/videojs/mux.js/commit/5454bdd))
+
+### Bug Fixes
+
+* replace indexOf with typedArrayIndexOf for IE11 support ([#417](https://github.com/videojs/mux.js/issues/417)) ([4e1b195](https://github.com/videojs/mux.js/commit/4e1b195))
+
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/videojs/mux.js/compare/v6.0.1...v6.1.0) (2022-05-26)
+
+### Features
+
+* send ID3 tag even when a frame has malformed content ([#408](https://github.com/videojs/mux.js/issues/408)) ([1da5d23](https://github.com/videojs/mux.js/commit/1da5d23))
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://github.com/videojs/mux.js/compare/v6.0.0...v6.0.1) (2021-12-20)
 

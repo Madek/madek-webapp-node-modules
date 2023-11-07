@@ -88,24 +88,6 @@
   @include transition($transition-property)
 }
 
-.video-js.vjs-no-flex .vjs-volume-panel .vjs-volume-control.vjs-volume-horizontal {
-  width: 5em;
-  height: 3em;
-
-  visibility: visible;
-  opacity: 1;
-  position: relative;
-
-  @include transition(none);
-}
-
-.video-js.vjs-no-flex .vjs-volume-control.vjs-volume-vertical,
-.video-js.vjs-no-flex .vjs-volume-panel .vjs-volume-control.vjs-volume-vertical {
-  position: absolute;
-  bottom: 3em;
-  left: 0.5em;
-}
-
 .video-js .vjs-volume-panel {
   @include display-flex;
 }
@@ -152,14 +134,40 @@
     z-index: 1;
   }
 }
+// Remove content from volume-level when using SVGs.
+.vjs-svg-icons-enabled .vjs-volume-level {
+  &:before {
+    content: none;
+  }
+}
+
+.vjs-volume-level .vjs-svg-icon {
+  position: absolute;
+  width: 0.9em;
+  height: 0.9em;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .vjs-slider-horizontal .vjs-volume-level {
   height: 0.3em;
 
   // Volume handle
   &:before {
-    top: -0.3em;
+    line-height: .35em;
     right: -0.5em;
   }
+}
+
+// here
+// Update placement of circle icon when using SVG icons
+.vjs-slider-horizontal .vjs-volume-level .vjs-svg-icon {
+  right: -0.3em;
+  transform: translateY(-50%);
+}
+.vjs-slider-vertical .vjs-volume-level .vjs-svg-icon {
+  top: -0.55em;
+  transform: translateX(-50%);
 }
 
 .video-js .vjs-volume-panel.vjs-volume-panel-vertical {
@@ -243,10 +251,6 @@
   height: 100%;
 }
 
-.vjs-no-flex .vjs-volume-control .vjs-mouse-display {
-  z-index: 0;
-}
-
 .video-js .vjs-volume-control:hover .vjs-mouse-display {
   display: block;
 }
@@ -256,10 +260,6 @@
   opacity: 0;
   $trans: visibility 1.0s, opacity 1.0s;
   @include transition($trans);
-}
-
-.video-js.vjs-user-inactive.vjs-no-flex .vjs-volume-control .vjs-mouse-display {
-  display: none;
 }
 
 .vjs-mouse-display .vjs-volume-tooltip {

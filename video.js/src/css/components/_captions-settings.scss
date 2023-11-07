@@ -5,6 +5,11 @@
   height: 70%;
 }
 
+// Hide if an error occurs
+.vjs-error .vjs-text-track-settings {
+  display: none;
+}
+
 // Layout divs
 .vjs-text-track-settings .vjs-modal-dialog-content {
   display: table;
@@ -53,19 +58,23 @@
 }
 
 // Form elements
+.vjs-text-track-settings select {
+  font-size: inherit;
+}
+
 .vjs-track-setting > select {
   margin-right: 1em;
   margin-bottom: 0.5em;
 }
 
 .vjs-text-track-settings fieldset {
-  margin: 5px;
-  padding: 3px;
+  margin: 10px;
   border: none;
 }
 
 .vjs-text-track-settings fieldset span {
   display: inline-block;
+  padding: 0 .6em .8em;
 }
 
 // style the second select for text colors
@@ -75,21 +84,12 @@
 
 .vjs-text-track-settings legend {
   color: $primary-foreground-color;
-  margin: 0 0 5px 0;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
-// Hide labels, so they are only for screen reader users
 .vjs-text-track-settings .vjs-label {
-  position: absolute;
-  clip: rect(1px 1px 1px 1px); // for Internet Explorer
-  clip: rect(1px, 1px, 1px, 1px);
-  display: block;
-  margin: 0 0 5px 0;
-  padding: 0;
-  border: 0;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
+  margin: 0 .5em .5em 0;
 }
 
 .vjs-track-settings-controls button:focus,

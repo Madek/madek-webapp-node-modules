@@ -1,4 +1,4 @@
-/*! @name mux.js @version 6.0.1 @license Apache-2.0 */
+/*! @name mux.js @version 7.0.1 @license Apache-2.0 */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -1407,19 +1407,33 @@
     var nextByte = packetData[i + 1];
     var win = service.currentWindow;
     var char;
-    var charCodeArray; // Use the TextDecoder if one was created for this service
+    var charCodeArray; // Converts an array of bytes to a unicode hex string.
+
+    function toHexString(byteArray) {
+      return byteArray.map(function (byte) {
+        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+      }).join('');
+    }
+
+    if (isMultiByte) {
+      charCodeArray = [currentByte, nextByte];
+      i++;
+    } else {
+      charCodeArray = [currentByte];
+    } // Use the TextDecoder if one was created for this service
+
 
     if (service.textDecoder_ && !isExtended) {
-      if (isMultiByte) {
-        charCodeArray = [currentByte, nextByte];
-        i++;
-      } else {
-        charCodeArray = [currentByte];
-      }
-
       char = service.textDecoder_.decode(new Uint8Array(charCodeArray));
     } else {
-      char = get708CharFromCode(extended | currentByte);
+      // We assume any multi-byte char without a decoder is unicode.
+      if (isMultiByte) {
+        var unicode = toHexString(charCodeArray); // Takes a unicode hex string and creates a single character.
+
+        char = String.fromCharCode(parseInt(unicode, 16));
+      } else {
+        char = get708CharFromCode(extended | currentByte);
+      }
     }
 
     if (win.pendingNewLine && !win.isEmpty()) {
@@ -2063,13 +2077,19 @@
 
   var ROWS = [0x1100, 0x1120, 0x1200, 0x1220, 0x1500, 0x1520, 0x1600, 0x1620, 0x1700, 0x1720, 0x1000, 0x1300, 0x1320, 0x1400, 0x1420]; // CEA-608 captions are rendered onto a 34x15 matrix of character
   // cells. The "bottom" row is the last element in the outer array.
+  // We keep track of positioning information as we go by storing the
+  // number of indentations and the tab offset in this buffer.
 
   var createDisplayBuffer = function createDisplayBuffer() {
     var result = [],
         i = BOTTOM_ROW + 1;
 
     while (i--) {
-      result.push('');
+      result.push({
+        text: '',
+        indent: 0,
+        offset: 0
+      });
     }
 
     return result;
@@ -2138,9 +2158,9 @@
         this.startPts_ = packet.pts;
       } else if (data === this.BACKSPACE_) {
         if (this.mode_ === 'popOn') {
-          this.nonDisplayed_[this.row_] = this.nonDisplayed_[this.row_].slice(0, -1);
+          this.nonDisplayed_[this.row_].text = this.nonDisplayed_[this.row_].text.slice(0, -1);
         } else {
-          this.displayed_[this.row_] = this.displayed_[this.row_].slice(0, -1);
+          this.displayed_[this.row_].text = this.displayed_[this.row_].text.slice(0, -1);
         }
       } else if (data === this.ERASE_DISPLAYED_MEMORY_) {
         this.flushDisplayed(packet.pts);
@@ -2173,9 +2193,9 @@
         // backspace the "e" and insert "è".
         // Delete the previous character
         if (this.mode_ === 'popOn') {
-          this.nonDisplayed_[this.row_] = this.nonDisplayed_[this.row_].slice(0, -1);
+          this.nonDisplayed_[this.row_].text = this.nonDisplayed_[this.row_].text.slice(0, -1);
         } else {
-          this.displayed_[this.row_] = this.displayed_[this.row_].slice(0, -1);
+          this.displayed_[this.row_].text = this.displayed_[this.row_].text.slice(0, -1);
         } // Bitmask char0 so that we can apply character transformations
         // regardless of field and data channel.
         // Then byte-shift to the left and OR with char1 so we can pass the
@@ -2207,7 +2227,11 @@
         // increments, with an additional offset code of 1-3 to reach any
         // of the 32 columns specified by CEA-608. So all we need to do
         // here is increment the column cursor by the given offset.
-        this.column_ += char1 & 0x03; // Detect PACs (Preamble Address Codes)
+        var offset = char1 & 0x03; // For an offest value 1-3, set the offset for that caption
+        // in the non-displayed array.
+
+        this.nonDisplayed_[this.row_].offset = offset;
+        this.column_ += offset; // Detect PACs (Preamble Address Codes)
       } else if (this.isPAC(char0, char1)) {
         // There's no logic for PAC -> row mapping, so we have to just
         // find the row code in an array and use its index :(
@@ -2241,7 +2265,10 @@
           // increments the column cursor by 4, so we can get the desired
           // column position by bit-shifting to the right (to get n/2)
           // and multiplying by 4.
-          this.column_ = ((data & 0xe) >> 1) * 4;
+          var indentations = (data & 0xe) >> 1;
+          this.column_ = indentations * 4; // add to the number of indentations for positioning
+
+          this.nonDisplayed_[this.row_].indent += indentations;
         }
 
         if (this.isColorPAC(char1)) {
@@ -2272,29 +2299,52 @@
   // display buffer
 
   Cea608Stream.prototype.flushDisplayed = function (pts) {
-    var content = this.displayed_ // remove spaces from the start and end of the string
-    .map(function (row, index) {
-      try {
-        return row.trim();
-      } catch (e) {
-        // Ordinarily, this shouldn't happen. However, caption
-        // parsing errors should not throw exceptions and
-        // break playback.
-        this.trigger('log', {
-          level: 'warn',
-          message: 'Skipping a malformed 608 caption at index ' + index + '.'
-        });
-        return '';
+    var _this = this;
+
+    var logWarning = function logWarning(index) {
+      _this.trigger('log', {
+        level: 'warn',
+        message: 'Skipping a malformed 608 caption at index ' + index + '.'
+      });
+    };
+
+    var content = [];
+    this.displayed_.forEach(function (row, i) {
+      if (row && row.text && row.text.length) {
+        try {
+          // remove spaces from the start and end of the string
+          row.text = row.text.trim();
+        } catch (e) {
+          // Ordinarily, this shouldn't happen. However, caption
+          // parsing errors should not throw exceptions and
+          // break playback.
+          logWarning(i);
+        } // See the below link for more details on the following fields:
+        // https://dvcs.w3.org/hg/text-tracks/raw-file/default/608toVTT/608toVTT.html#positioning-in-cea-608
+
+
+        if (row.text.length) {
+          content.push({
+            // The text to be displayed in the caption from this specific row, with whitespace removed.
+            text: row.text,
+            // Value between 1 and 15 representing the PAC row used to calculate line height.
+            line: i + 1,
+            // A number representing the indent position by percentage (CEA-608 PAC indent code).
+            // The value will be a number between 10 and 80. Offset is used to add an aditional
+            // value to the position if necessary.
+            position: 10 + Math.min(70, row.indent * 10) + row.offset * 2.5
+          });
+        }
+      } else if (row === undefined || row === null) {
+        logWarning(i);
       }
-    }, this) // combine all text rows to display in one cue
-    .join('\n') // and remove blank rows from the start and end, but not the middle
-    .replace(/^\n+|\n+$/g, '');
+    });
 
     if (content.length) {
       this.trigger('data', {
         startPts: this.startPts_,
         endPts: pts,
-        text: content,
+        content: content,
         stream: this.name_
       });
     }
@@ -2503,7 +2553,11 @@
       // move currently displayed captions (up or down) to the new base row
       for (var i = 0; i < this.rollUpRows_; i++) {
         this.displayed_[newBaseRow - i] = this.displayed_[this.row_ - i];
-        this.displayed_[this.row_ - i] = '';
+        this.displayed_[this.row_ - i] = {
+          text: '',
+          indent: 0,
+          offset: 0
+        };
       }
     }
 
@@ -2540,27 +2594,35 @@
 
 
   Cea608Stream.prototype.popOn = function (pts, text) {
-    var baseRow = this.nonDisplayed_[this.row_]; // buffer characters
+    var baseRow = this.nonDisplayed_[this.row_].text; // buffer characters
 
     baseRow += text;
-    this.nonDisplayed_[this.row_] = baseRow;
+    this.nonDisplayed_[this.row_].text = baseRow;
   };
 
   Cea608Stream.prototype.rollUp = function (pts, text) {
-    var baseRow = this.displayed_[this.row_];
+    var baseRow = this.displayed_[this.row_].text;
     baseRow += text;
-    this.displayed_[this.row_] = baseRow;
+    this.displayed_[this.row_].text = baseRow;
   };
 
   Cea608Stream.prototype.shiftRowsUp_ = function () {
     var i; // clear out inactive rows
 
     for (i = 0; i < this.topRow_; i++) {
-      this.displayed_[i] = '';
+      this.displayed_[i] = {
+        text: '',
+        indent: 0,
+        offset: 0
+      };
     }
 
     for (i = this.row_ + 1; i < BOTTOM_ROW + 1; i++) {
-      this.displayed_[i] = '';
+      this.displayed_[i] = {
+        text: '',
+        indent: 0,
+        offset: 0
+      };
     } // shift displayed rows up
 
 
@@ -2569,13 +2631,17 @@
     } // clear out the bottom row
 
 
-    this.displayed_[this.row_] = '';
+    this.displayed_[this.row_] = {
+      text: '',
+      indent: 0,
+      offset: 0
+    };
   };
 
   Cea608Stream.prototype.paintOn = function (pts, text) {
-    var baseRow = this.displayed_[this.row_];
+    var baseRow = this.displayed_[this.row_].text;
     baseRow += text;
-    this.displayed_[this.row_] = baseRow;
+    this.displayed_[this.row_].text = baseRow;
   }; // exports
 
 
@@ -2677,7 +2743,44 @@
     handleRollover: handleRollover
   };
 
-  var percentEncode = function percentEncode(bytes, start, end) {
+  // IE11 doesn't support indexOf for TypedArrays.
+  // Once IE11 support is dropped, this function should be removed.
+  var typedArrayIndexOf$1 = function typedArrayIndexOf(typedArray, element, fromIndex) {
+    if (!typedArray) {
+      return -1;
+    }
+
+    var currentIndex = fromIndex;
+
+    for (; currentIndex < typedArray.length; currentIndex++) {
+      if (typedArray[currentIndex] === element) {
+        return currentIndex;
+      }
+    }
+
+    return -1;
+  };
+
+  var typedArray = {
+    typedArrayIndexOf: typedArrayIndexOf$1
+  };
+
+  var typedArrayIndexOf = typedArray.typedArrayIndexOf,
+      // Frames that allow different types of text encoding contain a text
+  // encoding description byte [ID3v2.4.0 section 4.]
+  textEncodingDescriptionByte = {
+    Iso88591: 0x00,
+    // ISO-8859-1, terminated with \0.
+    Utf16: 0x01,
+    // UTF-16 encoded Unicode BOM, terminated with \0\0
+    Utf16be: 0x02,
+    // UTF-16BE encoded Unicode, without BOM, terminated with \0\0
+    Utf8: 0x03 // UTF-8 encoded Unicode, terminated with \0
+
+  },
+      // return a percent-encoded representation of the specified byte range
+  // @see http://en.wikipedia.org/wiki/Percent-encoding 
+  percentEncode = function percentEncode(bytes, start, end) {
     var i,
         result = '';
 
@@ -2700,60 +2803,202 @@
       parseSyncSafeInteger = function parseSyncSafeInteger(data) {
     return data[0] << 21 | data[1] << 14 | data[2] << 7 | data[3];
   },
-      tagParsers = {
-    TXXX: function TXXX(tag) {
-      var i;
+      frameParsers = {
+    'APIC': function APIC(frame) {
+      var i = 1,
+          mimeTypeEndIndex,
+          descriptionEndIndex,
+          LINK_MIME_TYPE = '-->';
 
-      if (tag.data[0] !== 3) {
+      if (frame.data[0] !== textEncodingDescriptionByte.Utf8) {
+        // ignore frames with unrecognized character encodings
+        return;
+      } // parsing fields [ID3v2.4.0 section 4.14.]
+
+
+      mimeTypeEndIndex = typedArrayIndexOf(frame.data, 0, i);
+
+      if (mimeTypeEndIndex < 0) {
+        // malformed frame
+        return;
+      } // parsing Mime type field (terminated with \0)
+
+
+      frame.mimeType = parseIso88591(frame.data, i, mimeTypeEndIndex);
+      i = mimeTypeEndIndex + 1; // parsing 1-byte Picture Type field
+
+      frame.pictureType = frame.data[i];
+      i++;
+      descriptionEndIndex = typedArrayIndexOf(frame.data, 0, i);
+
+      if (descriptionEndIndex < 0) {
+        // malformed frame
+        return;
+      } // parsing Description field (terminated with \0)
+
+
+      frame.description = parseUtf8(frame.data, i, descriptionEndIndex);
+      i = descriptionEndIndex + 1;
+
+      if (frame.mimeType === LINK_MIME_TYPE) {
+        // parsing Picture Data field as URL (always represented as ISO-8859-1 [ID3v2.4.0 section 4.])
+        frame.url = parseIso88591(frame.data, i, frame.data.length);
+      } else {
+        // parsing Picture Data field as binary data
+        frame.pictureData = frame.data.subarray(i, frame.data.length);
+      }
+    },
+    'T*': function T(frame) {
+      if (frame.data[0] !== textEncodingDescriptionByte.Utf8) {
+        // ignore frames with unrecognized character encodings
+        return;
+      } // parse text field, do not include null terminator in the frame value
+      // frames that allow different types of encoding contain terminated text [ID3v2.4.0 section 4.]
+
+
+      frame.value = parseUtf8(frame.data, 1, frame.data.length).replace(/\0*$/, ''); // text information frames supports multiple strings, stored as a terminator separated list [ID3v2.4.0 section 4.2.]
+
+      frame.values = frame.value.split('\0');
+    },
+    'TXXX': function TXXX(frame) {
+      var descriptionEndIndex;
+
+      if (frame.data[0] !== textEncodingDescriptionByte.Utf8) {
         // ignore frames with unrecognized character encodings
         return;
       }
 
-      for (i = 1; i < tag.data.length; i++) {
-        if (tag.data[i] === 0) {
-          // parse the text fields
-          tag.description = parseUtf8(tag.data, 1, i); // do not include the null terminator in the tag value
+      descriptionEndIndex = typedArrayIndexOf(frame.data, 0, 1);
 
-          tag.value = parseUtf8(tag.data, i + 1, tag.data.length).replace(/\0*$/, '');
-          break;
-        }
-      }
+      if (descriptionEndIndex === -1) {
+        return;
+      } // parse the text fields
 
-      tag.data = tag.value;
+
+      frame.description = parseUtf8(frame.data, 1, descriptionEndIndex); // do not include the null terminator in the tag value
+      // frames that allow different types of encoding contain terminated text
+      // [ID3v2.4.0 section 4.]
+
+      frame.value = parseUtf8(frame.data, descriptionEndIndex + 1, frame.data.length).replace(/\0*$/, '');
+      frame.data = frame.value;
     },
-    WXXX: function WXXX(tag) {
-      var i;
+    'W*': function W(frame) {
+      // parse URL field; URL fields are always represented as ISO-8859-1 [ID3v2.4.0 section 4.]
+      // if the value is followed by a string termination all the following information should be ignored [ID3v2.4.0 section 4.3]
+      frame.url = parseIso88591(frame.data, 0, frame.data.length).replace(/\0.*$/, '');
+    },
+    'WXXX': function WXXX(frame) {
+      var descriptionEndIndex;
 
-      if (tag.data[0] !== 3) {
+      if (frame.data[0] !== textEncodingDescriptionByte.Utf8) {
         // ignore frames with unrecognized character encodings
         return;
       }
 
-      for (i = 1; i < tag.data.length; i++) {
-        if (tag.data[i] === 0) {
-          // parse the description and URL fields
-          tag.description = parseUtf8(tag.data, 1, i);
-          tag.url = parseUtf8(tag.data, i + 1, tag.data.length);
-          break;
-        }
-      }
+      descriptionEndIndex = typedArrayIndexOf(frame.data, 0, 1);
+
+      if (descriptionEndIndex === -1) {
+        return;
+      } // parse the description and URL fields
+
+
+      frame.description = parseUtf8(frame.data, 1, descriptionEndIndex); // URL fields are always represented as ISO-8859-1 [ID3v2.4.0 section 4.]
+      // if the value is followed by a string termination all the following information
+      // should be ignored [ID3v2.4.0 section 4.3]
+
+      frame.url = parseIso88591(frame.data, descriptionEndIndex + 1, frame.data.length).replace(/\0.*$/, '');
     },
-    PRIV: function PRIV(tag) {
+    'PRIV': function PRIV(frame) {
       var i;
 
-      for (i = 0; i < tag.data.length; i++) {
-        if (tag.data[i] === 0) {
+      for (i = 0; i < frame.data.length; i++) {
+        if (frame.data[i] === 0) {
           // parse the description and URL fields
-          tag.owner = parseIso88591(tag.data, 0, i);
+          frame.owner = parseIso88591(frame.data, 0, i);
           break;
         }
       }
 
-      tag.privateData = tag.data.subarray(i + 1);
-      tag.data = tag.privateData;
+      frame.privateData = frame.data.subarray(i + 1);
+      frame.data = frame.privateData;
     }
-  },
-      _MetadataStream;
+  };
+
+  var parseId3Frames = function parseId3Frames(data) {
+    var frameSize,
+        frameHeader,
+        frameStart = 10,
+        tagSize = 0,
+        frames = []; // If we don't have enough data for a header, 10 bytes, 
+    // or 'ID3' in the first 3 bytes this is not a valid ID3 tag.
+
+    if (data.length < 10 || data[0] !== 'I'.charCodeAt(0) || data[1] !== 'D'.charCodeAt(0) || data[2] !== '3'.charCodeAt(0)) {
+      return;
+    } // the frame size is transmitted as a 28-bit integer in the
+    // last four bytes of the ID3 header.
+    // The most significant bit of each byte is dropped and the
+    // results concatenated to recover the actual value.
+
+
+    tagSize = parseSyncSafeInteger(data.subarray(6, 10)); // ID3 reports the tag size excluding the header but it's more
+    // convenient for our comparisons to include it
+
+    tagSize += 10; // check bit 6 of byte 5 for the extended header flag.
+
+    var hasExtendedHeader = data[5] & 0x40;
+
+    if (hasExtendedHeader) {
+      // advance the frame start past the extended header
+      frameStart += 4; // header size field
+
+      frameStart += parseSyncSafeInteger(data.subarray(10, 14));
+      tagSize -= parseSyncSafeInteger(data.subarray(16, 20)); // clip any padding off the end
+    } // parse one or more ID3 frames
+    // http://id3.org/id3v2.3.0#ID3v2_frame_overview
+
+
+    do {
+      // determine the number of bytes in this frame
+      frameSize = parseSyncSafeInteger(data.subarray(frameStart + 4, frameStart + 8));
+
+      if (frameSize < 1) {
+        break;
+      }
+
+      frameHeader = String.fromCharCode(data[frameStart], data[frameStart + 1], data[frameStart + 2], data[frameStart + 3]);
+      var frame = {
+        id: frameHeader,
+        data: data.subarray(frameStart + 10, frameStart + frameSize + 10)
+      };
+      frame.key = frame.id; // parse frame values
+
+      if (frameParsers[frame.id]) {
+        // use frame specific parser
+        frameParsers[frame.id](frame);
+      } else if (frame.id[0] === 'T') {
+        // use text frame generic parser
+        frameParsers['T*'](frame);
+      } else if (frame.id[0] === 'W') {
+        // use URL link frame generic parser
+        frameParsers['W*'](frame);
+      }
+
+      frames.push(frame);
+      frameStart += 10; // advance past the frame header
+
+      frameStart += frameSize; // advance past the frame body
+    } while (frameStart < tagSize);
+
+    return frames;
+  };
+
+  var parseId3 = {
+    parseId3Frames: parseId3Frames,
+    parseSyncSafeInteger: parseSyncSafeInteger,
+    frameParsers: frameParsers
+  };
+
+  var _MetadataStream;
 
   _MetadataStream = function MetadataStream(options) {
     var settings = {
@@ -2815,7 +3060,7 @@
         // last four bytes of the ID3 header.
         // The most significant bit of each byte is dropped and the
         // results concatenated to recover the actual value.
-        tagSize = parseSyncSafeInteger(chunk.data.subarray(6, 10)); // ID3 reports the tag size excluding the header but it's more
+        tagSize = parseId3.parseSyncSafeInteger(chunk.data.subarray(6, 10)); // ID3 reports the tag size excluding the header but it's more
         // convenient for our comparisons to include it
 
         tagSize += 10;
@@ -2848,23 +3093,25 @@
         // advance the frame start past the extended header
         frameStart += 4; // header size field
 
-        frameStart += parseSyncSafeInteger(tag.data.subarray(10, 14)); // clip any padding off the end
+        frameStart += parseId3.parseSyncSafeInteger(tag.data.subarray(10, 14)); // clip any padding off the end
 
-        tagSize -= parseSyncSafeInteger(tag.data.subarray(16, 20));
+        tagSize -= parseId3.parseSyncSafeInteger(tag.data.subarray(16, 20));
       } // parse one or more ID3 frames
       // http://id3.org/id3v2.3.0#ID3v2_frame_overview
 
 
       do {
         // determine the number of bytes in this frame
-        frameSize = parseSyncSafeInteger(tag.data.subarray(frameStart + 4, frameStart + 8));
+        frameSize = parseId3.parseSyncSafeInteger(tag.data.subarray(frameStart + 4, frameStart + 8));
 
         if (frameSize < 1) {
           this.trigger('log', {
             level: 'warn',
-            message: 'Malformed ID3 frame encountered. Skipping metadata parsing.'
-          });
-          return;
+            message: 'Malformed ID3 frame encountered. Skipping remaining metadata parsing.'
+          }); // If the frame is malformed, don't parse any further frames but allow previous valid parsed frames
+          // to be sent along.
+
+          break;
         }
 
         frameHeader = String.fromCharCode(tag.data[frameStart], tag.data[frameStart + 1], tag.data[frameStart + 2], tag.data[frameStart + 3]);
@@ -2872,29 +3119,37 @@
           id: frameHeader,
           data: tag.data.subarray(frameStart + 10, frameStart + frameSize + 10)
         };
-        frame.key = frame.id;
+        frame.key = frame.id; // parse frame values
 
-        if (tagParsers[frame.id]) {
-          tagParsers[frame.id](frame); // handle the special PRIV frame used to indicate the start
-          // time for raw AAC data
+        if (parseId3.frameParsers[frame.id]) {
+          // use frame specific parser
+          parseId3.frameParsers[frame.id](frame);
+        } else if (frame.id[0] === 'T') {
+          // use text frame generic parser
+          parseId3.frameParsers['T*'](frame);
+        } else if (frame.id[0] === 'W') {
+          // use URL link frame generic parser
+          parseId3.frameParsers['W*'](frame);
+        } // handle the special PRIV frame used to indicate the start
+        // time for raw AAC data
 
-          if (frame.owner === 'com.apple.streaming.transportStreamTimestamp') {
-            var d = frame.data,
-                size = (d[3] & 0x01) << 30 | d[4] << 22 | d[5] << 14 | d[6] << 6 | d[7] >>> 2;
-            size *= 4;
-            size += d[7] & 0x03;
-            frame.timeStamp = size; // in raw AAC, all subsequent data will be timestamped based
-            // on the value of this frame
-            // we couldn't have known the appropriate pts and dts before
-            // parsing this ID3 tag so set those values now
 
-            if (tag.pts === undefined && tag.dts === undefined) {
-              tag.pts = frame.timeStamp;
-              tag.dts = frame.timeStamp;
-            }
+        if (frame.owner === 'com.apple.streaming.transportStreamTimestamp') {
+          var d = frame.data,
+              size = (d[3] & 0x01) << 30 | d[4] << 22 | d[5] << 14 | d[6] << 6 | d[7] >>> 2;
+          size *= 4;
+          size += d[7] & 0x03;
+          frame.timeStamp = size; // in raw AAC, all subsequent data will be timestamped based
+          // on the value of this frame
+          // we couldn't have known the appropriate pts and dts before
+          // parsing this ID3 tag so set those values now
 
-            this.trigger('timestamp', frame);
+          if (tag.pts === undefined && tag.dts === undefined) {
+            tag.pts = frame.timeStamp;
+            tag.dts = frame.timeStamp;
           }
+
+          this.trigger('timestamp', frame);
         }
 
         tag.frames.push(frame);
@@ -4402,7 +4657,7 @@
     this.push = function (output) {
       // buffer incoming captions until the associated video segment
       // finishes
-      if (output.text) {
+      if (output.content || output.text) {
         return this.pendingCaptions.push(output);
       } // buffer incoming id3 tags until the final flush
 

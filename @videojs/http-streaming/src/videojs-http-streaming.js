@@ -1,8 +1,8 @@
 /**
  * @file videojs-http-streaming.js
  *
- * The main file for the HLS project.
- * License: https://github.com/videojs/videojs-http-streaming/blob/master/LICENSE
+ * The main file for the VHS project.
+ * License: https://github.com/videojs/videojs-http-streaming/blob/main/LICENSE
  */
 import document from 'global/document';
 import window from 'global/window';
@@ -17,7 +17,7 @@ import {
 } from './util/time';
 import { timeRangesToArray } from './ranges';
 import videojs from 'video.js';
-import { MasterPlaylistController } from './master-playlist-controller';
+import { PlaylistController } from './playlist-controller';
 import Config from './config';
 import renditionSelectionMixin from './rendition-mixin';
 import PlaybackWatcher from './playback-watcher';
@@ -38,6 +38,7 @@ import {
 import { unwrapCodecList } from './util/codecs.js';
 import logger from './util/logger';
 import {SAFE_TIME_DELTA} from './ranges';
+import {merge} from './util/vjs-compat';
 
 // IMPORTANT:
 // keep these at the bottom they are replaced at build time
@@ -125,10 +126,10 @@ const handleVhsLoadedMetadata = function(qualityLevels, vhs) {
   handleVhsMediaChange(qualityLevels, vhs.playlists);
 };
 
-// HLS is a source handler, not a tech. Make sure attempts to use it
+// VHS is a source handler, not a tech. Make sure attempts to use it
 // as one do not cause exceptions.
 Vhs.canPlaySource = function() {
-  return videojs.log.warn('HLS is no longer a tech. Please remove it from ' +
+  return videojs.log.warn('VHS is no longer a tech. Please remove it from ' +
     'your player\'s techOrder.');
 };
 
@@ -183,7 +184,7 @@ const emeKeySystems = (keySystemOptions, mainPlaylist, audioPlaylist) => {
     }
   }
 
-  return videojs.mergeOptions(keySystemOptions, keySystemContentTypes);
+  return merge(keySystemOptions, keySystemContentTypes);
 };
 
 /**
@@ -252,7 +253,7 @@ const getAllPsshKeySystemsOptions = (playlists, keySystems) => {
  * @param {Object} [audioMedia]
  *        The active audio media playlist (optional)
  * @param {Object[]} mainPlaylists
- *        The playlists found on the master playlist object
+ *        The playlists found on the main playlist object
  *
  * @return {Object}
  *         Promise that resolves when the key session has been created
@@ -286,8 +287,8 @@ export const waitForKeySessionCreation = ({
   const keySessionCreatedPromises = [];
 
   // Since PSSH values are interpreted as initData, EME will dedupe any duplicates. The
-  // only place where it should not be deduped is for ms-prefixed APIs, but the early
-  // return for IE11 above, and the existence of modern EME APIs in addition to
+  // only place where it should not be deduped is for ms-prefixed APIs, but
+  // the existence of modern EME APIs in addition to
   // ms-prefixed APIs on Edge should prevent this from being a concern.
   // initializeMediaKeys also won't use the webkit-prefixed APIs.
   keySystemsOptionsArr.forEach((keySystemsOptions) => {
@@ -391,7 +392,7 @@ const updateVhsLocalStorage = (options) => {
 
   let objectToStore = getVhsLocalStorage();
 
-  objectToStore = objectToStore ? videojs.mergeOptions(objectToStore, options) : options;
+  objectToStore = objectToStore ? merge(objectToStore, options) : options;
 
   try {
     window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(objectToStore));
@@ -424,6 +425,64 @@ const expandDataUri = (dataUri) => {
   }
   // no known case for this data URI, return the string as-is
   return dataUri;
+};
+
+/**
+ * Adds a request hook to an xhr object
+ *
+ * @param {Object} xhr object to add the onRequest hook to
+ * @param {function} callback hook function for an xhr request
+ */
+const addOnRequestHook = (xhr, callback) => {
+  if (!xhr._requestCallbackSet) {
+    xhr._requestCallbackSet = new Set();
+  }
+  xhr._requestCallbackSet.add(callback);
+};
+
+/**
+ * Adds a response hook to an xhr object
+ *
+ * @param {Object} xhr object to add the onResponse hook to
+ * @param {function} callback hook function for an xhr response
+ */
+const addOnResponseHook = (xhr, callback) => {
+  if (!xhr._responseCallbackSet) {
+    xhr._responseCallbackSet = new Set();
+  }
+  xhr._responseCallbackSet.add(callback);
+};
+
+/**
+ * Removes a request hook on an xhr object, deletes the onRequest set if empty.
+ *
+ * @param {Object} xhr object to remove the onRequest hook from
+ * @param {function} callback hook function to remove
+ */
+const removeOnRequestHook = (xhr, callback) => {
+  if (!xhr._requestCallbackSet) {
+    return;
+  }
+  xhr._requestCallbackSet.delete(callback);
+  if (!xhr._requestCallbackSet.size) {
+    delete xhr._requestCallbackSet;
+  }
+};
+
+/**
+ * Removes a response hook on an xhr object, deletes the onResponse set if empty.
+ *
+ * @param {Object} xhr object to remove the onResponse hook from
+ * @param {function} callback hook function to remove
+ */
+const removeOnResponseHook = (xhr, callback) => {
+  if (!xhr._responseCallbackSet) {
+    return;
+  }
+  xhr._responseCallbackSet.delete(callback);
+  if (!xhr._responseCallbackSet.size) {
+    delete xhr._responseCallbackSet;
+  }
 };
 
 /**
@@ -483,19 +542,55 @@ Vhs.supportsTypeNatively = (type) => {
 };
 
 /**
- * HLS is a source handler, not a tech. Make sure attempts to use it
+ * VHS is a source handler, not a tech. Make sure attempts to use it
  * as one do not cause exceptions.
  */
 Vhs.isSupported = function() {
-  return videojs.log.warn('HLS is no longer a tech. Please remove it from ' +
+  return videojs.log.warn('VHS is no longer a tech. Please remove it from ' +
     'your player\'s techOrder.');
+};
+
+/**
+ * A global function for setting an onRequest hook
+ *
+ * @param {function} callback for request modifiction
+ */
+Vhs.xhr.onRequest = function(callback) {
+  addOnRequestHook(Vhs.xhr, callback);
+};
+
+/**
+ * A global function for setting an onResponse hook
+ *
+ * @param {callback} callback for response data retrieval
+ */
+Vhs.xhr.onResponse = function(callback) {
+  addOnResponseHook(Vhs.xhr, callback);
+};
+
+/**
+ * Deletes a global onRequest callback if it exists
+ *
+ * @param {function} callback to delete from the global set
+ */
+Vhs.xhr.offRequest = function(callback) {
+  removeOnRequestHook(Vhs.xhr, callback);
+};
+
+/**
+ * Deletes a global onResponse callback if it exists
+ *
+ * @param {function} callback to delete from the global set
+ */
+Vhs.xhr.offResponse = function(callback) {
+  removeOnResponseHook(Vhs.xhr, callback);
 };
 
 const Component = videojs.getComponent('Component');
 
 /**
  * The Vhs Handler object, where we orchestrate all of the parts
- * of HLS to interact with video.js
+ * of VHS to interact with video.js
  *
  * @class VhsHandler
  * @extends videojs.Component
@@ -505,11 +600,7 @@ const Component = videojs.getComponent('Component');
  */
 class VhsHandler extends Component {
   constructor(source, tech, options) {
-    super(tech, videojs.mergeOptions(options.hls, options.vhs));
-
-    if (options.hls && Object.keys(options.hls).length) {
-      videojs.log.warn('Using hls options is deprecated. Please rename `hls` to `vhs` in your options object.');
-    }
+    super(tech, options.vhs);
 
     // if a tech level `initialBandwidth` option was passed
     // use that over the VHS level `bandwidth` option
@@ -519,42 +610,10 @@ class VhsHandler extends Component {
 
     this.logger_ = logger('VhsHandler');
 
-    // tech.player() is deprecated but setup a reference to HLS for
-    // backwards-compatibility
+    // we need access to the player in some cases,
+    // so, get it from Video.js via the `playerId`
     if (tech.options_ && tech.options_.playerId) {
-      const _player = videojs(tech.options_.playerId);
-
-      if (!_player.hasOwnProperty('hls')) {
-        Object.defineProperty(_player, 'hls', {
-          get: () => {
-            videojs.log.warn('player.hls is deprecated. Use player.tech().vhs instead.');
-            tech.trigger({ type: 'usage', name: 'hls-player-access' });
-            return this;
-          },
-          configurable: true
-        });
-      }
-
-      if (!_player.hasOwnProperty('vhs')) {
-        Object.defineProperty(_player, 'vhs', {
-          get: () => {
-            videojs.log.warn('player.vhs is deprecated. Use player.tech().vhs instead.');
-            tech.trigger({ type: 'usage', name: 'vhs-player-access' });
-            return this;
-          },
-          configurable: true
-        });
-      }
-
-      if (!_player.hasOwnProperty('dash')) {
-        Object.defineProperty(_player, 'dash', {
-          get: () => {
-            videojs.log.warn('player.dash is deprecated. Use player.tech().vhs instead.');
-            return this;
-          },
-          configurable: true
-        });
-      }
+      const _player = videojs.getPlayer(tech.options_.playerId);
 
       this.player_ = _player;
     }
@@ -572,9 +631,9 @@ class VhsHandler extends Component {
       tech.overrideNativeVideoTracks(true);
     } else if (this.options_.overrideNative &&
       (tech.featuresNativeVideoTracks || tech.featuresNativeAudioTracks)) {
-      // overriding native HLS only works if audio tracks have been emulated
+      // overriding native VHS only works if audio tracks have been emulated
       // error early if we're misconfigured
-      throw new Error('Overriding native HLS requires emulated tracks. ' +
+      throw new Error('Overriding native VHS requires emulated tracks. ' +
         'See https://git.io/vMpjB');
     }
 
@@ -590,12 +649,12 @@ class VhsHandler extends Component {
         document.msFullscreenElement;
 
       if (fullscreenElement && fullscreenElement.contains(this.tech_.el())) {
-        this.masterPlaylistController_.fastQualityChange_();
+        this.playlistController_.fastQualityChange_();
       } else {
         // When leaving fullscreen, since the in page pixel dimensions should be smaller
         // than full screen, see if there should be a rendition switch down to preserve
         // bandwidth.
-        this.masterPlaylistController_.checkABR_();
+        this.playlistController_.checkABR_();
       }
     });
 
@@ -610,9 +669,9 @@ class VhsHandler extends Component {
 
     this.on(this.tech_, 'error', function() {
       // verify that the error was real and we are loaded
-      // enough to have mpc loaded.
-      if (this.tech_.error() && this.masterPlaylistController_) {
-        this.masterPlaylistController_.pauseLoading();
+      // enough to have pc loaded.
+      if (this.tech_.error() && this.playlistController_) {
+        this.playlistController_.pauseLoading();
       }
     });
 
@@ -622,22 +681,24 @@ class VhsHandler extends Component {
   setOptions_() {
     // defaults
     this.options_.withCredentials = this.options_.withCredentials || false;
-    this.options_.handleManifestRedirects = this.options_.handleManifestRedirects === false ? false : true;
     this.options_.limitRenditionByPlayerDimensions = this.options_.limitRenditionByPlayerDimensions === false ? false : true;
     this.options_.useDevicePixelRatio = this.options_.useDevicePixelRatio || false;
-    this.options_.smoothQualityChange = this.options_.smoothQualityChange || false;
     this.options_.useBandwidthFromLocalStorage =
       typeof this.source_.useBandwidthFromLocalStorage !== 'undefined' ?
         this.source_.useBandwidthFromLocalStorage :
         this.options_.useBandwidthFromLocalStorage || false;
+    this.options_.useForcedSubtitles = this.options_.useForcedSubtitles || false;
     this.options_.useNetworkInformationApi = this.options_.useNetworkInformationApi || false;
     this.options_.useDtsForTimestampOffset = this.options_.useDtsForTimestampOffset || false;
+    this.options_.calculateTimestampOffsetForEachSegment = this.options_.calculateTimestampOffsetForEachSegment || false;
     this.options_.customTagParsers = this.options_.customTagParsers || [];
     this.options_.customTagMappers = this.options_.customTagMappers || [];
     this.options_.cacheEncryptionKeys = this.options_.cacheEncryptionKeys || false;
+    this.options_.llhls = this.options_.llhls === false ? false : true;
+    this.options_.bufferBasedABR = this.options_.bufferBasedABR || false;
 
-    if (typeof this.options_.blacklistDuration !== 'number') {
-      this.options_.blacklistDuration = 5 * 60;
+    if (typeof this.options_.playlistExclusionDuration !== 'number') {
+      this.options_.playlistExclusionDuration = 60;
     }
 
     if (typeof this.options_.bandwidth !== 'number') {
@@ -647,12 +708,10 @@ class VhsHandler extends Component {
         if (storedObject && storedObject.bandwidth) {
           this.options_.bandwidth = storedObject.bandwidth;
           this.tech_.trigger({type: 'usage', name: 'vhs-bandwidth-from-local-storage'});
-          this.tech_.trigger({type: 'usage', name: 'hls-bandwidth-from-local-storage'});
         }
         if (storedObject && storedObject.throughput) {
           this.options_.throughput = storedObject.throughput;
           this.tech_.trigger({type: 'usage', name: 'vhs-throughput-from-local-storage'});
-          this.tech_.trigger({type: 'usage', name: 'hls-throughput-from-local-storage'});
         }
       }
     }
@@ -674,20 +733,20 @@ class VhsHandler extends Component {
       'useDevicePixelRatio',
       'limitRenditionByPlayerDimensions',
       'bandwidth',
-      'smoothQualityChange',
       'customTagParsers',
       'customTagMappers',
-      'handleManifestRedirects',
       'cacheEncryptionKeys',
       'playlistSelector',
       'initialPlaylistSelector',
-      'experimentalBufferBasedABR',
+      'bufferBasedABR',
       'liveRangeSafeTimeDelta',
-      'experimentalLLHLS',
+      'llhls',
+      'useForcedSubtitles',
       'useNetworkInformationApi',
       'useDtsForTimestampOffset',
-      'experimentalExactManifestTimings',
-      'experimentalLeastPixelDiffSelector'
+      'calculateTimestampOffsetForEachSegment',
+      'exactManifestTimings',
+      'leastPixelDiffSelector'
     ].forEach((option) => {
       if (typeof this.source_[option] !== 'undefined') {
         this.options_[option] = this.source_[option];
@@ -708,7 +767,7 @@ class VhsHandler extends Component {
       return;
     }
     this.setOptions_();
-    // add master playlist controller options
+    // add main playlist controller options
     this.options_.src = expandDataUri(this.source_.src);
     this.options_.tech = this.tech_;
     this.options_.externVhs = Vhs;
@@ -719,29 +778,25 @@ class VhsHandler extends Component {
       this.tech_.setCurrentTime(time);
     };
 
-    if (this.options_.smoothQualityChange) {
-      videojs.log.warn('smoothQualityChange is deprecated and will be removed in the next major version');
-    }
+    this.playlistController_ = new PlaylistController(this.options_);
 
-    this.masterPlaylistController_ = new MasterPlaylistController(this.options_);
-
-    const playbackWatcherOptions = videojs.mergeOptions(
+    const playbackWatcherOptions = merge(
       {
         liveRangeSafeTimeDelta: SAFE_TIME_DELTA
       },
       this.options_,
       {
         seekable: () => this.seekable(),
-        media: () => this.masterPlaylistController_.media(),
-        masterPlaylistController: this.masterPlaylistController_
+        media: () => this.playlistController_.media(),
+        playlistController: this.playlistController_
       }
     );
 
     this.playbackWatcher_ = new PlaybackWatcher(playbackWatcherOptions);
 
-    this.masterPlaylistController_.on('error', () => {
+    this.playlistController_.on('error', () => {
       const player = videojs.players[this.tech_.options_.playerId];
-      let error = this.masterPlaylistController_.error;
+      let error = this.playlistController_.error;
 
       if (typeof error === 'object' && !error.code) {
         error.code = 3;
@@ -752,48 +807,48 @@ class VhsHandler extends Component {
       player.error(error);
     });
 
-    const defaultSelector = this.options_.experimentalBufferBasedABR ?
+    const defaultSelector = this.options_.bufferBasedABR ?
       Vhs.movingAverageBandwidthSelector(0.55) : Vhs.STANDARD_PLAYLIST_SELECTOR;
 
     // `this` in selectPlaylist should be the VhsHandler for backwards
     // compatibility with < v2
-    this.masterPlaylistController_.selectPlaylist = this.selectPlaylist ?
+    this.playlistController_.selectPlaylist = this.selectPlaylist ?
       this.selectPlaylist.bind(this) :
       defaultSelector.bind(this);
 
-    this.masterPlaylistController_.selectInitialPlaylist =
+    this.playlistController_.selectInitialPlaylist =
       Vhs.INITIAL_PLAYLIST_SELECTOR.bind(this);
 
     // re-expose some internal objects for backwards compatibility with < v2
-    this.playlists = this.masterPlaylistController_.masterPlaylistLoader_;
-    this.mediaSource = this.masterPlaylistController_.mediaSource;
+    this.playlists = this.playlistController_.mainPlaylistLoader_;
+    this.mediaSource = this.playlistController_.mediaSource;
 
-    // Proxy assignment of some properties to the master playlist
+    // Proxy assignment of some properties to the main playlist
     // controller. Using a custom property for backwards compatibility
     // with < v2
     Object.defineProperties(this, {
       selectPlaylist: {
         get() {
-          return this.masterPlaylistController_.selectPlaylist;
+          return this.playlistController_.selectPlaylist;
         },
         set(selectPlaylist) {
-          this.masterPlaylistController_.selectPlaylist = selectPlaylist.bind(this);
+          this.playlistController_.selectPlaylist = selectPlaylist.bind(this);
         }
       },
       throughput: {
         get() {
-          return this.masterPlaylistController_.mainSegmentLoader_.throughput.rate;
+          return this.playlistController_.mainSegmentLoader_.throughput.rate;
         },
         set(throughput) {
-          this.masterPlaylistController_.mainSegmentLoader_.throughput.rate = throughput;
+          this.playlistController_.mainSegmentLoader_.throughput.rate = throughput;
           // By setting `count` to 1 the throughput value becomes the starting value
           // for the cumulative average
-          this.masterPlaylistController_.mainSegmentLoader_.throughput.count = 1;
+          this.playlistController_.mainSegmentLoader_.throughput.count = 1;
         }
       },
       bandwidth: {
         get() {
-          let playerBandwidthEst = this.masterPlaylistController_.mainSegmentLoader_.bandwidth;
+          let playerBandwidthEst = this.playlistController_.mainSegmentLoader_.bandwidth;
 
           const networkInformation = window.navigator.connection || window.navigator.mozConnection || window.navigator.webkitConnection;
           const tenMbpsAsBitsPerSecond = 10e6;
@@ -816,11 +871,11 @@ class VhsHandler extends Component {
           return playerBandwidthEst;
         },
         set(bandwidth) {
-          this.masterPlaylistController_.mainSegmentLoader_.bandwidth = bandwidth;
+          this.playlistController_.mainSegmentLoader_.bandwidth = bandwidth;
           // setting the bandwidth manually resets the throughput counter
           // `count` is set to zero that current value of `rate` isn't included
           // in the cumulative average
-          this.masterPlaylistController_.mainSegmentLoader_.throughput = {
+          this.playlistController_.mainSegmentLoader_.throughput = {
             rate: 0,
             count: 0
           };
@@ -869,51 +924,51 @@ class VhsHandler extends Component {
         enumerable: true
       },
       mediaRequests: {
-        get: () => this.masterPlaylistController_.mediaRequests_() || 0,
+        get: () => this.playlistController_.mediaRequests_() || 0,
         enumerable: true
       },
       mediaRequestsAborted: {
-        get: () => this.masterPlaylistController_.mediaRequestsAborted_() || 0,
+        get: () => this.playlistController_.mediaRequestsAborted_() || 0,
         enumerable: true
       },
       mediaRequestsTimedout: {
-        get: () => this.masterPlaylistController_.mediaRequestsTimedout_() || 0,
+        get: () => this.playlistController_.mediaRequestsTimedout_() || 0,
         enumerable: true
       },
       mediaRequestsErrored: {
-        get: () => this.masterPlaylistController_.mediaRequestsErrored_() || 0,
+        get: () => this.playlistController_.mediaRequestsErrored_() || 0,
         enumerable: true
       },
       mediaTransferDuration: {
-        get: () => this.masterPlaylistController_.mediaTransferDuration_() || 0,
+        get: () => this.playlistController_.mediaTransferDuration_() || 0,
         enumerable: true
       },
       mediaBytesTransferred: {
-        get: () => this.masterPlaylistController_.mediaBytesTransferred_() || 0,
+        get: () => this.playlistController_.mediaBytesTransferred_() || 0,
         enumerable: true
       },
       mediaSecondsLoaded: {
-        get: () => this.masterPlaylistController_.mediaSecondsLoaded_() || 0,
+        get: () => this.playlistController_.mediaSecondsLoaded_() || 0,
         enumerable: true
       },
       mediaAppends: {
-        get: () => this.masterPlaylistController_.mediaAppends_() || 0,
+        get: () => this.playlistController_.mediaAppends_() || 0,
         enumerable: true
       },
       mainAppendsToLoadedData: {
-        get: () => this.masterPlaylistController_.mainAppendsToLoadedData_() || 0,
+        get: () => this.playlistController_.mainAppendsToLoadedData_() || 0,
         enumerable: true
       },
       audioAppendsToLoadedData: {
-        get: () => this.masterPlaylistController_.audioAppendsToLoadedData_() || 0,
+        get: () => this.playlistController_.audioAppendsToLoadedData_() || 0,
         enumerable: true
       },
       appendsToLoadedData: {
-        get: () => this.masterPlaylistController_.appendsToLoadedData_() || 0,
+        get: () => this.playlistController_.appendsToLoadedData_() || 0,
         enumerable: true
       },
       timeToLoadedData: {
-        get: () => this.masterPlaylistController_.timeToLoadedData_() || 0,
+        get: () => this.playlistController_.timeToLoadedData_() || 0,
         enumerable: true
       },
       buffered: {
@@ -936,8 +991,8 @@ class VhsHandler extends Component {
         get: () => this.tech_.duration(),
         enumerable: true
       },
-      master: {
-        get: () => this.playlists.master,
+      main: {
+        get: () => this.playlists.main,
         enumerable: true
       },
       playerDimensions: {
@@ -960,7 +1015,7 @@ class VhsHandler extends Component {
 
     this.tech_.one(
       'canplay',
-      this.masterPlaylistController_.setupFirstPlay.bind(this.masterPlaylistController_)
+      this.playlistController_.setupFirstPlay.bind(this.playlistController_)
     );
 
     this.tech_.on('bandwidthupdate', () => {
@@ -972,24 +1027,24 @@ class VhsHandler extends Component {
       }
     });
 
-    this.masterPlaylistController_.on('selectedinitialmedia', () => {
+    this.playlistController_.on('selectedinitialmedia', () => {
       // Add the manual rendition mix-in to VhsHandler
       renditionSelectionMixin(this);
     });
 
-    this.masterPlaylistController_.sourceUpdater_.on('createdsourcebuffers', () => {
+    this.playlistController_.sourceUpdater_.on('createdsourcebuffers', () => {
       this.setupEme_();
     });
 
     // the bandwidth of the primary segment loader is our best
     // estimate of overall bandwidth
-    this.on(this.masterPlaylistController_, 'progress', function() {
+    this.on(this.playlistController_, 'progress', function() {
       this.tech_.trigger('progress');
     });
 
     // In the live case, we need to ignore the very first `seeking` event since
     // that will be the result of the seek-to-live behavior
-    this.on(this.masterPlaylistController_, 'firstplay', function() {
+    this.on(this.playlistController_, 'firstplay', function() {
       this.ignoreNextSeekingEvent_ = true;
     });
 
@@ -1001,24 +1056,24 @@ class VhsHandler extends Component {
       return;
     }
 
-    this.mediaSourceUrl_ = window.URL.createObjectURL(this.masterPlaylistController_.mediaSource);
+    this.mediaSourceUrl_ = window.URL.createObjectURL(this.playlistController_.mediaSource);
 
     this.tech_.src(this.mediaSourceUrl_);
   }
 
   createKeySessions_() {
     const audioPlaylistLoader =
-      this.masterPlaylistController_.mediaTypes_.AUDIO.activePlaylistLoader;
+      this.playlistController_.mediaTypes_.AUDIO.activePlaylistLoader;
 
     this.logger_('waiting for EME key session creation');
     waitForKeySessionCreation({
       player: this.player_,
       sourceKeySystems: this.source_.keySystems,
       audioMedia: audioPlaylistLoader && audioPlaylistLoader.media(),
-      mainPlaylists: this.playlists.master.playlists
+      mainPlaylists: this.playlists.main.playlists
     }).then(() => {
       this.logger_('created EME key session');
-      this.masterPlaylistController_.sourceUpdater_.initializedEme();
+      this.playlistController_.sourceUpdater_.initializedEme();
     }).catch((err) => {
       this.logger_('error while creating EME key session', err);
       this.player_.error({
@@ -1051,7 +1106,7 @@ class VhsHandler extends Component {
    */
   setupEme_() {
     const audioPlaylistLoader =
-      this.masterPlaylistController_.mediaTypes_.AUDIO.activePlaylistLoader;
+      this.playlistController_.mediaTypes_.AUDIO.activePlaylistLoader;
 
     const didSetupEmeOptions = setupEmeOptions({
       player: this.player_,
@@ -1065,16 +1120,16 @@ class VhsHandler extends Component {
         return;
       }
 
-      const masterPlaylist = this.masterPlaylistController_.master();
+      const mainPlaylist = this.playlistController_.main();
 
-      if (!masterPlaylist || !masterPlaylist.playlists) {
+      if (!mainPlaylist || !mainPlaylist.playlists) {
         return;
       }
 
       const excludedHDPlaylists = [];
 
       // Assume all HD streams are unplayable and exclude them from ABR selection
-      masterPlaylist.playlists.forEach(playlist => {
+      mainPlaylist.playlists.forEach(playlist => {
         if (playlist && playlist.attributes && playlist.attributes.RESOLUTION &&
             playlist.attributes.RESOLUTION.height >= 720) {
           if (!playlist.excludeUntil || playlist.excludeUntil < Infinity) {
@@ -1094,18 +1149,17 @@ class VhsHandler extends Component {
         );
 
         // Clear the buffer before switching playlists, since it may already contain unplayable segments
-        this.masterPlaylistController_.fastQualityChange_();
+        this.playlistController_.mainSegmentLoader_.resetEverything();
+        this.playlistController_.fastQualityChange_();
       }
     });
 
     this.handleWaitingForKey_ = this.handleWaitingForKey_.bind(this);
     this.player_.tech_.on('waitingforkey', this.handleWaitingForKey_);
 
-    // In IE11 this is too early to initialize media keys, and IE11 does not support
-    // promises.
-    if (videojs.browser.IE_VERSION === 11 || !didSetupEmeOptions) {
+    if (!didSetupEmeOptions) {
       // If EME options were not set up, we've done all we could to initialize EME.
-      this.masterPlaylistController_.sourceUpdater_.initializedEme();
+      this.playlistController_.sourceUpdater_.initializedEme();
       return;
     }
 
@@ -1129,7 +1183,7 @@ class VhsHandler extends Component {
 
     this.qualityLevels_ = player.qualityLevels();
 
-    this.masterPlaylistController_.on('selectedinitialmedia', () => {
+    this.playlistController_.on('selectedinitialmedia', () => {
       handleVhsLoadedMetadata(this.qualityLevels_, this);
     });
 
@@ -1166,28 +1220,28 @@ class VhsHandler extends Component {
    * Begin playing the video.
    */
   play() {
-    this.masterPlaylistController_.play();
+    this.playlistController_.play();
   }
 
   /**
-   * a wrapper around the function in MasterPlaylistController
+   * a wrapper around the function in PlaylistController
    */
   setCurrentTime(currentTime) {
-    this.masterPlaylistController_.setCurrentTime(currentTime);
+    this.playlistController_.setCurrentTime(currentTime);
   }
 
   /**
-   * a wrapper around the function in MasterPlaylistController
+   * a wrapper around the function in PlaylistController
    */
   duration() {
-    return this.masterPlaylistController_.duration();
+    return this.playlistController_.duration();
   }
 
   /**
-   * a wrapper around the function in MasterPlaylistController
+   * a wrapper around the function in PlaylistController
    */
   seekable() {
-    return this.masterPlaylistController_.seekable();
+    return this.playlistController_.seekable();
   }
 
   /**
@@ -1197,26 +1251,15 @@ class VhsHandler extends Component {
     if (this.playbackWatcher_) {
       this.playbackWatcher_.dispose();
     }
-    if (this.masterPlaylistController_) {
-      this.masterPlaylistController_.dispose();
+    if (this.playlistController_) {
+      this.playlistController_.dispose();
     }
     if (this.qualityLevels_) {
       this.qualityLevels_.dispose();
     }
 
-    if (this.player_) {
-      delete this.player_.vhs;
-      delete this.player_.dash;
-      delete this.player_.hls;
-    }
-
     if (this.tech_ && this.tech_.vhs) {
       delete this.tech_.vhs;
-    }
-
-    // don't check this.tech_.hls as it will log a deprecated warning
-    if (this.tech_) {
-      delete this.tech_.hls;
     }
 
     if (this.mediaSourceUrl_ && window.URL.revokeObjectURL) {
@@ -1233,7 +1276,7 @@ class VhsHandler extends Component {
 
   convertToProgramTime(time, callback) {
     return getProgramTime({
-      playlist: this.masterPlaylistController_.media(),
+      playlist: this.playlistController_.media(),
       time,
       callback
     });
@@ -1243,13 +1286,59 @@ class VhsHandler extends Component {
   seekToProgramTime(programTime, callback, pauseAfterSeek = true, retryCount = 2) {
     return seekToProgramTime({
       programTime,
-      playlist: this.masterPlaylistController_.media(),
+      playlist: this.playlistController_.media(),
       retryCount,
       pauseAfterSeek,
       seekTo: this.options_.seekTo,
       tech: this.options_.tech,
       callback
     });
+  }
+
+  /**
+   * Adds the onRequest, onResponse, offRequest and offResponse functions
+   * to the VhsHandler xhr Object.
+   */
+  setupXhrHooks_() {
+    /**
+     * A player function for setting an onRequest hook
+     *
+     * @param {function} callback for request modifiction
+     */
+    this.xhr.onRequest = (callback) => {
+      addOnRequestHook(this.xhr, callback);
+    };
+
+    /**
+     * A player function for setting an onResponse hook
+     *
+     * @param {callback} callback for response data retrieval
+     */
+    this.xhr.onResponse = (callback) => {
+      addOnResponseHook(this.xhr, callback);
+    };
+
+    /**
+     * Deletes a player onRequest callback if it exists
+     *
+     * @param {function} callback to delete from the player set
+     */
+    this.xhr.offRequest = (callback) => {
+      removeOnRequestHook(this.xhr, callback);
+    };
+
+    /**
+     * Deletes a player onResponse callback if it exists
+     *
+     * @param {function} callback to delete from the player set
+     */
+    this.xhr.offResponse = (callback) => {
+      removeOnResponseHook(this.xhr, callback);
+    };
+
+    // Trigger an event on the player to notify the user that vhs is ready to set xhr hooks.
+    // This allows hooks to be set before the source is set to vhs when handleSource is called.
+    this.player_.trigger('xhr-hooks-ready');
   }
 }
 
@@ -1264,25 +1353,16 @@ const VhsSourceHandler = {
   name: 'videojs-http-streaming',
   VERSION: vhsVersion,
   canHandleSource(srcObj, options = {}) {
-    const localOptions = videojs.mergeOptions(videojs.options, options);
+    const localOptions = merge(videojs.options, options);
 
     return VhsSourceHandler.canPlayType(srcObj.type, localOptions);
   },
   handleSource(source, tech, options = {}) {
-    const localOptions = videojs.mergeOptions(videojs.options, options);
+    const localOptions = merge(videojs.options, options);
 
     tech.vhs = new VhsHandler(source, tech, localOptions);
-    if (!videojs.hasOwnProperty('hls')) {
-      Object.defineProperty(tech, 'hls', {
-        get: () => {
-          videojs.log.warn('player.tech().hls is deprecated. Use player.tech().vhs instead.');
-          return tech.vhs;
-        },
-        configurable: true
-      });
-    }
     tech.vhs.xhr = xhrFactory();
-
+    tech.vhs.setupXhrHooks_();
     tech.vhs.src(source.src, source.type);
     return tech.vhs;
   },
@@ -1300,12 +1380,11 @@ const VhsSourceHandler = {
     return canUseMsePlayback ? 'maybe' : '';
   },
   getOverrideNative(options = {}) {
-    const { vhs = {}, hls = {} } = options;
+    const { vhs = {} } = options;
     const defaultOverrideNative = !(videojs.browser.IS_ANY_SAFARI || videojs.browser.IS_IOS);
     const { overrideNative = defaultOverrideNative } = vhs;
-    const { overrideNative: legacyOverrideNative = false } = hls;
 
-    return legacyOverrideNative || overrideNative;
+    return overrideNative;
   }
 };
 
@@ -1325,41 +1404,15 @@ if (supportsNativeMediaSources()) {
 }
 
 videojs.VhsHandler = VhsHandler;
-Object.defineProperty(videojs, 'HlsHandler', {
-  get: () => {
-    videojs.log.warn('videojs.HlsHandler is deprecated. Use videojs.VhsHandler instead.');
-    return VhsHandler;
-  },
-  configurable: true
-});
 videojs.VhsSourceHandler = VhsSourceHandler;
-Object.defineProperty(videojs, 'HlsSourceHandler', {
-  get: () => {
-    videojs.log.warn('videojs.HlsSourceHandler is deprecated. ' +
-      'Use videojs.VhsSourceHandler instead.');
-    return VhsSourceHandler;
-  },
-  configurable: true
-});
 videojs.Vhs = Vhs;
-Object.defineProperty(videojs, 'Hls', {
-  get: () => {
-    videojs.log.warn('videojs.Hls is deprecated. Use videojs.Vhs instead.');
-    return Vhs;
-  },
-  configurable: true
-});
 if (!videojs.use) {
-  videojs.registerComponent('Hls', Vhs);
   videojs.registerComponent('Vhs', Vhs);
 }
 videojs.options.vhs = videojs.options.vhs || {};
-videojs.options.hls = videojs.options.hls || {};
 
 if (!videojs.getPlugin || !videojs.getPlugin('reloadSourceOnError')) {
-  const registerPlugin = videojs.registerPlugin || videojs.plugin;
-
-  registerPlugin('reloadSourceOnError', reloadSourceOnError);
+  videojs.registerPlugin('reloadSourceOnError', reloadSourceOnError);
 }
 
 export {

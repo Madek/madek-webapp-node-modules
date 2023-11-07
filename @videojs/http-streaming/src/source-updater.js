@@ -9,6 +9,7 @@ import {getMimeForCodec} from '@videojs/vhs-utils/es/codecs.js';
 import window from 'global/window';
 import toTitleCase from './util/to-title-case.js';
 import { QUOTA_EXCEEDED_ERR } from './error-codes';
+import {createTimeRanges, prettyBuffered} from './util/vjs-compat';
 
 const bufferTypes = [
   'video',
@@ -296,6 +297,11 @@ const pushQueue = ({type, sourceUpdater, action, doneFn, name}) => {
 };
 
 const onUpdateend = (type, sourceUpdater) => (e) => {
+  const buffered = sourceUpdater[`${type}Buffered`]();
+  const bufferedAsString = prettyBuffered(buffered);
+
+  sourceUpdater.logger_(`${type} source buffer update end. Buffered: \n`, bufferedAsString);
+
   // Although there should, in theory, be a pending action for any updateend receieved,
   // there are some actions that may trigger updateend events without set definitions in
   // the w3c spec. For instance, setting the duration on the media source may trigger
@@ -467,11 +473,9 @@ export default class SourceUpdater extends videojs.EventTarget {
    *          if removeSourceBuffer can be called.
    */
   canRemoveSourceBuffer() {
-    // IE reports that it supports removeSourceBuffer, but often throws
-    // errors when attempting to use the function. So we report that it
-    // does not support removeSourceBuffer. As of Firefox 83 removeSourceBuffer
-    // throws errors, so we report that it does not support this as well.
-    return !videojs.browser.IE_VERSION && !videojs.browser.IS_FIREFOX && window.MediaSource &&
+    // As of Firefox 83 removeSourceBuffer
+    // throws errors, so we report that it does not support this.
+    return !videojs.browser.IS_FIREFOX && window.MediaSource &&
       window.MediaSource.prototype &&
       typeof window.MediaSource.prototype.removeSourceBuffer === 'function';
   }
@@ -605,11 +609,11 @@ export default class SourceUpdater extends videojs.EventTarget {
     // no media source/source buffer or it isn't in the media sources
     // source buffer list
     if (!inSourceBuffers(this.mediaSource, this.audioBuffer)) {
-      return videojs.createTimeRange();
+      return createTimeRanges();
     }
 
     return this.audioBuffer.buffered ? this.audioBuffer.buffered :
-      videojs.createTimeRange();
+      createTimeRanges();
   }
 
   /**
@@ -622,10 +626,10 @@ export default class SourceUpdater extends videojs.EventTarget {
     // no media source/source buffer or it isn't in the media sources
     // source buffer list
     if (!inSourceBuffers(this.mediaSource, this.videoBuffer)) {
-      return videojs.createTimeRange();
+      return createTimeRanges();
     }
     return this.videoBuffer.buffered ? this.videoBuffer.buffered :
-      videojs.createTimeRange();
+      createTimeRanges();
   }
 
   /**

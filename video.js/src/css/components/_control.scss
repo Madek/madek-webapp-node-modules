@@ -25,7 +25,11 @@
 }
 
 .vjs-button > .vjs-icon-placeholder {
-    display: block;
+  display: block;
+}
+
+.vjs-button > .vjs-svg-icon {
+  display: inline-block;
 }
 
 // Replacement for focus outline
@@ -38,9 +42,4 @@
 // Hide control text visually, but have it available for screenreaders
 .video-js *:not(.vjs-visible-text) > .vjs-control-text {
   @include hide-visually;
-}
-
-.vjs-no-flex .vjs-control {
-  display: table-cell;
-  vertical-align: middle;
 }

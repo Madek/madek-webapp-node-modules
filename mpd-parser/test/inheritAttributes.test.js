@@ -3,34 +3,37 @@ import {
   buildBaseUrls,
   parseCaptionServiceMetadata,
   getSegmentInformation,
-  getPeriodStart
+  getPeriodStart,
+  toEventStream
 } from '../src/inheritAttributes';
 import { stringToMpdXml } from '../src/stringToMpdXml';
 import errors from '../src/errors';
 import QUnit from 'qunit';
+import { stub } from 'sinon';
 import { toPlaylists } from '../src/toPlaylists';
 import decodeB64ToUint8Array from '@videojs/vhs-utils/es/decode-b64-to-uint8-array';
+import { findChildren } from '../src/utils/xml';
 
 QUnit.module('buildBaseUrls');
 
 QUnit.test('returns reference urls when no BaseURL nodes', function(assert) {
-  const reference = ['https://example.com/', 'https://foo.com/'];
+  const reference = [{ baseUrl: 'https://example.com/' }, { baseUrl: 'https://foo.com/' }];
 
   assert.deepEqual(buildBaseUrls(reference, []), reference, 'returns reference urls');
 });
 
 QUnit.test('single reference url with single BaseURL node', function(assert) {
-  const reference = ['https://example.com'];
+  const reference = [{ baseUrl: 'https://example.com' }];
   const node = [{ textContent: 'bar/' }];
-  const expected = ['https://example.com/bar/'];
+  const expected = [{ baseUrl: 'https://example.com/bar/' }];
 
   assert.deepEqual(buildBaseUrls(reference, node), expected, 'builds base url');
 });
 
 QUnit.test('multiple reference urls with single BaseURL node', function(assert) {
-  const reference = ['https://example.com/', 'https://foo.com/'];
+  const reference = [{ baseUrl: 'https://example.com/' }, { baseUrl: 'https://foo.com/' }];
   const node = [{ textContent: 'bar/' }];
-  const expected = ['https://example.com/bar/', 'https://foo.com/bar/'];
+  const expected = [{ baseUrl: 'https://example.com/bar/' }, { baseUrl: 'https://foo.com/bar/' }];
 
   assert.deepEqual(
     buildBaseUrls(reference, node), expected,
@@ -39,40 +42,76 @@ QUnit.test('multiple reference urls with single BaseURL node', function(assert) 
 });
 
 QUnit.test('multiple BaseURL nodes with single reference url', function(assert) {
-  const reference = ['https://example.com/'];
+  const reference = [{ baseUrl: 'https://example.com/' }];
   const nodes = [{ textContent: 'bar/' }, { textContent: 'baz/' }];
-  const expected = ['https://example.com/bar/', 'https://example.com/baz/'];
+  const expected = [{ baseUrl: 'https://example.com/bar/' }, { baseUrl: 'https://example.com/baz/' }];
 
   assert.deepEqual(buildBaseUrls(reference, nodes), expected, 'base url for each node');
 });
 
 QUnit.test('multiple reference urls with multiple BaseURL nodes', function(assert) {
-  const reference = ['https://example.com/', 'https://foo.com/', 'http://example.com'];
+  const reference = [
+    { baseUrl: 'https://example.com/' }, { baseUrl: 'https://foo.com/' }, { baseUrl: 'http://example.com' }
+  ];
   const nodes =
     [{ textContent: 'bar/' }, { textContent: 'baz/' }, { textContent: 'buzz/' }];
   const expected = [
-    'https://example.com/bar/',
-    'https://example.com/baz/',
-    'https://example.com/buzz/',
-    'https://foo.com/bar/',
-    'https://foo.com/baz/',
-    'https://foo.com/buzz/',
-    'http://example.com/bar/',
-    'http://example.com/baz/',
-    'http://example.com/buzz/'
+    { baseUrl: 'https://example.com/bar/' },
+    { baseUrl: 'https://example.com/baz/' },
+    { baseUrl: 'https://example.com/buzz/' },
+    { baseUrl: 'https://foo.com/bar/' },
+    { baseUrl: 'https://foo.com/baz/' },
+    { baseUrl: 'https://foo.com/buzz/' },
+    { baseUrl: 'http://example.com/bar/' },
+    { baseUrl: 'http://example.com/baz/' },
+    { baseUrl: 'http://example.com/buzz/' }
   ];
 
   assert.deepEqual(buildBaseUrls(reference, nodes), expected, 'creates all base urls');
 });
 
 QUnit.test('absolute BaseURL overwrites reference', function(assert) {
-  const reference = ['https://example.com'];
+  const reference = [{ baseUrl: 'https://example.com' }];
   const node = [{ textContent: 'https://foo.com/bar/' }];
-  const expected = ['https://foo.com/bar/'];
+  const expected = [{ baseUrl: 'https://foo.com/bar/'}];
 
   assert.deepEqual(
     buildBaseUrls(reference, node), expected,
     'absolute url overwrites reference'
+  );
+});
+
+QUnit.test('reference attributes are ignored when there is a BaseURL node', function(assert) {
+  const reference = [{ baseUrl: 'https://example.com', attributes: [{ name: 'test', value: 'wow' }] }];
+  const node = [{ textContent: 'https://foo.com/bar/' }];
+  const expected = [{ baseUrl: 'https://foo.com/bar/' }];
+
+  assert.deepEqual(
+    buildBaseUrls(reference, node), expected,
+    'baseURL attributes are not included'
+  );
+});
+
+QUnit.test('BasURL attributes are still added with a reference', function(assert) {
+  const reference = [{ baseUrl: 'https://example.com' }];
+  const node = [{ textContent: 'https://foo.com/bar/', attributes: [{ name: 'test', value: 'wow' }] }];
+
+  const expected = [{ baseUrl: 'https://foo.com/bar/', test: 'wow' }];
+
+  assert.deepEqual(
+    buildBaseUrls(reference, node), expected,
+    'baseURL attributes are included'
+  );
+});
+
+QUnit.test('attributes are replaced when both reference and BaseURL have the same attributes', function(assert) {
+  const reference = [{ baseUrl: 'https://example.com', attributes: [{ name: 'test', value: 'old' }] }];
+  const node = [{ textContent: 'https://foo.com/bar/', attributes: [{ name: 'test', value: 'new' }] }];
+  const expected = [{ baseUrl: 'https://foo.com/bar/', test: 'new' }];
+
+  assert.deepEqual(
+    buildBaseUrls(reference, node), expected,
+    'baseURL attributes are included'
   );
 });
 
@@ -544,6 +583,8 @@ QUnit.test('end to end - basic', function(assert) {
   `), { NOW });
 
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -571,6 +612,82 @@ QUnit.test('end to end - basic', function(assert) {
       attributes: {
         bandwidth: 256,
         baseUrl: 'https://example.com/en.vtt',
+        id: 'en',
+        lang: 'en',
+        mediaPresentationDuration: 30,
+        mimeType: 'text/vtt',
+        periodStart: 0,
+        role: {},
+        sourceDuration: 30,
+        type: 'static',
+        NOW,
+        clientOffset: 0
+      },
+      segmentInfo: {}
+    }]
+  };
+
+  assert.equal(actual.representationInfo.length, 2);
+  assert.deepEqual(actual, expected);
+});
+
+QUnit.test('end to end - basic using manifest uri', function(assert) {
+  const NOW = Date.now();
+
+  const actual = inheritAttributes(stringToMpdXml(`
+    <MPD mediaPresentationDuration="PT30S" >
+      <BaseURL>base/</BaseURL>
+      <Period>
+        <AdaptationSet mimeType="video/mp4" >
+          <Role value="main"></Role>
+          <SegmentTemplate></SegmentTemplate>
+          <Representation
+            bandwidth="5000000"
+            codecs="avc1.64001e"
+            height="404"
+            id="test"
+            width="720">
+          </Representation>
+        </AdaptationSet>
+        <AdaptationSet mimeType="text/vtt" lang="en">
+          <Representation bandwidth="256" id="en">
+            <BaseURL>en.vtt</BaseURL>
+          </Representation>
+        </AdaptationSet>
+      </Period>
+    </MPD>
+  `), { NOW, manifestUri: 'https://www.test.com' });
+
+  const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
+    locations: undefined,
+    representationInfo: [{
+      attributes: {
+        bandwidth: 5000000,
+        baseUrl: 'https://www.test.com/base/',
+        codecs: 'avc1.64001e',
+        height: 404,
+        id: 'test',
+        mediaPresentationDuration: 30,
+        mimeType: 'video/mp4',
+        periodStart: 0,
+        role: {
+          value: 'main'
+        },
+        sourceDuration: 30,
+        type: 'static',
+        width: 720,
+        NOW,
+        clientOffset: 0
+      },
+      segmentInfo: {
+        template: {}
+      }
+    }, {
+      attributes: {
+        bandwidth: 256,
+        baseUrl: 'https://www.test.com/base/en.vtt',
         id: 'en',
         lang: 'en',
         mediaPresentationDuration: 30,
@@ -618,6 +735,8 @@ QUnit.test('end to end - basic dynamic', function(assert) {
   `), { NOW });
 
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -662,6 +781,303 @@ QUnit.test('end to end - basic dynamic', function(assert) {
   assert.deepEqual(actual, expected);
 });
 
+QUnit.test('end to end - content steering - non resolvable base URLs', function(assert) {
+  const NOW = Date.now();
+
+  const actual = inheritAttributes(stringToMpdXml(`
+  <MPD type="dyanmic">
+    <ContentSteering defaultServiceLocation="beta" queryBeforeStart="false" proxyServerURL="http://127.0.0.1:3455/steer">https://example.com/app/url</ContentSteering>
+    <BaseURL serviceLocation="alpha">https://cdn1.example.com/</BaseURL>
+    <BaseURL serviceLocation="beta">https://cdn2.example.com/</BaseURL>
+    <Period start="PT0S">
+      <AdaptationSet mimeType="video/mp4">
+        <Role value="main"></Role>
+        <SegmentTemplate></SegmentTemplate>
+        <Representation
+          bandwidth="5000000"
+          codecs="avc1.64001e"
+          height="404"
+          id="test"
+          width="720">
+        </Representation>
+      </AdaptationSet>
+      <AdaptationSet mimeType="text/vtt" lang="en">
+        <Representation bandwidth="256" id="en">
+        <BaseURL>https://example.com/en.vtt</BaseURL>
+        </Representation>
+      </AdaptationSet>
+    </Period>
+  </MPD>
+`), { NOW, manifestUri: 'https://www.test.com' });
+
+  // Note that we expect to see the `contentSteeringInfo` object set with the
+  // proper values. We also expect to see the `serviceLocation` property set to
+  // the correct values inside of the correct representations.
+  const expected = {
+    contentSteeringInfo: {
+      defaultServiceLocation: 'beta',
+      proxyServerURL: 'http://127.0.0.1:3455/steer',
+      queryBeforeStart: false,
+      serverURL: 'https://example.com/app/url'
+    },
+    eventStream: [],
+    locations: undefined,
+    representationInfo: [
+      {
+        attributes: {
+          NOW,
+          bandwidth: 5000000,
+          baseUrl: 'https://cdn1.example.com/',
+          clientOffset: 0,
+          codecs: 'avc1.64001e',
+          height: 404,
+          id: 'test',
+          mimeType: 'video/mp4',
+          periodStart: 0,
+          role: {
+            value: 'main'
+          },
+          serviceLocation: 'alpha',
+          sourceDuration: 0,
+          type: 'dyanmic',
+          width: 720
+        },
+        segmentInfo: {
+          template: {}
+        }
+      },
+      {
+        attributes: {
+          NOW,
+          bandwidth: 5000000,
+          baseUrl: 'https://cdn2.example.com/',
+          clientOffset: 0,
+          codecs: 'avc1.64001e',
+          height: 404,
+          id: 'test',
+          mimeType: 'video/mp4',
+          periodStart: 0,
+          role: {
+            value: 'main'
+          },
+          serviceLocation: 'beta',
+          sourceDuration: 0,
+          type: 'dyanmic',
+          width: 720
+        },
+        segmentInfo: {
+          template: {}
+        }
+      },
+      {
+        attributes: {
+          NOW,
+          bandwidth: 256,
+          baseUrl: 'https://example.com/en.vtt',
+          clientOffset: 0,
+          id: 'en',
+          lang: 'en',
+          mimeType: 'text/vtt',
+          periodStart: 0,
+          role: {},
+          sourceDuration: 0,
+          type: 'dyanmic'
+        },
+        segmentInfo: {}
+      },
+      {
+        attributes: {
+          NOW,
+          bandwidth: 256,
+          baseUrl: 'https://example.com/en.vtt',
+          clientOffset: 0,
+          id: 'en',
+          lang: 'en',
+          mimeType: 'text/vtt',
+          periodStart: 0,
+          role: {},
+          sourceDuration: 0,
+          type: 'dyanmic'
+        },
+        segmentInfo: {}
+      }
+    ]
+  };
+
+  assert.equal(actual.representationInfo.length, 4);
+  assert.deepEqual(actual, expected);
+});
+
+QUnit.test('end to end - content steering - resolvable base URLs', function(assert) {
+  const NOW = Date.now();
+
+  const actual = inheritAttributes(stringToMpdXml(`
+  <MPD type="dyanmic">
+    <ContentSteering defaultServiceLocation="beta" queryBeforeStart="false" proxyServerURL="http://127.0.0.1:3455/steer">https://example.com/app/url</ContentSteering>
+    <BaseURL serviceLocation="alpha">https://cdn1.example.com/</BaseURL>
+    <BaseURL serviceLocation="beta">https://cdn2.example.com/</BaseURL>
+    <Period start="PT0S">
+      <AdaptationSet mimeType="video/mp4">
+        <Role value="main"></Role>
+        <SegmentTemplate></SegmentTemplate>
+        <Representation
+          bandwidth="5000000"
+          codecs="avc1.64001e"
+          height="404"
+          id="test"
+          width="720">
+        </Representation>
+        <BaseURL>/video</BaseURL>
+      </AdaptationSet>
+      <AdaptationSet mimeType="text/vtt" lang="en">
+        <Representation bandwidth="256" id="en">
+        <BaseURL>/vtt</BaseURL>
+        </Representation>
+      </AdaptationSet>
+    </Period>
+  </MPD>
+`), { NOW, manifestUri: 'https://www.test.com' });
+
+  // Note that we expect to see the `contentSteeringInfo` object set with the
+  // proper values. We also expect to see the `serviceLocation` property set to
+  // the correct values inside of the correct representations.
+  //
+  // Also note that some of the representations have '/video' appended
+  // to the end of the baseUrls
+  const expected = {
+    contentSteeringInfo: {
+      defaultServiceLocation: 'beta',
+      proxyServerURL: 'http://127.0.0.1:3455/steer',
+      queryBeforeStart: false,
+      serverURL: 'https://example.com/app/url'
+    },
+    eventStream: [],
+    locations: undefined,
+    representationInfo: [
+      {
+        attributes: {
+          NOW,
+          bandwidth: 5000000,
+          baseUrl: 'https://cdn1.example.com/video',
+          clientOffset: 0,
+          codecs: 'avc1.64001e',
+          height: 404,
+          id: 'test',
+          mimeType: 'video/mp4',
+          periodStart: 0,
+          role: {
+            value: 'main'
+          },
+          serviceLocation: 'alpha',
+          sourceDuration: 0,
+          type: 'dyanmic',
+          width: 720
+        },
+        segmentInfo: {
+          template: {}
+        }
+      },
+      {
+        attributes: {
+          NOW,
+          bandwidth: 5000000,
+          baseUrl: 'https://cdn2.example.com/video',
+          clientOffset: 0,
+          codecs: 'avc1.64001e',
+          height: 404,
+          id: 'test',
+          mimeType: 'video/mp4',
+          periodStart: 0,
+          role: {
+            value: 'main'
+          },
+          serviceLocation: 'beta',
+          sourceDuration: 0,
+          type: 'dyanmic',
+          width: 720
+        },
+        segmentInfo: {
+          template: {}
+        }
+      },
+      {
+        attributes: {
+          NOW,
+          bandwidth: 256,
+          baseUrl: 'https://cdn1.example.com/vtt',
+          clientOffset: 0,
+          id: 'en',
+          lang: 'en',
+          mimeType: 'text/vtt',
+          periodStart: 0,
+          role: {},
+          serviceLocation: 'alpha',
+          sourceDuration: 0,
+          type: 'dyanmic'
+        },
+        segmentInfo: {}
+      },
+      {
+        attributes: {
+          NOW,
+          bandwidth: 256,
+          baseUrl: 'https://cdn2.example.com/vtt',
+          clientOffset: 0,
+          id: 'en',
+          lang: 'en',
+          mimeType: 'text/vtt',
+          periodStart: 0,
+          role: {},
+          serviceLocation: 'beta',
+          sourceDuration: 0,
+          type: 'dyanmic'
+        },
+        segmentInfo: {}
+      }
+    ]
+  };
+
+  assert.equal(actual.representationInfo.length, 4);
+  assert.deepEqual(actual, expected);
+});
+
+QUnit.test('Too many content steering tags sends a warning to the eventHandler', function(assert) {
+  const handlerStub = stub();
+  const NOW = Date.now();
+
+  inheritAttributes(stringToMpdXml(`
+    <MPD type="dyanmic">
+      <ContentSteering defaultServiceLocation="alpha" queryBeforeStart="false" proxyServerURL="http://127.0.0.1:3455/steer">https://example.com/app/url</ContentSteering>
+      <ContentSteering defaultServiceLocation="beta" queryBeforeStart="false" proxyServerURL="http://127.0.0.1:3455/steer">https://example.com/app/url</ContentSteering>
+      <BaseURL serviceLocation="alpha">https://cdn1.example.com/</BaseURL>
+      <BaseURL serviceLocation="beta">https://cdn2.example.com/</BaseURL>
+      <Period start="PT0S">
+        <AdaptationSet mimeType="video/mp4">
+          <Role value="main"></Role>
+          <SegmentTemplate></SegmentTemplate>
+          <Representation
+            bandwidth="5000000"
+            codecs="avc1.64001e"
+            height="404"
+            id="test"
+            width="720">
+          </Representation>
+        </AdaptationSet>
+        <AdaptationSet mimeType="text/vtt" lang="en">
+          <Representation bandwidth="256" id="en">
+          <BaseURL>/video</BaseURL>
+          </Representation>
+        </AdaptationSet>
+      </Period>
+    </MPD>
+  `), { NOW, manifestUri: 'https://www.test.com', eventHandler: handlerStub });
+
+  assert.ok(handlerStub.calledWith({
+    type: 'warn',
+    message: 'The MPD manifest should contain no more than one ContentSteering tag'
+  }));
+});
+
 QUnit.test('end to end - basic multiperiod', function(assert) {
   const NOW = Date.now();
 
@@ -699,6 +1115,8 @@ QUnit.test('end to end - basic multiperiod', function(assert) {
   `), { NOW });
 
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -785,6 +1203,8 @@ QUnit.test('end to end - inherits BaseURL from all levels', function(assert) {
   `), { NOW });
 
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -861,6 +1281,8 @@ QUnit.test('end to end - alternate BaseURLs', function(assert) {
   `), { NOW });
 
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -1028,6 +1450,8 @@ QUnit.test(
   `), { NOW });
 
     const expected = {
+      contentSteeringInfo: null,
+      eventStream: [],
       locations: undefined,
       representationInfo: [{
         attributes: {
@@ -1140,6 +1564,8 @@ QUnit.test(
   `), { NOW });
 
     const expected = {
+      contentSteeringInfo: null,
+      eventStream: [],
       locations: undefined,
       representationInfo: [{
         attributes: {
@@ -1263,6 +1689,8 @@ QUnit.test(
   `), { NOW });
 
     const expected = {
+      contentSteeringInfo: null,
+      eventStream: [],
       locations: undefined,
       representationInfo: [{
         attributes: {
@@ -2106,6 +2534,8 @@ QUnit.test('keySystem info for representation - lowercase UUIDs', function(asser
 
   // inconsistent quoting because of quote-props
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -2192,6 +2622,8 @@ QUnit.test('keySystem info for representation - uppercase UUIDs', function(asser
 
   // inconsistent quoting because of quote-props
   const expected = {
+    contentSteeringInfo: null,
+    eventStream: [],
     locations: undefined,
     representationInfo: [{
       attributes: {
@@ -2237,4 +2669,277 @@ QUnit.test('keySystem info for representation - uppercase UUIDs', function(asser
 
   assert.equal(actual.representationInfo.length, 1);
   assert.deepEqual(actual, expected);
+});
+
+QUnit.test('gets EventStream data from toEventStream', function(assert) {
+  const mpd = stringToMpdXml(`
+    <MPD mediaPresentationDuration="PT30S" xmlns:cenc="urn:mpeg:cenc:2013">
+      <Period id="dai_pod-0001065804-ad-1" start="PT17738H17M14.156S" duration="PT9.977S">
+        <BaseURL>https://www.example.com/base/</BaseURL>
+        <SegmentTemplate media="$RepresentationID$/$Number$.mp4" initialization="$RepresentationID$/init.mp4"/>
+        <EventStream schemeIdUri="urn:google:dai:2018" timescale="1000" contentEncoding="foo" presentationTimeOffset="1">
+          <Event presentationTime="100" duration="0" id="0" messageData="foo"/>
+          <Event presentationTime="900" duration="0" id="5" messageData="bar"/>
+          <Event presentationTime="1900" duration="0" id="6" messageData="foo_bar"/>
+        </EventStream>
+      </Period>
+    </MPD>`);
+  const expected = [
+    {
+      end: 2.1,
+      id: '0',
+      messageData: 'foo',
+      schemeIdUri: 'urn:google:dai:2018',
+      start: 2.1,
+      value: undefined,
+      contentEncoding: 'foo',
+      presentationTimeOffset: 1
+
+    },
+    {
+      end: 2.9,
+      id: '5',
+      messageData: 'bar',
+      schemeIdUri: 'urn:google:dai:2018',
+      start: 2.9,
+      value: undefined,
+      contentEncoding: 'foo',
+      presentationTimeOffset: 1
+    },
+    {
+      end: 3.9,
+      id: '6',
+      messageData: 'foo_bar',
+      schemeIdUri: 'urn:google:dai:2018',
+      start: 3.9,
+      value: undefined,
+      contentEncoding: 'foo',
+      presentationTimeOffset: 1
+    }
+  ];
+
+  const firstPeriod = { node: findChildren(mpd, 'Period')[0], attributes: { start: 2 } };
+  const eventStreams = toEventStream(firstPeriod);
+
+  assert.deepEqual(eventStreams, expected, 'toEventStream returns the expected object');
+});
+
+QUnit.test('can get EventStream data from toEventStream with no schemeIdUri', function(assert) {
+  const mpd = stringToMpdXml(`
+    <MPD mediaPresentationDuration="PT30S" xmlns:cenc="urn:mpeg:cenc:2013">
+      <Period id="dai_pod-0001065804-ad-1" start="PT17738H17M14.156S" duration="PT9.977S">
+        <BaseURL>https://www.example.com/base/</BaseURL>
+        <SegmentTemplate media="$RepresentationID$/$Number$.mp4" initialization="$RepresentationID$/init.mp4"/>
+        <EventStream timescale="1000">
+          <Event presentationTime="100" duration="0" id="0" messageData="foo"/>
+          <Event presentationTime="900" duration="0" id="5" messageData="bar"/>
+          <Event presentationTime="1900" duration="0" id="6" messageData="foo_bar"/>
+        </EventStream>
+      </Period>
+    </MPD>`);
+
+  const expected = [
+    {
+      end: 2.1,
+      id: '0',
+      messageData: 'foo',
+      schemeIdUri: undefined,
+      start: 2.1,
+      value: undefined,
+      contentEncoding: undefined,
+      presentationTimeOffset: 0
+
+    },
+    {
+      end: 2.9,
+      id: '5',
+      messageData: 'bar',
+      schemeIdUri: undefined,
+      start: 2.9,
+      value: undefined,
+      contentEncoding: undefined,
+      presentationTimeOffset: 0
+    },
+    {
+      end: 3.9,
+      id: '6',
+      messageData: 'foo_bar',
+      schemeIdUri: undefined,
+      start: 3.9,
+      value: undefined,
+      contentEncoding: undefined,
+      presentationTimeOffset: 0
+    }
+  ];
+
+  const firstPeriod = { node: findChildren(mpd, 'Period')[0], attributes: { start: 2} };
+  const eventStreams = toEventStream(firstPeriod);
+
+  assert.deepEqual(eventStreams, expected, 'toEventStream returns the expected object');
+});
+
+QUnit.test('gets eventStream from inheritAttributes', function(assert) {
+  const mpd = stringToMpdXml(`
+    <MPD mediaPresentationDuration="PT30S" xmlns:cenc="urn:mpeg:cenc:2013">
+      <Period id="dai_pod-0001065804-ad-1" start="PT0H0M14.9S" duration="PT9.977S">
+        <BaseURL>https://www.example.com/base/</BaseURL>
+        <SegmentTemplate media="$RepresentationID$/$Number$.mp4" initialization="$RepresentationID$/init.mp4"/>
+        <EventStream schemeIdUri="urn:google:dai:2018" timescale="1000" value="foo">
+          <Event presentationTime="100" duration="0" id="0" messageData="foo"/>
+          <Event presentationTime="1100" duration="0" id="5" messageData="bar"/>
+          <Event presentationTime="2100" duration="0" id="6" messageData="foo_bar"/>
+        </EventStream>
+      </Period>
+    </MPD>`);
+  const expected = {
+    contentSteeringInfo: null,
+    eventStream: [
+      {
+        end: 15,
+        id: '0',
+        messageData: 'foo',
+        schemeIdUri: 'urn:google:dai:2018',
+        start: 15,
+        value: 'foo',
+        contentEncoding: undefined,
+        presentationTimeOffset: 0
+      },
+      {
+        end: 16,
+        id: '5',
+        messageData: 'bar',
+        schemeIdUri: 'urn:google:dai:2018',
+        start: 16,
+        value: 'foo',
+        contentEncoding: undefined,
+        presentationTimeOffset: 0
+      },
+      {
+        end: 17,
+        id: '6',
+        messageData: 'foo_bar',
+        schemeIdUri: 'urn:google:dai:2018',
+        start: 17,
+        value: 'foo',
+        contentEncoding: undefined,
+        presentationTimeOffset: 0
+      }
+    ],
+    locations: undefined,
+    representationInfo: []
+  };
+
+  const eventStreams = inheritAttributes(mpd);
+
+  assert.deepEqual(eventStreams, expected, 'inheritAttributes returns the expected object');
+});
+
+QUnit.test('can get EventStream data from toEventStream with data in Event tags', function(assert) {
+  const mpd = stringToMpdXml(`
+    <MPD mediaPresentationDuration="PT30S" xmlns:cenc="urn:mpeg:cenc:2013">
+      <Period id="dai_pod-0001065804-ad-1" start="PT17738H17M14.156S" duration="PT9.977S">
+        <BaseURL>https://www.example.com/base/</BaseURL>
+        <SegmentTemplate media="$RepresentationID$/$Number$.mp4" initialization="$RepresentationID$/init.mp4"/>
+        <EventStream timescale="1000">
+          <Event presentationTime="100" duration="0" id="0">foo</Event>
+          <Event presentationTime="900" duration="0" id="5">bar</Event>
+          <Event presentationTime="1900" duration="0" id="6">foo_bar</Event>
+        </EventStream>
+      </Period>
+    </MPD>`);
+
+  const expected = [
+    {
+      end: 2.1,
+      id: '0',
+      messageData: 'foo',
+      schemeIdUri: undefined,
+      start: 2.1,
+      value: undefined,
+      contentEncoding: undefined,
+      presentationTimeOffset: 0
+
+    },
+    {
+      end: 2.9,
+      id: '5',
+      messageData: 'bar',
+      schemeIdUri: undefined,
+      start: 2.9,
+      value: undefined,
+      contentEncoding: undefined,
+      presentationTimeOffset: 0
+    },
+    {
+      end: 3.9,
+      id: '6',
+      messageData: 'foo_bar',
+      schemeIdUri: undefined,
+      start: 3.9,
+      value: undefined,
+      contentEncoding: undefined,
+      presentationTimeOffset: 0
+    }
+  ];
+
+  const firstPeriod = { node: findChildren(mpd, 'Period')[0], attributes: { start: 2} };
+  const eventStreams = toEventStream(firstPeriod);
+
+  assert.deepEqual(eventStreams, expected, 'toEventStream returns the expected object');
+});
+
+QUnit.test('gets eventStream from inheritAttributes with data in Event tags', function(assert) {
+  const mpd = stringToMpdXml(`
+    <MPD mediaPresentationDuration="PT30S" xmlns:cenc="urn:mpeg:cenc:2013">
+      <Period id="dai_pod-0001065804-ad-1" start="PT0H0M14.9S" duration="PT9.977S">
+        <BaseURL>https://www.example.com/base/</BaseURL>
+        <SegmentTemplate media="$RepresentationID$/$Number$.mp4" initialization="$RepresentationID$/init.mp4"/>
+        <EventStream schemeIdUri="urn:google:dai:2018" timescale="1000" value="foo">
+          <Event presentationTime="100" duration="0" id="0">foo</Event>
+          <Event presentationTime="1100" duration="0" id="5">bar</Event>
+          <Event presentationTime="2100" duration="0" id="6">foo_bar</Event>
+        </EventStream>
+      </Period>
+    </MPD>`);
+  const expected = {
+    contentSteeringInfo: null,
+    eventStream: [
+      {
+        end: 15,
+        id: '0',
+        messageData: 'foo',
+        schemeIdUri: 'urn:google:dai:2018',
+        start: 15,
+        value: 'foo',
+        contentEncoding: undefined,
+        presentationTimeOffset: 0
+      },
+      {
+        end: 16,
+        id: '5',
+        messageData: 'bar',
+        schemeIdUri: 'urn:google:dai:2018',
+        start: 16,
+        value: 'foo',
+        contentEncoding: undefined,
+        presentationTimeOffset: 0
+      },
+      {
+        end: 17,
+        id: '6',
+        messageData: 'foo_bar',
+        schemeIdUri: 'urn:google:dai:2018',
+        start: 17,
+        value: 'foo',
+        contentEncoding: undefined,
+        presentationTimeOffset: 0
+      }
+    ],
+    locations: undefined,
+    representationInfo: []
+  };
+
+  const eventStreams = inheritAttributes(mpd);
+
+  assert.deepEqual(eventStreams, expected, 'inheritAttributes returns the expected object');
 });

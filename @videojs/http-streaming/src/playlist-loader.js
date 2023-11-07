@@ -11,14 +11,16 @@ import window from 'global/window';
 import logger from './util/logger';
 import {
   parseManifest,
-  addPropertiesToMaster,
-  masterForMedia,
+  addPropertiesToMain,
+  mainForMedia,
   setupMediaPlaylist,
   forEachMediaGroup
 } from './manifest';
 import {getKnownPartCount} from './playlist.js';
+import {merge} from './util/vjs-compat';
+import DateRangesStorage from './util/date-ranges';
 
-const { mergeOptions, EventTarget } = videojs;
+const { EventTarget } = videojs;
 
 const addLLHLSQueryDirectives = (uri, media) => {
   if (media.endList || !media.serverControl) {
@@ -105,7 +107,7 @@ export const updateSegment = (a, b) => {
     return b;
   }
 
-  const result = mergeOptions(a, b);
+  const result = merge(a, b);
 
   // if only the old segment has preload hints
   // and the new one does not, remove preload hints.
@@ -123,7 +125,7 @@ export const updateSegment = (a, b) => {
   } else if (a.parts && b.parts) {
     for (let i = 0; i < b.parts.length; i++) {
       if (a.parts && a.parts[i]) {
-        result.parts[i] = mergeOptions(a.parts[i], b.parts[i]);
+        result.parts[i] = merge(a.parts[i], b.parts[i]);
       }
     }
   }
@@ -261,19 +263,19 @@ export const isPlaylistUnchanged = (a, b) => a === b ||
    a.preloadSegment === b.preloadSegment);
 
 /**
-  * Returns a new master playlist that is the result of merging an
+  * Returns a new main playlist that is the result of merging an
   * updated media playlist into the original version. If the
   * updated media playlist does not match any of the playlist
-  * entries in the original master playlist, null is returned.
+  * entries in the original main playlist, null is returned.
   *
-  * @param {Object} master a parsed master M3U8 object
+  * @param {Object} main a parsed main M3U8 object
   * @param {Object} media a parsed media M3U8 object
   * @return {Object} a new object that represents the original
-  * master playlist with the updated media playlist merged in, or
+  * main playlist with the updated media playlist merged in, or
   * null if the merge produced no change.
   */
-export const updateMaster = (master, newMedia, unchangedCheck = isPlaylistUnchanged) => {
-  const result = mergeOptions(master, {});
+export const updateMain = (main, newMedia, unchangedCheck = isPlaylistUnchanged) => {
+  const result = merge(main, {});
   const oldMedia = result.playlists[newMedia.id];
 
   if (!oldMedia) {
@@ -286,7 +288,7 @@ export const updateMaster = (master, newMedia, unchangedCheck = isPlaylistUnchan
 
   newMedia.segments = getAllSegments(newMedia);
 
-  const mergedPlaylist = mergeOptions(oldMedia, newMedia);
+  const mergedPlaylist = merge(oldMedia, newMedia);
 
   // always use the new media's preload segment
   if (mergedPlaylist.preloadSegment && !newMedia.preloadSegment) {
@@ -328,7 +330,7 @@ export const updateMaster = (master, newMedia, unchangedCheck = isPlaylistUnchan
   result.playlists[newMedia.uri] = mergedPlaylist;
 
   // update media group playlist references.
-  forEachMediaGroup(master, (properties, mediaType, groupKey, labelKey) => {
+  forEachMediaGroup(main, (properties, mediaType, groupKey, labelKey) => {
     if (!properties.playlists) {
       return;
     }
@@ -385,23 +387,19 @@ export default class PlaylistLoader extends EventTarget {
     }
     this.logger_ = logger('PlaylistLoader');
 
-    const { withCredentials = false, handleManifestRedirects = false } = options;
+    const { withCredentials = false} = options;
 
     this.src = src;
     this.vhs_ = vhs;
     this.withCredentials = withCredentials;
-    this.handleManifestRedirects = handleManifestRedirects;
+    this.addDateRangesToTextTrack_ = options.addDateRangesToTextTrack;
 
     const vhsOptions = vhs.options_;
 
     this.customTagParsers = (vhsOptions && vhsOptions.customTagParsers) || [];
     this.customTagMappers = (vhsOptions && vhsOptions.customTagMappers) || [];
-    this.experimentalLLHLS = (vhsOptions && vhsOptions.experimentalLLHLS) || false;
-
-    // force experimentalLLHLS for IE 11
-    if (videojs.browser.IE_VERSION) {
-      this.experimentalLLHLS = false;
-    }
+    this.llhls = vhsOptions && vhsOptions.llhls;
+    this.dateRangesStorage_ = new DateRangesStorage();
 
     // initialize the loader state
     this.state = 'HAVE_NOTHING';
@@ -409,6 +407,25 @@ export default class PlaylistLoader extends EventTarget {
     // live playlist staleness timeout
     this.handleMediaupdatetimeout_ = this.handleMediaupdatetimeout_.bind(this);
     this.on('mediaupdatetimeout', this.handleMediaupdatetimeout_);
+    this.on('loadedplaylist', this.handleLoadedPlaylist_.bind(this));
+  }
+
+  handleLoadedPlaylist_() {
+    const mediaPlaylist = this.media();
+
+    if (!mediaPlaylist) {
+      return;
+    }
+
+    this.dateRangesStorage_.setOffset(mediaPlaylist.segments);
+    this.dateRangesStorage_.setPendingDateRanges(mediaPlaylist.dateRanges);
+    const availableDateRanges = this.dateRangesStorage_.getDateRangesToProcess();
+
+    if (!availableDateRanges.length || !this.addDateRangesToTextTrack_) {
+      return;
+    }
+
+    this.addDateRangesToTextTrack_(availableDateRanges);
   }
 
   handleMediaupdatetimeout_() {
@@ -418,9 +435,9 @@ export default class PlaylistLoader extends EventTarget {
     }
     const media = this.media();
 
-    let uri = resolveUrl(this.master.uri, media.uri);
+    let uri = resolveUrl(this.main.uri, media.uri);
 
-    if (this.experimentalLLHLS) {
+    if (this.llhls) {
       uri = addLLHLSQueryDirectives(uri, media);
     }
     this.state = 'HAVE_CURRENT_METADATA';
@@ -461,7 +478,7 @@ export default class PlaylistLoader extends EventTarget {
     }
 
     this.error = {
-      playlist: this.master.playlists[id],
+      playlist: this.main.playlists[id],
       status: xhr.status,
       message: `HLS playlist request error at URL: ${uri}.`,
       responseText: xhr.responseText,
@@ -478,7 +495,7 @@ export default class PlaylistLoader extends EventTarget {
       manifestString,
       customTagParsers: this.customTagParsers,
       customTagMappers: this.customTagMappers,
-      experimentalLLHLS: this.experimentalLLHLS
+      llhls: this.llhls
     });
   }
 
@@ -512,16 +529,16 @@ export default class PlaylistLoader extends EventTarget {
       id
     });
 
-    // merge this playlist into the master
-    const update = updateMaster(this.master, playlist);
+    // merge this playlist into the main manifest
+    const update = updateMain(this.main, playlist);
 
     this.targetDuration = playlist.partTargetDuration || playlist.targetDuration;
 
     this.pendingMedia_ = null;
 
     if (update) {
-      this.master = update;
-      this.media_ = this.master.playlists[id];
+      this.main = update;
+      this.media_ = this.main.playlists[id];
     } else {
       this.trigger('playlistunchanged');
     }
@@ -539,6 +556,7 @@ export default class PlaylistLoader extends EventTarget {
     this.stopRequest();
     window.clearTimeout(this.mediaUpdateTimeout);
     window.clearTimeout(this.finalRenditionTimeout);
+    this.dateRangesStorage_ = new DateRangesStorage();
 
     this.off();
   }
@@ -581,10 +599,10 @@ export default class PlaylistLoader extends EventTarget {
     // find the playlist object if the target playlist has been
     // specified by URI
     if (typeof playlist === 'string') {
-      if (!this.master.playlists[playlist]) {
+      if (!this.main.playlists[playlist]) {
         throw new Error('Unknown playlist URI: ' + playlist);
       }
-      playlist = this.master.playlists[playlist];
+      playlist = this.main.playlists[playlist];
     }
 
     window.clearTimeout(this.finalRenditionTimeout);
@@ -599,10 +617,10 @@ export default class PlaylistLoader extends EventTarget {
 
     const startingState = this.state;
     const mediaChange = !this.media_ || playlist.id !== this.media_.id;
-    const masterPlaylistRef = this.master.playlists[playlist.id];
+    const mainPlaylistRef = this.main.playlists[playlist.id];
 
     // switch to fully loaded playlists immediately
-    if (masterPlaylistRef && masterPlaylistRef.endList ||
+    if (mainPlaylistRef && mainPlaylistRef.endList ||
         // handle the case of a playlist object (e.g., if using vhs-json with a resolved
         // media playlist or, for the case of demuxed audio, a resolved audio media group)
         (playlist.endList && playlist.segments.length)) {
@@ -620,8 +638,8 @@ export default class PlaylistLoader extends EventTarget {
       if (mediaChange) {
         this.trigger('mediachanging');
 
-        if (startingState === 'HAVE_MASTER') {
-          // The initial playlist was a master manifest, and the first media selected was
+        if (startingState === 'HAVE_MAIN_MANIFEST') {
+          // The initial playlist was a main manifest, and the first media selected was
           // also provided (in the form of a resolved playlist object) as part of the
           // source object (rather than just a URL). Therefore, since the media playlist
           // doesn't need to be requested, loadedmetadata won't trigger as part of the
@@ -678,7 +696,7 @@ export default class PlaylistLoader extends EventTarget {
 
       playlist.lastRequest = Date.now();
 
-      playlist.resolvedUri = resolveManifestRedirect(this.handleManifestRedirects, playlist.resolvedUri, req);
+      playlist.resolvedUri = resolveManifestRedirect(playlist.resolvedUri, req);
 
       if (error) {
         return this.playlistRequestError(this.request, playlist, startingState);
@@ -691,7 +709,7 @@ export default class PlaylistLoader extends EventTarget {
       });
 
       // fire loadedmetadata the first time a media playlist is loaded
-      if (startingState === 'HAVE_MASTER') {
+      if (startingState === 'HAVE_MAIN_MANIFEST') {
         this.trigger('loadedmetadata');
       } else {
         this.trigger('mediachange');
@@ -717,12 +735,12 @@ export default class PlaylistLoader extends EventTarget {
     // Need to restore state now that no activity is happening
     if (this.state === 'SWITCHING_MEDIA') {
       // if the loader was in the process of switching media, it should either return to
-      // HAVE_MASTER or HAVE_METADATA depending on if the loader has loaded a media
+      // HAVE_MAIN_MANIFEST or HAVE_METADATA depending on if the loader has loaded a media
       // playlist yet. This is determined by the existence of loader.media_
       if (this.media_) {
         this.state = 'HAVE_METADATA';
       } else {
-        this.state = 'HAVE_MASTER';
+        this.state = 'HAVE_MAIN_MANIFEST';
       }
     } else if (this.state === 'HAVE_CURRENT_METADATA') {
       this.state = 'HAVE_METADATA';
@@ -800,7 +818,7 @@ export default class PlaylistLoader extends EventTarget {
       // Since a manifest object was passed in as the source (instead of a URL), the first
       // request can be skipped (since the top level of the manifest, at a minimum, is
       // already available as a parsed manifest object). However, if the manifest object
-      // represents a master playlist, some media playlists may need to be resolved before
+      // represents a main playlist, some media playlists may need to be resolved before
       // the starting segment list is available. Therefore, go directly to setup of the
       // initial playlist, and let the normal flow continue from there.
       //
@@ -839,7 +857,7 @@ export default class PlaylistLoader extends EventTarget {
         return this.trigger('error');
       }
 
-      this.src = resolveManifestRedirect(this.handleManifestRedirects, this.src, req);
+      this.src = resolveManifestRedirect(this.src, req);
 
       const manifest = this.parseManifest_({
         manifestString: req.responseText,
@@ -855,17 +873,17 @@ export default class PlaylistLoader extends EventTarget {
   }
 
   /**
-   * Given a manifest object that's either a master or media playlist, trigger the proper
+   * Given a manifest object that's either a main or media playlist, trigger the proper
    * events and set the state of the playlist loader.
    *
-   * If the manifest object represents a master playlist, `loadedplaylist` will be
+   * If the manifest object represents a main playlist, `loadedplaylist` will be
    * triggered to allow listeners to select a playlist. If none is selected, the loader
    * will default to the first one in the playlists array.
    *
    * If the manifest object represents a media playlist, `loadedplaylist` will be
    * triggered followed by `loadedmetadata`, as the only available playlist is loaded.
    *
-   * In the case of a media playlist, a master playlist object wrapper with one playlist
+   * In the case of a media playlist, a main playlist object wrapper with one playlist
    * will be created so that all logic can handle playlists in the same fashion (as an
    * assumed manifest object schema).
    *
@@ -873,12 +891,12 @@ export default class PlaylistLoader extends EventTarget {
    *        The parsed manifest object
    */
   setupInitialPlaylist(manifest) {
-    this.state = 'HAVE_MASTER';
+    this.state = 'HAVE_MAIN_MANIFEST';
 
     if (manifest.playlists) {
-      this.master = manifest;
-      addPropertiesToMaster(this.master, this.srcUri());
-      // If the initial master playlist has playlists wtih segments already resolved,
+      this.main = manifest;
+      addPropertiesToMain(this.main, this.srcUri());
+      // If the initial main playlist has playlists wtih segments already resolved,
       // then resolve URIs in advance, as they are usually done after a playlist request,
       // which may not happen if the playlist is resolved.
       manifest.playlists.forEach((playlist) => {
@@ -892,7 +910,7 @@ export default class PlaylistLoader extends EventTarget {
       if (!this.request) {
         // no media playlist was specifically selected so start
         // from the first listed one
-        this.media(this.master.playlists[0]);
+        this.media(this.main.playlists[0]);
       }
       return;
     }
@@ -902,11 +920,11 @@ export default class PlaylistLoader extends EventTarget {
     // default used.
     const uri = this.srcUri() || window.location.href;
 
-    this.master = masterForMedia(manifest, uri);
+    this.main = mainForMedia(manifest, uri);
     this.haveMetadata({
       playlistObject: manifest,
       url: uri,
-      id: this.master.playlists[0].id
+      id: this.main.playlists[0].id
     });
     this.trigger('loadedmetadata');
   }

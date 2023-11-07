@@ -9,7 +9,7 @@ videojs.addLanguage('ar', {
   "Loaded": "تم التحميل",
   "Progress": "التقدم",
   "Fullscreen": "ملء الشاشة",
-  "Non-Fullscreen": "تعطيل ملء الشاشة",
+  "Exit Fullscreen": "تعطيل ملء الشاشة",
   "Mute": "صامت",
   "Unmute": "غير الصامت",
   "Playback Rate": "معدل التشغيل",
@@ -68,7 +68,7 @@ videojs.addLanguage('ar', {
   "Raised": "بارز",
   "Depressed": "منخفض",
   "Uniform": "منتظم",
-  "Dropshadow": "ظل خلفي",
+  "Drop shadow": "ظل خلفي",
   "Font Family": "عائلة الخطوط",
   "Proportional Sans-Serif": "Proportional Sans-Serif",
   "Monospace Sans-Serif": "Monospace Sans-Serif",
@@ -86,5 +86,9 @@ videojs.addLanguage('ar', {
   "{1} is loading.": "{1} قيد التحميل.",
   "Exit Picture-in-Picture": "خرج من وضع صورة داخل صورة",
   "Picture-in-Picture": "صورة داخل صورة",
-  "No content": "لا يوجد محتوى"
+  "No content": "لا يوجد محتوى",
+  "Color": "اللون",
+  "Opacity": "معدل الشفافية",
+  "Text Background": "خلفية النص",
+  "Caption Area Background": "خلفية منطقة التسمية التوضيحية"
 });

@@ -6,12 +6,6 @@
   line-height: 3em;
 }
 
-.vjs-no-flex .vjs-live-control {
-  display: table-cell;
-  width: auto;
-  text-align: left;
-}
-
 // hide the LiveDisplay when not live or when
 // the new liveui is in use
 .video-js:not(.vjs-live) .vjs-live-control,
@@ -34,12 +28,6 @@
   min-width: 4em;
 }
 
-.vjs-no-flex .vjs-seek-to-live-control {
-  display: table-cell;
-  width: auto;
-  text-align: left;
-}
-
 // hide the SeekToLive button when not live and
 // when the liveui is not in use
 .video-js.vjs-live:not(.vjs-liveui) .vjs-seek-to-live-control,
@@ -58,7 +46,21 @@
   color: #888;
 }
 
+.vjs-svg-icons-enabled .vjs-seek-to-live-control {
+  line-height: 0;
+}
+
+.vjs-seek-to-live-control .vjs-svg-icon {
+  width: 1em;
+  height: 1em;
+  pointer-events: none;
+  fill: #888888;
+}
+
 // make the live circle red when at the live edge
 .vjs-seek-to-live-control.vjs-control.vjs-at-live-edge .vjs-icon-placeholder {
   color: red;
+}
+.vjs-seek-to-live-control.vjs-control.vjs-at-live-edge .vjs-svg-icon {
+  fill: red;
 }

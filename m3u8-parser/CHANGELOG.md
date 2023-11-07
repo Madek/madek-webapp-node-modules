@@ -1,13 +1,45 @@
-<a name="4.8.0"></a>
-# [4.8.0](https://github.com/videojs/m3u8-parser/compare/v4.7.1...v4.8.0) (2022-09-09)
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/videojs/m3u8-parser/compare/v6.1.0...v6.2.0) (2023-05-25)
+
+### Features
+
+* add independent-segments support ([#165](https://github.com/videojs/m3u8-parser/issues/165)) ([8c47d81](https://github.com/videojs/m3u8-parser/commit/8c47d81))
+
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/videojs/m3u8-parser/compare/v6.0.0...v6.1.0) (2023-05-12)
+
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/videojs/m3u8-parser/compare/v5.0.0...v6.0.0) (2022-09-27)
+
+### Bug Fixes
+
+* non standard tag match ([#156](https://github.com/videojs/m3u8-parser/issues/156)) ([8d56f30](https://github.com/videojs/m3u8-parser/commit/8d56f30)), closes [#22](https://github.com/videojs/m3u8-parser/issues/22)
+
+### Chores
+
+* don't run tests on version ([b84575f](https://github.com/videojs/m3u8-parser/commit/b84575f))
+
+
+### BREAKING CHANGES
+
+* Missing colon (:) tag delimiters are no longer supported
+
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/videojs/m3u8-parser/compare/v4.7.1...v5.0.0) (2022-08-19)
 
 ### Features
 
 * parse FRAME-RATE as a number ([#150](https://github.com/videojs/m3u8-parser/issues/150)) ([d51e93f](https://github.com/videojs/m3u8-parser/commit/d51e93f))
 
+### Chores
+
+* do not run es-check on publish ([#153](https://github.com/videojs/m3u8-parser/issues/153)) ([4e0bc63](https://github.com/videojs/m3u8-parser/commit/4e0bc63))
+* remove IE11 support ([#152](https://github.com/videojs/m3u8-parser/issues/152)) ([fc12241](https://github.com/videojs/m3u8-parser/commit/fc12241))
+
 
 ### BREAKING CHANGES
 
+* Internet Explorer is no longer supported.
 * parser changes an output type for 'FRAME-RATE'
 attribute from a string to a number.
 
