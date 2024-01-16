@@ -1,91 +1,40 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "insert-module-globals@^7.0.0",
-        "scope": null,
-        "escapedName": "insert-module-globals",
-        "name": "insert-module-globals",
-        "rawSpec": "^7.0.0",
-        "spec": ">=7.0.0 <8.0.0",
-        "type": "range"
-      },
-      "/Users/ma/CODE/Madek/webapp/node_modules/browserify"
-    ]
-  ],
-  "_from": "insert-module-globals@>=7.0.0 <8.0.0",
-  "_id": "insert-module-globals@7.0.1",
-  "_inCache": true,
-  "_location": "/insert-module-globals",
-  "_nodeVersion": "0.12.7",
-  "_npmUser": {
-    "name": "parshap",
-    "email": "parshap+npm@gmail.com"
-  },
-  "_npmVersion": "2.14.6",
-  "_phantomChildren": {
-    "buffer-shims": "1.0.0",
-    "core-util-is": "1.0.2",
-    "inherits": "2.0.1",
-    "process-nextick-args": "1.0.7",
-    "string_decoder": "0.10.31",
-    "typedarray": "0.0.6",
-    "util-deprecate": "1.0.2",
-    "xtend": "4.0.1"
-  },
-  "_requested": {
-    "raw": "insert-module-globals@^7.0.0",
-    "scope": null,
-    "escapedName": "insert-module-globals",
-    "name": "insert-module-globals",
-    "rawSpec": "^7.0.0",
-    "spec": ">=7.0.0 <8.0.0",
-    "type": "range"
-  },
-  "_requiredBy": [
-    "/browserify"
-  ],
-  "_resolved": "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.1.tgz",
-  "_shasum": "c03bf4e01cb086d5b5e5ace8ad0afe7889d638c3",
-  "_shrinkwrap": null,
-  "_spec": "insert-module-globals@^7.0.0",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/browserify",
-  "author": {
-    "name": "James Halliday",
-    "email": "mail@substack.net",
-    "url": "http://substack.net"
-  },
+  "name": "insert-module-globals",
+  "version": "7.2.1",
+  "description": "insert implicit module globals into a module-deps stream",
+  "main": "index.js",
   "bin": {
     "insert-module-globals": "bin/cmd.js"
   },
-  "bugs": {
-    "url": "https://github.com/substack/insert-module-globals/issues"
-  },
   "dependencies": {
     "JSONStream": "^1.0.3",
-    "combine-source-map": "~0.7.1",
-    "concat-stream": "~1.5.1",
+    "acorn-node": "^1.5.2",
+    "combine-source-map": "^0.8.0",
+    "concat-stream": "^1.6.1",
     "is-buffer": "^1.1.0",
-    "lexical-scope": "^1.2.0",
+    "path-is-absolute": "^1.0.1",
     "process": "~0.11.0",
     "through2": "^2.0.0",
+    "undeclared-identifiers": "^1.1.2",
     "xtend": "^4.0.0"
   },
-  "description": "insert implicit module globals into a module-deps stream",
   "devDependencies": {
     "browser-pack": "^6.0.0",
-    "buffer": "^3.0.0",
+    "buffer": "^4.9.1",
     "convert-source-map": "~1.1.0",
     "module-deps": "^4.0.2",
-    "tape": "^4.2.0"
+    "nanobench": "^2.1.1",
+    "tape": "^4.2.0",
+    "timers-browserify": "^1.4.2"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "c03bf4e01cb086d5b5e5ace8ad0afe7889d638c3",
-    "tarball": "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.1.tgz"
+  "scripts": {
+    "test": "tape test/*.js"
   },
-  "gitHead": "769f4bd08e01b77a620f2e2de1d2249c8311b0a2",
-  "homepage": "https://github.com/substack/insert-module-globals",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/browserify/insert-module-globals.git"
+  },
+  "homepage": "https://github.com/browserify/insert-module-globals",
   "keywords": [
     "__filename",
     "__dirname",
@@ -95,31 +44,10 @@
     "browser-pack",
     "browserify"
   ],
-  "license": "MIT",
-  "main": "index.js",
-  "maintainers": [
-    {
-      "name": "parshap",
-      "email": "parshap+npm@gmail.com"
-    },
-    {
-      "name": "substack",
-      "email": "substack@gmail.com"
-    },
-    {
-      "name": "zertosh",
-      "email": "zertosh@gmail.com"
-    }
-  ],
-  "name": "insert-module-globals",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/substack/insert-module-globals.git"
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
   },
-  "scripts": {
-    "test": "tape test/*.js"
-  },
-  "version": "7.0.1"
+  "license": "MIT"
 }

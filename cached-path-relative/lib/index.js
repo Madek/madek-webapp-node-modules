@@ -8,9 +8,9 @@ var path = require('path')
  * Vars
  */
 
-var relative = path.relative.bind(path)
+var relative = path.relative
 var lastCwd = process.cwd()
-var cache = {}
+var cache = Object.create(null)
 
 /**
  * Expose cachedPathRelative
@@ -27,7 +27,7 @@ function cachedPathRelative (from, to) {
   // to invalidate the cache
   var cwd = process.cwd()
   if (cwd !== lastCwd) {
-    cache = {}
+    cache = Object.create(null)
     lastCwd = cwd
   }
 
@@ -35,7 +35,7 @@ function cachedPathRelative (from, to) {
 
   var result = relative.call(path, from, to)
 
-  cache[from] = cache[from] || {}
+  cache[from] = cache[from] || Object.create(null)
   cache[from][to] = result
 
   return result

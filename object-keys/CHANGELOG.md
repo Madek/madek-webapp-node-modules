@@ -1,3 +1,32 @@
+1.1.1 / 2019-04-06
+=================
+  * [Fix] exclude deprecated Firefox keys (#53)
+
+1.1.0 / 2019-02-10
+=================
+  * [New] [Refactor] move full implementation to `implementation` entry point
+  * [Refactor] only evaluate the implementation if `Object.keys` is not present
+  * [Tests] up to `node` `v11.8`, `v10.15`, `v8.15`, `v6.16`
+  * [Tests] remove jscs
+  * [Tests] switch to `npm audit` from `nsp`
+
+1.0.12 / 2018-06-18
+=================
+  * [Fix] avoid accessing `window.applicationCache`, to avoid issues with latest Chrome on HTTP (#46)
+
+1.0.11 / 2016-07-05
+=================
+  * [Fix] exclude keys regarding the style (eg. `pageYOffset`) on `window` to avoid reflow (#32)
+
+1.0.10 / 2016-07-04
+=================
+  * [Fix] exclude `height` and `width` keys on `window` to avoid reflow (#31)
+  * [Fix] In IE 6, `window.external` makes `Object.keys` throw
+  * [Tests] up to `node` `v6.2`, `v5.10`, `v4.4`
+  * [Tests] use pretest/posttest for linting/security
+  * [Dev Deps] update `tape`, `jscs`, `nsp`, `eslint`, `@ljharb/eslint-config`
+  * [Dev Deps] remove unused eccheck script + dep
+
 1.0.9 / 2015-10-19
 =================
   * [Fix] Blacklist 'frame' property on window (#16, #17)
