@@ -2,113 +2,126 @@
  * @fileoverview Validate JSX maximum depth
  * @author Chris<wfsr@foxmail.com>
  */
+
 'use strict';
 
-const has = require('has');
+const has = require('hasown');
+const includes = require('array-includes');
 const variableUtil = require('../util/variable');
+const jsxUtil = require('../util/jsx');
+const docsUrl = require('../util/docsUrl');
+const reportC = require('../util/report');
 
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
+
+const messages = {
+  wrongDepth: 'Expected the depth of nested jsx elements to be <= {{needed}}, but found {{found}}.',
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
-      description: 'Validate JSX maximum depth',
+      description: 'Enforce JSX maximum depth',
       category: 'Stylistic Issues',
-      recommended: false
+      recommended: false,
+      url: docsUrl('jsx-max-depth'),
     },
+
+    messages,
+
     schema: [
       {
         type: 'object',
         properties: {
           max: {
             type: 'integer',
-            minimum: 0
-          }
+            minimum: 0,
+          },
         },
-        additionalProperties: false
-      }
-    ]
+        additionalProperties: false,
+      },
+    ],
   },
-  create: function(context) {
-    const MESSAGE = 'Expected the depth of nested jsx elements to be <= {{needed}}, but found {{found}}.';
+  create(context) {
     const DEFAULT_DEPTH = 2;
 
     const option = context.options[0] || {};
     const maxDepth = has(option, 'max') ? option.max : DEFAULT_DEPTH;
-
-    function isJSXElement(node) {
-      return node.type === 'JSXElement';
-    }
 
     function isExpression(node) {
       return node.type === 'JSXExpressionContainer';
     }
 
     function hasJSX(node) {
-      return isJSXElement(node) || isExpression(node) && isJSXElement(node.expression);
+      return jsxUtil.isJSX(node) || (isExpression(node) && jsxUtil.isJSX(node.expression));
     }
 
     function isLeaf(node) {
       const children = node.children;
 
-      return !children.length || !children.some(hasJSX);
+      return !children || children.length === 0 || !children.some(hasJSX);
     }
 
     function getDepth(node) {
       let count = 0;
 
-      while (isJSXElement(node.parent) || isExpression(node.parent)) {
+      while (jsxUtil.isJSX(node.parent) || isExpression(node.parent)) {
         node = node.parent;
-        if (isJSXElement(node)) {
-          count++;
+        if (jsxUtil.isJSX(node)) {
+          count += 1;
         }
       }
 
       return count;
     }
 
-
     function report(node, depth) {
-      context.report({
-        node: node,
-        message: MESSAGE,
+      reportC(context, messages.wrongDepth, 'wrongDepth', {
+        node,
         data: {
           found: depth,
-          needed: maxDepth
-        }
+          needed: maxDepth,
+        },
       });
     }
 
-    function findJSXElement(variables, name) {
-      function find(refs) {
-        let i = refs.length;
-
-        while (--i >= 0) {
-          if (has(refs[i], 'writeExpr')) {
+    function findJSXElementOrFragment(startNode, name, previousReferences) {
+      function find(refs, prevRefs) {
+        for (let i = refs.length - 1; i >= 0; i--) {
+          if (typeof refs[i].writeExpr !== 'undefined') {
             const writeExpr = refs[i].writeExpr;
 
-            return isJSXElement(writeExpr)
-              && writeExpr
-              || writeExpr.type === 'Identifier'
-              && findJSXElement(variables, writeExpr.name);
+            return (jsxUtil.isJSX(writeExpr)
+              && writeExpr)
+              || ((writeExpr && writeExpr.type === 'Identifier')
+              && findJSXElementOrFragment(startNode, writeExpr.name, prevRefs));
           }
         }
 
         return null;
       }
 
-      const variable = variableUtil.getVariable(variables, name);
-      return variable && variable.references && find(variable.references);
+      const variable = variableUtil.getVariableFromContext(context, startNode, name);
+      if (variable && variable.references) {
+        const containDuplicates = previousReferences.some((ref) => includes(variable.references, ref));
+
+        // Prevent getting stuck in circular references
+        if (containDuplicates) {
+          return false;
+        }
+
+        return find(variable.references, previousReferences.concat(variable.references));
+      }
+
+      return false;
     }
 
     function checkDescendant(baseDepth, children) {
-      children.forEach(node => {
-        if (!hasJSX(node)) {
-          return;
-        }
-
-        baseDepth++;
+      baseDepth += 1;
+      (children || []).filter((node) => hasJSX(node)).forEach((node) => {
         if (baseDepth > maxDepth) {
           report(node, baseDepth);
         } else if (!isLeaf(node)) {
@@ -117,30 +130,33 @@ module.exports = {
       });
     }
 
-    return {
-      JSXElement: function(node) {
-        if (!isLeaf(node)) {
-          return;
-        }
+    function handleJSX(node) {
+      if (!isLeaf(node)) {
+        return;
+      }
 
-        const depth = getDepth(node);
-        if (depth > maxDepth) {
-          report(node, depth);
-        }
-      },
-      JSXExpressionContainer: function(node) {
+      const depth = getDepth(node);
+      if (depth > maxDepth) {
+        report(node, depth);
+      }
+    }
+
+    return {
+      JSXElement: handleJSX,
+      JSXFragment: handleJSX,
+
+      JSXExpressionContainer(node) {
         if (node.expression.type !== 'Identifier') {
           return;
         }
 
-        const variables = variableUtil.variablesInScope(context);
-        const element = findJSXElement(variables, node.expression.name);
+        const element = findJSXElementOrFragment(node, node.expression.name, []);
 
         if (element) {
           const baseDepth = getDepth(node);
           checkDescendant(baseDepth, element.children);
         }
-      }
+      },
     };
-  }
+  },
 };

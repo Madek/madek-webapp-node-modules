@@ -8,8 +8,8 @@
   <a href="https://gitter.im/jlongster/prettier">
     <img alt="Gitter" src="https://img.shields.io/gitter/room/jlongster/prettier.svg?style=flat-square">
   </a>
-  <a href="https://travis-ci.org/prettier/plugin-ruby">
-    <img alt="Travis" src="https://img.shields.io/travis/prettier/plugin-ruby/master.svg?style=flat-square">
+  <a href="https://github.com/prettier/plugin-ruby/actions">
+    <img alt="GitHub Actions" src="https://img.shields.io/github/actions/workflow/status/prettier/plugin-ruby/main.yml?branch=main&style=flat-square">
   </a>
   <a href="https://www.npmjs.com/package/@prettier/plugin-ruby">
     <img alt="NPM Version" src="https://img.shields.io/npm/v/@prettier/plugin-ruby.svg?style=flat-square">
@@ -22,7 +22,7 @@
   </a>
 </p>
 
-`@prettier/plugin-ruby` is a [prettier](https://prettier.io/) plugin for the Ruby programming language (versions `2.5` and above). `prettier` is an opinionated code formatter that supports multiple languages and integrates with most editors. The idea is to eliminate discussions of style in code review and allow developers to get back to thinking about code design instead.
+`@prettier/plugin-ruby` is a [prettier](https://prettier.io/) plugin for the Ruby programming language and its ecosystem. `prettier` is an opinionated code formatter that supports multiple languages and integrates with most editors. The idea is to eliminate discussions of style in code review and allow developers to get back to thinking about code design instead.
 
 For example, the below [code segment](http://www.rubyinside.com/advent2006/4-ruby-obfuscation.html):
 
@@ -59,44 +59,22 @@ d = [
   30_643_069_058
 ]
 a, s = [], $*[0]
-s.each_byte { |b| a << ('%036b' % d[b.chr.to_i]).scan(/\d{6}/) }
+s.each_byte { |b| a << ("%036b" % d[b.chr.to_i]).scan(/\d{6}/) }
 a.transpose.each do |a|
-  a.join.each_byte { |i| print i == 49 ? ($*[1] || '#') : 32.chr }
+  a.join.each_byte { |i| print i == 49 ? ($*[1] || "#") : 32.chr }
   puts
 end
 ```
 
 ## Getting started
 
-To run `prettier` with the Ruby plugin, you're going to need [`ruby`](https://www.ruby-lang.org/en/documentation/installation/) (version `2.5` or newer) and [`node`](https://nodejs.org/en/download/) (version `8.3` or newer). If you're integrating with a project that is not already using `prettier`, you should use the ruby gem. Otherwise you can use the `npm` package directly.
+The `@prettier/plugin-ruby` plugin for `prettier` is a small wrapper around the [Syntax Tree](https://github.com/ruby-syntax-tree/syntax_tree) gem that provides a Ruby formatter for `prettier`. It does this by keeping a Ruby server running in that background that `prettier` can communicate with when it needs to format a Ruby file. This means that in order to function, you will need to have both the requisite `node` and `ruby` dependencies installed. Because of this configuration, there are a couple of ways that you can get setup to use this plugin.
 
-### Ruby gem
+- If you're already using `prettier` in your project to format other files in your project and want to install this as a plugin, you can install it using `npm`.
+- If you're not using `prettier` yet in your project, then we recommend using the [Syntax Tree](https://github.com/ruby-syntax-tree/syntax_tree) gem directly instead of using this plugin.
+- Note that this plugin also ships a gem named `prettier` which is a wrapper around the `prettier` CLI and includes this plugin by default, but _we no longer recommend its use_. If you're using that gem, you should migrate to using [Syntax Tree](https://github.com/ruby-syntax-tree/syntax_tree) instead.
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'prettier'
-```
-
-And then execute:
-
-```bash
-bundle
-```
-
-Or install it yourself as:
-
-```bash
-gem install prettier
-```
-
-The `rbprettier` executable is now installed and ready for use:
-
-```bash
-bundle exec rbprettier --write '**/*.rb'
-```
-
-### `npm` package
+To run `prettier` with the Ruby plugin as an `npm` package, you're going to need [`ruby`](https://www.ruby-lang.org/en/documentation/installation/) (version `2.7` or newer) and [`node`](https://nodejs.org/en/download/) (version `16` or newer).
 
 If you're using the `npm` CLI, then add the plugin by:
 
@@ -110,93 +88,114 @@ Or if you're using `yarn`, then add the plugin by:
 yarn add --dev prettier @prettier/plugin-ruby
 ```
 
+You'll also need to add the necessary Ruby dependencies. You can do this by running:
+
+```bash
+gem install bundler prettier_print syntax_tree syntax_tree-haml syntax_tree-rbs
+```
+
 The `prettier` executable is now installed and ready for use:
 
 ```bash
-./node_modules/.bin/prettier --write '**/*.rb'
+./node_modules/.bin/prettier --plugin=@prettier/plugin-ruby --write '**/*'
+```
+
+### Using Prettier >= 3.0
+
+You need to tell Prettier to use the plugin, add the following to your existing [prettier configuration
+file](https://prettier.io/docs/en/configuration.html).
+
+```json
+{
+  "plugins": ["@prettier/plugin-ruby"]
+}
 ```
 
 ## Configuration
 
-Below are the options (from [`src/ruby.js`](src/ruby.js)) that `@prettier/plugin-ruby` currently supports:
+Below are the options (from [`src/plugin.js`](src/plugin.js)) that `@prettier/plugin-ruby` currently supports:
 
-| Name                 | Default | Description                                                                                                   |
-| -------------------- | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| `printWidth`         |  `80`   | Same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#print-width)).              |
-| `requirePragma`      | `false` | Same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#require-pragma)).           |
-| `tabWidth`           |   `2`   | Same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#tab-width)).                |
-| `addTrailingCommas`  | `false` | Adds a trailing comma to array literals, hash literals, and method calls.                                     |
-| `inlineConditionals` | `true`  | When it fits on one line, allows if and unless statements to use the modifier form.                           |
-| `inlineLoops`        | `true`  | When it fits on one line, allows while and until statements to use the modifier form.                         |
-| `preferHashLabels`   | `true`  | When possible, uses the shortened hash key syntax, as opposed to hash rockets.                                |
-| `preferSingleQuotes` | `true`  | When double quotes are not necessary for interpolation, prefers the use of single quotes for string literals. |
+| API Option           | CLI Option            |                      Default                       | Description                                                                                                                                         |
+| -------------------- | --------------------- | :------------------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `printWidth`         | `--print-width`       |                        `80`                        | Same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#print-width)).                                                    |
+| `requirePragma`      | `--require-pragma`    |                      `false`                       | Same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#require-pragma)).                                                 |
+| `rubyExecutablePath` | `"ruby"`              | Allows you to configure your Ruby executable path. |
+| `rubyPlugins`        | `--ruby-plugins`      |                        `""`                        | The comma-separated list of plugins to require. See [Syntax Tree](https://github.com/ruby-syntax-tree/syntax_tree#plugins).                         |
+| `rubySingleQuote`    | `--ruby-single-quote` |                      `false`                       | Whether or not to default to single quotes for Ruby code. See [Syntax Tree](https://github.com/ruby-syntax-tree/syntax_tree#plugins).               |
+| `tabWidth`           | `--tab-width`         |                        `2`                         | Same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#tab-width)).                                                      |
+| `trailingComma`      | `--trailing-comma`    |                       `es5`                        | Almost same as in Prettier ([see prettier docs](https://prettier.io/docs/en/options.html#trailing-commas)). Will be on for any value except `none`. |
 
 Any of these can be added to your existing [prettier configuration
 file](https://prettier.io/docs/en/configuration.html). For example:
 
 ```json
 {
-  "preferSingleQuotes": false
+  "tabWidth": 4
 }
 ```
 
 Or, they can be passed to `prettier` as arguments:
 
 ```bash
-prettier --prefer-single-quotes false --write '**/*.rb'
+bundle exec rbprettier --tab-width 4 --write '**/*'
 ```
+
+### Ignoring code
+
+Sometimes you want to leave your formatting in place and have `prettier` not format it, but continue to format the rest of the file. `prettier` has the ability to do this with `prettier-ignore` comments, but because the underlying formatter for this plugin is [Syntax Tree](https://github.com/ruby-syntax-tree/syntax_tree), you instead would use a `stree-ignore` comment.
+
+### Usage with RuboCop
+
+RuboCop and Prettier for Ruby serve different purposes, but there is overlap with some of RuboCop's functionality. Prettier provides a RuboCop configuration file to disable the rules which would clash. To enable this file, add the following configuration at the top of your project's `.rubocop.yml`:
+
+```yaml
+inherit_from:
+  - node_modules/@prettier/plugin-ruby/rubocop.yml
+```
+
+### Usage with an editor
+
+For [supported editor integrations](https://github.com/prettier/prettier/blob/main/website/data/editors.yml), you should follow the instructions for installing the integration, then install the npm version of this plugin as a development dependency of your project. For most integrations, that should be sufficient. For convenience, the instructions for integrating with VSCode are used as an example below:
+
+- Install the [Prettier - Code Formatter](https://github.com/prettier/prettier-vscode) extension.
+- Add the npm `@prettier/plugin-ruby` package to your project as described above.
+- Configure in your `settings.json` (`formatOnSave` is optional):
+
+```json
+{
+  "[ruby]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}
+```
+
+Refer to [this issue](https://github.com/prettier/plugin-ruby/issues/113#issuecomment-783426539) if you're having difficulties.
 
 ## Contributing
 
-Check out our [contributing guide](CONTRIBUTING.md). Bug reports and pull requests are welcome on GitHub at https://github.com/prettier/plugin-ruby.
+Thanks so much for your interest in contributing! You can contribute in many ways, including:
 
-## License
+- Contributing code to fix any bugs on [GitHub](https://github.com/prettier/plugin-ruby).
+- Reporting issues on [GitHub](https://github.com/prettier/plugin-ruby/issues/new).
+- Supporting `prettier/plugin-ruby` on [OpenCollective](https://opencollective.com/prettier-ruby/contribute). Your organization's logo will show up here with a link to your website.
 
-The package is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://kevindeisz.com"><img src="https://avatars2.githubusercontent.com/u/5093358?v=4" width="100px;" alt="Kevin Deisz"/><br /><sub><b>Kevin Deisz</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=kddeisz" title="Code">💻</a> <a href="https://github.com/prettier/plugin-ruby/commits?author=kddeisz" title="Documentation">📖</a> <a href="https://github.com/prettier/plugin-ruby/commits?author=kddeisz" title="Tests">⚠️</a> <a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Akddeisz" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://www.alanfoster.me/"><img src="https://avatars2.githubusercontent.com/u/1271782?v=4" width="100px;" alt="Alan Foster"/><br /><sub><b>Alan Foster</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=AlanFoster" title="Code">💻</a> <a href="https://github.com/prettier/plugin-ruby/commits?author=AlanFoster" title="Documentation">📖</a> <a href="https://github.com/prettier/plugin-ruby/commits?author=AlanFoster" title="Tests">⚠️</a> <a href="https://github.com/prettier/plugin-ruby/issues?q=author%3AAlanFoster" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/johnschoeman"><img src="https://avatars0.githubusercontent.com/u/16049495?v=4" width="100px;" alt="johnschoeman"/><br /><sub><b>johnschoeman</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=johnschoeman" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://twitter.com/aaronjensen"><img src="https://avatars3.githubusercontent.com/u/8588?v=4" width="100px;" alt="Aaron Jensen"/><br /><sub><b>Aaron Jensen</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=aaronjensen" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://cameronbothner.com"><img src="https://avatars1.githubusercontent.com/u/4642599?v=4" width="100px;" alt="Cameron Bothner"/><br /><sub><b>Cameron Bothner</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=cbothner" title="Code">💻</a></td>
-    <td align="center"><a href="https://localhost.dev"><img src="https://avatars3.githubusercontent.com/u/47308085?v=4" width="100px;" alt="localhost.dev"/><br /><sub><b>localhost.dev</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Alocalhostdotdev" title="Bug reports">🐛</a> <a href="https://github.com/prettier/plugin-ruby/commits?author=localhostdotdev" title="Code">💻</a></td>
-    <td align="center"><a href="https://deecewan.github.io"><img src="https://avatars0.githubusercontent.com/u/4755785?v=4" width="100px;" alt="David Buchan-Swanson"/><br /><sub><b>David Buchan-Swanson</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Adeecewan" title="Bug reports">🐛</a> <a href="https://github.com/prettier/plugin-ruby/commits?author=deecewan" title="Code">💻</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/jpickwell"><img src="https://avatars1.githubusercontent.com/u/4682321?v=4" width="100px;" alt="Jordan Pickwell"/><br /><sub><b>Jordan Pickwell</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Ajpickwell" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="http://codingitwrong.com"><img src="https://avatars0.githubusercontent.com/u/15832198?v=4" width="100px;" alt="Josh Justice"/><br /><sub><b>Josh Justice</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3ACodingItWrong" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/xipgroc"><img src="https://avatars0.githubusercontent.com/u/28561131?v=4" width="100px;" alt="xipgroc"/><br /><sub><b>xipgroc</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Axipgroc" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="http://lejeun.es"><img src="https://avatars1.githubusercontent.com/u/15168?v=4" width="100px;" alt="Gregoire Lejeune"/><br /><sub><b>Gregoire Lejeune</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Aglejeune" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/petevk"><img src="https://avatars3.githubusercontent.com/u/5108627?v=4" width="100px;" alt="Pete Van Klaveren"/><br /><sub><b>Pete Van Klaveren</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Apetevk" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/meleyal"><img src="https://avatars3.githubusercontent.com/u/15045?v=4" width="100px;" alt="meleyal"/><br /><sub><b>meleyal</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=meleyal" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://lip.is"><img src="https://avatars1.githubusercontent.com/u/125676?v=4" width="100px;" alt="Lipis"/><br /><sub><b>Lipis</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=lipis" title="Documentation">📖</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://janpiotrowski.de"><img src="https://avatars0.githubusercontent.com/u/183673?v=4" width="100px;" alt="Jan Piotrowski"/><br /><sub><b>Jan Piotrowski</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=janpio" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://www.andywaite.com"><img src="https://avatars1.githubusercontent.com/u/13400?v=4" width="100px;" alt="Andy Waite"/><br /><sub><b>Andy Waite</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/commits?author=andyw8" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/jviney"><img src="https://avatars3.githubusercontent.com/u/7051?v=4" width="100px;" alt="Jonathan Viney"/><br /><sub><b>Jonathan Viney</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Ajviney" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/acrewdson"><img src="https://avatars0.githubusercontent.com/u/10353074?v=4" width="100px;" alt="acrewdson"/><br /><sub><b>acrewdson</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Aacrewdson" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://orleans.io"><img src="https://avatars0.githubusercontent.com/u/1683595?v=4" width="100px;" alt="Louis Orleans"/><br /><sub><b>Louis Orleans</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Adudeofawesome" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/cvoege"><img src="https://avatars2.githubusercontent.com/u/6777709?v=4" width="100px;" alt="Colton Voege"/><br /><sub><b>Colton Voege</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Acvoege" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://stefankracht.de"><img src="https://avatars1.githubusercontent.com/u/529711?v=4" width="100px;" alt="Stefan Kracht"/><br /><sub><b>Stefan Kracht</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Akrachtstefan" title="Bug reports">🐛</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/jakeprime"><img src="https://avatars1.githubusercontent.com/u/1019036?v=4" width="100px;" alt="jakeprime"/><br /><sub><b>jakeprime</b></sub></a><br /><a href="https://github.com/prettier/plugin-ruby/issues?q=author%3Ajakeprime" title="Bug reports">🐛</a></td>
-  </tr>
-</table>
+<a href="https://opencollective.com/prettier-ruby/organization/0/website"><img src="https://opencollective.com/prettier-ruby/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/1/website"><img src="https://opencollective.com/prettier-ruby/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/2/website"><img src="https://opencollective.com/prettier-ruby/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/3/website"><img src="https://opencollective.com/prettier-ruby/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/4/website"><img src="https://opencollective.com/prettier-ruby/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/5/website"><img src="https://opencollective.com/prettier-ruby/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/6/website"><img src="https://opencollective.com/prettier-ruby/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/7/website"><img src="https://opencollective.com/prettier-ruby/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/8/website"><img src="https://opencollective.com/prettier-ruby/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/prettier-ruby/organization/9/website"><img src="https://opencollective.com/prettier-ruby/organization/9/avatar.svg"></a>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+## License
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+The package is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

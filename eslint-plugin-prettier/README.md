@@ -1,6 +1,25 @@
-# eslint-plugin-prettier [![Build Status](https://travis-ci.org/prettier/eslint-plugin-prettier.svg?branch=master)](https://travis-ci.org/prettier/eslint-plugin-prettier)
+# eslint-plugin-prettier [![Build Status](https://github.com/prettier/eslint-plugin-prettier/workflows/CI/badge.svg?branch=master)](https://github.com/prettier/eslint-plugin-prettier/actions?query=workflow%3ACI+branch%3Amaster)
 
-Runs [Prettier](https://github.com/prettier/prettier) as an [ESLint](http://eslint.org) rule and reports differences as individual ESLint issues.
+Runs [Prettier](https://github.com/prettier/prettier) as an [ESLint](https://eslint.org) rule and reports differences as individual ESLint issues.
+
+If your desired formatting does not match Prettier’s output, you should use a different tool such as [prettier-eslint](https://github.com/prettier/prettier-eslint) instead.
+
+Please read [Integrating with linters](https://prettier.io/docs/en/integrating-with-linters.html) before installing.
+
+## TOC <!-- omit in toc -->
+
+- [Sample](#sample)
+- [Installation](#installation)
+- [Configuration (legacy: `.eslintrc*`)](#configuration-legacy-eslintrc)
+- [Configuration (new: `eslint.config.js`)](#configuration-new-eslintconfigjs)
+- [`Svelte` support](#svelte-support)
+- [`arrow-body-style` and `prefer-arrow-callback` issue](#arrow-body-style-and-prefer-arrow-callback-issue)
+- [Options](#options)
+- [Sponsors](#sponsors)
+- [Backers](#backers)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
+- [License](#license)
 
 ## Sample
 
@@ -33,137 +52,151 @@ error: Delete `;` (prettier/prettier) at pkg/commons-atom/ActiveEditorRegistry.j
 ## Installation
 
 ```sh
-npm install --save-dev eslint-plugin-prettier
+npm install --save-dev eslint-plugin-prettier eslint-config-prettier
 npm install --save-dev --save-exact prettier
 ```
 
 **_`eslint-plugin-prettier` does not install Prettier or ESLint for you._** _You must install these yourself._
 
-Then, in your `.eslintrc.json`:
+This plugin works best if you disable all other ESLint rules relating to code formatting, and only enable rules that detect potential bugs. If another active ESLint rule disagrees with `prettier` about how code should be formatted, it will be impossible to avoid lint errors. Our recommended configuration automatically enables [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier) to disable all formatting-related ESLint rules.
+
+## Configuration (legacy: `.eslintrc*`)
+
+For [legacy configuration](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated), this plugin ships with a `plugin:prettier/recommended` config that sets up both `eslint-plugin-prettier` and [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier) in one go.
+
+Add `plugin:prettier/recommended` as the _last_ item in the extends array in your `.eslintrc*` config file, so that `eslint-config-prettier` has the opportunity to override other configs:
 
 ```json
 {
-  "plugins": [
-    "prettier"
-  ],
-  "rules": {
-    "prettier/prettier": "error"
-  }
+  "extends": ["plugin:prettier/recommended"]
 }
 ```
 
-## Recommended Configuration
+This will:
 
-This plugin works best if you disable all other ESLint rules relating to code formatting, and only enable rules that detect patterns in the AST. (If another active ESLint rule disagrees with `prettier` about how code should be formatted, it will be impossible to avoid lint errors.) You can use [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) to disable all formatting-related ESLint rules.
+- Enable the `prettier/prettier` rule.
+- Disable the `arrow-body-style` and `prefer-arrow-callback` rules which are problematic with this plugin - see the below for why.
+- Enable the `eslint-config-prettier` config which will turn off ESLint rules that conflict with Prettier.
 
-If your desired formatting does not match the `prettier` output, you should use a different tool such as [prettier-eslint](https://github.com/prettier/prettier-eslint) instead.
+## Configuration (new: `eslint.config.js`)
 
-To integrate this plugin with `eslint-config-prettier`, you can use the `"recommended"` configuration:
+For [flat configuration](https://eslint.org/docs/latest/use/configure/configuration-files-new), this plugin ships with an `eslint-plugin-prettier/recommended` config that sets up both `eslint-plugin-prettier` and [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier) in one go.
 
-1. In addition to the above installation instructions, install `eslint-config-prettier`:
+Import `eslint-plugin-prettier/recommended` and add it as the _last_ item in the configuration array in your `eslint.config.js` file so that `eslint-config-prettier` has the opportunity to override other configs:
 
-  ```sh
-  npm install --save-dev eslint-config-prettier
-  ```
+```js
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 
-2. Then all you need in your `.eslintrc.json` is:
+module.exports = [
+  // Any other config imports go at the top
+  eslintPluginPrettierRecommended,
+];
+```
 
-  ```json
-  {
-    "extends": [
-      "plugin:prettier/recommended"
-    ]
-  }
-  ```
+This will:
 
-This does three things:
+- Enable the `prettier/prettier` rule.
+- Disable the `arrow-body-style` and `prefer-arrow-callback` rules which are problematic with this plugin - see the below for why.
+- Enable the `eslint-config-prettier` config which will turn off ESLint rules that conflict with Prettier.
 
-1. Enables `eslint-plugin-prettier`.
-2. Sets the `prettier/prettier` rule to `"error"`.
-3. Extends the `eslint-config-prettier` configuration.
+## `Svelte` support
 
-You can then set Prettier's own options inside a `.prettierrc` file.
+We recommend to use [`eslint-plugin-svelte`](https://github.com/ota-meshi/eslint-plugin-svelte) instead of [`eslint-plugin-svelte3`](https://github.com/sveltejs/eslint-plugin-svelte3) because `eslint-plugin-svelte` has a correct [`eslint-svelte-parser`](https://github.com/ota-meshi/svelte-eslint-parser) instead of hacking.
+
+When use with `eslint-plugin-svelte3`, `eslint-plugin-prettier` will just ignore the text passed by `eslint-plugin-svelte3`, because the text has been modified.
+
+If you still decide to use `eslint-plugin-svelte3`, you'll need to run `prettier --write *.svelte` manually.
+
+## `arrow-body-style` and `prefer-arrow-callback` issue
+
+If you use [arrow-body-style](https://eslint.org/docs/rules/arrow-body-style) or [prefer-arrow-callback](https://eslint.org/docs/rules/prefer-arrow-callback) together with the `prettier/prettier` rule from this plugin, you can in some cases end up with invalid code due to a bug in ESLint’s autofix – see [issue #65](https://github.com/prettier/eslint-plugin-prettier/issues/65).
+
+For this reason, it’s recommended to turn off these rules. The `plugin:prettier/recommended` config does that for you.
+
+You _can_ still use these rules together with this plugin if you want, because the bug does not occur _all the time._ But if you do, you need to keep in mind that you might end up with invalid code, where you manually have to insert a missing closing parenthesis to get going again.
+
+If you’re fixing large of amounts of previously unformatted code, consider temporarily disabling the `prettier/prettier` rule and running `eslint --fix` and `prettier --write` separately.
 
 ## Options
 
 > Note: While it is possible to pass options to Prettier via your ESLint configuration file, it is not recommended because editor extensions such as `prettier-atom` and `prettier-vscode` **will** read [`.prettierrc`](https://prettier.io/docs/en/configuration.html), but **won't** read settings from ESLint, which can lead to an inconsistent experience.
 
-* The first option:
-  - Objects are passed directly to Prettier as [options](https://prettier.io/docs/en/options.html). Example:
-    
-    ```json
-    "prettier/prettier": ["error", {"singleQuote": true, "parser": "flow"}]
-    ```
+- The first option:
 
-  - Or the string `"fb"` may be used to set "Facebook style" defaults:
+  - An object representing [options](https://prettier.io/docs/en/options.html) that will be passed into prettier. Example:
 
     ```json
-    "prettier/prettier": ["error", "fb"]
+    {
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "parser": "flow"
+        }
+      ]
+    }
     ```
 
-    Equivalent to:
+    NB: This option will merge and override any config set with `.prettierrc` files
 
-    ```json
-    "prettier/prettier": ["error", {
-      "singleQuote": true,
-      "trailingComma": "all",
-      "bracketSpacing": false,
-      "jsxBracketSameLine": true,
-      "parser": "flow"
-    }]
-    ```
-  NB: This option will merge and override any config set with `.prettierrc` files (for Prettier < 1.7.0, [config files are ignored](https://github.com/prettier/eslint-plugin-prettier/issues/46))
+- The second option:
 
-* The second option:
-
-  - A string with a pragma that triggers this rule. By default, this rule applies to all files. However, if you set a pragma (this option), only files with that pragma in the heading docblock will be checked. All pragmas must start with `@`. Example:
-
-    ```json
-    "prettier/prettier": ["error", null, "@prettier"]
-    ```
-
-    Only files with `@prettier` in the heading docblock will be checked:
-
-    ```js
-    /** @prettier */
-
-    console.log(1 + 2 + 3);
-    ```
-
-    Or:
-
-    ```js
-    /**
-     * @prettier
-     */
-
-    console.log(4 + 5 + 6);
-    ```
-
-    _This option is useful if you're migrating a large codebase and already use pragmas like `@flow`._
-  
   - An object with the following options
-  
-    - `pragma`: Also sets the aforementioned `pragma`: a string with a pragma that triggers this rule. By default, this rule applies to all files. However, if you set a pragma (this option), only files with that pragma in the heading docblock will be checked. All pragmas must start with `@`.
-    
+
+    - `usePrettierrc`: Enables loading of the Prettier configuration file, (default: `true`). May be useful if you are using multiple tools that conflict with each other, or do not wish to mix your ESLint settings with your Prettier configuration. And also, it is possible to run prettier without loading the prettierrc config file [via the CLI's --no-config option](https://prettier.io/docs/en/cli.html#--no-config) or through the API by [calling prettier.format() without passing through the options generated by calling resolveConfig](https://prettier.io/docs/en/api.html#prettierresolveconfigfilepath--options).
+
       ```json
-      "prettier/prettier": ["error", null, {
-        "pragma": "@prettier"
-      }]
-      ```
-      
-    - `usePrettierrc`: Enables loading of the Prettier configuration file, (default: `true`). May be useful if you are using multiple tools that conflict with each other, or do not wish to mix your ESLint settings with your Prettier configuration.
-    
-      ```json
-      "prettier/prettier": ["error", null, {
-        "usePrettierrc": false
-      }]
+      {
+        "prettier/prettier": [
+          "error",
+          {},
+          {
+            "usePrettierrc": false
+          }
+        ]
+      }
       ```
 
-* The rule is autofixable -- if you run `eslint` with the `--fix` flag, your code will be formatted according to `prettier` style.
+    - `fileInfoOptions`: Options that are passed to [prettier.getFileInfo](https://prettier.io/docs/en/api.html#prettiergetfileinfofilepath--options) to decide whether a file needs to be formatted. Can be used for example to opt-out from ignoring files located in `node_modules` directories.
+
+      ```json
+      {
+        "prettier/prettier": [
+          "error",
+          {},
+          {
+            "fileInfoOptions": {
+              "withNodeModules": true
+            }
+          }
+        ]
+      }
+      ```
+
+- The rule is auto fixable -- if you run `eslint` with the `--fix` flag, your code will be formatted according to `prettier` style.
 
 ---
+
+## Sponsors
+
+| @prettier/plugin-eslint                                                                                                                                                        | eslint-config-prettier                                                                                                                                                       | eslint-plugin-prettier                                                                                                                                     | prettier-eslint                                                                                                                                          | prettier-eslint-cli                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![@prettier/plugin-eslint Open Collective sponsors](https://opencollective.com/prettier-plugin-eslint/tiers/sponsors.svg)](https://opencollective.com/prettier-plugin-eslint) | [![eslint-config-prettier Open Collective backers](https://opencollective.com/eslint-config-prettier/tiers/sponsors.svg)](https://opencollective.com/eslint-config-prettier) | [![eslint-plugin-prettier Open Collective backers](https://opencollective.com/eslint-plugin-prettier/tiers/sponsors.svg)](https://opencollective.com/rxts) | [![prettier-eslint Open Collective sponsors](https://opencollective.com/prettier-eslint/tiers/sponsors.svg)](https://opencollective.com/prettier-eslint) | [![prettier-eslint-cli Open Collective backers](https://opencollective.com/prettier-eslint-cli/tiers/sponsors.svg)](https://opencollective.com/prettier-eslint-cli) |
+
+## Backers
+
+| @prettier/plugin-eslint                                                                                                                                                      | eslint-config-prettier                                                                                                                                                      | eslint-plugin-prettier                                                                                                                                    | prettier-eslint                                                                                                                                        | prettier-eslint-cli                                                                                                                                                |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [![@prettier/plugin-eslint Open Collective backers](https://opencollective.com/prettier-plugin-eslint/tiers/backers.svg)](https://opencollective.com/prettier-plugin-eslint) | [![eslint-config-prettier Open Collective backers](https://opencollective.com/eslint-config-prettier/tiers/backers.svg)](https://opencollective.com/eslint-config-prettier) | [![eslint-plugin-prettier Open Collective backers](https://opencollective.com/eslint-plugin-prettier/tiers/backers.svg)](https://opencollective.com/rxts) | [![prettier-eslint Open Collective backers](https://opencollective.com/prettier-eslint/tiers/backers.svg)](https://opencollective.com/prettier-eslint) | [![prettier-eslint-cli Open Collective backers](https://opencollective.com/prettier-eslint-cli/tiers/backers.svg)](https://opencollective.com/prettier-eslint-cli) |
 
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/prettier/eslint-plugin-prettier/blob/master/CONTRIBUTING.md)
+
+## Changelog
+
+Detailed changes for each release are documented in [CHANGELOG.md](./CHANGELOG.md).
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)

@@ -1,6 +1,19 @@
 /**
- * @fileoverview Runs `prettier` as an ESLint rule.
+ * @file Runs `prettier` as an ESLint rule.
  * @author Andres Suarez
+ */
+
+// @ts-check
+
+/**
+ * @typedef {import('eslint').AST.Range} Range
+ * @typedef {import('eslint').AST.SourceLocation} SourceLocation
+ * @typedef {import('eslint').ESLint.Plugin} Plugin
+ * @typedef {import('eslint').ESLint.ObjectMetaProperties} ObjectMetaProperties
+ * @typedef {import('prettier').FileInfoOptions} FileInfoOptions
+ * @typedef {import('prettier').Options} PrettierOptions
+ * @typedef {PrettierOptions & { onDiskFilepath: string, parserMeta?: ObjectMetaProperties['meta'], parserPath?: string, usePrettierrc?: boolean }} Options
+ * @typedef {(source: string, options: Options, fileInfoOptions: FileInfoOptions) => string} PrettierFormat
  */
 
 'use strict';
@@ -9,438 +22,235 @@
 //  Requirements
 // ------------------------------------------------------------------------------
 
-const diff = require('fast-diff');
-const docblock = require('jest-docblock');
+const {
+  showInvisibles,
+  generateDifferences,
+} = require('prettier-linter-helpers');
+const { name, version } = require('./package.json');
 
 // ------------------------------------------------------------------------------
 //  Constants
 // ------------------------------------------------------------------------------
 
-// Preferred Facebook style.
-const FB_PRETTIER_OPTIONS = {
-  singleQuote: true,
-  trailingComma: 'all',
-  bracketSpacing: false,
-  jsxBracketSameLine: true,
-  parser: 'flow'
-};
-
-const LINE_ENDING_RE = /\r\n|[\r\n\u2028\u2029]/;
-
-const OPERATION_INSERT = 'insert';
-const OPERATION_DELETE = 'delete';
-const OPERATION_REPLACE = 'replace';
+const { INSERT, DELETE, REPLACE } = generateDifferences;
 
 // ------------------------------------------------------------------------------
 //  Privates
 // ------------------------------------------------------------------------------
 
 // Lazily-loaded Prettier.
-let prettier;
-
-// ------------------------------------------------------------------------------
-//  Helpers
-// ------------------------------------------------------------------------------
-
 /**
- * Gets the location of a given index in the source code for a given context.
- * @param {RuleContext} context - The ESLint rule context.
- * @param {number} index - An index in the source code.
- * @returns {Object} An object containing numeric `line` and `column` keys.
+ * @type {PrettierFormat}
  */
-function getLocFromIndex(context, index) {
-  // If `sourceCode.getLocFromIndex` is available from ESLint, use it - added
-  // in ESLint 3.16.0.
-  const sourceCode = context.getSourceCode();
-  if (typeof sourceCode.getLocFromIndex === 'function') {
-    return sourceCode.getLocFromIndex(index);
-  }
-  const text = sourceCode.getText();
-  if (typeof index !== 'number') {
-    throw new TypeError('Expected `index` to be a number.');
-  }
-  if (index < 0 || index > text.length) {
-    throw new RangeError('Index out of range.');
-  }
-  // Loosely based on
-  // https://github.com/eslint/eslint/blob/18a519fa/lib/ast-utils.js#L408-L438
-  const lineEndingPattern = /\r\n|[\r\n\u2028\u2029]/g;
-  let offset = 0;
-  let line = 0;
-  let match;
-  while ((match = lineEndingPattern.exec(text))) {
-    const next = match.index + match[0].length;
-    if (index < next) {
-      break;
-    }
-    line++;
-    offset = next;
-  }
-  return {
-    line: line + 1,
-    column: index - offset
-  };
-}
-
-/**
- * Converts invisible characters to a commonly recognizable visible form.
- * @param {string} str - The string with invisibles to convert.
- * @returns {string} The converted string.
- */
-function showInvisibles(str) {
-  let ret = '';
-  for (let i = 0; i < str.length; i++) {
-    switch (str[i]) {
-      case ' ':
-        ret += '·'; // Middle Dot, \u00B7
-        break;
-      case '\n':
-        ret += '⏎'; // Return Symbol, \u23ce
-        break;
-      case '\t':
-        ret += '↹'; // Left Arrow To Bar Over Right Arrow To Bar, \u21b9
-        break;
-      default:
-        ret += str[i];
-        break;
-    }
-  }
-  return ret;
-}
-
-/**
- * Generate results for differences between source code and formatted version.
- * @param {string} source - The original source.
- * @param {string} prettierSource - The Prettier formatted source.
- * @returns {Array} - An array contains { operation, offset, insertText, deleteText }
- */
-function generateDifferences(source, prettierSource) {
-  // fast-diff returns the differences between two texts as a series of
-  // INSERT, DELETE or EQUAL operations. The results occur only in these
-  // sequences:
-  //           /-> INSERT -> EQUAL
-  //    EQUAL |           /-> EQUAL
-  //           \-> DELETE |
-  //                      \-> INSERT -> EQUAL
-  // Instead of reporting issues at each INSERT or DELETE, certain sequences
-  // are batched together and are reported as a friendlier "replace" operation:
-  // - A DELETE immediately followed by an INSERT.
-  // - Any number of INSERTs and DELETEs where the joining EQUAL of one's end
-  // and another's beginning does not have line endings (i.e. issues that occur
-  // on contiguous lines).
-
-  const results = diff(source, prettierSource);
-  const differences = [];
-
-  const batch = [];
-  let offset = 0; // NOTE: INSERT never advances the offset.
-  while (results.length) {
-    const result = results.shift();
-    const op = result[0];
-    const text = result[1];
-    switch (op) {
-      case diff.INSERT:
-      case diff.DELETE:
-        batch.push(result);
-        break;
-      case diff.EQUAL:
-        if (results.length) {
-          if (batch.length) {
-            if (LINE_ENDING_RE.test(text)) {
-              flush();
-              offset += text.length;
-            } else {
-              batch.push(result);
-            }
-          } else {
-            offset += text.length;
-          }
-        }
-        break;
-      default:
-        throw new Error(`Unexpected fast-diff operation "${op}"`);
-    }
-    if (batch.length && !results.length) {
-      flush();
-    }
-  }
-
-  return differences;
-
-  function flush() {
-    let aheadDeleteText = '';
-    let aheadInsertText = '';
-    while (batch.length) {
-      const next = batch.shift();
-      const op = next[0];
-      const text = next[1];
-      switch (op) {
-        case diff.INSERT:
-          aheadInsertText += text;
-          break;
-        case diff.DELETE:
-          aheadDeleteText += text;
-          break;
-        case diff.EQUAL:
-          aheadDeleteText += text;
-          aheadInsertText += text;
-          break;
-      }
-    }
-    if (aheadDeleteText && aheadInsertText) {
-      differences.push({
-        offset,
-        operation: OPERATION_REPLACE,
-        insertText: aheadInsertText,
-        deleteText: aheadDeleteText
-      });
-    } else if (!aheadDeleteText && aheadInsertText) {
-      differences.push({
-        offset,
-        operation: OPERATION_INSERT,
-        insertText: aheadInsertText
-      });
-    } else if (aheadDeleteText && !aheadInsertText) {
-      differences.push({
-        offset,
-        operation: OPERATION_DELETE,
-        deleteText: aheadDeleteText
-      });
-    }
-    offset += aheadDeleteText.length;
-  }
-}
+let prettierFormat;
 
 // ------------------------------------------------------------------------------
 //  Rule Definition
 // ------------------------------------------------------------------------------
 
 /**
- * Reports an "Insert ..." issue where text must be inserted.
- * @param {RuleContext} context - The ESLint rule context.
- * @param {number} offset - The source offset where to insert text.
- * @param {string} text - The text to be inserted.
+ * Reports a difference.
+ *
+ * @param {import('eslint').Rule.RuleContext} context - The ESLint rule context.
+ * @param {import('prettier-linter-helpers').Difference} difference - The difference object.
  * @returns {void}
  */
-function reportInsert(context, offset, text) {
-  const pos = getLocFromIndex(context, offset);
-  const range = [offset, offset];
-  context.report({
-    message: 'Insert `{{ code }}`',
-    data: { code: showInvisibles(text) },
-    loc: { start: pos, end: pos },
-    fix(fixer) {
-      return fixer.insertTextAfterRange(range, text);
-    }
-  });
-}
+function reportDifference(context, difference) {
+  const { operation, offset, deleteText = '', insertText = '' } = difference;
+  const range = /** @type {Range} */ ([offset, offset + deleteText.length]);
+  // `context.getSourceCode()` was deprecated in ESLint v8.40.0 and replaced
+  // with the `sourceCode` property.
+  // TODO: Only use property when our eslint peerDependency is >=8.40.0.
+  const [start, end] = range.map(index =>
+    (context.sourceCode ?? context.getSourceCode()).getLocFromIndex(index),
+  );
 
-/**
- * Reports a "Delete ..." issue where text must be deleted.
- * @param {RuleContext} context - The ESLint rule context.
- * @param {number} offset - The source offset where to delete text.
- * @param {string} text - The text to be deleted.
- * @returns {void}
- */
-function reportDelete(context, offset, text) {
-  const start = getLocFromIndex(context, offset);
-  const end = getLocFromIndex(context, offset + text.length);
-  const range = [offset, offset + text.length];
   context.report({
-    message: 'Delete `{{ code }}`',
-    data: { code: showInvisibles(text) },
-    loc: { start, end },
-    fix(fixer) {
-      return fixer.removeRange(range);
-    }
-  });
-}
-
-/**
- * Reports a "Replace ... with ..." issue where text must be replaced.
- * @param {RuleContext} context - The ESLint rule context.
- * @param {number} offset - The source offset where to replace deleted text
- with inserted text.
- * @param {string} deleteText - The text to be deleted.
- * @param {string} insertText - The text to be inserted.
- * @returns {void}
- */
-function reportReplace(context, offset, deleteText, insertText) {
-  const start = getLocFromIndex(context, offset);
-  const end = getLocFromIndex(context, offset + deleteText.length);
-  const range = [offset, offset + deleteText.length];
-  context.report({
-    message: 'Replace `{{ deleteCode }}` with `{{ insertCode }}`',
+    messageId: operation,
     data: {
-      deleteCode: showInvisibles(deleteText),
-      insertCode: showInvisibles(insertText)
+      deleteText: showInvisibles(deleteText),
+      insertText: showInvisibles(insertText),
     },
     loc: { start, end },
-    fix(fixer) {
-      return fixer.replaceTextRange(range, insertText);
-    }
+    fix: fixer => fixer.replaceTextRange(range, insertText),
   });
-}
-
-/**
- * Get the pragma from the ESLint rule context.
- * @param {RuleContext} context - The ESLint rule context.
- * @returns {string|null}
- */
-function getPragma(context) {
-  const pluginOptions = context.options[1];
-
-  if (!pluginOptions) {
-    return null;
-  }
-
-  const pragmaRef =
-    typeof pluginOptions === 'string' ? pluginOptions : pluginOptions.pragma;
-
-  // Remove leading @
-  return pragmaRef ? pragmaRef.slice(1) : null;
 }
 
 // ------------------------------------------------------------------------------
 //  Module Definition
 // ------------------------------------------------------------------------------
 
-module.exports = {
-  showInvisibles,
-  generateDifferences,
+/**
+ * @type {Plugin}
+ */
+const eslintPluginPrettier = {
+  meta: { name, version },
   configs: {
     recommended: {
       extends: ['prettier'],
       plugins: ['prettier'],
       rules: {
-        'prettier/prettier': 'error'
-      }
-    }
+        'prettier/prettier': 'error',
+        'arrow-body-style': 'off',
+        'prefer-arrow-callback': 'off',
+      },
+    },
   },
   rules: {
     prettier: {
       meta: {
         docs: {
-          url: 'https://github.com/prettier/eslint-plugin-prettier#options'
+          url: 'https://github.com/prettier/eslint-plugin-prettier#options',
         },
+        type: 'layout',
         fixable: 'code',
         schema: [
           // Prettier options:
           {
-            anyOf: [
-              { enum: [null, 'fb'] },
-              { type: 'object', properties: {}, additionalProperties: true }
-            ]
+            type: 'object',
+            properties: {},
+            additionalProperties: true,
           },
           {
-            anyOf: [
-              // Pragma:
-              { type: 'string', pattern: '^@\\w+$' },
-              {
+            type: 'object',
+            properties: {
+              usePrettierrc: { type: 'boolean' },
+              fileInfoOptions: {
                 type: 'object',
-                properties: {
-                  pragma: { type: 'string', pattern: '^@\\w+$' },
-                  usePrettierrc: { type: 'boolean' }
-                },
-                additionalProperties: true
-              }
-            ]
-          }
-        ]
+                properties: {},
+                additionalProperties: true,
+              },
+            },
+            additionalProperties: true,
+          },
+        ],
+        messages: {
+          [INSERT]: 'Insert `{{ insertText }}`',
+          [DELETE]: 'Delete `{{ deleteText }}`',
+          [REPLACE]: 'Replace `{{ deleteText }}` with `{{ insertText }}`',
+        },
       },
       create(context) {
-        const pragma = getPragma(context);
         const usePrettierrc =
           !context.options[1] || context.options[1].usePrettierrc !== false;
-        const sourceCode = context.getSourceCode();
+        /**
+         * @type {FileInfoOptions}
+         */
+        const fileInfoOptions =
+          (context.options[1] && context.options[1].fileInfoOptions) || {};
+
+        // `context.getSourceCode()` was deprecated in ESLint v8.40.0 and replaced
+        // with the `sourceCode` property.
+        // TODO: Only use property when our eslint peerDependency is >=8.40.0.
+        const sourceCode = context.sourceCode ?? context.getSourceCode();
+        // `context.getFilename()` was deprecated in ESLint v8.40.0 and replaced
+        // with the `filename` property.
+        // TODO: Only use property when our eslint peerDependency is >=8.40.0.
+        const filepath = context.filename ?? context.getFilename();
+
+        // Processors that extract content from a file, such as the markdown
+        // plugin extracting fenced code blocks may choose to specify virtual
+        // file paths. If this is the case then we need to resolve prettier
+        // config and file info using the on-disk path instead of the virtual
+        // path.
+        // `context.getPhysicalFilename()` was deprecated in ESLint v8.40.0 and replaced
+        // with the `physicalFilename` property.
+        // TODO: Only use property when our eslint peerDependency is >=8.40.0.
+        const onDiskFilepath =
+          context.physicalFilename ?? context.getPhysicalFilename();
         const source = sourceCode.text;
 
-        // The pragma is only valid if it is found in a block comment at the very
-        // start of the file.
-        if (pragma) {
-          // ESLint 3.x reports the shebang as a "Line" node, while ESLint 4.x
-          // reports it as a "Shebang" node. This works for both versions:
-          const hasShebang = source.startsWith('#!');
-          const allComments = sourceCode.getAllComments();
-          const firstComment = hasShebang ? allComments[1] : allComments[0];
-          if (
-            !(
-              firstComment &&
-              firstComment.type === 'Block' &&
-              firstComment.loc.start.line === (hasShebang ? 2 : 1) &&
-              firstComment.loc.start.column === 0
-            )
-          ) {
-            return {};
-          }
-          const parsed = docblock.parse(firstComment.value);
-          if (parsed[pragma] !== '') {
-            return {};
-          }
-        }
-
-        if (prettier && prettier.clearConfigCache) {
-          prettier.clearConfigCache();
-        }
-
         return {
-          Program() {
-            if (!prettier) {
+          Program(node) {
+            if (!prettierFormat) {
               // Prettier is expensive to load, so only load it if needed.
-              prettier = require('prettier');
+              prettierFormat = /** @type {PrettierFormat} */ (
+                require('synckit').createSyncFn(require.resolve('./worker'))
+              );
             }
 
-            const eslintPrettierOptions =
-              context.options[0] === 'fb'
-                ? FB_PRETTIER_OPTIONS
-                : context.options[0];
-            const prettierRcOptions =
-              usePrettierrc &&
-              prettier.resolveConfig &&
-              prettier.resolveConfig.sync
-                ? prettier.resolveConfig.sync(context.getFilename())
-                : null;
-            const prettierOptions = Object.assign(
-              {},
-              prettierRcOptions,
-              eslintPrettierOptions,
-              { filepath: context.getFilename() }
-            );
+            /**
+             * @type {PrettierOptions}
+             */
+            const eslintPrettierOptions = context.options[0] || {};
 
-            const prettierSource = prettier.format(source, prettierOptions);
+            const parser = context.languageOptions?.parser;
+
+            // prettier.format() may throw a SyntaxError if it cannot parse the
+            // source code it is given. Usually for JS files this isn't a
+            // problem as ESLint will report invalid syntax before trying to
+            // pass it to the prettier plugin. However this might be a problem
+            // for non-JS languages that are handled by a plugin. Notably Vue
+            // files throw an error if they contain unclosed elements, such as
+            // `<template><div></template>. In this case report an error at the
+            // point at which parsing failed.
+            /**
+             * @type {string}
+             */
+            let prettierSource;
+            try {
+              prettierSource = prettierFormat(
+                source,
+                {
+                  ...eslintPrettierOptions,
+                  filepath,
+                  onDiskFilepath,
+                  parserMeta:
+                    parser &&
+                    (parser.meta ?? {
+                      name: parser.name,
+                      version: parser.version,
+                    }),
+                  parserPath: context.parserPath,
+                  usePrettierrc,
+                },
+                fileInfoOptions,
+              );
+            } catch (err) {
+              if (!(err instanceof SyntaxError)) {
+                throw err;
+              }
+
+              let message = 'Parsing error: ' + err.message;
+
+              const error =
+                /** @type {SyntaxError & {codeFrame: string; loc?: SourceLocation}} */ (
+                  err
+                );
+
+              // Prettier's message contains a codeframe style preview of the
+              // invalid code and the line/column at which the error occurred.
+              // ESLint shows those pieces of information elsewhere already so
+              // remove them from the message
+              if (error.codeFrame) {
+                message = message.replace(`\n${error.codeFrame}`, '');
+              }
+              if (error.loc) {
+                message = message.replace(/ \(\d+:\d+\)$/, '');
+                context.report({ message, loc: error.loc });
+              } else {
+                context.report({ message, node });
+              }
+
+              return;
+            }
+
+            if (prettierSource == null) {
+              return;
+            }
+
             if (source !== prettierSource) {
               const differences = generateDifferences(source, prettierSource);
 
-              differences.forEach(difference => {
-                switch (difference.operation) {
-                  case OPERATION_INSERT:
-                    reportInsert(
-                      context,
-                      difference.offset,
-                      difference.insertText
-                    );
-                    break;
-                  case OPERATION_DELETE:
-                    reportDelete(
-                      context,
-                      difference.offset,
-                      difference.deleteText
-                    );
-                    break;
-                  case OPERATION_REPLACE:
-                    reportReplace(
-                      context,
-                      difference.offset,
-                      difference.deleteText,
-                      difference.insertText
-                    );
-                    break;
-                }
-              });
+              for (const difference of differences) {
+                reportDifference(context, difference);
+              }
             }
-          }
+          },
         };
-      }
-    }
-  }
+      },
+    },
+  },
 };
+
+module.exports = eslintPluginPrettier;
