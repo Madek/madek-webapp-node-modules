@@ -1,4 +1,61 @@
-## master (unreleased)
+## 8.1.0
+
+- Improve support for refs (#278)
+- Don't include `.babelrc` in published npm package (#270)
+
+## 8.0.3
+
+- Defer `handleScroll` in `componentDidUpdate` ([#265](https://github.com/brigade/react-waypoint/pull/265))
+- Extend `React.PureComponent` instead of `React.Component` when available ([#264](https://github.com/brigade/react-waypoint/pull/264))
+
+## 8.0.2
+
+- Allow consolidated-events ^2.0.0 ([#256](https://github.com/brigade/react-waypoint/pull/256))
+- Add message to better understand logged error message in tests ([#255](https://github.com/brigade/react-waypoint/pull/255))
+
+## 8.0.1
+
+- Fix default export error in typescript definition file
+
+## 8.0.0
+
+- Add es module entry point in package.json
+- Type Waypoint class properties as static
+- Let proptypes be removable in consumers production bundles
+
+## 7.3.4
+
+- Fix second arg to Typescript component definition
+
+## 7.3.3
+
+- Add second arg to Typescript component definition
+
+## 7.3.2
+
+- Fix typescript definition
+
+## 7.3.1
+
+- Make es module opt in (via `import Waypoint from 'react-waypoint/es'`)
+
+## 7.3.0
+
+- Build with rollup.
+- Add an ES module build.
+
+## 7.2.0
+
+- Allow React 16 as a peerDependency.
+- Remove scrollableParent prop check error.
+
+## 7.1.0
+
+- Add support for using composite components as child (#208)
+
+## 7.0.4
+
+- Update consolidated-events from 1.0.1 to 1.1.0.
 
 ## 7.0.3
 

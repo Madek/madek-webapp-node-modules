@@ -1,101 +1,12 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "consolidated-events@^1.0.1",
-        "scope": null,
-        "escapedName": "consolidated-events",
-        "name": "consolidated-events",
-        "rawSpec": "^1.0.1",
-        "spec": ">=1.0.1 <2.0.0",
-        "type": "range"
-      },
-      "/Users/ma/CODE/Madek/webapp/node_modules/react-waypoint"
-    ]
-  ],
-  "_from": "consolidated-events@>=1.0.1 <2.0.0",
-  "_id": "consolidated-events@1.0.1",
-  "_inCache": true,
-  "_location": "/consolidated-events",
-  "_nodeVersion": "6.2.2",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/consolidated-events-1.0.1.tgz_1478651716447_0.03294350323267281"
-  },
-  "_npmUser": {
-    "name": "lencioni",
-    "email": "joe.lencioni@gmail.com"
-  },
-  "_npmVersion": "3.9.5",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "consolidated-events@^1.0.1",
-    "scope": null,
-    "escapedName": "consolidated-events",
-    "name": "consolidated-events",
-    "rawSpec": "^1.0.1",
-    "spec": ">=1.0.1 <2.0.0",
-    "type": "range"
-  },
-  "_requiredBy": [
-    "/react-waypoint"
-  ],
-  "_resolved": "https://registry.npmjs.org/consolidated-events/-/consolidated-events-1.0.1.tgz",
-  "_shasum": "70f475f4a5d6d20428e702da1b8870d9cc031a14",
-  "_shrinkwrap": null,
-  "_spec": "consolidated-events@^1.0.1",
-  "_where": "/Users/ma/CODE/Madek/webapp/node_modules/react-waypoint",
-  "author": {
-    "name": "Joe Lencioni",
-    "email": "joe.lencioni@gmail.com"
-  },
-  "bugs": {
-    "url": "https://github.com/lencioni/consolidated-events/issues"
-  },
-  "dependencies": {},
-  "description": "Manage multiple event handlers using few event listeners",
-  "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.18.2",
-    "babel-jest": "^17.0.0",
-    "babel-preset-airbnb": "^2.1.1",
-    "eslint": "^3.9.1",
-    "eslint-config-airbnb-base": "^10.0.1",
-    "eslint-plugin-import": "^2.2.0",
-    "in-publish": "^2.0.0",
-    "jest": "^17.0.0",
-    "rimraf": "^2.5.4",
-    "safe-publish-latest": "^1.1.1"
-  },
-  "directories": {},
-  "dist": {
-    "shasum": "70f475f4a5d6d20428e702da1b8870d9cc031a14",
-    "tarball": "https://registry.npmjs.org/consolidated-events/-/consolidated-events-1.0.1.tgz"
-  },
-  "gitHead": "d0ea74735de6a53a29e6273dcfa4a4d3ab0eb196",
-  "homepage": "https://github.com/lencioni/consolidated-events#readme",
-  "keywords": [
-    "events",
-    "performance"
-  ],
-  "license": "MIT",
-  "main": "lib/index.js",
-  "maintainers": [
-    {
-      "name": "lencioni",
-      "email": "joe.lencioni@gmail.com"
-    }
-  ],
   "name": "consolidated-events",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lencioni/consolidated-events.git"
-  },
+  "version": "2.0.2",
+  "description": "Manage multiple event handlers using few event listeners",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
   "scripts": {
     "build": "npm run clean && npm run build:js",
-    "build:js": "babel src/ -d lib/",
+    "build:js": "rollup -c",
     "check-changelog": "expr $(git status --porcelain 2>/dev/null| grep \"^\\s*M.*CHANGELOG.md\" | wc -l) >/dev/null || (echo 'Please edit CHANGELOG.md' && exit 1)",
     "check-only-changelog-changed": "(expr $(git status --porcelain 2>/dev/null| grep -v \"CHANGELOG.md\" | wc -l) >/dev/null && echo 'Only CHANGELOG.md may have uncommitted changes' && exit 1) || exit 0",
     "clean": "rimraf lib",
@@ -111,5 +22,33 @@
     "version:minor": "npm --no-git-tag-version version minor",
     "version:patch": "npm --no-git-tag-version version patch"
   },
-  "version": "1.0.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lencioni/consolidated-events.git"
+  },
+  "keywords": [
+    "events",
+    "performance"
+  ],
+  "author": "Joe Lencioni <joe.lencioni@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lencioni/consolidated-events/issues"
+  },
+  "homepage": "https://github.com/lencioni/consolidated-events#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.0.1",
+    "babel-preset-airbnb": "^2.5.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "in-publish": "^2.0.0",
+    "jest": "^23.1.0",
+    "jest-wrap": "^1.4.0",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.60.7",
+    "rollup-plugin-babel": "^3.0.4",
+    "safe-publish-latest": "^1.1.1"
+  }
 }

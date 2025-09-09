@@ -1,13 +1,14 @@
 language: node_js
 sudo: false
 node_js:
+  - '10'
+  - '8'
   - '6'
-  - '5'
   - '4'
-  - '4.2'
 env:
   - MAIN_RUN=true
   - MAIN_RUN=false && REACT_VERSION=0.14
+  - MAIN_RUN=false && REACT_VERSION=15.0
 before_install:
   - npm install -g npm@2
 before_script:

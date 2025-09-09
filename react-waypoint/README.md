@@ -38,10 +38,8 @@ yarn add react-waypoint
 ## Usage
 
 ```jsx
-var Waypoint = require('react-waypoint');
-```
+import Waypoint from 'react-waypoint';
 
-```jsx
 <Waypoint
   onEnter={this._handleWaypointEnter}
   onLeave={this._handleWaypointLeave}
@@ -275,8 +273,55 @@ waypoint as a line across the page. Whenever that line crosses a
 [boundary](#offsets-and-boundaries), then the `onEnter` or `onLeave` callbacks
 will be called.
 
-If you do pass a child, it must be a single DOM Element (eg; a `<div>`)
-and *not* a Component Element (eg; `<MyComponent />`).
+If you do pass a child, it can be a single DOM component (e.g. `<div>`) or a
+composite component (e.g. `<MyComponent />`).
+
+Waypoint needs a DOM node to compute its boundaries. When you pass a DOM
+component to Waypoint, it handles getting a reference to the DOM node through
+the `ref` prop automatically.
+
+If you pass a composite component, you can wrap it with `React.forwardRef` (requires `react@^16.3.0`)
+and have the `ref` prop being handled automatically for you, like this:
+
+```jsx
+class Block extends React.Component {
+  render() {
+    return <div ref={this.props.innerRef}>Hello</div>
+  }
+}
+
+const BlockWithRef = React.forwardRef((props, ref) => {
+  return <Block innerRef={ref} {...props} />
+})
+
+const App = () => (
+  <Waypoint>
+    <BlockWithRef />
+  </Waypoint>
+)
+```
+
+If you can't do that because you are using older version of React then
+you need to make use of the `innerRef` prop passed by Waypoint to your component.
+Simply pass it through as the `ref` of a DOM component and you're all set. Like in
+this example:
+
+```jsx
+class Block extends React.Component {
+  render() {
+    return <div ref={this.props.innerRef}>Hello</div>
+  }
+}
+Block.propTypes = {
+  innerRef: PropTypes.func.isRequired,
+}
+
+const App = () => (
+  <Waypoint>
+    <Block />
+  </Waypoint>
+)
+```
 
 The `onEnter` callback will be called when *any* part of the child is visible
 in the viewport. The `onLeave` callback will be called when *all* of the child

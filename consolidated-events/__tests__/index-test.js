@@ -1,13 +1,13 @@
-/* eslint-disable import/first */
-import { addEventListener, removeEventListener, EVENT_HANDLERS_KEY } from '../src';
+import { addEventListener } from '../src';
 import TargetEventHandlers from '../src/TargetEventHandlers';
 
 class MockTarget {
   constructor() {
     this.addEventListener = jest.fn();
-    this.removeEventListener = jest.fn();
   }
 }
+
+const EVENT_HANDLERS_KEY = '__consolidated_events_handlers__';
 
 describe('addEventListener()', () => {
   it('initializes an instance of TargetEventHandlers on new targets', () => {
@@ -25,45 +25,10 @@ describe('addEventListener()', () => {
       .toHaveBeenCalledWith('scroll', jasmine.any(Function), true);
   });
 
-  it('returns a handle', () => {
+  it('returns an unsubscribe function', () => {
     const target = new MockTarget();
-    const handle = addEventListener(target, 'scroll', () => {}, { capture: true });
+    const remove = addEventListener(target, 'scroll', () => {}, { capture: true });
 
-    expect(handle).not.toBe(null);
-    expect(handle).not.toBe(undefined);
-  });
-});
-
-describe('removeEventListener()', () => {
-  it('does not throw when target is undefined', () => {
-    const handle = { target: undefined };
-    expect(() => removeEventListener(handle)).not.toThrow();
-  });
-
-  it('removes event listeners that were previously registered', () => {
-    const target = new MockTarget();
-    const handle = addEventListener(target, 'scroll', () => {});
-    removeEventListener(handle);
-
-    expect(target.removeEventListener)
-      .toHaveBeenCalledWith('scroll', jasmine.any(Function), undefined);
-  });
-
-  it('ignores event listeners it does not know about', () => {
-    const target = new MockTarget();
-    addEventListener(target, 'scroll', () => {});
-    removeEventListener({ target, eventName: 'scroll', index: 'foo' });
-    removeEventListener({ target, eventName: 'resize', index: 'foo' });
-
-    expect(target.removeEventListener).toHaveBeenCalledTimes(0);
-  });
-
-  it('normalizes event options', () => {
-    const target = new MockTarget();
-    const handle = addEventListener(target, 'scroll', () => {}, { capture: true });
-    removeEventListener(handle);
-
-    expect(target.removeEventListener)
-      .toHaveBeenCalledWith('scroll', jasmine.any(Function), true);
+    expect(typeof remove).toBe('function');
   });
 });
