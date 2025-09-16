@@ -1,4 +1,4 @@
-/* global describe, it, expect, beforeEach, jasmine, xit */
+/* globals document */
 
 var toStr = Object.prototype.toString;
 var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
@@ -661,13 +661,16 @@ describe('Array', function () {
 
             it('should leave the original array untouched', function () {
                 var copy = testSubject.slice();
+                expect(copy).toNotBe(testSubject);
+
                 testSubject.filter(callback);
+
                 expect(testSubject).toExactlyMatch(copy);
             });
 
             it('should not be affected by same-index mutation', function () {
                 var results = [1, 2, 3].filter(function (value, index, array) {
-                    array[index] = 'a';
+                    array[index] = 'a'; // eslint-disable-line no-param-reassign
                     return true;
                 });
                 expect(results).toEqual([1, 2, 3]);
@@ -1277,7 +1280,6 @@ describe('Array', function () {
             });
         });
 
-        /* globals document */
         if (typeof document !== 'undefined') {
             it('should be false for an HTML element', function () {
                 var el = document.getElementsByTagName('div');
@@ -1367,6 +1369,12 @@ describe('Array', function () {
         xit('treats undefined deleteCount as 0', function () {
             expect(test.splice(0).length).toBe(0);
             expect(test.splice(0)).toEqual(test.splice(0, 0));
+        });
+
+        // ES6 introduced a proper default value
+        it('defaults deleteCount to length - start if there is only 1 argument', function () {
+            expect([0, 1, 2].splice(0).length).toBe(3);
+            expect([0, 1, 2].splice(1).length).toBe(2);
         });
 
         it('basic implementation test 1', function () {
@@ -1600,7 +1608,6 @@ describe('Array', function () {
             expect(result).toEqual(['2', '3']);
         });
 
-        /* globals document */
         if (typeof document !== 'undefined') {
             it('should be able to slice a NodeList', function () {
                 var nodes = document.getElementsByTagName('div');

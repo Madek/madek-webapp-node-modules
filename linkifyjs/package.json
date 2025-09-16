@@ -1,64 +1,32 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "linkifyjs@latest",
-        "scope": null,
-        "escapedName": "linkifyjs",
-        "name": "linkifyjs",
-        "rawSpec": "latest",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "/Users/ma/CODE/Madek/webapp"
-    ]
-  ],
-  "_from": "linkifyjs@latest",
-  "_id": "linkifyjs@2.1.4",
-  "_inCache": true,
-  "_location": "/linkifyjs",
-  "_nodeVersion": "7.1.0",
-  "_npmOperationalInternal": {
-    "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/linkifyjs-2.1.4.tgz_1483657069030_0.4887782451696694"
-  },
-  "_npmUser": {
-    "name": "nfrasser",
-    "email": "nfrasser@gmail.com"
-  },
-  "_npmVersion": "4.1.1",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "linkifyjs@latest",
-    "scope": null,
-    "escapedName": "linkifyjs",
-    "name": "linkifyjs",
-    "rawSpec": "latest",
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/linkifyjs/-/linkifyjs-2.1.4.tgz",
-  "_shasum": "b04aac3f327afc871deb205546f612d80bd784b5",
-  "_shrinkwrap": null,
-  "_spec": "linkifyjs@latest",
-  "_where": "/Users/ma/CODE/Madek/webapp",
-  "author": {
-    "name": "SoapBox Innovations",
-    "url": "@SoapBoxHQ"
-  },
-  "bugs": {
-    "url": "https://github.com/SoapBox/linkifyjs/issues"
-  },
-  "dependencies": {
-    "jquery": ">=1.9.0",
-    "react": ">=0.14.0",
-    "react-dom": ">=0.14.0"
-  },
+  "name": "linkifyjs",
+  "version": "2.1.4",
   "description": "Intelligent link recognition, made easy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SoapBox/linkifyjs.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "rm -rf lib/* && node_modules/.bin/gulp build",
+    "test": "node_modules/.bin/gulp test",
+    "test-ci": "node_modules/.bin/gulp test-ci",
+    "coverage": "./node_modules/coveralls/bin/coveralls.js < coverage/lcov.info"
+  },
+  "author": "SoapBox Innovations (@SoapBoxHQ)",
+  "license": "MIT",
+  "keywords": [
+    "jquery",
+    "link",
+    "autolink",
+    "text",
+    "url",
+    "email",
+    "hashtag",
+    "hashtags",
+    "mention",
+    "mentions"
+  ],
   "devDependencies": {
     "amd-optimize": "^0.6.1",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -98,49 +66,9 @@
     "simple-html-tokenizer": "git+https://github.com/nfrasser/simple-html-tokenizer.git#04799f4638ec5ed903a4e5aa6e832269fa59be6b",
     "through2": "^2.0.1"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "b04aac3f327afc871deb205546f612d80bd784b5",
-    "tarball": "https://registry.npmjs.org/linkifyjs/-/linkifyjs-2.1.4.tgz"
-  },
-  "gitHead": "6e4b1eddc280a4a53ad825ffbdd9a7ea46160ed5",
-  "homepage": "https://github.com/SoapBox/linkifyjs#readme",
-  "keywords": [
-    "jquery",
-    "link",
-    "autolink",
-    "text",
-    "url",
-    "email",
-    "hashtag",
-    "hashtags",
-    "mention",
-    "mentions"
-  ],
-  "license": "MIT",
-  "main": "index.js",
-  "maintainers": [
-    {
-      "name": "nfrasser",
-      "email": "nick@soapboxhq.com"
-    }
-  ],
-  "name": "linkifyjs",
   "optionalDependencies": {
     "jquery": ">=1.9.0",
     "react": ">=0.14.0",
     "react-dom": ">=0.14.0"
-  },
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SoapBox/linkifyjs.git"
-  },
-  "scripts": {
-    "coverage": "./node_modules/coveralls/bin/coveralls.js < coverage/lcov.info",
-    "prepublish": "rm -rf lib/* && node_modules/.bin/gulp build",
-    "test": "gulp test",
-    "test-ci": "gulp test-ci"
-  },
-  "version": "2.1.4"
+  }
 }

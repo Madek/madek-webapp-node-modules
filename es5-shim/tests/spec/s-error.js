@@ -1,5 +1,3 @@
-/* global describe, it, xit, expect */
-
 describe('Error', function () {
     'use strict';
 
@@ -7,6 +5,7 @@ describe('Error', function () {
         try {
             var obj = {};
             Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+            // eslint-disable-next-line no-unreachable-loop
             for (var _ in obj) { return false; } // jscs:ignore disallowUnusedVariables
             return obj.x === obj;
         } catch (e) { /* this is ES3 */

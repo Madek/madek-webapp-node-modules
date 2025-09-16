@@ -1,92 +1,43 @@
-var compat = require('./browser')
-var crypto = require('crypto')
-var fork = require('child_process').fork
-var path = require('path')
+'use strict';
 
-var MAX_ALLOC = Math.pow(2, 30) - 1 // default in iojs
+var nativeImpl = require('crypto');
 
-function asyncPBKDF2 (password, salt, iterations, keylen, digest, callback) {
-  if (typeof iterations !== 'number') {
-    throw new TypeError('Iterations not a number')
-  }
+var checkParameters = require('./lib/precondition');
+var defaultEncoding = require('./lib/default-encoding');
+var toBuffer = require('./lib/to-buffer');
 
-  if (iterations < 0) {
-    throw new TypeError('Bad iterations')
-  }
+function nativePBKDF2(password, salt, iterations, keylen, digest, callback) {
+	checkParameters(iterations, keylen);
+	password = toBuffer(password, defaultEncoding, 'Password');
+	salt = toBuffer(salt, defaultEncoding, 'Salt');
 
-  if (typeof keylen !== 'number') {
-    throw new TypeError('Key length not a number')
-  }
+	if (typeof digest === 'function') {
+		callback = digest;
+		digest = 'sha1';
+	}
+	if (typeof callback !== 'function') {
+		throw new Error('No callback provided to pbkdf2');
+	}
 
-  if (keylen < 0 || keylen > MAX_ALLOC) {
-    throw new TypeError('Bad key length')
-  }
-
-  if (typeof password === 'string') {
-    password = new Buffer(password, 'binary')
-  }
-
-  if (typeof salt === 'string') {
-    salt = new Buffer(salt, 'binary')
-  }
-
-  var child = fork(path.resolve(__dirname, 'async-shim.js'))
-
-  child.on('message', function (result) {
-    if (result.type === 'success') {
-      callback(null, new Buffer(result.data, 'hex'))
-    } else if (result.type === 'fail') {
-      callback(new TypeError(result.data))
-    }
-  })
-
-  child.send({
-    password: password.toString('hex'),
-    salt: salt.toString('hex'),
-    iterations: iterations,
-    keylen: keylen,
-    digest: digest
-  })
+	return nativeImpl.pbkdf2(password, salt, iterations, keylen, digest, callback);
 }
 
-exports.pbkdf2Sync = function pbkdf2Sync (password, salt, iterations, keylen, digest) {
-  digest = digest || 'sha1'
-
-  if (isNode10()) {
-    if (digest === 'sha1') {
-      return crypto.pbkdf2Sync(password, salt, iterations, keylen)
-    } else {
-      return compat.pbkdf2Sync(password, salt, iterations, keylen, digest)
-    }
-  } else {
-    return crypto.pbkdf2Sync(password, salt, iterations, keylen, digest)
-  }
+function nativePBKDF2Sync(password, salt, iterations, keylen, digest) {
+	checkParameters(iterations, keylen);
+	password = toBuffer(password, defaultEncoding, 'Password');
+	salt = toBuffer(salt, defaultEncoding, 'Salt');
+	digest = digest || 'sha1';
+	return nativeImpl.pbkdf2Sync(password, salt, iterations, keylen, digest);
 }
 
-exports.pbkdf2 = function pbkdf2 (password, salt, iterations, keylen, digest, callback) {
-  if (typeof digest === 'function') {
-    callback = digest
-    digest = 'sha1'
-  }
+/* istanbul ignore next */
+if (!nativeImpl.pbkdf2Sync || nativeImpl.pbkdf2Sync.toString().indexOf('keylen, digest') === -1) {
+	/* eslint global-require: 0 */
+	exports.pbkdf2Sync = require('./lib/sync');
+	exports.pbkdf2 = require('./lib/async');
 
-  if (isNode10()) {
-    if (digest === 'sha1') {
-      return crypto.pbkdf2(password, salt, iterations, keylen, callback)
-    } else {
-      return asyncPBKDF2(password, salt, iterations, keylen, digest, callback)
-    }
-  } else {
-    return crypto.pbkdf2(password, salt, iterations, keylen, digest, callback)
-  }
-}
-
-var sha1 = '0c60c80f961f0e71f3a9b524af6012062fe037a6e0f0eb94fe8fc46bdc637164'
-var isNode10Result
-
-function isNode10 () {
-  if (typeof isNode10Result === 'undefined') {
-    isNode10Result = crypto.pbkdf2Sync('password', 'salt', 1, 32, 'sha256').toString('hex') === sha1
-  }
-
-  return isNode10Result
+// native
+} else {
+	exports.pbkdf2Sync = nativePBKDF2Sync;
+	exports.pbkdf2 = nativePBKDF2;
 }

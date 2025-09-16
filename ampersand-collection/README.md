@@ -10,13 +10,6 @@ It does not require underscore or jQuery, but instead makes it easy to extend wi
 Part of the [Ampersand.js toolkit](http://ampersandjs.com) for building clientside applications.
 <!-- endhide -->
 
-<!-- starthide -->
-## browser support
-
-[![browser support](https://ci.testling.com/ampersandjs/ampersand-collection.png)
-](https://ci.testling.com/ampersandjs/ampersand-collection)
-<!-- endhide -->
-
 ## Installation
 
 ```
@@ -80,7 +73,7 @@ To deal with this (because sometimes this is a legitimate scenario), `collection
 
 Create a collection class of your own by extending `AmpersandCollection`, providing the required instance properties to be attached instances of your class.
 
-Typically you will specify a `model` constructor (if you are storing [ampersand-state](#ampersand-state) or [ampersand-model](#ampersand-model) objects).
+Typically you will specify a `model` constructor (if you are storing [ampersand-state](http://ampersandjs.com/docs#ampersand-state) or [ampersand-model](http://ampersandjs.com/docs#ampersand-model) objects).
 
 ### model `collection.model`
 
@@ -229,6 +222,33 @@ console.log(JSON.stringify(collection));
 //=> "[{\"name\":\"Tim\",\"age\":5},{\"name\":\"Ida\",\"age\":26},{\"name\":\"Rob\",\"age\":55}]"
 ```
 
+### parse `collection.parse(data, [options])`
+
+The parse method gets called if the `{parse: true}` option is passed when calling `collection.set` method. By default, `parse` simply returns the data it was passed, but can be overwritten through `.extend` to provide any additional parsing logic to extract the array of data that should be stored in the collection. This is most commonly used when processing data coming back from an ajax request. The response from an API may look like this:
+
+```javascript
+{
+  "limit": 100,
+  "offset": 0,
+  "data": [
+    {"name": "larry"},
+    {"name": "curly"},
+    {"name": "moe"}
+  ]
+}
+```
+
+To extract `data` you'd define a `parse` method on the collection as follows, to return the array of data to be stored.
+
+```javascript
+var MyCollection = Collection.extend({
+    parse: function (response) {
+        return response.data;
+    }
+});
+```
+
+If you're using `ampersand-rest-collection`'s `fetch()` method, the `parse` method will be called with the response by default. Also, the options object passed to `set()` gets passed through as a second argument to allow for conditional parsing logic.
 
 ### set `collection.set(models, [options])`
 
@@ -357,7 +377,7 @@ people.filter(function (person) {
 
 ## credits
 
-Created by [@HenrikJoreteg](http://twitter.com/henrikjoreteg), but many ideas and some code (especially for `set()`) should be credited to Jeremy Ashkenas and the rest of the Backbone.js authors.
+Created by [@HenrikJoreteg](http://twitter.com/henrikjoreteg), but many ideas and some code (especially for `set()`) should be credited to [Jeremy Ashkenas](https://github.com/jashkenas) and the rest of the Backbone.js authors.
 
 
 ## license

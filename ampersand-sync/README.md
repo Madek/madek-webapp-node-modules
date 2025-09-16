@@ -66,6 +66,7 @@ Additional fields in `options`:
  - emulateJSON - defaults to `false`
  - xhrImplementation - can be used to override http request implementation for just this one call
  - data - JSON serializable object to be sent as request body
+ - qsOptions - set stringify encoding options and create a different URI output if needed [[see qs.stringify(string,[options])]](https://www.npmjs.com/package/qs/v/4.0.0#stringifying)
  - `success(body, 'success', responseObject)` - optional callback to be called when request finishes successfully
  - `error(responseObject, 'error', error.message)` - optional callback to be called when an error occurs (http request/response error or parsing response error)
  - `always(error, responseObject, body)` - optional callback to be called when request finishes no matter what the result
@@ -112,7 +113,7 @@ This should only affect your if you're using `ajaxConfig` as a function. If so y
 
 All credit goes to Jeremy Ashkenas and the other Backbone.js authors.
 
-If you like this follow [@HenrikJoreteg](http://twitter.com/henrikjoreteg) on twitter.
+The `ampersand-sync` you are using today was made available to you by all the contributors listed here: https://github.com/AmpersandJS/ampersand-sync/graphs/contributors
 
 
 ## license

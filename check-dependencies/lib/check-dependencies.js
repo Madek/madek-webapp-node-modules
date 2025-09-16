@@ -2,66 +2,35 @@
 
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
-const findup = require('findup-sync');
+const pico = require('picocolors');
 const semver = require('semver');
 const spawn = require('child_process').spawn;
 const spawnSync = require('child_process').spawnSync;
 
-const checkDependenciesHelper = (syncOrAsync, config, callback) => {
-    // We treat the signature:
-    //     checkDependencies(callback)
-    // as:
-    //     checkDependencies({}, callback)
-
-    if (syncOrAsync === 'async') {
-        // Catch all cases where `config` is not an object - even if it's not a function
-        // so it's useless here, we need it to be assigned to `callback` to provide
-        // to the error message.
-        if (typeof callback !== 'function' && (typeof config !== 'object' || config == null)) {
-            callback = config;
-            config = null;
+const findup = fileName => {
+    let dir = process.cwd();
+    while (true) {
+        const filePath = path.resolve(dir, fileName);
+        if (fs.existsSync(filePath)) {
+            return filePath;
         }
-        if (typeof callback !== 'function') {
-            if (callback == null) {
-                // In the async mode we return the promise anyway; assign callback
-                // to noop to keep code consistency.
-                callback = () => {/* noop */};
-            } else {
-                // If callback was simply not provided, we assume the user wanted
-                // to handle the returned promise. If it was passed but not a function
-                // we assume user error and throw.
-                throw new TypeError(`The provided callback wasn't a function! Got: ${ callback }`);
-            }
+        const nextDir = path.dirname(dir);
+        if (dir === nextDir) {
+            // top level => not found
+            return null;
         }
+        dir = nextDir;
     }
+};
 
-    const win32 = process.platform === 'win32';
-    const output = {log: [], error: []};
+const checkDependenciesHelper = (syncOrAsync, config) => {
+    const output = { log: [], error: [] };
 
-    let depsDirName, packageJson, pkgManagerPath;
+    let packageJson;
 
-    let installPrunePromise = Promise.resolve();
+    let installPromise = Promise.resolve();
     let success = true;
     let installNeeded = false;
-    let pruneNeeded = false;
-
-    const options = Object.assign({
-        packageManager: 'npm',
-        onlySpecified: false,
-        install: false,
-        scopeList: ['dependencies', 'devDependencies'],
-        optionalScopeList: ['optionalDependencies'],
-        verbose: false,
-        checkGitUrls: false,
-        checkCustomPackageNames: false,
-        log: console.log.bind(console),
-        error: console.error.bind(console),
-    }, config);
-
-    const packageJsonName = options.packageManager === 'npm' ? 'package.json' : 'bower.json';
-    const packageJsonRegex = options.packageManager === 'npm' ? /package\.json$/ : /bower\.json$/;
-    depsDirName = options.packageManager === 'npm' ? 'node_modules' : 'bower_components';
 
     const log = message => {
         output.log.push(message);
@@ -80,7 +49,6 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
     const finish = () => {
         output.status = success ? 0 : 1;
         if (syncOrAsync === 'async') {
-            callback(output);
             return Promise.resolve(output);
         }
         return output;
@@ -88,41 +56,57 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
 
     const missingPackageJson = () => {
         success = false;
-        error(`Missing ${ packageJsonName }!`);
+        error('Missing package.json!');
         return finish();
     };
 
-    options.packageDir = options.packageDir || findup(packageJsonName);
+    const options = {
+        packageManager: 'npm',
+        onlySpecified: false,
+        install: false,
+        scopeList: ['dependencies', 'devDependencies'],
+        optionalScopeList: ['optionalDependencies'],
+        verbose: false,
+        checkGitUrls: false,
+        log: console.log.bind(console),
+        error: console.error.bind(console),
+        ...config,
+    };
+
+    if (!/^[a-z][a-z0-9-]*$/i.test(options.packageManager)) {
+        success = false;
+        error(
+            'The packageManager field value must match the regex ' +
+                `\`/^[a-z][a-z0-9-]*$/i\`; got: "${options.packageManager}"`,
+        );
+        return finish();
+    }
+
+    const packageJsonRegex = /package\.json$/;
+
+    options.packageDir = options.packageDir || findup('package.json');
     if (!options.packageDir) {
         return missingPackageJson();
     }
-    options.packageDir = path.resolve(options.packageDir.replace(packageJsonRegex, ''));
+    options.packageDir = path.resolve(
+        options.packageDir.replace(packageJsonRegex, ''),
+    );
 
-    packageJson = `${ options.packageDir }/${ packageJsonName }`;
+    packageJson = `${options.packageDir}/package.json`;
     if (!fs.existsSync(packageJson)) {
         return missingPackageJson();
     }
     packageJson = require(packageJson);
 
-    if (options.packageManager === 'bower') {
-        const bowerConfig = require('bower-config').create(options.packageDir).load();
-        depsDirName = bowerConfig._config.directory;
-    }
-
-    // Bower uses a different name (with a dot) for package data of dependencies.
-    const depsJsonName = options.packageManager === 'npm' ? 'package.json' : '.bower.json';
-
-    if (options.packageManager === 'bower') {
-        // Allow a local bower.
-        pkgManagerPath = findup('node_modules/bower/bin/bower');
-    }
-
-    const depsDir = `${ options.packageDir }/${ depsDirName }`;
+    const depsDir = `${options.packageDir}/node_modules`;
 
     const getDepsMappingsFromScopeList = scopeList =>
-        // Get names of all packages specified in package.json/bower.json at keys from scopeList
-        // together with specified version numbers.
-        scopeList.reduce((result, scope) => Object.assign(result, packageJson[scope]), {});
+        // Get names of all packages specified in `package.json` at keys from
+        // `scopeList` together with specified version numbers.
+        scopeList.reduce(
+            (result, scope) => Object.assign(result, packageJson[scope]),
+            {},
+        );
 
     // Make sure each package from `scopeList` is present and matches the specified version range.
     // Packages from `optionalScopeList` may not be present but if they are, they are required
@@ -131,14 +115,14 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         const name = pkg.name;
         let versionString = pkg.versionString;
 
-        const depDir = `${ depsDir }/${ name }`;
-        const depJson = `${ depDir }/${ depsJsonName }`;
+        const depDir = `${depsDir}/${name}`;
+        const depJsonPath = `${depDir}/package.json`;
 
-        if (!fs.existsSync(depDir) || !fs.existsSync(depJson)) {
+        if (!fs.existsSync(depDir) || !fs.existsSync(depJsonPath)) {
             if (pkg.isOptional) {
-                log(`${ name }: ${ chalk.red('not installed!') }`);
+                log(`${name}: ${pico.red('not installed!')}`);
             } else {
-                error(`${ name }: ${ chalk.red('not installed!') }`);
+                error(`${name}: ${pico.red('not installed!')}`);
                 success = false;
             }
             return;
@@ -146,7 +130,7 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
 
         // Let's look if we can get a valid version from a Git URL
         if (options.checkGitUrls && /\.git.*#v?(.+)$/.test(versionString)) {
-            versionString = (/#v?(.+)$/.exec(versionString))[1];
+            versionString = /#v?(.+)$/.exec(versionString)[1];
             if (!semver.valid(versionString)) {
                 return;
             }
@@ -155,17 +139,6 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         // Quick and dirty check - make sure we're not dealing with a URL
         if (/\//.test(versionString)) {
             return;
-        }
-
-        // Bower has the option to specify a custom name, e.g. 'packageOld' : 'package#1.2.3'
-        if (options.checkCustomPackageNames && options.packageManager !== 'npm') {
-            // Let's look if we can get a valid version from a custom package name (with a # in it)
-            if (/\.*#v?(.+)$/.test(versionString)) {
-                versionString = (/#v?(.+)$/.exec(versionString))[1];
-                if (!semver.valid(versionString)) {
-                    return;
-                }
-            }
         }
 
         // If we are dealing with a custom package name, semver check won't work - skip it
@@ -179,54 +152,94 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
             return;
         }
 
-        const depVersion = require(depJson).version;
+        const depJson = require(depJsonPath);
+
+        // Support package aliases
+        if (/npm:(.+)@(.+)/.test(versionString)) {
+            const [, depName, version] = versionString.match(/npm:(.+)@(.+)/);
+
+            versionString = version;
+
+            if (depJson.name !== depName) {
+                success = false;
+                error(
+                    `${name}: installed: ${pico.red(
+                        depName,
+                    )}, expected: ${pico.green(depJson.name)}`,
+                );
+            }
+        }
+
+        const depVersion = depJson.version;
         if (semver.satisfies(depVersion, versionString)) {
-            log(`${ name }: installed: ${ chalk.green(depVersion)
-                }, expected: ${ chalk.green(versionString) }`);
+            log(
+                `${name}: installed: ${pico.green(
+                    depVersion,
+                )}, expected: ${pico.green(versionString)}`,
+            );
         } else {
             success = false;
-            error(`${ name }: installed: ${ chalk.red(depVersion)
-                }, expected: ${ chalk.green(versionString) }`);
+            error(
+                `${name}: installed: ${pico.red(
+                    depVersion,
+                )}, expected: ${pico.green(versionString)}`,
+            );
         }
     };
 
     const depsMappings = getDepsMappingsFromScopeList(options.scopeList);
-    const optionalDepsMappings = getDepsMappingsFromScopeList(options.optionalScopeList);
-    const fullDepsMappings = Object.assign({}, depsMappings, optionalDepsMappings);
+    const optionalDepsMappings = getDepsMappingsFromScopeList(
+        options.optionalScopeList,
+    );
+    const fullDepsMappings = {
+        ...depsMappings,
+        ...optionalDepsMappings,
+    };
 
     Object.keys(depsMappings).forEach(name => {
-        checkPackage({name, versionString: depsMappings[name], isOptional: false});
+        checkPackage({
+            name,
+            versionString: depsMappings[name],
+            isOptional: false,
+        });
     });
 
     Object.keys(optionalDepsMappings).forEach(name => {
-        checkPackage({name, versionString: optionalDepsMappings[name], isOptional: true});
+        checkPackage({
+            name,
+            versionString: optionalDepsMappings[name],
+            isOptional: true,
+        });
     });
 
     installNeeded = !success;
 
     if (options.onlySpecified) {
-        fs
-            .readdirSync(depsDir)
+        fs.readdirSync(depsDir)
 
             // Ignore hidden directories
             .filter(depName => depName[0] !== '.')
 
             // Ignore files
-            .filter(depName => fs.lstatSync(`${ depsDir }/${ depName }`).isDirectory())
+            .filter(depName =>
+                fs.lstatSync(`${depsDir}/${depName}`).isDirectory(),
+            )
 
             .forEach(depName => {
                 let depSubDirName;
 
                 // Scoped packages
                 if (depName[0] === '@') {
-                    depName = fs.readdirSync(`${ depsDir }/${ depName }`)[0];
+                    depName = fs.readdirSync(`${depsDir}/${depName}`)[0];
 
                     // Ignore weird directories - if it just looks like a scoped package but
                     // isn't one, just skip it.
                     if (depSubDirName && !fullDepsMappings[depName]) {
                         success = false;
-                        pruneNeeded = true;
-                        error(`Package ${ depName } installed, though it shouldn\'t be`);
+                        installNeeded = true;
+                        error(
+                            `Package ${depName} installed, though it shouldn't be`,
+                        );
                     }
                     return;
                 }
@@ -234,8 +247,10 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
                 // Regular packages
                 if (!fullDepsMappings[depName]) {
                     success = false;
-                    pruneNeeded = true;
-                    error(`Package ${ depName } installed, though it shouldn\'t be`);
+                    installNeeded = true;
+                    error(
+                        `Package ${depName} installed, though it shouldn't be`,
+                    );
                 }
             });
     }
@@ -247,46 +262,35 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
     output.depsWereOk = false;
 
     if (!options.install) {
-        if (options.onlySpecified) {
-            error(`Invoke ${ chalk.green(`${ options.packageManager } prune`) } and ${
-                chalk.green(`${ options.packageManager } install`)
-                } to install missing packages and remove excessive ones`);
-        } else {
-            error(`Invoke ${ chalk.green(`${ options.packageManager } install`)
-                } to install missing packages`);
-        }
+        error(
+            `Invoke ${pico.green(
+                `${options.packageManager} install`,
+            )} to install missing packages${
+                options.onlySpecified ? ' and remove excessive ones' : ''
+            }`,
+        );
         return finish();
     }
 
-
-    const installOrPrune = mode => {
-        log(`Invoking ${ chalk.green(`${ options.packageManager } ${ mode }`) }...`);
+    const install = () => {
+        log(`Invoking ${pico.green(`${options.packageManager} install`)}...`);
 
         // If we're using a direct path, on Windows we need to invoke it via `node path`, not
         // `cmd /c path`. In UNIX systems we can execute the command directly so no need to wrap.
-        let msg, spawnReturn;
+        let msg;
         const method = syncOrAsync === 'sync' ? spawnSync : spawn;
 
-        if (win32) {
-            spawnReturn = method(pkgManagerPath ? 'node' : 'cmd',
-                (pkgManagerPath ? [pkgManagerPath] : ['/c', options.packageManager]).concat(mode),
-                {
-                    cwd: options.packageDir,
-                    stdio: 'inherit',
-                });
-        } else {
-            spawnReturn = method(options.packageManager,
-                [mode],
-                {
-                    cwd: options.packageDir,
-                    stdio: 'inherit',
-                });
-        }
+        const spawnReturn = method(`${options.packageManager} install`, {
+            cwd: options.packageDir,
+            stdio: 'inherit',
+            shell: true,
+        });
 
         if (syncOrAsync === 'sync') {
             if (spawnReturn.status !== 0) {
-                msg = `${ options.packageManager } ${ mode } failed with code: ${
-                    chalk.red(spawnReturn.status) }`;
+                msg = `${
+                    options.packageManager
+                } install failed with code: ${pico.red(spawnReturn.status)}`;
                 throw new Error(msg);
             }
             return null;
@@ -297,25 +301,21 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
                     resolve();
                     return;
                 }
-                msg = `${ options.packageManager } ${ mode } failed with code: ${
-                    chalk.red(code) }`;
+                msg = `${
+                    options.packageManager
+                } install failed with code: ${pico.red(code)}`;
                 error(msg);
                 reject(msg);
             });
         });
     };
 
-    const installMissing = () => installOrPrune('install');
-    const pruneExcessive = () => installOrPrune('prune');
+    const installMissing = () => install();
 
     if (syncOrAsync === 'sync') {
         try {
             if (installNeeded) {
                 installMissing();
-            }
-
-            if (pruneNeeded) {
-                pruneExcessive();
             }
 
             success = true;
@@ -327,14 +327,10 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
 
     // Async scenario
     if (installNeeded) {
-        installPrunePromise = installPrunePromise.then(installMissing);
+        installPromise = installPromise.then(installMissing);
     }
 
-    if (pruneNeeded) {
-        installPrunePromise = installPrunePromise.then(pruneExcessive);
-    }
-
-    return installPrunePromise
+    return installPromise
         .then(() => {
             success = true;
             return finish();
@@ -345,5 +341,5 @@ const checkDependenciesHelper = (syncOrAsync, config, callback) => {
         });
 };
 
-module.exports = (cfg, cb) => checkDependenciesHelper('async', cfg, cb);
-module.exports.sync = (cfg, cb) => checkDependenciesHelper('sync', cfg, cb);
+module.exports = cfg => checkDependenciesHelper('async', cfg);
+module.exports.sync = cfg => checkDependenciesHelper('sync', cfg);
